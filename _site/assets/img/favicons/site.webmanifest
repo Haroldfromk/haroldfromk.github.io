@@ -3,7 +3,7 @@
 {
   "name": "Harold`s Daily Log",
   "short_name": "Harold`s Daily Log",
-  "description": "A minimal, responsive and feature-rich Jekyll theme for technical writing.",
+  "description": "Harold's Devlog",
   "icons": [
     {
       "src": "/assets/img/favicons/android-chrome-192x192.png",

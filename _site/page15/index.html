@@ -32,8 +32,8 @@
 <meta name="generator" content="Jekyll v4.3.3" />
 <meta property="og:title" content="Harold`s Daily Log" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing." />
-<meta property="og:description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing." />
+<meta name="description" content="Harold’s Devlog" />
+<meta property="og:description" content="Harold’s Devlog" />
 <link rel="canonical" href="http://localhost:4000/page15/" />
 <meta property="og:url" content="http://localhost:4000/page15/" />
 <meta property="og:site_name" content="Harold`s Daily Log" />
@@ -44,7 +44,7 @@
 <meta property="twitter:title" content="Harold`s Daily Log" />
 <meta name="twitter:site" content="@twitter_username" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"A minimal, responsive and feature-rich Jekyll theme for technical writing.","headline":"Harold`s Daily Log","url":"http://localhost:4000/page15/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"Harold’s Devlog","headline":"Harold`s Daily Log","url":"http://localhost:4000/page15/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -535,6 +535,240 @@
 
 
 <div id="post-list" class="flex-grow-1 px-xl-1">
+  
+    <article class="card-wrapper card">
+      <a href="/posts/94.-%EC%A4%91%EC%95%99%EA%B0%92-%EA%B5%AC%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">94. 중앙값 구하기</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                
+
+
+
+import Foundation
+
+func solution(_ array:[Int]) -&amp;gt; Int {
+    
+    var answer : Int = 0
+    
+    answer = Int(array.sorted()[array.count/2])
+
+    return answer
+}
+
+
+
+array를 먼저 오름차순으로 정리를 하고 배열...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1707855180"
+  data-df="YYYY/MM/DD"
+  
+>
+  2024/02/14
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      코딩테스트
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/93.-%EC%B5%9C%EB%B9%88%EA%B0%92-%EA%B5%AC%ED%95%98%EA%B8%B0-(ing)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">93. 최빈값 구하기 (ing)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1707855180"
+  data-df="YYYY/MM/DD"
+  
+>
+  2024/02/14
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      코딩테스트
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/92.-%EC%A7%9D%EC%88%98%EB%8A%94-%EC%8B%AB%EC%96%B4%EC%9A%94/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">92. 짝수는 싫어요</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                
+
+
+
+import Foundation
+
+func solution(_ n:Int) -&amp;gt; [Int] {
+    
+    var answer : [Int] = []
+    
+    answer = (1...n).filter{$0%2 != 0}.map{$0}
+     
+    return answer
+}
+
+
+
+filter 와 map을 사용하였다.
+
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1707855180"
+  data-df="YYYY/MM/DD"
+  
+>
+  2024/02/14
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      코딩테스트
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
   
     <article class="card-wrapper card">
       <a href="/posts/91.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-1/" class="post-preview row g-0 flex-md-row-reverse">
@@ -1089,240 +1323,6 @@ func solution(_ my_string:String) -&amp;gt; String {
       </a>
     </article>
   
-    <article class="card-wrapper card">
-      <a href="/posts/84.-%EC%A7%81%EA%B0%81%EC%82%BC%EA%B0%81%ED%98%95-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">84. 직각삼각형 출력하기</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-import Foundation
-
-let n = readLine()!.components(separatedBy: [&quot; &quot;]).map { Int($0)! }
-
-var string = &quot;*&quot;
-
-for i in 0..&amp;lt;n[0]{
-    print(string)
-    string += &quot;*&quot;
-}
-
-
-
-처음에 n을 그대로 넣으려고했는데 타입에러가...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1707855180"
-  data-df="YYYY/MM/DD"
-  
->
-  2024/02/14
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/83.-%EC%A4%91%EB%B3%B5%EB%90%9C-%EC%88%AB%EC%9E%90-%EA%B0%9C%EC%88%98/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">83. 중복된 숫자 개수</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-import Foundation
-
-func solution(_ array:[Int], _ n:Int) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    answer = array.filter{$0 == n}.count 
-    
-    return answer
-}
-
-
-해당문제가 바로 filter를 사용할...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1707855180"
-  data-df="YYYY/MM/DD"
-  
->
-  2024/02/14
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/82.-%EB%A8%B8%EC%93%B1%EC%9D%B4%EB%B3%B4%EB%8B%A4-%ED%82%A4-%ED%81%B0-%EC%82%AC%EB%9E%8C/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">82. 머쓱이보다 키 큰 사람</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-import Foundation
-
-func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    for i in array.indices{
-        if array[i] &amp;gt; height {
-            answer += ...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1707855180"
-  data-df="YYYY/MM/DD"
-  
->
-  2024/02/14
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
 </div>
 <!-- #post-list -->
 
@@ -1683,12 +1683,25 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
       
 
       
+        <!-- hide number -->
+        
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
         <!-- show number -->
         <li class="page-item ">
           <a
             class="page-link"
-            href="/page24"
-          >24</a>
+            href="/page25"
+          >25</a>
         </li>
       
     
@@ -1696,7 +1709,7 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     <!-- mobile pagination -->
     <li class="page-index align-middle">
       <span>15</span>
-      <span class="text-muted">/ 24</span>
+      <span class="text-muted">/ 25</span>
     </li>
 
     <!-- right arrow -->
@@ -1860,45 +1873,6 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1908,114 +1882,6 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2144,6 +2010,26 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2168,7 +2054,40 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
-      
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -2189,6 +2108,61 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2198,6 +2172,68 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
       
     
   
@@ -2215,6 +2251,10 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
+      
+        
+        
+
   
     
     
@@ -2249,6 +2289,9 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%ED%96%88%EB%8D%98%EB%AC%B8%EC%A0%9C/">보류했던문제</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/deep-dive/">Deep Dive</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/dices/">Dices</a>
       
         
@@ -2256,9 +2299,6 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/auto-layout/">Auto Layout</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/eggtimer/">EggTimer</a>
       
     </div>
   </section>
@@ -2393,45 +2433,6 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2441,114 +2442,6 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2677,6 +2570,26 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2701,7 +2614,40 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
-      
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -2722,6 +2668,61 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2731,6 +2732,68 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
       
     
   
@@ -2748,6 +2811,10 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
     
     
     
+      
+        
+        
+
   
     
     
@@ -2782,6 +2849,9 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%ED%96%88%EB%8D%98%EB%AC%B8%EC%A0%9C/">보류했던문제</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/deep-dive/">Deep Dive</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/dices/">Dices</a>
       
         
@@ -2789,9 +2859,6 @@ func solution(_ array:[Int], _ height:Int) -&amp;gt; Int {
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/auto-layout/">Auto Layout</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/eggtimer/">EggTimer</a>
       
     </div>
   </section>

@@ -32,8 +32,8 @@
 <meta name="generator" content="Jekyll v4.3.3" />
 <meta property="og:title" content="Harold`s Daily Log" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing." />
-<meta property="og:description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing." />
+<meta name="description" content="Harold’s Devlog" />
+<meta property="og:description" content="Harold’s Devlog" />
 <link rel="canonical" href="http://localhost:4000/page10/" />
 <meta property="og:url" content="http://localhost:4000/page10/" />
 <meta property="og:site_name" content="Harold`s Daily Log" />
@@ -44,7 +44,7 @@
 <meta property="twitter:title" content="Harold`s Daily Log" />
 <meta name="twitter:site" content="@twitter_username" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"A minimal, responsive and feature-rich Jekyll theme for technical writing.","headline":"Harold`s Daily Log","url":"http://localhost:4000/page10/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"Harold’s Devlog","headline":"Harold`s Daily Log","url":"http://localhost:4000/page10/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -535,6 +535,241 @@
 
 
 <div id="post-list" class="flex-grow-1 px-xl-1">
+  
+    <article class="card-wrapper card">
+      <a href="/posts/Auto-Layout-(challenge)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">Auto Layout (challenge)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                
+
+다음과 같이 만들어 보자.
+
+우선 해당 Project를 clone하여 가져오니 다음과 같다.
+
+
+내가 해야할건 위의 portrait인상태에서 landscape일때 위와 같은 형태로 보여지게 하면 되는것같다.
+
+먼저 Landscape모드를 보았다.
+
+
+다음과같다.
+
+constraint(제약)을 해야할것같다.
+
+view구성을 보았다.
+
+
+우선 Cont...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708459980"
+  data-df="YYYY/MM/DD"
+  
+>
+  2024/02/21
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/Auto-Layout-(2)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">Auto Layout (2)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                Auto Layout (1)에서 했던것을 바탕으로
+Main의 화면도 Rotate했을때 background, image, button들이 짤리지 않고 유지하게 만들어 보자.
+
+
+  background
+
+
+
+up / down / left / right의 제약조건을 모두 활성화 해준다.
+
+
+
+하지만 이렇게 safe area가 있으므로 그부분도 조절을 해주자...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708459980"
+  data-df="YYYY/MM/DD"
+  
+>
+  2024/02/21
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/Auto-Layout-(1)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">Auto Layout (1)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                Auto Layout 에서는 폰을 Rotate했을때 어플 화면이 변경되게 하는것을 공부할 예정이다.
+
+
+
+현재는 이렇게 화면을 회전할 경우 지원이 되지않는 걸 볼 수 있다.
+
+이렇게 Launch Screen에서도 Rotate했을때 로고가 짤리는 걸 알 수 있다.
+
+
+
+
+Q:그러면 직접 사이즈를 조절하면 되는걸까?
+A:안된다. 아래 이미지를 보자.
+
+
+...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708459980"
+  data-df="YYYY/MM/DD"
+  
+>
+  2024/02/21
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
   
     <article class="card-wrapper card">
       <a href="/posts/135.-7%EC%9D%98-%EA%B0%9C%EC%88%98/" class="post-preview row g-0 flex-md-row-reverse">
@@ -1090,255 +1325,6 @@ Launch Screen은 보통 어플을 켤때 잠깐 보여주는 화면...
       </a>
     </article>
   
-    <article class="card-wrapper card">
-      <a href="/posts/I-Am-Rich-(2)/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">I Am Rich (2)</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                asset에 이미지 추가
-
-
-
-필요한 이미지를 asset에 추가할때는 위와 같이 그냥 드래그를 하면 된다.
-
-
-
-이미지의 크기를 나타낸다 (2x : 2배, 3x : 3배)
-sketch나 illustrator를 통해 2x 또는 3x의 이미지를 만들 수 있다.
-
-
-  
-    만약 해당 앱을 쓸수없는 환경이라면?
-
-    
-      https://www...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708287180"
-  data-df="YYYY/MM/DD"
-  
->
-  2024/02/19
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      Udemy
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/I-Am-Poor-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">I Am Poor 만들어보기</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                I Am Poor Project를 만들어보자!
-
-프로젝트 생성은 pass!
-
-
-  
-    Label을 추가하고 I Am Poor 이라고 입력해보자.
-
-  
-  
-    Label -&amp;gt; I Am Poor로 변경.
-  
-
-
-
-
-
-  그다음 색상과, 폰트크기를 변경.
-
-
-
-
-
-  ImageView를 추가하자
-
-
-
-
-
-  ImageView에 Image...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708287180"
-  data-df="YYYY/MM/DD"
-  
->
-  2024/02/19
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      Udemy
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/132.-%ED%8A%B9%EB%B3%84%ED%95%9C-%EC%9D%B4%EC%B0%A8%EC%9B%90-%EB%B0%B0%EC%97%B4-1/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">132. 특별한 이차원 배열 1</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-
-
-import Foundation
-
-func solution(_ n:Int) -&amp;gt; [[Int]] {
-    
-    var arr : [[Int]] = []
-    
-    arr = Array(repeating: Array(repeating:0,count:n), count:n)
-    
-    for i in 0..&amp;lt;n {
-   ...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708287180"
-  data-df="YYYY/MM/DD"
-  
->
-  2024/02/19
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
 </div>
 <!-- #post-list -->
 
@@ -1699,12 +1685,25 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
       
 
       
+        <!-- hide number -->
+        
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
         <!-- show number -->
         <li class="page-item ">
           <a
             class="page-link"
-            href="/page24"
-          >24</a>
+            href="/page25"
+          >25</a>
         </li>
       
     
@@ -1712,7 +1711,7 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     <!-- mobile pagination -->
     <li class="page-index align-middle">
       <span>10</span>
-      <span class="text-muted">/ 24</span>
+      <span class="text-muted">/ 25</span>
     </li>
 
     <!-- right arrow -->
@@ -1876,45 +1875,6 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1924,114 +1884,6 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2160,6 +2012,26 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2184,7 +2056,40 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
-      
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -2205,6 +2110,61 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2214,6 +2174,68 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
       
     
   
@@ -2231,6 +2253,10 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
+      
+        
+        
+
   
     
     
@@ -2265,6 +2291,9 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%ED%96%88%EB%8D%98%EB%AC%B8%EC%A0%9C/">보류했던문제</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/deep-dive/">Deep Dive</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/dices/">Dices</a>
       
         
@@ -2272,9 +2301,6 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/auto-layout/">Auto Layout</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/eggtimer/">EggTimer</a>
       
     </div>
   </section>
@@ -2409,45 +2435,6 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2457,114 +2444,6 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2693,6 +2572,26 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2717,7 +2616,40 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
-      
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -2738,6 +2670,61 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2747,6 +2734,68 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
       
     
   
@@ -2764,6 +2813,10 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     
     
     
+      
+        
+        
+
   
     
     
@@ -2798,6 +2851,9 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%ED%96%88%EB%8D%98%EB%AC%B8%EC%A0%9C/">보류했던문제</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/deep-dive/">Deep Dive</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/dices/">Dices</a>
       
         
@@ -2805,9 +2861,6 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/auto-layout/">Auto Layout</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/eggtimer/">EggTimer</a>
       
     </div>
   </section>
