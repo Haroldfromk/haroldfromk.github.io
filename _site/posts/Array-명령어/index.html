@@ -14,7 +14,7 @@
 
 
 <!-- `site.alt_lang` can specify a language different from the UI -->
-<html lang="ko" >
+<html lang="ko-KR" >
   <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
@@ -31,7 +31,7 @@
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <meta name="generator" content="Jekyll v4.3.3" />
 <meta property="og:title" content="Array 명령어" />
-<meta property="og:locale" content="ko" />
+<meta property="og:locale" content="ko_KR" />
 <meta name="description" content="배열에 대해서 정리를 해보자. 이것도 추가로 필요한게 있다면 지속적으로 수정 할 예정" />
 <meta property="og:description" content="배열에 대해서 정리를 해보자. 이것도 추가로 필요한게 있다면 지속적으로 수정 할 예정" />
 <link rel="canonical" href="http://localhost:4000/posts/Array-%EB%AA%85%EB%A0%B9%EC%96%B4/" />
@@ -275,7 +275,7 @@
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
-    <a href="/" id="avatar" class="rounded-circle"><img src="https://chirpy-img.netlify.app/assets/img/myicon/backg.png" width="112" height="112" alt="avatar" onerror="this.style.display='none'"></a>
+    <a href="/" id="avatar" class="rounded-circle"><img src="https://chirpy-img.netlify.app/assets/img/backg.png" width="112" height="112" alt="avatar" onerror="this.style.display='none'"></a>
 
     <h1 class="site-title">
       <a href="/">Harold`s Daily Log</a>
@@ -290,7 +290,7 @@
       <li class="nav-item">
         <a href="/" class="nav-link">
           <i class="fa-fw fas fa-home"></i>
-          <span>HOME</span>
+          <span>홈</span>
         </a>
       </li>
       <!-- the real tabs -->
@@ -300,7 +300,7 @@
             <i class="fa-fw fas fa-stream"></i>
             
 
-            <span>CATEGORIES</span>
+            <span>카테고리</span>
           </a>
         </li>
         <!-- .nav-item -->
@@ -310,7 +310,7 @@
             <i class="fa-fw fas fa-tags"></i>
             
 
-            <span>TAGS</span>
+            <span>태그</span>
           </a>
         </li>
         <!-- .nav-item -->
@@ -320,7 +320,7 @@
             <i class="fa-fw fas fa-archive"></i>
             
 
-            <span>ARCHIVES</span>
+            <span>아카이브</span>
           </a>
         </li>
         <!-- .nav-item -->
@@ -330,7 +330,7 @@
             <i class="fa-fw fas fa-info-circle"></i>
             
 
-            <span>ABOUT</span>
+            <span>정보</span>
           </a>
         </li>
         <!-- .nav-item -->
@@ -454,7 +454,7 @@
         
           
             <span>
-              <a href="/">Home</a>
+              <a href="/">홈</a>
             </span>
 
           
@@ -477,7 +477,7 @@
     </button>
 
     <div id="topbar-title">
-      Post
+      포스트
     </div>
 
     <button type="button" id="search-trigger" class="btn btn-link">
@@ -492,10 +492,10 @@
         type="search"
         aria-label="search"
         autocomplete="off"
-        placeholder="Search..."
+        placeholder="검색..."
       >
     </search>
-    <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancel</button>
+    <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">취소</button>
   </div>
 </header>
 
@@ -730,7 +730,7 @@
     <div class="post-meta text-muted">
       <!-- published date -->
       <span>
-        Posted
+        게시
         <!--
   Date format snippet
   See: ${JS_ROOT}/utils/locale-dateime.js
@@ -742,12 +742,12 @@
 <time
   
   data-ts="1709186160"
-  data-df="ll"
+  data-df="YYYY/MM/DD"
   
     data-bs-toggle="tooltip" data-bs-placement="bottom"
   
 >
-  Feb 29, 2024
+  2024/02/29
 </time>
 
       </span>
@@ -755,7 +755,7 @@
       <!-- lastmod date -->
       
         <span>
-          Updated
+          업데이트
           <!--
   Date format snippet
   See: ${JS_ROOT}/utils/locale-dateime.js
@@ -767,12 +767,12 @@
 <time
   
   data-ts="1709164800"
-  data-df="ll"
+  data-df="YYYY/MM/DD"
   
     data-bs-toggle="tooltip" data-bs-placement="bottom"
   
 >
-  Feb 29, 2024
+  2024/02/29
 </time>
 
         </span>
@@ -819,9 +819,9 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="3292 words"
+  title="3292 단어"
 >
-  <em>18 min</em> read</span>
+  <em>18 분</em>읽는 시간</span>
 
         </div>
       </div>
@@ -841,7 +841,7 @@
   <li>예시
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">intNumbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="c1">// 'Int' 요소를 갖는 배열</span>
 <span class="k">var</span> <span class="nv">strings</span> <span class="o">=</span> <span class="p">[</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"BC"</span><span class="p">,</span> <span class="s">"DEF"</span><span class="p">]</span> <span class="c1">// 'String' 요소를 갖는 배열</span>
@@ -858,7 +858,7 @@ var emptyFloats: Array<Float> = Array()</Float></li>
 <p>var emptyArray = [] // [!] Empty collection literal requires an explicit type</p>
 <div class="language-plaintext highlighter-rouge"><div class="code-header">
         <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -872,7 +872,7 @@ var intArray = Array&lt;Int&gt;(1...10) // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   <li>한 배열에 여러 자료형 요소를 넣고싶으면 Any 타입을 사용하면 된다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">anyArray</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">]</span>
 </pre></td></tr></tbody></table></code></div>    </div>
     <hr />
@@ -891,7 +891,7 @@ print(digitCounts) // [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</li>
 print(stringCounts) // [””, “”, “”, “”, “”, “”, “”, “”, “”, “”]</p>
 <div class="language-plaintext highlighter-rouge"><div class="code-header">
         <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -938,7 +938,7 @@ print(persons)  // [Person("이순신"), Person("이순신"), Person("이순신"
   <li>print()를 사용하면 된다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">array</span> <span class="o">=</span> <span class="p">[</span><span class="s">"A"</span><span class="p">,</span><span class="s">"B"</span><span class="p">,</span><span class="s">"C"</span><span class="p">]</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="c1">// ["A", "B", "C"]</span>
@@ -949,7 +949,7 @@ print(persons)  // [Person("이순신"), Person("이순신"), Person("이순신"
   <li>배열에서 요소의 위치(인덱스) 값으로 요소를 찾아올 수 있다. 인덱스 범위를 사용해도 된다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">array</span> <span class="o">=</span> <span class="p">[</span><span class="s">"A"</span><span class="p">,</span><span class="s">"B"</span><span class="p">,</span><span class="s">"C"</span><span class="p">]</span>
@@ -960,7 +960,7 @@ print(persons)  // [Person("이순신"), Person("이순신"), Person("이순신"
   <li>빈 배열의 경우, 값을 참조하려고 할 때 없는 인덱스를 참조하는 것이므로 런타임 에러(Index out of range)가 발생
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">EmptyDoubles</span><span class="p">:</span> <span class="p">[</span><span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">emptyDoubles</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">// [!] Triggers runtime error: Index out of range</span>
@@ -982,7 +982,7 @@ print(array) // [“Apple”, “Banana”, “Carrot”]</li>
 intArray[0] = 100 // [!] Cannot assign through subscript: ‘intArray’ is a ‘let’ constant</p>
 <div class="language-plaintext highlighter-rouge"><div class="code-header">
         <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1011,7 +1011,7 @@ print(numbers) // [1, 2, 3, 4, 5, 6, 7]</p>
 print(numbers) // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
 <div class="language-plaintext highlighter-rouge"><div class="code-header">
         <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1036,7 +1036,7 @@ print(numbers) // [0, 1, 2, 3, 4, 5]
   <li>insert(contentsOf:at:)을 사용하여 특정 위치에 여러 요소를 한꺼번에 삽입할 수 있다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
@@ -1049,7 +1049,7 @@ print(numbers) // [0, 1, 2, 3, 4, 5]
   <li>값을 제거할때는 remove(at:)에 제거하고 싶은 값의 인덱스를 입력하면 된다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
@@ -1064,7 +1064,7 @@ print(numbers) // [0, 1, 2, 3, 4, 5]
       <li>제거한 값을 반환하기 때문에, 빈 배열일 경우 에러가 발생
         <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1083,7 +1083,7 @@ print(numbers) // [0, 1, 2, 3, 4, 5]
       <li>배열의 맨 앞 또는 맨 뒤에서부터 몇 칸 띄운 값을 지우겠다는 의미.
         <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1103,7 +1103,7 @@ print(numbers) // [0, 1, 2, 3, 4, 5]
       <li>빈 배열일 경우 nil을 반환하고 에러가 발생하지 않는다.
         <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
@@ -1116,7 +1116,7 @@ print(numbers) // [0, 1, 2, 3, 4, 5]
   <li>모든 요소를 제거하여 빈 배열로 만들고 싶을 경우에는 removeAll()을 사용한다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
@@ -1129,7 +1129,7 @@ print(numbers) // [0, 1, 2, 3, 4, 5]
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
@@ -1152,7 +1152,7 @@ print(numbers.dropLast(10))	// [] : 뒤에서부터 10개 제거한 새로운 �
 print(numbers) // [1, 2, 3, 4, 5] : 기존 배열은 그대로</p>
 <div class="language-plaintext highlighter-rouge"><div class="code-header">
         <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1177,7 +1177,7 @@ print(numbers.firstIndex(of: 5)) // nil
   <li>반환값이 Optional 이므로 Unwrapping하여 사용한다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1201,7 +1201,7 @@ print(numbers.firstIndex(of: 5)) // nil
       <li>Bool값을 반환한다.
         <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
@@ -1216,7 +1216,7 @@ print(numbers.firstIndex(of: 5)) // nil
   <li>배열에 요소가 몇 개 있는지 알고 싶으면 count를 사용한다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">empty</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]()</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">empty</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="c1">// 0</span>
@@ -1237,7 +1237,7 @@ print(numbers.firstIndex(of: 5)) // nil
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1261,7 +1261,7 @@ print(numbers.firstIndex(of: 5)) // nil
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="n">numbers</span><span class="o">.</span><span class="nf">reverseCapacity</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> 
 <span class="nf">print</span><span class="p">(</span><span class="n">numbers</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span> <span class="c1">// 10</span>
@@ -1273,7 +1273,7 @@ print(numbers.firstIndex(of: 5)) // nil
   <li>빈 배열인지 알고 싶으면 count를 사용하여 요소의 개수가 0개인지 판단하면 된다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">empty</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]()</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">empty</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">//true</span>
@@ -1282,7 +1282,7 @@ print(numbers.firstIndex(of: 5)) // nil
   <li>요소의 개수가 아니라 단순히 빈 배열인지만 알고싶으면, isEmpty를 사용하면 된다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">empty</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]()</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">empty</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">)</span> <span class="c1">//true</span>
@@ -1295,7 +1295,7 @@ print(numbers.firstIndex(of: 5)) // nil
   <li>기존 배열의 순서를 거꾸로 뒤집는 방법으로는 reverse()를 사용하면 된다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
@@ -1306,7 +1306,7 @@ print(numbers.firstIndex(of: 5)) // nil
   <li>reserved()는 기존 배열은 그대로 두고 순서가 뒤집어진 새로운 배열을 리턴한다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
@@ -1328,7 +1328,7 @@ print(numbers.firstIndex(of: 5)) // nil
   <li>배열을 오름 차순으로 정렬하고 싶으면 sort()를 사용한다. 기존 배열 자체의 순서를 정렬하게 된다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
@@ -1349,7 +1349,7 @@ array.sort(by: &gt;)
 print(array) // [6, 5, 4, 3, 2, 1]</p>
 <div class="language-plaintext highlighter-rouge"><div class="code-header">
         <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1389,7 +1389,7 @@ print(array) // [1, 3, 5, 2, 4, 6]
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1427,7 +1427,7 @@ print(array) // [1, 3, 5, 2, 4, 6]
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1447,7 +1447,7 @@ print(array) // [1, 3, 5, 2, 4, 6]
   <li>부분 배열의 범위를 지정할 때 유용하게 사용 가능하다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1468,7 +1468,7 @@ print(numbers[numbers.index(before: numbers.endIndex]) // 5 - 마지막 값
 print(nubmers[numbers.endIndex]) // [!] Runtime Error - Index out of range</p>
 <div class="language-plaintext highlighter-rouge"><div class="code-header">
         <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -1534,18 +1534,18 @@ print(numbers.last) // nil
         
           
 
-          This post is licensed under 
+          이 기사는 저작권자의 
         <a href="https://creativecommons.org/licenses/by/4.0/">
           CC BY 4.0
         </a>
-         by the author.
+         라이센스를 따릅니다.
         
       </div>
 
       <!-- Post sharing snippet -->
 
 <div class="share-wrapper d-flex align-items-center">
-  <span class="share-label text-muted">Share</span>
+  <span class="share-label text-muted">공유하기</span>
   <span class="share-icons">
     
     
@@ -1580,8 +1580,8 @@ print(numbers.last) // nil
       class="btn small"
       data-bs-toggle="tooltip"
       data-bs-placement="top"
-      title="Copy link"
-      data-title-succeed="Link copied successfully!"
+      title="링크 복사하기"
+      data-title-succeed="링크가 복사되었습니다!"
     >
       <i class="fa-fw fas fa-link pe-none fs-6"></i>
     </button>
@@ -1617,8 +1617,15 @@ print(numbers.last) // nil
 
 
   <section id="access-lastmod">
-    <h2 class="panel-heading">Recently Updated</h2>
+    <h2 class="panel-heading">최근 업데이트</h2>
     <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/String-Index/">String Index</a>
+        </li>
       
         
         
@@ -1632,13 +1639,6 @@ print(numbers.last) // nil
         
         <li class="text-truncate lh-lg">
           <a href="/posts/(Deep-Dive)-Array/">(Deep Dive) Array</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/String-Index/">String Index</a>
         </li>
       
         
@@ -2108,7 +2108,7 @@ print(numbers.last) // nil
 
 
   <section>
-    <h2 class="panel-heading">Trending Tags</h2>
+    <h2 class="panel-heading">인기 태그</h2>
     <div class="d-flex flex-wrap mt-3 mb-1 me-3">
       
         
@@ -2154,7 +2154,7 @@ print(numbers.last) // nil
 
 
   <section id="toc-wrapper" class="ps-0 pe-4">
-    <h2 class="panel-heading ps-3 pt-2 mb-2">Contents</h2>
+    <h2 class="panel-heading ps-3 pt-2 mb-2">바로가기</h2>
     <nav id="toc"></nav>
   </section>
 
@@ -4666,7 +4666,7 @@ print(numbers.last) // nil
 
 
   <aside id="related-posts" aria-labelledby="related-label">
-    <h3 class="mb-4" id="related-label">Further Reading</h3>
+    <h3 class="mb-4" id="related-label">관련된 글</h3>
     <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
       
         <article class="col">
@@ -4683,10 +4683,10 @@ print(numbers.last) // nil
 <time
   
   data-ts="1708027980"
-  data-df="ll"
+  data-df="YYYY/MM/DD"
   
 >
-  Feb 16, 2024
+  2024/02/16
 </time>
 
               <h4 class="pt-0 my-2">107. x 사이의 개수</h4>
@@ -4729,10 +4729,10 @@ func solution(_ myString:String) -&amp;gt; [Int] {
 <time
   
   data-ts="1708027980"
-  data-df="ll"
+  data-df="YYYY/MM/DD"
   
 >
-  Feb 16, 2024
+  2024/02/16
 </time>
 
               <h4 class="pt-0 my-2">108. 문자열 잘라서 정렬하기.</h4>
@@ -4777,10 +4777,10 @@ func solution(_ myString:String) -&amp;gt; [String] {
 <time
   
   data-ts="1708027980"
-  data-df="ll"
+  data-df="YYYY/MM/DD"
   
 >
-  Feb 16, 2024
+  2024/02/16
 </time>
 
               <h4 class="pt-0 my-2">109. 문자열 바꿔서 찾기</h4>
@@ -4827,7 +4827,7 @@ func solution(_ myString:String, _ pat:String) -&amp;gt; Int {
     <a
       href="/posts/(Deep-Dive)-Array/"
       class="btn btn-outline-primary"
-      aria-label="Older"
+      aria-label="이전 글"
     >
       <p>(Deep Dive) Array</p>
     </a>
@@ -4837,7 +4837,7 @@ func solution(_ myString:String, _ pat:String) -&amp;gt; Int {
     <a
       href="/posts/String-Index/"
       class="btn btn-outline-primary"
-      aria-label="Newer"
+      aria-label="다음 글"
     >
       <p>String Index</p>
     </a>
@@ -4871,12 +4871,12 @@ func solution(_ myString:String, _ pat:String) -&amp;gt; Int {
       <span
         data-bs-toggle="tooltip"
         data-bs-placement="top"
-        title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author."
-      >Some rights reserved.</span>
+        title="명시되지 않는 한 이 사이트의 블로그 게시물은 작성자의 Creative Commons Attribution 4.0 International(CC BY 4.0) 라이선스에 따라 사용이 허가되었습니다."
+      >일부 권리 보유</span>
     
   </p>
 
-  <p>Using the <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme for <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>.
+  <p>Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme
   </p>
 </footer>
 
@@ -5336,7 +5336,7 @@ func solution(_ myString:String, _ pat:String) -&amp;gt; Int {
 
 
   <section>
-    <h2 class="panel-heading">Trending Tags</h2>
+    <h2 class="panel-heading">인기 태그</h2>
     <div class="d-flex flex-wrap mt-3 mb-1 me-3">
       
         
@@ -5408,9 +5408,9 @@ func solution(_ myString:String, _ pat:String) -&amp;gt; Int {
     ></button>
   </div>
   <div class="toast-body text-center pt-0">
-    <p class="px-2 mb-3">A new version of content is available.</p>
+    <p class="px-2 mb-3">새 버전의 콘텐츠를 사용할 수 있습니다.</p>
     <button type="button" class="btn btn-primary" aria-label="Update">
-      Update
+      업데이트
     </button>
   </div>
 </aside>
