@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>Harold`s Daily Log</title>
   <subtitle>A minimal, responsive and feature-rich Jekyll theme for technical writing.</subtitle>
-  <updated>2024-02-29T22:56:13+09:00</updated>
+  <updated>2024-02-29T23:16:56+09:00</updated>
   <author>
     <name>Dongik Song</name>
     <uri>http://localhost:4000/</uri>
@@ -17,6 +17,115 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>String Index</title>
+    <link href="http://localhost:4000/posts/String-Index/" rel="alternate" type="text/html" title="String Index" />
+    <published>2024-02-29T15:52:00+09:00</published>
+  
+    <updated>2024-02-29T22:56:48+09:00</updated>
+  
+    <id>http://localhost:4000/posts/String-Index/</id>
+    <content src="http://localhost:4000/posts/String-Index/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="코딩테스트" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      코딩테스트 문제를 풀다보면 String Index에 관한 문제가 많이 나와 정리한다.
+
+추가로 더 서술해야할게 있다면 지속적으로 수정을 할 예정
+
+String.Index
+
+
+  String.Index
+    
+      Int를 리턴한다.
+      String.Index의 구조체 내용이 나온다.
+        var string : String = "abcdefg"
+print(string.startIndex) //Index(_rawBits: 15)
+        
+        
+      
+    
+  
+  String.distance(from:to:)
+    
+      Int를 리턴한다
+      from : string.startIndex
+      to : 변환할 String.Index
+  ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Array 명령어</title>
+    <link href="http://localhost:4000/posts/Array-%EB%AA%85%EB%A0%B9%EC%96%B4/" rel="alternate" type="text/html" title="Array 명령어" />
+    <published>2024-02-29T14:56:00+09:00</published>
+  
+    <updated>2024-02-29T00:00:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/Array-%EB%AA%85%EB%A0%B9%EC%96%B4/</id>
+    <content src="http://localhost:4000/posts/Array-%EB%AA%85%EB%A0%B9%EC%96%B4/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="코딩테스트" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      배열에 대해서 정리를 해보자.
+이것도 추가로 필요한게 있다면 지속적으로 수정 할 예정
+
+초기화 및 선언
+
+  배열은 가지는 요소에 타입에 따라 자동으로 타입 추론이 가능하다.
+  
+    선언과 동시에 초기화 할 때는 요소에 값이 들어있다면 자동으로 타입 추론이 이루어지기 때문에 타입을 명시해주지 않아도 된다.
+  
+  예시
+    var intNumbers = [1,2,3,4,5] // 'Int' 요소를 갖는 배열
+var strings = ["A", "BC", "DEF"] // 'String' 요소를 갖는 배열
+    
+  
+  단, 빈 배열을 선언할 때는 타입을 명시해주지 않으면 에러가 발생
+예시
+```swift
+var emptyDoubles: [Double] = []
+var emptyStrings...
+    </summary>
+  
+
+  </entry>
 
   
   <entry>
@@ -187,100 +296,6 @@ func solution(_ t:String, _ p:String) -&amp;gt; Int {
             string = ""
                 for j in i ..&amp;lt; i + (p.count) {
                     stri...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>202. 삼총사 (ing)</title>
-    <link href="http://localhost:4000/posts/202.-%EC%82%BC%EC%B4%9D%EC%82%AC/" rel="alternate" type="text/html" title="202. 삼총사 (ing)" />
-    <published>2024-02-29T05:13:00+09:00</published>
-  
-    <updated>2024-02-29T05:13:00+09:00</updated>
-  
-    <id>http://localhost:4000/posts/202.-%EC%82%BC%EC%B4%9D%EC%82%AC/</id>
-    <content src="http://localhost:4000/posts/202.-%EC%82%BC%EC%B4%9D%EC%82%AC/" />
-    <author>
-      <name>Dongik Song</name>
-    </author>
-
-  
-    
-    <category term="코딩테스트" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-
-
-
-
-
-
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>201. 이상한 문자 만들기</title>
-    <link href="http://localhost:4000/posts/201.-%EC%9D%B4%EC%83%81%ED%95%9C-%EB%AC%B8%EC%9E%90-%EB%A7%8C%EB%93%A4%EA%B8%B0/" rel="alternate" type="text/html" title="201. 이상한 문자 만들기" />
-    <published>2024-02-29T05:13:00+09:00</published>
-  
-    <updated>2024-02-29T05:13:00+09:00</updated>
-  
-    <id>http://localhost:4000/posts/201.-%EC%9D%B4%EC%83%81%ED%95%9C-%EB%AC%B8%EC%9E%90-%EB%A7%8C%EB%93%A4%EA%B8%B0/</id>
-    <content src="http://localhost:4000/posts/201.-%EC%9D%B4%EC%83%81%ED%95%9C-%EB%AC%B8%EC%9E%90-%EB%A7%8C%EB%93%A4%EA%B8%B0/" />
-    <author>
-      <name>Dongik Song</name>
-    </author>
-
-  
-    
-    <category term="코딩테스트" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-
-
-func solution(_ s:String) -&amp;gt; String {
-    
-    var answer : String = ""
-
-    var index = 0
-    
-    for string in s {
-        if string ==  " " {
-            index = 0
-            answer += " "
-        } else if index % 2 == 0 {
-            answer += string.uppercased()
-            index += 1
-        } else {
-            answer += string.lowercased()
-            index -= 1
-        }
-    }...
     </summary>
   
 

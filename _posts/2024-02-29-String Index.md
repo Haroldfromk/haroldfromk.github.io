@@ -12,9 +12,8 @@ toc_sticky: true
 
 추가로 더 서술해야할게 있다면 지속적으로 수정을 할 예정
 
-String.Index
 
-1. String.Index
+## String.Index
 - Int를 리턴한다.
 - String.Index의 구조체 내용이 나온다.
 ```swift
@@ -22,7 +21,7 @@ var string : String = "abcdefg"
 print(string.startIndex) //Index(_rawBits: 15)
 ```
 ---
-2. String.distance(from:to:)
+## String.distance(from:to:)
 - Int를 리턴한다
  - from : string.startIndex
   - to : 변환할 String.Index
@@ -31,7 +30,7 @@ print(string.startIndex) //Index(_rawBits: 15)
 let distance = string.distance(from: string.startIndex, to: 변환할 String.Index)
 ```
 ---
-3. StartIndex (첫글자 구하기)
+## StartIndex (첫글자 구하기)
 - 문자열의 시작 인덱스를 알 수 있다.
   
  - startIndex를 String의 Subscript로 전달 하면 해당 인덱스의 문자를 알 수 있다.
@@ -43,7 +42,7 @@ let first = string.startIndex
 print(string[first]) //a
 ```
 ---
-4. prefix(_:)
+## prefix(_:)
 - 0~n번째까지의 Substring을 구할 수 있다.
 ```swift
 let first = string.prefix(2)
@@ -52,7 +51,7 @@ print(first) //ab
 
 ---
 
-5. index(after:)
+## index(after:)
 - n번째 글자를 구할 수 있다.
 
 ```swift
@@ -64,7 +63,7 @@ print(string[second]) //b
 
 ```
 ---
-6. String.Index(endcodedOffset:)
+## String.Index(endcodedOffset:)
 	
   - String.Index를 생성할 때 encodedOffset 프로퍼티를 설정하면 n 번째 String.Index를 생성할 수 있다.
 		
@@ -75,7 +74,7 @@ print(string[String.Index(encodedOffset: 3)]) //d
 ```
 ---
 
-7. index(_:offsetBy:)
+## index(_:offsetBy:)
 - offsetBy에 정수 n을 입력하면 Index에서 n만큼 이동한 String.Index를 구할 수 있다.
 
 ```swift
@@ -93,7 +92,7 @@ print(string[string.index(index, offsetBy: -2)]) //b
 //startIndex에서 -1을 하면 string의 범위를 벗어나기 때문.
 ```
 ---
-8. endIndex (문자열의 마지막 문자 구하기)
+## endIndex (문자열의 마지막 문자 구하기)
 
 - 그냥 endIndex를 하면 런타임 에러가 발생함
     - 빈 공간을 가리키기 때문.
@@ -103,14 +102,14 @@ print(string[string.index(index, offsetBy: -2)]) //b
 print(string[string.index(before: string.endIndex)]) //g
 ```
 ---
-9. suffix(_:)
+## suffix(_:)
 
 - 뒤에서 부터 n개의 Substring을 구할 수 있다.
 ```swift
 print(string.suffix(3)) //efg
 ```
 ---
-10. firstIndex(of:)
+## firstIndex(of:)
 
 - 특정 문자의 인덱스를 구할 때 쓴다.
 ```swift
@@ -128,7 +127,7 @@ print(distance) //0
 - index(of:) 도 같은 기능을 수행한다.
 
 ---
-11. lastIndex(of:)
+## lastIndex(of:)
 - 마지막으로 나오는 String.Index를 반환.
 - 일치하지 않는다면 nil을 반환
 ```swift

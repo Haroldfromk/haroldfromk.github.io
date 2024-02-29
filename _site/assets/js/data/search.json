@@ -1,10 +1,44 @@
 [
   
   {
+    "title": "String Index",
+    "url": "/posts/String-Index/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 15:52:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "코딩테스트 문제를 풀다보면 String Index에 관한 문제가 많이 나와 정리한다.추가로 더 서술해야할게 있다면 지속적으로 수정을 할 예정String.Index  String.Index          Int를 리턴한다.      String.Index의 구조체 내용이 나온다.        var string : String = \"abcdefg\"pr...",
+    "content": "코딩테스트 문제를 풀다보면 String Index에 관한 문제가 많이 나와 정리한다.추가로 더 서술해야할게 있다면 지속적으로 수정을 할 예정String.Index  String.Index          Int를 리턴한다.      String.Index의 구조체 내용이 나온다.        var string : String = \"abcdefg\"print(string.startIndex) //Index(_rawBits: 15)                              String.distance(from:to:)          Int를 리턴한다      from : string.startIndex      to : 변환할 String.Index      let distance = string.distance(from: string.startIndex, to: 변환할 String.Index)  StartIndex (첫글자 구하기)          문자열의 시작 인덱스를 알 수 있다.        startIndex를 String의 Subscript로 전달 하면 해당 인덱스의 문자를 알 수 있다.let string: String = \"abcdefg\"let first = string.startIndexprint(string[first]) //a  prefix(_:)          0~n번째까지의 Substring을 구할 수 있다.        let first = string.prefix(2)print(first) //ab                      index(after:)          n번째 글자를 구할 수 있다.      let first = string.startIndex//index(after:)은 매개변수로 String.Index를 받고 전달받은 String.Index의 다음 String.Index를 구할 수 있다.let second = string.index(after: first)print(string[second]) //b  String.Index(endcodedOffset:)      String.Index를 생성할 때 encodedOffset 프로퍼티를 설정하면 n 번째 String.Index를 생성할 수 있다.    - 인덱스는 0부터 시작이니 3은 네 번째 문자가 된다.      print(string[String.Index(encodedOffset: 3)]) //d  index(_:offsetBy:)          offsetBy에 정수 n을 입력하면 Index에서 n만큼 이동한 String.Index를 구할 수 있다.      let start = string.startIndexprint(string[string.index(start, offsetBy: 0)]) //aprint(string[string.index(start, offsetBy: 2)]) //c// offsetBy는 음수도 전달할 수 있다.let index = String.Index(encodedOffset: 3)print(string[string.index(index, offsetBy: -2)]) //b//3에서 -2를 한 1 번째 글자인 b가 출력된다.//주의할 점은 string 범위를 벗어날 경우 런타임 에러가 발생//startIndex에서 -1을 하면 string의 범위를 벗어나기 때문.  endIndex (문자열의 마지막 문자 구하기)  그냥 endIndex를 하면 런타임 에러가 발생함          빈 공간을 가리키기 때문.      아래와 같이 사용한다.      print(string[string.index(before: string.endIndex)]) //g  suffix(_:)  뒤에서 부터 n개의 Substring을 구할 수 있다.    print(string.suffix(3)) //efg                  firstIndex(of:)        특정 문자의 인덱스를 구할 때 쓴다.    print(string.firstIndex(of: \"d\")) //d의 String.Indexprint(string.firstIndex(of: \"h\")) //nil        firstIndex는 문자가 가장 먼저 나오는 String.Index를 반환하기 때문에 일치하는 문자가 여러 개면 가장 먼저 나오는 글자의 인덱스를 리턴한다.let string = \"aaaaa\"let distance = string.distance(from: string.startIndex, to: string.firstIndex(of: \"a\")!)print(distance) //0  index(of:) 도 같은 기능을 수행한다.  lastIndex(of:)          마지막으로 나오는 String.Index를 반환.      일치하지 않는다면 nil을 반환        let string = \"aaaaa\"let distance = string.distance(from: string.startIndex, to: string.lastIndex(of: \"a\")!)print(distance) //4                    "
+  },
+  
+  {
+    "title": "Array 명령어",
+    "url": "/posts/Array-%EB%AA%85%EB%A0%B9%EC%96%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 14:56:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "배열에 대해서 정리를 해보자.이것도 추가로 필요한게 있다면 지속적으로 수정 할 예정초기화 및 선언  배열은 가지는 요소에 타입에 따라 자동으로 타입 추론이 가능하다.      선언과 동시에 초기화 할 때는 요소에 값이 들어있다면 자동으로 타입 추론이 이루어지기 때문에 타입을 명시해주지 않아도 된다.    예시    var intNumbers = [1,...",
+    "content": "배열에 대해서 정리를 해보자.이것도 추가로 필요한게 있다면 지속적으로 수정 할 예정초기화 및 선언  배열은 가지는 요소에 타입에 따라 자동으로 타입 추론이 가능하다.      선언과 동시에 초기화 할 때는 요소에 값이 들어있다면 자동으로 타입 추론이 이루어지기 때문에 타입을 명시해주지 않아도 된다.    예시    var intNumbers = [1,2,3,4,5] // 'Int' 요소를 갖는 배열var strings = [\"A\", \"BC\", \"DEF\"] // 'String' 요소를 갖는 배열        단, 빈 배열을 선언할 때는 타입을 명시해주지 않으면 에러가 발생예시```swiftvar emptyDoubles: [Double] = []var emptyStrings = Stringvar emptyFloats: Array = Array()var emptyArray = [] // [!] Empty collection literal requires an explicit type- Int 타입 배열은 연속된 숫자 배열을 쉽게 선언할 수 있다```swiftvar intArray = Array&lt;Int&gt;(1...10) // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  한 배열에 여러 자료형 요소를 넣고싶으면 Any 타입을 사용하면 된다.    let anyArray: [Any] = [1, 2, \"a\", \"b\"]          모든 요소를 반복되는 값으로 초기화  특정 값만 반복적으로 가지는 배열일 경우 Array(repeating:count:)를 사용한다.```swiftvar digitCounts = Array(repeating: 0, count: 10) print(digitCounts) // [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]var stringCounts = [String](repeating: “”, count: 10) print(stringCounts) // [””, “”, “”, “”, “”, “”, “”, “”, “”, “”]- 여기서 repeating에 들어가는 값이 클래스의 인스턴스일 경우, 반복되는 모든 요소가 동일한 인스턴스를 참조하게 되므로 주의 해야함. (요소 하나의 속성만 변경해도 모든 값이 변경됨)```swiftclass Person: CustomStringConvertible {    var name: String        init(name: String) {        self.name = name    }        var description: String {        return \"Person(\\(self.name))\"    }}var persons = Array(repeating: Person(name: \"홍길동\"), count: 3)print(persons)  // [Person(\"홍길동\"), Person(\"홍길동\"), Person(\"홍길동\")]persons[0].name = \"이순신\"print(persons)  // [Person(\"이순신\"), Person(\"이순신\"), Person(\"이순신\")]배열 출력  print()를 사용하면 된다.    var array = [\"A\",\"B\",\"C\"]print(array) // [\"A\", \"B\", \"C\"]            값 접근    배열에서 요소의 위치(인덱스) 값으로 요소를 찾아올 수 있다. 인덱스 범위를 사용해도 된다.    var array = [\"A\",\"B\",\"C\"]print(array[0]) // \"A\"print(array[1..&lt;3]) // [\"B\", \"C\"]        빈 배열의 경우, 값을 참조하려고 할 때 없는 인덱스를 참조하는 것이므로 런타임 에러(Index out of range)가 발생    var EmptyDoubles: [Double] = []print(emptyDoubles[0]) // [!] Triggers runtime error: Index out of range            값 변경    변경하고 싶은 요소의 위치에 다른 값을 넣을 수 있다.  let으로 선언된 배열에는 변경할 수 없다.```swiftvar array = [“A”,”B”,”C”]array[0] = “Apple”array[1] = “Banana”array[2] = “Carrot”print(array) // [“Apple”, “Banana”, “Carrot”]let intArray = [1,2,3]intArray[0] = 100 // [!] Cannot assign through subscript: ‘intArray’ is a ‘let’ constant---## 값 추가- 배열의 맨 뒤에 값을 추가하는 방법으로는 append(_:)를 사용한다.```swiftvar numbers = [1,2,3,4]numbers.append(5)print(numbers) // [1, 2, 3, 4, 5]  배열 뒤에 여러 요소들을 한꺼번에 추가 하고 싶을 때는 append(contentsOf:)를 사용한다. (또는 += 연산자를 사용할 수도 있다.)```swiftvar numbers = [1,2,3,4]var moreNumbers = [5, 6, 7]numbers.append(contentsOf: moreNumbers)print(numbers) // [1, 2, 3, 4, 5, 6, 7]numbers += [8,9,10]print(numbers) // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]- 배열의 특정 위치에 값을 삽입하고 싶을 경우에는 insert(_:at:)을 사용한다.\t    - 앞의 인자에는 넣고 싶은 값을 입력한다.    - 뒤의 인자 at에는 넣을 위치(인덱스)를 입력한다.    - 이 메소드를 사용하면 값을 삽입한 위치 뒤의 요소들은 한 칸씩 뒤로 밀리게되고, 배열의 크기는 1 증가한다.```swiftvar numbers = [1,2,3,4,5]numbers.insert(0, at: 0)print(numbers) // [0, 1, 2, 3, 4, 5]  insert(contentsOf:at:)을 사용하여 특정 위치에 여러 요소를 한꺼번에 삽입할 수 있다.    var numbers = [1,2,3,4,5]numbers.insert(contentsOf: [1,2,3], at: 3)print(numbers) // [1, 2, 3, 1, 2, 3, 4, 5]            값 제거    값을 제거할때는 remove(at:)에 제거하고 싶은 값의 인덱스를 입력하면 된다.    var numbers = [1,2,3]numbers.remove(at: 1) // 인덱스 1에 있는 2를 제거한다.print(numbers) // [1,3]            첫번째 값을 제거하고 싶을 때는 removeFirst(), 마지막 값을 제거하고 싶을때는 removeLast()를 사용한다.          제거한 값을 반환하기 때문에, 빈 배열일 경우 에러가 발생        var numbers = [1,2,3]numbers.removeFirst() // numbers.remove(at: 0)와 같은 표현numbers.removeLast()  // numbers.remove(at: numbers.count-1)와 같은 표현print(numbers) // [2]                          removeFirst()와 removeLast()에 인자값으로 점프할 인덱스 값을 넣을 수 있다.          배열의 맨 앞 또는 맨 뒤에서부터 몇 칸 띄운 값을 지우겠다는 의미.        var numbers = [1,2,3,4,5]numbers.removeFirst(2) // numbers.remove(at: 2)와 같은 표현 =&gt; 3 삭제numbers.removeLast(1)  // numbers.remove(at: numbers.count-2)와 같은 표현 =&gt; 4 삭제print(numbers) // [1,2,5]                          마지막 값을 제거하는 방법으로는 popLast()도 있다.          마지막 값(Optional)을 반환하면서 제거한다.      빈 배열일 경우 nil을 반환하고 에러가 발생하지 않는다.        var numbers = [1,2,3]print(numbers.popLast()) // Optional(3)print(numbers) // [1,2]                      모든 요소를 제거하여 빈 배열로 만들고 싶을 경우에는 removeAll()을 사용한다.    var numbers = [1,2,3]numbers.removeAll()print(numbers) // []        일부 구간을 제거하고 싶을 때는 removeSubrange(_:)에 제거하고 싶은 인덱스 범위를 입력한다.var numbers = [1,2,3,4,5,6]numbers.removeSubrange(1..&lt;4) // 인덱스 1,2,3 범위의 값을 제거한다.print(numbers) // [1,5,6]  dropFirst(:), dropLast(:)를 사용하면 기존 배열은 그대로두고, 기존 배열에서 앞 또는 뒤에서 몇개의 값을 제거한 새로운 배열을 반환```swiftlet numbers = [1, 2, 3, 4, 5]print(numbers.dropFirst(2))\t// [3, 4, 5] : 앞에서부터 2개 제거한 새로운 배열 반환print(numbers.dropFirst(10))\t// [] : 앞에서부터 10개 제거한 새로운 배열 반환print(numbers) // [1, 2, 3, 4, 5] : 기존 배열은 그대로let numbers = [1, 2, 3, 4, 5]print(numbers.dropLast(2))\t// [1, 2, 3] : 뒤에서부터 2개 제거한 새로운 배열 반환print(numbers.dropLast(10))\t// [] : 뒤에서부터 10개 제거한 새로운 배열 반환print(numbers) // [1, 2, 3, 4, 5] : 기존 배열은 그대로---## 값의 인덱스 찾기- 배열에서 원하는 값의 인덱스를 찾고 싶을 때는 firstIndex(of:)를 사용한다. Optional Int 형태를 반환한다.- 배열에서 찾고자 하는 값이 여러개일 경우, 가장 앞에 있는 값의 인덱스를 반환한다.\t    - 해당하는 값이 없을 때는 nil을 반환한다.```swiftvar numbers = [1,2,3,4,4,3,2,1]print(numbers.firstIndex(of: 3)) // Optional(2)print(numbers.firstIndex(of: 5)) // nil  반환값이 Optional 이므로 Unwrapping하여 사용한다.    var fruits = [\"Apple\", \"Banana\", \"Carrot\"]if let i = fruits.firstIndex(of: \"Banana\") {  fruits[i] = \"Beetroot\"}print(fruits) // [\"Apple\", \"Beetroot\", \"Carrot\"]            원하는 값의 마지막 인덱스를 찾고 싶을때는 lastIndex(of:)를 사용한다.    특정 값 포함    특정 요소가 있는지 판단하기 위해서는 firstIndex(of:)를 사용 했을때 반환값이 nil이 아닌지를 검사해도 된다.      하지만 단순히 포함 여부만 알고싶다면 contains() 메소드를 사용한다          Bool값을 반환한다.        var numbers = [1,2,3,4]print(numbers.contains(4)) // trueprint(numbers.contains(5)) // false                        배열의 크기              배열에 요소가 몇 개 있는지 알고 싶으면 count를 사용한다.    var empty = [Int]()print(empty.count) // 0        배열을 처음에 선언하면, 배열의 크기와 별개로 내용을 보관하기 위한 메모리를 예약하게 된다.      배열에 예약된 메모리 크기는 capacity 속성을 사용해서 알 수 있다.          capacity속성은 새 스토리지를 할당하지 않고 배열에 포함될 수 있는 총 요소수 이다.        요소를 추가하다가 배열의 capacity를 초과하게 되면 배열은 더 큰 메모리를 할당하여 새 공간에 요소들을 복사한다.  이 때 할당되는 새로운 배열의 용량은 기존 크기의 배수이다.  요소를 많이 추가하게 될 수록, 점점 재할당 발생 빈도가 낮아지게 된다.var numbers = [1,2,3,4]print(numbers.count)    // 4print(numbers.capacity) // 4numbers.append(5)print(numbers.count)    // 5print(numbers.capacity) // 8  만약 배열에 요소가 얼마나 저장될 지 대략 예상할 수 있으면 미리 capacity를 설정하여 재할당을 방지할 수 있다.  capacity를 설정하는 방법은 reserveCapacity(_:)를 사용하면 된다.numbers.reverseCapacity(10) print(numbers.capacity) // 10빈 배열 여부  빈 배열인지 알고 싶으면 count를 사용하여 요소의 개수가 0개인지 판단하면 된다.    var empty = [Int]()print(empty.count == 0) //true        요소의 개수가 아니라 단순히 빈 배열인지만 알고싶으면, isEmpty를 사용하면 된다.    var empty = [Int]()print(empty.isEmpty) //true                  배열 뒤집기        기존 배열의 순서를 거꾸로 뒤집는 방법으로는 reverse()를 사용하면 된다.    var array = [1,3,5,2,4,6]array.reverse()print(array) // [6, 4, 2, 5, 3, 1]        reserved()는 기존 배열은 그대로 두고 순서가 뒤집어진 새로운 배열을 리턴한다.    var array = [1,3,5,2,4,6]array.reversed() // [6, 4, 2, 5, 3, 1]print(array) // [1, 3, 5, 2, 4, 6]        빠른 수행시간을 위해 reserved()를 사용하는걸 추천한다.배열 정렬하기  정렬을 하기 위해서는 요소가 Comparable 프로토콜을 준수하고 있는 타입이어야 한다.  Comparable은 비교연산자(&lt;)에 대한 오버로딩이 구현되어야 하기 때문에 값의 대소 비교가 가능해진다.      Swift에서 기본 제공하는 숫자 타입이나 String 타입은 모두 Comparable을 준수하고 있고, 커스텀 객체라도 Comparable을 준수하도록 구현하면 sort() 메소드를 사용할 수 있다.    배열을 오름 차순으로 정렬하고 싶으면 sort()를 사용한다. 기존 배열 자체의 순서를 정렬하게 된다.    var array = [1,3,5,2,4,6]array.sort()print(array) // [1, 2, 3, 4, 5, 6]        내림 차순으로 정렬하고 싶을땐, sort()와 reverse()를 함께 사용하거나 sort(by:&gt;)를 사용하면 된다.```swiftvar array = [1,3,5,2,4,6]array.sort()array.reverse()print(array) // [6, 5, 4, 3, 2, 1]var array = [1,3,5,2,4,6]array.sort(by: &gt;)print(array) // [6, 5, 4, 3, 2, 1]- sort()는 기존 배열은 그대로 두고 정렬된 새로운 배열을 리턴한다.- 오름차순 정렬은 sorted(), 또는 sorted(by:&lt;), 내림차순정렬은 sorted(by:&gt;)```swiftvar array = [1,3,5,2,4,6]array.sorted() //  [1, 2, 3, 4, 5, 6]print(array) // [1, 3, 5, 2, 4, 6]var array = [1,3,5,2,4,6]array.sorted(by: &gt;) // [6, 5, 4, 3, 2, 1]print(array) // [1, 3, 5, 2, 4, 6]최대 최소값 찾기      max(), min()메소드를 활용하여 최대, 최소값을 찾을 수 있다.          반환값은 Optional이므로 Unwrapping해서 사용하면 된다.            comparable 프로토콜을 준수하지 않는 요소일 경우 컴파일 에러를 발생하며, 빈 배열에서 사용하면 nil을 반환한다.  var numbers = [1,2,3]print(numbers.min()) // Optional(1)print(numbers.max()) // Optional(3)var numbers = [Int]()print(numbers.min()) // nilprint(numbers.max()) // nilvar objects = [CustomClass]()print(objects.min()) // [!] Compile Errorprint(objects.max()) // [!] Compile Error인덱스 관련  배열의 첫번째 인덱스는 0, 마지막 인덱스는 count-1과 같다.      startIndex, endIndex를 사용하여 구할 수도 있다.          startIndex는 항상 0이고, endIndex는 count값과 같다.      var numbers = [1,2,3,4,5]print(numbers.startIndex) // 0print(numbers.endIndex) // 5var numbers = []print(numbers.startIndex) // 0print(numbers.endIndex) // 0  부분 배열의 범위를 지정할 때 유용하게 사용 가능하다.    let numbers = [10, 20, 30, 40, 50]if let i = numbers.firstIndex(of: 30) {  print(numbers[i ..&lt; numbers.endIndex]) // [30, 40, 50]}        index(after:), index(before:)를 활용할 수도 있다.```swiftvar numbers = [1,2,3,4,5]print(numbers[numbers.startIndex]) // 1 - 첫번째 값print(numbers[numbers.index(after: numbers.startIndex]) // 2 - 2번째 값print(numbers[numbers.index(before: numbers.endIndex]) // 5 - 마지막 값print(nubmers[numbers.endIndex]) // [!] Runtime Error - Index out of range---## 첫번째, 마지막 값 찾기- array[0], array[array.count-1]을 사용하거나, numbers[numbers.startIndex], numbers[numbers.endIndex]를 사용하는 방법이 있다.- 하지만 first, last를 사용하면 Optional요소를 반환하며 빈 배열일 경우 nil을 반환한다.\t    - Index out of range 에러를 발생시키지 않고 안전하게 찾을 수 있다.```swiftvar numbers = [1,2,3,4,5]print(numbers.first) // Optional(1)print(numbers.first) // Optional(5)var numbers = [Int]()print(numbers.first) // nilprint(numbers.last) // nil"
+  },
+  
+  {
     "title": "(Deep Dive) Array",
     "url": "/posts/(Deep-Dive)-Array/",
     "categories": "Deep Dive",
-    "tags": "Deep Dive",
+    "tags": "Udemy, Deep Dive",
     "date": "2024-02-29 11:19:00 +0900",
     
 
@@ -21,7 +55,7 @@
     "title": "(Deep Dive) Variables",
     "url": "/posts/(Deep-Dive)-Variables/",
     "categories": "Deep Dive",
-    "tags": "Deep Dive",
+    "tags": "Udemy, Deep Dive",
     "date": "2024-02-29 11:13:00 +0900",
     
 
@@ -766,6 +800,23 @@
   },
   
   {
+    "title": "고차함수",
+    "url": "/posts/%EA%B3%A0%EC%B0%A8%ED%95%A8%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 00:00:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "고차함수 정리.map  컬렉션 내부의 데이터를 가공하여 새로운 컬렉션을 생성한다.      map 메서드는 인자로 클로저를 받아 컨테이너 내부에 들어있는 요소들의 값을 어떻게 바꿀 것인지를 결정한다.    선언    func map&lt;T&gt;(_ transform: (Element) throws -&gt; T) rethrows -&gt; [T] ...",
+    "content": "고차함수 정리.map  컬렉션 내부의 데이터를 가공하여 새로운 컬렉션을 생성한다.      map 메서드는 인자로 클로저를 받아 컨테이너 내부에 들어있는 요소들의 값을 어떻게 바꿀 것인지를 결정한다.    선언    func map&lt;T&gt;(_ transform: (Element) throws -&gt; T) rethrows -&gt; [T]                      매개변수   \t- transform : 매핑 클로저로, 이 컨테이너의 요소를 매개변수로 받아들이고 정의한 클로저의 형태에 맞게 변환된 값을 반환한다.                    리턴타입 : 이 컨테이너의 변환된 요소를 포함하는 배열을 반환.              예시 (For문을 사용했을 때)// numbers의 각 요소에 9 곱하기let Numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]var multiplyArray: [Int] = []for number in Numbers {    multiplyArray.append(number * 9)}print(multiplyArray)// [9, 18, 27, 36, 45, 54, 63, 72, 81]  예시 (map을 사용했을 때)// numbers의 각 요소에 9 곱하기let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]let multiplyArray: [Int] = numbers.map { $0 * 9 }print(multiplyArray)// [9, 18, 27, 36, 45, 54, 63, 72, 81]reduce  컬렉션 내부에서 조건에 맞는 데이터들만 골라 새로운 컬렉션을 생성한다.      filter 메서드는 클로저를 인자로 받고, 이 클로저 내부에는 어떤 데이터를 포함시킬지 그 조건을 정의한다.    선언```swiftfunc reduce(_ initialResult: Result, _ nextPartialResult: (Result, Element) throws -&gt; Result) rethrows -&gt; Result- 매개변수    - initialResult : 초기값으로 사용할 값을 넣으면 클로저가 처음 실행될 때, nextPartialResult에 전달된다.    - nextPartialResult : 컨테이너 요소를 새로운 누적값으로 결합하는 클로저이다.        - 리턴타입 : 최종 누적 값이 반환되며, 컨테이너 요소가 없다면 initialResult의 값이 반환된다.- 예시 (for문을 사용 했을 때)```swift// 각 요소의 합 구하기let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]var sum = 0for number in numbers {    sum += number}print(sum)// 55  예시 (reduce를 사용했을 때)```swift// 각 요소의 합 구하기 (1)let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]let sum = numbers.reduce(0, +)print(sum)// 55// 각 요소의 합 구하기 (2)let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]let sum = numbers.reduce(0) { $0 + $1 }print(sum)// 55- 예시 (for문을 사용 했을 때)```swift// 각 요소의 곱셈 결과 구하기let numbers = [1, 2, 3, 4, 5]var sum = 1for number in numbers {    sum *= number}print(sum)// 120  예시 (reduce를 사용했을 때)```swift// 각 요소의 곱셈 결과 구하기 (1)let numbers = [1, 2, 3, 4, 5]let sum = numbers.reduce(1, *)print(sum)// 120// 각 요소의 곱셈 결과 구하기 (2)let numbers = [1, 2, 3, 4, 5]let sum = numbers.reduce(1) { $0 * $1 }print(sum)// 120## filter- 컬렉션 내부의 데이터들을 하나로 통합시킨다- 다른 고차함수들과는 다르게 reduce는 두 개의 인자를 받는다.    \t     - 첫번째 인자는 통합할 데이터의 초기 값이다.     - 두번째 인자는 클로저인데, 클로저에서는 어떻게 값을 통합할 것인지를 정의한다.     - 이때 사용되는 두 파라미터 중 첫번째는 바로 이전값에 대한 통합된 데이터를 의미하고, 두번째는 이번에 새로 통합할 데이터를 의미한다. - 선언```swiftfunc filter(_ isIncluded: (Self.Element) throws -&gt; Bool) rethrows -&gt; [Self.Element]  매개변수                  isIncluded : 컨테이너의 요소를 인수로 취하고, 요소가 반환된 배열에 포함되어야 하는지 여부를 Bool 값으로 반환하는 클로저.                    리턴 타입 : inIncluded 에 맞게 true로 반환되는 값만 리턴한다.              예시 (일반적인 For문을 사용 했을 때)```swift// numbers에서 짝수만 추출하기let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]var evenNumbers: [Int] = []for number in numbers {    if number % 2 == 0 {        evenNumbers.append(number)    }}print(evenNumbers)// [2, 4, 6, 8]- 예시 (filter를 사용했을 때)```swift// numbers에서 짝수만 추출하기let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]let evenNumbers = numbers.filter { $0 % 2 == 0 }print(evenNumbers)// [2, 4, 6, 8]다른 고차함수들CompactMap      옵셔널 바인딩을 지원한다.        예시```swiftlet students : [String?] = [“Mike”, “Jane”, nil, “John”, nil]// nil이 섞여 있는 컬렉션에서 존재하는 모든 이름앞에 “Boost2021-“ 키워드를 붙여주자.  // 1. map을 이용한 코드let boostStudents = students.map({“BoostCamp2021” + $0})// 에러가 발생한다 nil이 있기 때문.// 2. compactMap을 이용한 코드let students : [String?] = [“Mike”, “Jane”, nil, “John”, nil]let boostStudents = students.compactMap({ $0 }).map( {“BoostCamp2021-“ + $0})print(boostStudents) // [“BoostCamp2021-Mike”, “BoostCamp2021-Jane”, “BoostCamp2021-John”## FlatMap\t- 2차원 배열에 나누어져있는 데이터들을 1차원 배열로 합쳐주는 기능이 포함되어있다.예시```swiftlet students = [[\"Mike\", nil], [nil, nil, \"Jane\"], [\"John\"]]// 먼저 위와 같은 배열을 1차원으로 만들때 사용한다.let goodStudents = students.flatMap({$0})print(goodStudents) // [Optional(\"Mike\"), nil, nil, nil, Optional(\"Jane\"), Optional(\"John\")]//아직은 옵셔널 바인딩이 안되어 있고 nil이 포함되어 있습니다. 이때 실제 이름 값만 추출하고 싶다면 위의 compactmap을 추가로 쓸 수 있다.let goodStudents = students.flatMap({$0}).compactMap({ $0 })print(goodStudents) // [\"Mike\", \"Jane\", \"John\"]ForEach  for - in 구문처럼 컬렉션의 각 요소들을 뽑아낼 수 있다.  for - in 과는 다르게 고차함수에 포함되어 있기에 글로벌 스코프에서 사용했을 때도 return을 통해 현재 반복을 종료하고 다음 반복으로 이어나갈 수 있다 (continue와 비슷하게 동작)      다른 고차함수처럼 새로운 컬렉션이나 데이터를 반환하지 않기 때문에 단순한 순회의 용도로 사용하기에 적합하다.    예시let numbers = [1, 2, 3, 4, 5]numbers.forEach({    print($0)}) //1//2//3//4//5"
+  },
+  
+  {
     "title": "Destini Review",
     "url": "/posts/Destini/",
     "categories": "Udemy",
@@ -987,7 +1038,7 @@
   },
   
   {
-    "title": "2.",
+    "title": "155. 개미군단",
     "url": "/posts/155.-%EA%B0%9C%EB%AF%B8%EA%B5%B0%EB%8B%A8/",
     "categories": "코딩테스트",
     "tags": "코딩테스트",
@@ -1021,7 +1072,7 @@
   },
   
   {
-    "title": "2.",
+    "title": "153. 암호 해독",
     "url": "/posts/153.-%EC%95%94%ED%98%B8-%ED%95%B4%EB%8F%85/",
     "categories": "코딩테스트",
     "tags": "코딩테스트",
@@ -1633,23 +1684,6 @@
   },
   
   {
-    "title": "2.",
-    "url": "/posts/133.-%EB%82%A0%EC%A7%9C-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/",
-    "categories": "코딩테스트",
-    "tags": "코딩테스트",
-    "date": "2024-02-19 05:13:00 +0900",
-    
-
-
-
-
-
-    
-    "snippet": "import Foundationfunc solution(_ date1:[Int], _ date2:[Int]) -&gt; Int {        var answer : Int = 0    var d1 = Int(date1.map{String($0)}.joined())!    var d2 = Int(date2.map{String($0)}.joined())...",
-    "content": "import Foundationfunc solution(_ date1:[Int], _ date2:[Int]) -&gt; Int {        var answer : Int = 0    var d1 = Int(date1.map{String($0)}.joined())!    var d2 = Int(date2.map{String($0)}.joined())!        answer = d1 == d2 ? 0 : (d1 &lt; d2 ? 1 : 0)    return answer}날짜비교라고 되어있어서 배열안에 있는 원소들을 joined를 이용하여 하나로 묶으면서 하나의 문자열로 만들었고, 그것을 Int로 형변환 해주었다.다만 값이 없을 수도 있기에 !를 사용하여 unwrapping 해주었다.!를 붙이지 않으면 에러가 발생하기 때문이다.그 이후 삼항 연산자를 이용하여 결과 값을 리턴하였다."
-  },
-  
-  {
     "title": "132. 특별한 이차원 배열 1",
     "url": "/posts/132.-%ED%8A%B9%EB%B3%84%ED%95%9C-%EC%9D%B4%EC%B0%A8%EC%9B%90-%EB%B0%B0%EC%97%B4-1/",
     "categories": "코딩테스트",
@@ -1664,6 +1698,23 @@
     
     "snippet": "import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {        var arr : [[Int]] = []        arr = Array(repeating: Array(repeating:0,count:n), count:n)        for i in 0..&lt;n {        for j in 0...",
     "content": "import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {        var arr : [[Int]] = []        arr = Array(repeating: Array(repeating:0,count:n), count:n)        for i in 0..&lt;n {        for j in 0..&lt;n {            if i == j {                arr[i][j] = 1            }        }    }     return arr}repeating을 이용하여 n * n 의 배열을 생성하였다.그 이후 행과 열의 index가 같은 값에 대해서 1의 값으로 바꿔주었다.다른코드import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {    return (1...n).map {         var arr = Array(repeating: 0, count: n)        arr[$0 - 1] = 1        return arr    }}//import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {    var arr = [[Int]](repeating: [Int](repeating: 0, count: n), count: n)    (0..&lt;n).forEach { arr[$0][$0] = 1 }    return arr}//import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {    return (0..&lt;n).map { i in (0..&lt;n).map { j in i==j ? 1 : 0 } }}"
+  },
+  
+  {
+    "title": "133. 날짜 비교하기",
+    "url": "/posts/133.-%EB%82%A0%EC%A7%9C-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-19 00:00:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ date1:[Int], _ date2:[Int]) -&gt; Int {        var answer : Int = 0    var d1 = Int(date1.map{String($0)}.joined())!    var d2 = Int(date2.map{String($0)}.joined())...",
+    "content": "import Foundationfunc solution(_ date1:[Int], _ date2:[Int]) -&gt; Int {        var answer : Int = 0    var d1 = Int(date1.map{String($0)}.joined())!    var d2 = Int(date2.map{String($0)}.joined())!        answer = d1 == d2 ? 0 : (d1 &lt; d2 ? 1 : 0)    return answer}날짜비교라고 되어있어서 배열안에 있는 원소들을 joined를 이용하여 하나로 묶으면서 하나의 문자열로 만들었고, 그것을 Int로 형변환 해주었다.다만 값이 없을 수도 있기에 !를 사용하여 unwrapping 해주었다.!를 붙이지 않으면 에러가 발생하기 때문이다.그 이후 삼항 연산자를 이용하여 결과 값을 리턴하였다."
   },
   
   {
@@ -1905,7 +1956,7 @@
   },
   
   {
-    "title": "2.",
+    "title": "117. 정수 찾기",
     "url": "/posts/117.-%EC%A0%95%EC%88%98-%EC%B0%BE%EA%B8%B0/",
     "categories": "코딩테스트",
     "tags": "코딩테스트",
@@ -2772,7 +2823,7 @@
   },
   
   {
-    "title": "1.",
+    "title": "65. n개 간격의 원소들",
     "url": "/posts/65.-n-%EA%B0%9C-%EA%B0%84%EA%B2%A9%EC%9D%98-%EC%9B%90%EC%86%8C%EB%93%A4/",
     "categories": "코딩테스트",
     "tags": "코딩테스트",
