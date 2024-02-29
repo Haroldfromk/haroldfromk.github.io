@@ -1,11 +1,11 @@
 [
   
   {
-    "title": "test",
-    "url": "/posts/test/",
-    "categories": "Blogging, Tutorial",
-    "tags": "favicon",
-    "date": "2019-08-11 01:34:00 +0900",
+    "title": "92. 짝수는 싫어요",
+    "url": "/posts/92.-%EC%A7%9D%EC%88%98%EB%8A%94-%EC%8B%AB%EC%96%B4%EC%9A%94/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
     
 
 
@@ -13,16 +13,16 @@
 
 
     
-    "snippet": "The favicons of Chirpy are placed in the directory assets/img/favicons/. You may want to replace them with your own. The following sections will guide you to create and replace the default favicons.",
-    "content": "The favicons of Chirpy are placed in the directory assets/img/favicons/. You may want to replace them with your own. The following sections will guide you to create and replace the default favicons."
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; [Int] {        var answer : [Int] = []        answer = (1...n).filter{$0%2 != 0}.map{$0}         return answer}filter 와 map을 사용하였다.",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; [Int] {        var answer : [Int] = []        answer = (1...n).filter{$0%2 != 0}.map{$0}         return answer}filter 와 map을 사용하였다."
   },
   
   {
-    "title": "Customize the Favicon",
-    "url": "/posts/customize-the-favicon/",
-    "categories": "Blogging, Tutorial",
-    "tags": "favicon",
-    "date": "2019-08-11 01:34:00 +0900",
+    "title": "91. 피자 나눠 먹기 1",
+    "url": "/posts/91.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
     
 
 
@@ -30,16 +30,16 @@
 
 
     
-    "snippet": "The favicons of Chirpy are placed in the directory assets/img/favicons/. You may want to replace them with your own. The following sections will guide you to create and replace the default favicons...",
-    "content": "The favicons of Chirpy are placed in the directory assets/img/favicons/. You may want to replace them with your own. The following sections will guide you to create and replace the default favicons.Generate the faviconPrepare a square image (PNG, JPG, or SVG) with a size of 512x512 or more, and then go to the online tool Real Favicon Generator and click the button Select your Favicon image to upload your image file.In the next step, the webpage will show all usage scenarios. You can keep the default options, scroll to the bottom of the page, and click the button Generate your Favicons and HTML code to generate the favicon.Download &amp; ReplaceDownload the generated package, unzip and delete the following two from the extracted files:  browserconfig.xml  site.webmanifestAnd then copy the remaining image files (.PNG and .ICO) to cover the original files in the directory assets/img/favicons/ of your Jekyll site. If your Jekyll site doesn’t have this directory yet, just create one.The following table will help you understand the changes to the favicon files:            File(s)      From Online Tool      From Chirpy                  *.PNG      ✓      ✗              *.ICO      ✓      ✗        ✓ means keep, ✗ means delete.The next time you build the site, the favicon will be replaced with a customized edition."
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0        answer = n &gt; 7 ? (n%7 == 0) ? n/7 : (n/7)+1 : 1        return answer}삼항연산자를 2중으로 하여 해결하려고 하였다.",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0        answer = n &gt; 7 ? (n%7 == 0) ? n/7 : (n/7)+1 : 1        return answer}삼항연산자를 2중으로 하여 해결하려고 하였다."
   },
   
   {
-    "title": "Getting Started",
-    "url": "/posts/getting-started/",
-    "categories": "Blogging, Tutorial",
-    "tags": "getting started",
-    "date": "2019-08-09 21:55:00 +0900",
+    "title": "90. 피자 나눠 먹기 2 (ing)",
+    "url": "/posts/90.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-2-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-14 05:13:00 +0900",
     
 
 
@@ -47,16 +47,16 @@
 
 
     
-    "snippet": "PrerequisitesFollow the instructions in the Jekyll Docs to complete the installation of the basic environment. Git also needs to be installed.InstallationCreating a New SiteThere are two ways to cr...",
-    "content": "PrerequisitesFollow the instructions in the Jekyll Docs to complete the installation of the basic environment. Git also needs to be installed.InstallationCreating a New SiteThere are two ways to create a new repository for this theme:  Using the Chirpy Starter - Easy to upgrade, isolates irrelevant project files so you can focus on writing.  GitHub Fork - Convenient for custom development, but difficult to upgrade. Unless you are familiar with Jekyll and are determined to tweak or contribute to this project, this approach is not recommended.Option 1. Using the Chirpy StarterSign in to GitHub and browse to Chirpy Starter, click the button Use this template &gt; Create a new repository, and name the new repository USERNAME.github.io, where USERNAME represents your GitHub username.Option 2. GitHub ForkSign in to GitHub to fork Chirpy, and then rename it to USERNAME.github.io (USERNAME means your username).Next, clone your site to local machine. In order to build JavaScript files later, we need to install Node.js, and then run the tool:$ bash tools/init  If you don’t want to deploy your site on GitHub Pages, append option --no-gh at the end of the above command.The above command will:  Check out the code to the latest tag (to ensure the stability of your site: as the code for the default branch is under development).  Remove non-essential sample files and take care of GitHub-related files.  Build JavaScript files and export to assets/js/dist/, then make them tracked by Git.  Automatically create a new commit to save the changes above.Installing DependenciesBefore running local server for the first time, go to the root directory of your site and run:$ bundleUsageConfigurationUpdate the variables of _config.yml as needed. Some of them are typical options:  url  avatar  timezone  langSocial Contact OptionsSocial contact options are displayed at the bottom of the sidebar. You can turn on/off the specified contacts in file _data/contact.yml.Customizing StylesheetIf you need to customize the stylesheet, copy the theme’s assets/css/jekyll-theme-chirpy.scss to the same path on your Jekyll site, and then add the custom style at the end of it.Starting with version 6.2.0, if you want to overwrite the SASS variables defined in _sass/addon/variables.scss, copy the main sass file _sass/main.scss into the _sass directory in your site’s source, then create a new file _sass/variables-hook.scss and assign new value.Customing Static AssetsStatic assets configuration was introduced in version 5.1.0. The CDN of the static assets is defined by file _data/origin/cors.yml, and you can replace some of them according to the network conditions in the region where your website is published.Also, if you’d like to self-host the static assets, please refer to the chirpy-static-assets.Running Local ServerYou may want to preview the site contents before publishing, so just run it by:$ bundle exec jekyll sAfter a few seconds, the local service will be published at http://127.0.0.1:4000.DeploymentBefore the deployment begins, check out the file _config.yml and make sure the url is configured correctly. Furthermore, if you prefer the project site and don’t use a custom domain, or you want to visit your website with a base URL on a web server other than GitHub Pages, remember to change the baseurl to your project name that starts with a slash, e.g, /project-name.Now you can choose ONE of the following methods to deploy your Jekyll site.Deploy by Using GitHub ActionsThere are a few things to get ready for.  If you’re on the GitHub Free plan, keep your site repository public.      If you have committed Gemfile.lock to the repository, and your local machine is not running Linux, go to the root of your site and update the platform list of the lock-file:    $ bundle lock --add-platform x86_64-linux      Next, configure the Pages service.      Browse to your repository on GitHub. Select the tab Settings, then click Pages in the left navigation bar. Then, in the Source section (under Build and deployment), select GitHub Actions from the dropdown menu.        Push any commits to GitHub to trigger the Actions workflow. In the Actions tab of your repository, you should see the workflow Build and Deploy running. Once the build is complete and successful, the site will be deployed automatically.  At this point, you can go to the URL indicated by GitHub to access your site.Manually Build and DeployOn self-hosted servers, you cannot enjoy the convenience of GitHub Actions. Therefore, you should build the site on your local machine and then upload the site files to the server.Go to the root of the source project, and build your site as follows:$ JEKYLL_ENV=production bundle exec jekyll bUnless you specified the output path, the generated site files will be placed in folder _site of the project’s root directory. Now you should upload those files to the target server."
+    "snippet": "",
+    "content": ""
   },
   
   {
-    "title": "Writing a New Post",
-    "url": "/posts/write-a-new-post/",
-    "categories": "Blogging, Tutorial",
-    "tags": "writing",
-    "date": "2019-08-08 15:10:00 +0900",
+    "title": "89. 피자 나눠 먹기 3",
+    "url": "/posts/89.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-3/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
     
 
 
@@ -64,16 +64,16 @@
 
 
     
-    "snippet": "This tutorial will guide you how to write a post in the Chirpy template, and it’s worth reading even if you’ve used Jekyll before, as many features require specific variables to be set.Naming and P...",
-    "content": "This tutorial will guide you how to write a post in the Chirpy template, and it’s worth reading even if you’ve used Jekyll before, as many features require specific variables to be set.Naming and PathCreate a new file named YYYY-MM-DD-TITLE.EXTENSION and put it in the _posts of the root directory. Please note that the EXTENSION must be one of md and markdown. If you want to save time of creating files, please consider using the plugin Jekyll-Compose to accomplish this.Front MatterBasically, you need to fill the Front Matter as below at the top of the post:---title: TITLEdate: YYYY-MM-DD HH:MM:SS +/-TTTTcategories: [TOP_CATEGORIE, SUB_CATEGORIE]tags: [TAG]     # TAG names should always be lowercase---  The posts’ layout has been set to post by default, so there is no need to add the variable layout in the Front Matter block.Timezone of DateIn order to accurately record the release date of a post, you should not only set up the timezone of _config.yml but also provide the post’s timezone in variable date of its Front Matter block. Format: +/-TTTT, e.g. +0800.Categories and TagsThe categories of each post are designed to contain up to two elements, and the number of elements in tags can be zero to infinity. For instance:---categories: [Animal, Insect]tags: [bee]---Author InformationThe author information of the post usually does not need to be filled in the Front Matter , they will be obtained from variables social.name and the first entry of social.links of the configuration file by default. But you can also override it as follows:Adding author information in _data/authors.yml (If your website doesn’t have this file, don’t hesitate to create one).&lt;author_id&gt;:  name: &lt;full name&gt;  twitter: &lt;twitter_of_author&gt;  url: &lt;homepage_of_author&gt;And then use author to specify a single entry or authors to specify multiple entries:---author: &lt;author_id&gt;                     # for single entry# orauthors: [&lt;author1_id&gt;, &lt;author2_id&gt;]   # for multiple entries---Having said that, the key author can also identify multiple entries.  The benefit of reading the author information from the file _data/authors.yml is that the page will have the meta tag twitter:creator, which enriches the Twitter Cards and is good for SEO.Table of ContentsBy default, the Table of Contents (TOC) is displayed on the right panel of the post. If you want to turn it off globally, go to _config.yml and set the value of variable toc to false. If you want to turn off TOC for a specific post, add the following to the post’s Front Matter:---toc: false---CommentsThe global switch of comments is defined by variable comments.active in the file _config.yml. After selecting a comment system for this variable, comments will be turned on for all posts.If you want to close the comment for a specific post, add the following to the Front Matter of the post:---comments: false---MathematicsFor website performance reasons, the mathematical feature won’t be loaded by default. But it can be enabled by:---math: true---After enabling the mathematical feature, you can add math equations with the following syntax:  Block math should be added with $$ math $$ with mandatory blank lines before and after $$          Inserting equation numbering should be added with $$\\begin{equation} math \\end{equation}$$      Referencing equation numbering should be done with \\label{eq:label_name} in the equation block and \\eqref{eq:label_name} inline with text (see example below)        Inline math (in lines) should be added with $$ math $$ without any blank line before or after $$  Inline math (in lists) should be added with \\$$ math $$&lt;!-- Block math, keep all blank lines --&gt;$$LaTeX_math_expression$$&lt;!-- Equation numbering, keep all blank lines  --&gt;$$\\begin{equation}  LaTeX_math_expression  \\label{eq:label_name}\\end{equation}$$Can be referenced as \\eqref{eq:label_name}.&lt;!-- Inline math in lines, NO blank lines --&gt;\"Lorem ipsum dolor sit amet, $$ LaTeX_math_expression $$ consectetur adipiscing elit.\"&lt;!-- Inline math in lists, escape the first `$` --&gt;1. \\$$ LaTeX_math_expression $$2. \\$$ LaTeX_math_expression $$3. \\$$ LaTeX_math_expression $$MermaidMermaid is a great diagram generation tool. To enable it on your post, add the following to the YAML block:---mermaid: true---Then you can use it like other markdown languages: surround the graph code with ```mermaid and ```.ImagesCaptionAdd italics to the next line of an image, then it will become the caption and appear at the bottom of the image:![img-description](/path/to/image)_Image Caption_SizeIn order to prevent the page content layout from shifting when the image is loaded, we should set the width and height for each image.![Desktop View](/assets/img/sample/mockup.png){: width=\"700\" height=\"400\" }  For an SVG, you have to at least specify its width, otherwise it won’t be rendered.Starting from Chirpy v5.0.0, height and width support abbreviations (height → h, width → w). The following example has the same effect as the above:![Desktop View](/assets/img/sample/mockup.png){: w=\"700\" h=\"400\" }PositionBy default, the image is centered, but you can specify the position by using one of the classes normal, left, and right.  Once the position is specified, the image caption should not be added.      Normal position    Image will be left aligned in below sample:    ![Desktop View](/assets/img/sample/mockup.png){: .normal }            Float to the left    ![Desktop View](/assets/img/sample/mockup.png){: .left }            Float to the right    ![Desktop View](/assets/img/sample/mockup.png){: .right }      Dark/Light modeYou can make images follow theme preferences in dark/light mode. This requires you to prepare two images, one for dark mode and one for light mode, and then assign them a specific class (dark or light):![Light mode only](/path/to/light-mode.png){: .light }![Dark mode only](/path/to/dark-mode.png){: .dark }ShadowThe screenshots of the program window can be considered to show the shadow effect:![Desktop View](/assets/img/sample/mockup.png){: .shadow }CDN URLIf you host the images on the CDN, you can save the time of repeatedly writing the CDN URL by assigning the variable img_cdn of _config.yml file:img_cdn: https://cdn.comOnce img_cdn is assigned, the CDN URL will be added to the path of all images (images of site avatar and posts) starting with /.For instance, when using images:![The flower](/path/to/flower.png)The parsing result will automatically add the CDN prefix https://cdn.com before the image path:&lt;img src=\"https://cdn.com/path/to/flower.png\" alt=\"The flower\" /&gt;Image PathWhen a post contains many images, it will be a time-consuming task to repeatedly define the path of the images. To solve this, we can define this path in the YAML block of the post:---img_path: /img/path/---And then, the image source of Markdown can write the file name directly:![The flower](flower.png)The output will be:&lt;img src=\"/img/path/flower.png\" alt=\"The flower\" /&gt;Preview ImageIf you want to add an image at the top of the post, please provide an image with a resolution of 1200 x 630. Please note that if the image aspect ratio does not meet 1.91 : 1, the image will be scaled and cropped.Knowing these prerequisites, you can start setting the image’s attribute:---image:  path: /path/to/image  alt: image alternative text---Note that the img_path can also be passed to the preview image, that is, when it has been set, the attribute path only needs the image file name.For simple use, you can also just use image to define the path.---image: /path/to/image---LQIPFor preview images:---image:  lqip: /path/to/lqip-file # or base64 URI---  You can observe LQIP in the preview image of post Text and Typography.For normal images:![Image description](/path/to/image){: lqip=\"/path/to/lqip-file\" }Pinned PostsYou can pin one or more posts to the top of the home page, and the fixed posts are sorted in reverse order according to their release date. Enable by:---pin: true---PromptsThere are several types of prompts: tip, info, warning, and danger. They can be generated by adding the class prompt-{type} to the blockquote. For example, define a prompt of type info as follows:&gt; Example line for prompt.{: .prompt-info }SyntaxInline Code`inline code part`Filepath Hightlight`/path/to/a/file.extend`{: .filepath}Code BlockMarkdown symbols ``` can easily create a code block as follows:```This is a plaintext code snippet.```Specifying LanguageUsing ```{language} you will get a code block with syntax highlight:```yamlkey: value```  The Jekyll tag {% highlight %} is not compatible with this theme.Line NumberBy default, all languages except plaintext, console, and terminal will display line numbers. When you want to hide the line number of a code block, add the class nolineno to it:```shellecho 'No more line numbers!'```{: .nolineno }Specifying the FilenameYou may have noticed that the code language will be displayed at the top of the code block. If you want to replace it with the file name, you can add the attribute file to achieve this:```shell# content```{: file=\"path/to/file\" }Liquid CodesIf you want to display the Liquid snippet, surround the liquid code with {% raw %} and {% endraw %}:{% raw %}```liquid{% if product.title contains 'Pack' %}  This product's title contains the word Pack.{% endif %}```{% endraw %}Or adding render_with_liquid: false (Requires Jekyll 4.0 or higher) to the post’s YAML block.VideosVideo Sharing PlatformYou can embed a video with the following syntax:{% include embed/{Platform}.html id='{ID}' %}Where Platform is the lowercase of the platform name, and ID is the video ID.The following table shows how to get the two parameters we need in a given video URL, and you can also know the currently supported video platforms.            Video URL      Platform      ID                  https://www.youtube.com/watch?v=H-B46URT4mg      youtube      H-B46URT4mg              https://www.twitch.tv/videos/1634779211      twitch      1634779211              https://www.bilibili.com/video/BV1Q44y1B7Wf      bilibili      BV1Q44y1B7Wf      Video FileIf you want to embed a video file directly, use the following syntax:{% include embed/video.html src='{URL}' %}Where URL is an URL to a video file e.g. /assets/img/sample/video.mp4.You can also specify additional attributes for the embedded video file. Here is a full list of attributes allowed.  poster='/path/to/poster.png' - poster image for a video that is shown while video is downloading  title='Text' - title for a video that appears below the video and looks same as for images  autoplay=true - video automatically begins to play back as soon as it can  loop=true - automatically seek back to the start upon reaching the end of the video  muted=true - audio will be initially silencedConsider an example utilizing all of the above:{% include embed/video.html src='video.mp4' poster='poster.png' title='Demo video'   autoplay=true loop=true muted=true %}Learn MoreFor more knowledge about Jekyll posts, visit the Jekyll Docs: Posts."
+    "snippet": "import Foundationfunc solution(_ slice:Int, _ n:Int) -&gt; Int {        var answer : Int = 0        answer = n % slice == 0 ? n/slice : n/slice+1    return answer}삼항연산자를 이용하여 간략하게 표현하였다.올림을 하는 ceil...",
+    "content": "import Foundationfunc solution(_ slice:Int, _ n:Int) -&gt; Int {        var answer : Int = 0        answer = n % slice == 0 ? n/slice : n/slice+1    return answer}삼항연산자를 이용하여 간략하게 표현하였다.올림을 하는 ceil을 써보고 싶었지만 그러러면 n을 소수점으로 타입변형을 해야하기에n/slice +1로 처리하였다."
   },
   
   {
-    "title": "Text and Typography",
-    "url": "/posts/text-and-typography/",
-    "categories": "Blogging, Demo",
-    "tags": "typography",
-    "date": "2019-08-08 12:33:00 +0900",
+    "title": "88. 옷가게 할인 받기",
+    "url": "/posts/88.-%EC%98%B7%EA%B0%80%EA%B2%8C-%ED%95%A0%EC%9D%B8-%EB%B0%9B%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
     
 
 
@@ -81,8 +81,1606 @@
 
 
     
-    "snippet": "This post is to show Markdown syntax rendering on Chirpy, you can also use it as an example of writing. Now, let’s start looking at text and typography.HeadingsH1 - headingH2 - headingH3 - headingH...",
-    "content": "This post is to show Markdown syntax rendering on Chirpy, you can also use it as an example of writing. Now, let’s start looking at text and typography.HeadingsH1 - headingH2 - headingH3 - headingH4 - headingParagraphQuisque egestas convallis ipsum, ut sollicitudin risus tincidunt a. Maecenas interdum malesuada egestas. Duis consectetur porta risus, sit amet vulputate urna facilisis ac. Phasellus semper dui non purus ultrices sodales. Aliquam ante lorem, ornare a feugiat ac, finibus nec mauris. Vivamus ut tristique nisi. Sed vel leo vulputate, efficitur risus non, posuere mi. Nullam tincidunt bibendum rutrum. Proin commodo ornare sapien. Vivamus interdum diam sed sapien blandit, sit amet aliquam risus mattis. Nullam arcu turpis, mollis quis laoreet at, placerat id nibh. Suspendisse venenatis eros eros.ListsOrdered list  Firstly  Secondly  ThirdlyUnordered list  Chapter          Section                  Paragraph                    ToDo list  Job          Step 1      Step 2      Step 3      Description list  Sun  the star around which the earth orbits  Moon  the natural satellite of the earth, visible by reflected light from the sunBlock Quote  This line shows the block quote.Prompts  An example showing the tip type prompt.  An example showing the info type prompt.  An example showing the warning type prompt.  An example showing the danger type prompt.Tables            Company      Contact      Country                  Alfreds Futterkiste      Maria Anders      Germany              Island Trading      Helen Bennett      UK              Magazzini Alimentari Riuniti      Giovanni Rovelli      Italy      Linkshttp://127.0.0.1:4000FootnoteClick the hook will locate the footnote1, and here is another footnote2.Inline codeThis is an example of Inline Code.FilepathHere is the /path/to/the/file.extend.Code blocksCommonThis is a common code snippet, without syntax highlight and line number.Specific Languageif [ $? -ne 0 ]; then  echo \"The command was not successful.\";  #do the needful / exitfi;Specific filename@import  \"colors/light-typography\",  \"colors/dark-typography\";MathematicsThe mathematics powered by MathJax:\\[\\begin{equation}  \\sum_{n=1}^\\infty 1/n^2 = \\frac{\\pi^2}{6}  \\label{eq:series}\\end{equation}\\]We can reference the equation as \\eqref{eq:series}.When $a \\ne 0$, there are two solutions to $ax^2 + bx + c = 0$ and they are\\[x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}\\]Mermaid SVG gantt  title  Adding GANTT diagram functionality to mermaid  apple :a, 2017-07-20, 1w  banana :crit, b, 2017-07-23, 1d  cherry :active, c, after b a, 1dImagesDefault (with caption)Full screen width and center alignmentLeft alignedFloat to leftPraesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.Float to rightPraesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.Dark/Light mode &amp; ShadowThe image below will toggle dark/light mode based on theme preference, notice it has shadows.VideoReverse Footnote            The footnote source &#8617;              The 2nd footnote source &#8617;      "
+    "snippet": "import Foundationfunc solution(_ price:Int) -&gt; Int {        var answer : Int = 0        switch price {        case ..&lt;100000 :             answer = price        case 100000..&lt;300000 :     ...",
+    "content": "import Foundationfunc solution(_ price:Int) -&gt; Int {        var answer : Int = 0        switch price {        case ..&lt;100000 :             answer = price        case 100000..&lt;300000 :            answer = Int(Double(price) * 0.95)        case 300000..&lt;500000 :            answer = Int(Double(price) * 0.9)        case 500000... :            answer = Int(Double(price) * 0.8)        default :         answer = 0    }    return answer}switch case를 통해 범위로 조건을 잡았고 해결하였다.처음에 할인만 의식해서 몇개의 케이스가 성공을 못했는데.알고보니 10만원 미만일때는 할인을 받지않는 케이스였는데 그부분을 적용하지 못했다.import Foundationfunc solution(_ price:Int) -&gt; Int {        var answer : Int = 0        switch price {        case 100000..&lt;300000 :            answer = Int(Double(price) * 0.95)        case 300000..&lt;500000 :            answer = Int(Double(price) * 0.9)        case 500000... :            answer = Int(Double(price) * 0.8)        default :             answer = price    }    return answer}10만원 미만 조건대신 디폴트에 적용을 하였다."
+  },
+  
+  {
+    "title": "87. 아이스 아메리카노",
+    "url": "/posts/87.-%EC%95%84%EC%9D%B4%EC%8A%A4-%EC%95%84%EB%A9%94%EB%A6%AC%EC%B9%B4%EB%85%B8/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ money:Int) -&gt; [Int] {    var answer : [Int] = []    answer.append(money/5500)    answer.append(money%5500)    return answer}append를 이용하여 해결하였다.다른 코드를 보니 그냥 배열안에 ...",
+    "content": "import Foundationfunc solution(_ money:Int) -&gt; [Int] {    var answer : [Int] = []    answer.append(money/5500)    answer.append(money%5500)    return answer}append를 이용하여 해결하였다.다른 코드를 보니 그냥 배열안에 다이렉트로 해도 되었다.[money/5500, money%5500]이런식이었다."
+  },
+  
+  {
+    "title": "86. 배열 뒤집기",
+    "url": "/posts/86.-%EB%B0%B0%EC%97%B4-%EB%92%A4%EC%A7%91%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr = num_list.reversed()    return arr}문자열과 같이 배열또한 reversed()를 사용하여 처리하였다.다만 형변환은 따로 필요하지 않았다.",
+    "content": "import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr = num_list.reversed()    return arr}문자열과 같이 배열또한 reversed()를 사용하여 처리하였다.다만 형변환은 따로 필요하지 않았다."
+  },
+  
+  {
+    "title": "85. 문자열 뒤집기",
+    "url": "/posts/85.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%92%A4%EC%A7%91%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String) -&gt; String {        var answer : String = \"\"        answer = String(my_string.reversed())    return answer}바꿔주는 reversed()를 사용하여 해결하였다.그냥쓰니 type...",
+    "content": "import Foundationfunc solution(_ my_string:String) -&gt; String {        var answer : String = \"\"        answer = String(my_string.reversed())    return answer}바꿔주는 reversed()를 사용하여 해결하였다.그냥쓰니 type 에러가나서 String으로 감싸주었다."
+  },
+  
+  {
+    "title": "84. 직각삼각형 출력하기",
+    "url": "/posts/84.-%EC%A7%81%EA%B0%81%EC%82%BC%EA%B0%81%ED%98%95-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }var string = \"*\"for i in 0..&lt;n[0]{    print(string)    string += \"*\"}처음에 n을 그대로 넣으려고했는데 타입에러가나서 자세히보니 배열이어서어차피...",
+    "content": "import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }var string = \"*\"for i in 0..&lt;n[0]{    print(string)    string += \"*\"}처음에 n을 그대로 넣으려고했는데 타입에러가나서 자세히보니 배열이어서어차피 하나의 수만 입력을 받기에 n[0]으로 하였다.그리고 *가 한개씩 늘어나게 하였다.다른코드 보니 for each와 map joined을 사용하여 간결하게 하였다.다른코드import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }(1...n[0]).forEach {    print((1...$0).map { _ in \"*\" }.joined())}"
+  },
+  
+  {
+    "title": "83. 중복된 숫자 개수",
+    "url": "/posts/83.-%EC%A4%91%EB%B3%B5%EB%90%9C-%EC%88%AB%EC%9E%90-%EA%B0%9C%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ array:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0        answer = array.filter{$0 == n}.count         return answer}해당문제가 바로 filter를 사용할 수 있어서 적용을 해보았다....",
+    "content": "import Foundationfunc solution(_ array:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0        answer = array.filter{$0 == n}.count         return answer}해당문제가 바로 filter를 사용할 수 있어서 적용을 해보았다.다음번엔 for where로 해봐야겠다."
+  },
+  
+  {
+    "title": "82. 머쓱이보다 키 큰 사람",
+    "url": "/posts/82.-%EB%A8%B8%EC%93%B1%EC%9D%B4%EB%B3%B4%EB%8B%A4-%ED%82%A4-%ED%81%B0-%EC%82%AC%EB%9E%8C/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ array:[Int], _ height:Int) -&gt; Int {        var answer : Int = 0        for i in array.indices{        if array[i] &gt; height {            answer += 1        }  ...",
+    "content": "import Foundationfunc solution(_ array:[Int], _ height:Int) -&gt; Int {        var answer : Int = 0        for i in array.indices{        if array[i] &gt; height {            answer += 1        }    }    return answer}for문과 if문을 통해 문제를 해결하였다.다른코드를 보니 filter로 하였다 다음번에 해봐야겠다.또한 for if문을 섞어 for문에 where로 했다. 예전에 해본거 같은데 다시 기억해둬야겠다.func solution(_ array: [Int], _ height: Int) -&gt; Int { array.filter { $0 &gt; height }.count }//import Foundationfunc solution(_ array:[Int], _ height:Int) -&gt; Int {    var result = 0    for h in array where h &gt; height {        result += 1    }    return result}"
+  },
+  
+  {
+    "title": "81. 특정 문자열로 끝나는 가장 긴 부분 문자열 찾기 (ing)",
+    "url": "/posts/81.-%ED%8A%B9%EC%A0%95-%EB%AC%B8%EC%9E%90%EC%97%B4%EB%A1%9C-%EB%81%9D%EB%82%98%EB%8A%94-%EA%B0%80%EC%9E%A5-%EA%B8%B4-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B0%BE%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "80. 특정한 문자를 대문자로 바꾸기",
+    "url": "/posts/80.-%ED%8A%B9%EC%A0%95%ED%95%9C-%EB%AC%B8%EC%9E%90%EB%A5%BC-%EB%8C%80%EB%AC%B8%EC%9E%90%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String, _ alp:String) -&gt; String {        var answer : String = \"\"        var arr : [String] = []    arr = my_string.map{String($0)}        if my_string...",
+    "content": "import Foundationfunc solution(_ my_string:String, _ alp:String) -&gt; String {        var answer : String = \"\"        var arr : [String] = []    arr = my_string.map{String($0)}        if my_string.contains(alp) {        for i in arr.indices{            if arr[i] == alp {                arr[i] = String(arr[i]).uppercased()            }        }        answer = arr.joined()    } else {        answer = my_string    }    return answer}처음에 아래와 같이 map 을 이용하려고 삼항연산자 까지 썼다가. 아닌경우에는 어떻게 해야하나 고민을 햇는데. 애초에 아닌경우에는 소문자로 리턴을 했으면 되는문제였는데 너무 복잡하게 생각했던것같다.map 안에 삼항연산자를 사용하여 배열을 만들 수 있는데 아직 그부분이 부족한것같다.다른코드import Foundationfunc solution(_ my_string:String, _ alp:String) -&gt; String {    return my_string.map { String($0) == alp ? $0.uppercased() : $0.lowercased() }.joined()}//"
+  },
+  
+  {
+    "title": "79. A 강조하기",
+    "url": "/posts/79.-A-%EA%B0%95%EC%A1%B0%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ myString:String) -&gt; String {        var answer : String = \"\"    var arr : [String] = []        arr = myString.lowercased().map{String($0)}        for i in arr.in...",
+    "content": "import Foundationfunc solution(_ myString:String) -&gt; String {        var answer : String = \"\"    var arr : [String] = []        arr = myString.lowercased().map{String($0)}        for i in arr.indices {        if arr[i] == \"a\" {            arr[i] = String(arr[i]).uppercased()        }    }        answer = arr.joined()        return answer}주어진 문자열을 우선 소문자로 만들면서 map을 사용해 배열로 만들었다.그다음 하나씩 비교하여 a일때 대문자로 바꾼뒤 join으로 문자열로 만들어 줬다.replacingOccurrences 라는 메서드를 통해 아주 간단하게 바꾸었다.나중에 한번 해당 메서드를 적용해봐야겠다.다른코드import Foundationfunc solution(_ myString:String) -&gt; String {    return myString.lowercased().replacingOccurrences(of: \"a\", with: \"A\")}"
+  },
+  
+  {
+    "title": "77. 소문자로 바꾸기",
+    "url": "/posts/77.-%EC%86%8C%EB%AC%B8%EC%9E%90%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ myString:String) -&gt; String {        var answer : String = \"\"        answer = myString.lowercased()        return answer}소문자로 바꾸는 lowercased를 사용하여 해결하였다.",
+    "content": "import Foundationfunc solution(_ myString:String) -&gt; String {        var answer : String = \"\"        answer = myString.lowercased()        return answer}소문자로 바꾸는 lowercased를 사용하여 해결하였다."
+  },
+  
+  {
+    "title": "76. 대문자로 바꾸기",
+    "url": "/posts/76.-%EB%8C%80%EB%AC%B8%EC%9E%90%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ myString:String) -&gt; String {        var answer : String = \"\"        answer = myString.uppercased()        return answer}문자열을 대문자로 바꿔주는 uppercased를 사용하여 해결하였다.",
+    "content": "import Foundationfunc solution(_ myString:String) -&gt; String {        var answer : String = \"\"        answer = myString.uppercased()        return answer}문자열을 대문자로 바꿔주는 uppercased를 사용하여 해결하였다."
+  },
+  
+  {
+    "title": "74. 길이에 따른 연산",
+    "url": "/posts/74.-%EA%B8%B8%EC%9D%B4%EC%97%90-%EB%94%B0%EB%A5%B8-%EC%97%B0%EC%82%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var answer : Int = 0        answer = 11 &lt;= num_list.count ? num_list.reduce(0,+) : num_list.reduce(1,*)        return answer}리...",
+    "content": "import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var answer : Int = 0        answer = 11 &lt;= num_list.count ? num_list.reduce(0,+) : num_list.reduce(1,*)        return answer}리스트의 길이가 필요하므로 count를 사용하였고, 간단하게 표현하기위해 삼항연산자를 사용하였다.그리고 고차함수를 연습겸 사용함으로써 식을 한줄로 간결하게 표현하려고 하였다.고차함수도 조금씩 감이 생기는듯하다."
+  },
+  
+  {
+    "title": "73. 1로 만들기",
+    "url": "/posts/73.-1%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var answer : Int = 0    var arr : [Int] = []    var n : Int = 0        arr = num_list        for i in arr.indices {        while ...",
+    "content": "import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var answer : Int = 0    var arr : [Int] = []    var n : Int = 0        arr = num_list        for i in arr.indices {        while (arr[i] != 1) {            n = 0            if arr[i] % 2 == 0 {                arr[i] = arr[i] / 2                n+=1            } else {                arr[i] = (arr[i]-1) / 2                n+=1            }            answer += n         }    }        return answer}for 문 안에 while을 넣어서 각 원소가 1이될때까지 처리를 하게 하였다.처음에 값이 에러가 났던건은 while안에 n의 값을 0을 해서 계속 리셋을 해야했는데, while밖에 n을 넣어서 21이 계속 나왔다.좀 더 집중해야겠다."
+  },
+  
+  {
+    "title": "72. 조건에 맞게 수열 변환하기 2",
+    "url": "/posts/72.-%EC%A1%B0%EA%B1%B4%EC%97%90-%EB%A7%9E%EA%B2%8C-%EC%88%98%EC%97%B4-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0-2/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int]) -&gt; Int {        var answer : Int = 0    var temp : [Int] = []    var Arr : [Int] = []    var j : Int = 0        Arr = arr        while Arr != temp{   ...",
+    "content": "import Foundationfunc solution(_ arr:[Int]) -&gt; Int {        var answer : Int = 0    var temp : [Int] = []    var Arr : [Int] = []    var j : Int = 0        Arr = arr        while Arr != temp{        temp = Arr        for i in Arr.indices {           if Arr[i] &gt;= 50 &amp;&amp; Arr[i] % 2 == 0 {                Arr[i] = Arr[i] / 2            } else if Arr[i] &lt; 50 &amp;&amp; Arr[i] % 2 != 0 {                Arr[i] = (Arr[i] * 2) + 1            } else {                continue            }        }            j+=1    }        answer = j-1        return answer}while을 사용하여 무한 루프를 사용하였다.무한루프 1 cycle이 돌았을때 직전값을 가지고 있는 배열 temp를 만들었고 그다음 Arr=temp 일때 즉 값의 변화가 없을때 나오게끔 조건을 걸었다.그다음 그안에 for문을 하나 더 추가함으로써 1사이클 동안 배열값을 전부 처리하게 하였다.그리고 마지막에 j값이 1씩 증가하게 끔 했기때문에. 실제로 6회 돌았을때, 해당값이 멈추게된다. 그러므로 그전의 값을 리턴해야하므로 -1을 하였다."
+  },
+  
+  {
+    "title": "70. 수열과 구간 쿼리1",
+    "url": "/posts/70.-%EC%88%98%EC%97%B4%EA%B3%BC-%EA%B5%AC%EA%B0%84-%EC%BF%BC%EB%A6%AC1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {        var answer : [Int] = []        answer=arr        for i in queries.indices{                for n in queries[i][0] ...",
+    "content": "import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {        var answer : [Int] = []        answer=arr        for i in queries.indices{                for n in queries[i][0] ... queries[i][1] {            answer[n] += 1        }            }        return answer}2중 반복문을 통하여 계산하였다.아래는 forEach를 통하여 계산하였다.forEach도 정리만하고 써볼생각을 못했는데다음번에는 해봐야겠다.다른코드import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {    var arr = arr    queries.forEach { ($0[0]...$0[1]).forEach { arr[$0] += 1 } }     return arr}"
+  },
+  
+  {
+    "title": "68. 할 일 목록",
+    "url": "/posts/68.-%ED%95%A0-%EC%9D%BC-%EB%AA%A9%EB%A1%9D/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ todo_list:[String], _ finished:[Bool]) -&gt; [String] {        var answer : [String] = []        for i in todo_list.indices {        if finished[i] == false {      ...",
+    "content": "import Foundationfunc solution(_ todo_list:[String], _ finished:[Bool]) -&gt; [String] {        var answer : [String] = []        for i in todo_list.indices {        if finished[i] == false {            answer.append(todo_list[i])        }    }    return answer}딕셔너리를 사용해보고 싶었으나 배열이 중복으로 생겨서 안되어서 for문을 사용해서 해결했다.다른 코드를 보니 간결하면서도 모르는게 많았다.다른코드import Foundationfunc solution(_ todo_list:[String], _ finished:[Bool]) -&gt; [String] {    return finished.enumerated().filter { !$0.element }.map { todo_list[$0.offset] }}//func solution(_ todoList: [String], _ finished: [Bool]) -&gt; [String] {    return zip(todoList, finished).filter { !$0.1 }.map { $0.0 }}//import Foundationfunc solution(_ todo_list:[String], _ finished:[Bool]) -&gt; [String] {    return finished.enumerated().filter { $0.element == false }.map { todo_list[$0.offset] }}"
+  },
+  
+  {
+    "title": "67. 5명씩",
+    "url": "/posts/67.-5%EB%AA%85%EC%94%A9/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ names:[String]) -&gt; [String] {        var answer : [String] = []        answer = stride(from:0, to:names.count, by:5).map{names[$0]}                         retur...",
+    "content": "import Foundationfunc solution(_ names:[String]) -&gt; [String] {        var answer : [String] = []        answer = stride(from:0, to:names.count, by:5).map{names[$0]}                         return answer}5명 간격으로 그룹짓고 그 그룹의 선두 이름을 출력한다는 것은 즉 5명간격으로 배열에 입력을 하면되는것이므로, stride를 사용하였다."
+  },
+  
+  {
+    "title": "66. 홀수 vs 짝수",
+    "url": "/posts/66.-%ED%99%80%EC%88%98-vs-%EC%A7%9D%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var odd : Int = 0    var even : Int = 0    var answer : Int = 0        for i in num_list.indices {        if i % 2 == 0 {        ...",
+    "content": "import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var odd : Int = 0    var even : Int = 0    var answer : Int = 0        for i in num_list.indices {        if i % 2 == 0 {            even += num_list[i]        } else {            odd += num_list[i]        }    }        answer = even &gt; odd ? even : odd            return answer}홀수 짝수 인덱스에 다라 odd, even이라는 변수에 누적해서 더하게 하였고,삼항연산자를 사용하여 리턴하였다.filter를 사용해서 인덱스로 접근해 처리해보고 싶었는데 가능한지 모르겠다.다른 코드를 보니 가능한거같다. 공부를 해봐야겠다.다른코드import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {    let even = num_list.enumerated().filter { $0.0 % 2 == 0 }.map { $0.1 }    let odd = num_list.enumerated().filter { $0.0 % 2 == 1 }.map { $0.1 }    return even.reduce(0, +) &gt;= odd.reduce(0, +) ? even.reduce(0, +) : odd.reduce(0, +)}해당 코드를 보니 enumerated를 통해 Dictionary배열로 바꾸었다 (key, value)의 형태그리고 $0.0 / $0.1 의 개념을 찾아보니 $0.0이 key/ $0.1이 value 였다.즉 key는 인덱스를 의미하니 그걸 이용하여 필터를 사용하였고, map에는 0.1 즉 value값 실제로 배열에 있었던 값을 적용하여 배열을 만들었다."
+  },
+  
+  {
+    "title": "1.",
+    "url": "/posts/65.-n-%EA%B0%9C-%EA%B0%84%EA%B2%A9%EC%9D%98-%EC%9B%90%EC%86%8C%EB%93%A4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []    answer = stride(from:0, through:num_list.count-1, by:n).map{num_list[$0]}            return...",
+    "content": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []    answer = stride(from:0, through:num_list.count-1, by:n).map{num_list[$0]}            return answer}stride를 사용하여 간격에 따라서 출력을 하려고 하였다.num_list[] 인데 num_list{}로 하여 에러가 났었다.잘 확인해두자."
+  },
+  
+  {
+    "title": "64. n 번째 원소까지",
+    "url": "/posts/64.-n-%EB%B2%88%EC%A7%B8-%EC%9B%90%EC%86%8C%EA%B9%8C%EC%A7%80/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []        answer = Array(num_list[..&lt;n])        return answer}슬라이싱을 하면 되는 문제였기에 간단하게 n이 포함되지않는...",
+    "content": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []        answer = Array(num_list[..&lt;n])        return answer}슬라이싱을 하면 되는 문제였기에 간단하게 n이 포함되지않는 미만으로 범위를 설정하여 문제를 해결하였다."
+  },
+  
+  {
+    "title": "63. 왼쪽 오른쪽",
+    "url": "/posts/63.-%EC%99%BC%EC%AA%BD-%EC%98%A4%EB%A5%B8%EC%AA%BD/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ str_list:[String]) -&gt; [String] {        var answer : [String] = []        for i in str_list.indices {        if str_list.count == 1 {            answer = []     ...",
+    "content": "import Foundationfunc solution(_ str_list:[String]) -&gt; [String] {        var answer : [String] = []        for i in str_list.indices {        if str_list.count == 1 {            answer = []        } else {            if str_list[i] == \"l\" {                        answer = Array(str_list[..&lt;i])            break                    } else if str_list[i] == \"r\" {            answer = Array(str_list[(i+1)...])            break                    }        }                    }        return answer}이번에도 슬라이싱을 생각하였다.다만 2번째 조건일때를 잘못 생각하였고,그래서 한글자만 들어올때는 빈배열을 리턴하게 하였다."
+  },
+  
+  {
+    "title": "62. 순서 바꾸기",
+    "url": "/posts/62.-%EC%88%9C%EC%84%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []    answer = Array(num_list[n...]) + Array(num_list[..&lt;n])    return answer}이번에도 슬라이싱을 통해서 문...",
+    "content": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []    answer = Array(num_list[n...]) + Array(num_list[..&lt;n])    return answer}이번에도 슬라이싱을 통해서 문제를 해결하려고 하였다.n번쨰 까지에서 내가 잘못 이해했는지 … 으로 했을때는 하나를 더 포함을 해서..&lt; 으로 바꾸어 해결하였다."
+  },
+  
+  {
+    "title": "60. 배열 조각하기(ing)",
+    "url": "/posts/60.-%EB%B0%B0%EC%97%B4-%EC%A1%B0%EA%B0%81%ED%95%98%EA%B8%B0(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "이렇게 한 이유.",
+    "content": "이렇게 한 이유."
+  },
+  
+  {
+    "title": "59. 2의 영역 (ing)",
+    "url": "/posts/59.-2%EC%9D%98-%EC%98%81%EC%97%AD-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "58. 배열 만들기 3",
+    "url": "/posts/58.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-3/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int], _ intervals:[[Int]]) -&gt; [Int] {        var answer : [Int] = []        for i in 0...intervals.count-1 {                answer += Array(arr[Int(interval...",
+    "content": "import Foundationfunc solution(_ arr:[Int], _ intervals:[[Int]]) -&gt; [Int] {        var answer : [Int] = []        for i in 0...intervals.count-1 {                answer += Array(arr[Int(intervals[i][0]) ... Int(intervals[i][1])])            }            return answer}이렇게 한 이유슬라이싱과 유사하게 해보았고. 혹시나 해서 빈 배열에 +=로 누적을 해보았는데 되었다."
+  },
+  
+  {
+    "title": "57. 첫 번째로 나오는 음수",
+    "url": "/posts/57.-%EC%B2%AB-%EB%B2%88%EC%A7%B8%EB%A1%9C-%EB%82%98%EC%98%A4%EB%8A%94-%EC%9D%8C%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var answer : Int = 0        for i in 0...num_list.count-1 {                if num_list[i] &lt; 0 {            answer = i         ...",
+    "content": "import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var answer : Int = 0        for i in 0...num_list.count-1 {                if num_list[i] &lt; 0 {            answer = i            break        } else {            answer = -1        }        }        return answer}이렇게 한 이유반복문을 통해서 해결하였다.전에 풀었던 문제와 유사하게 해결하였다.나중에 다시 풀때는 삼항연산자를 이용해서 풀어봐야겠다.다른 코드func solution(_ numList: [Int]) -&gt; Int { numList.firstIndex(where: { $0 &lt; 0 }) ?? -1 }"
+  },
+  
+  {
+    "title": "56. 리스트 자르기",
+    "url": "/posts/56.-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%9E%90%EB%A5%B4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int, _ slicer:[Int], _ num_list:[Int]) -&gt; [Int] {        var answer : [Int] = []        switch n {        case 1 :            answer = Array(num_list[0...slice...",
+    "content": "import Foundationfunc solution(_ n:Int, _ slicer:[Int], _ num_list:[Int]) -&gt; [Int] {        var answer : [Int] = []        switch n {        case 1 :            answer = Array(num_list[0...slicer[1]])        case 2 :            answer = Array(num_list[slicer[0]...])        case 3 :            answer = Array(num_list[slicer[0]...slicer[1]])        case 4 :            answer = stride(from:slicer[0], to:slicer[1]+1, by:slicer[2]).map{num_list[$0]}            default : answer = []    }    return answer}이렇게 한 이유switch case를 이용해 1,2,3,4 일때의 조건을 나누었다.Array로 감싼이유는 array를 감싸지 않도 돌리니 type 에러가 났다.[]를 통해 슬라이싱을 할경우 슬라이싱을 한 배열은 ArrySlice&lt;&gt;으로 되면서 데이터 타입 에러가 났다.그래서 Array로 감싸서 데이텨형을 맞추었다.n=4일때 간격을 두고 슬라이싱을 해야해서 검색을 해야했다. stride를 통해서 할수 있다는 것을 알았고, 그다음 map을 써서 배열로 만들어야하는것을 알게 되었다.출력결과 4번에서 2,4,6이 정답인데 6이 안나와서 +1을 하여 슬라이싱 범위를 한칸 더 주었다.from: tofrom: through 의 표현에 차이가 있었다.to를 하게되면 해당 인덱스를 포함하지 않는다.through를 하게되면 해다 인덱스를 포함하게된다.다른 코드import Foundationfunc solution(_ n:Int, _ slicer:[Int], _ num_list:[Int]) -&gt; [Int] {        var answer : [Int] = []        switch n {        case 1 :            answer = Array(num_list[0...slicer[1]])        case 2 :            answer = Array(num_list[slicer[0]...])        case 3 :            answer = Array(num_list[slicer[0]...slicer[1]])        case 4 :            answer = stride(from:slicer[0], through:slicer[1], by:slicer[2]).map{num_list[$0]}            default : answer = []    }        print(answer)        return answer}"
+  },
+  
+  {
+    "title": "55. 가까운 1 찾기",
+    "url": "/posts/55.-%EA%B0%80%EA%B9%8C%EC%9A%B4-1-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int], _ idx:Int) -&gt; Int {    var answer : Int = 0    for i in idx ... arr.count-1 {        if arr[i] == 1 {            answer = i            break        } ...",
+    "content": "import Foundationfunc solution(_ arr:[Int], _ idx:Int) -&gt; Int {    var answer : Int = 0    for i in idx ... arr.count-1 {        if arr[i] == 1 {            answer = i            break        } else {            answer = -1        }    }    return answer}이렇게 한 이유반복문을 통하려고 하였고, 1일때의 인덱스값을 찾자마자 리턴을 시켜야 했기에, break를 써서 끊었다.그리고 그것이 해당하지 않는 케이스라면 -1을 리턴을 하여 해결하였다.다른 코드를 보니 엄청 심플하게 했다…다른 코드import Foundationfunc solution(_ arr:[Int], _ idx:Int) -&gt; Int {    return arr[idx...].firstIndex(of: 1) ?? -1}//"
+  },
+  
+  {
+    "title": "53. 글자 지우기 (ing)",
+    "url": "/posts/53.-%EA%B8%80%EC%9E%90-%EC%A7%80%EC%9A%B0%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "이렇게 한 이유.",
+    "content": "이렇게 한 이유."
+  },
+  
+  {
+    "title": "52. 배열 만들기1",
+    "url": "/posts/52.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B01/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int, _ k:Int) -&gt; [Int] {        var arr : [Int] = []        arr = (1...n).map{$0}.filter{$0 % k == 0}    return arr}이렇게 한 이유.고차함수로 문제를 해결하려고 하였다.다만 그냥 수가 주어졌을때...",
+    "content": "import Foundationfunc solution(_ n:Int, _ k:Int) -&gt; [Int] {        var arr : [Int] = []        arr = (1...n).map{$0}.filter{$0 % k == 0}    return arr}이렇게 한 이유.고차함수로 문제를 해결하려고 하였다.다만 그냥 수가 주어졌을때 어떻게 해야하는지 몰라 찾아보니 (1…n)을 사용하여 범위의 숫자를 적용한 뒤에 map을 사용하여 1부터 n까지의 정수 배열을 생성하였고,그뒤에 filter를 적용하여 각 인덱스에 접근하여 k로 나누었을때 나머지가 0 즉, k의 배수인 값을 따로 추려내었다.확실히 고차함수만을 사용하니 코드가 간결해졌다."
+  },
+  
+  {
+    "title": "1.",
+    "url": "/posts/78.-%EB%B0%B0%EC%97%B4%EC%97%90%EC%84%9C-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%8C%80%EC%86%8C%EB%AC%B8%EC%9E%90-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "1.",
+    "url": "/posts/75.-%EC%9B%90%ED%95%98%EB%8A%94-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "1.",
+    "url": "/posts/71.-%EC%A1%B0%EA%B1%B4%EC%97%90-%EB%A7%9E%EA%B2%8C-%EC%88%98%EC%97%B4-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0-1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "69. n보다 커질 때 까지 더하기",
+    "url": "/posts/69.-n%EB%B3%B4%EB%8B%A4-%EC%BB%A4%EC%A7%88-%EB%95%8C-%EA%B9%8C%EC%A7%80-%EB%8D%94%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    var i : Int = 0        while answer &lt;= n {        answer += numbers[i]        i += 1    }    r...",
+    "content": "import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    var i : Int = 0        while answer &lt;= n {        answer += numbers[i]        i += 1    }    return answer}while문으로 처리하였다.reduce를 써보고 싶었는데 잘 안되어서 다른 코드를 보니 아직 공부할게 많다.다른코드import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {    return numbers.reduce(0) { $0 &gt; n ? $0 : $0 + $1 }}//func solution(_ numbers: [Int], _ n: Int) -&gt; Int {    return numbers.reduce(0) { acc, i in n &gt;= acc ? acc + i : acc }}//"
+  },
+  
+  {
+    "title": "61. n 번째 원소부터",
+    "url": "/posts/61.-n-%EB%B2%88%EC%A7%B8-%EC%9B%90%EC%86%8C%EB%B6%80%ED%84%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []    var N : Int = 0    N = n-1        answer = Array(num_list[N...])        return answer}이렇게 한...",
+    "content": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []    var N : Int = 0    N = n-1        answer = Array(num_list[N...])        return answer}이렇게 한 이유처음에는 고차함수를 써보려고했으나, 생각해보니 슬라이싱을 하면 될것 같아서 슬라이싱을 해서 해결하였다.Array로 감싸지 않으면 데이터 에러가 나기에 Array로 감싸주었다."
+  },
+  
+  {
+    "title": "1.",
+    "url": "/posts/54.-%EC%B9%B4%EC%9A%B4%ED%8A%B8-%EB%8B%A4%EC%9A%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "51. 문자 개수 세기 (ing)",
+    "url": "/posts/51.-%EB%AC%B8%EC%9E%90-%EA%B0%9C%EC%88%98-%EC%84%B8%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "50. qr code",
+    "url": "/posts/50.-qr-code/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ q:Int, _ r:Int, _ code:String) -&gt; String {        var answer : String = \"\"        for i in 0 ... code.count-1 {                if (i % q) == r {                 ...",
+    "content": "import Foundationfunc solution(_ q:Int, _ r:Int, _ code:String) -&gt; String {        var answer : String = \"\"        for i in 0 ... code.count-1 {                if (i % q) == r {                        answer += String(code[String.Index(encodedOffset:i)])        }          }    return answer}이렇게 한 이유.처음에는 배열을 하나 만들어서 그에 해당하는 인덱스만 꺼낼까 생각했는데, 생각해보니 문자열의 인덱스로 접근해서 그에 해당하는 것을 answer라는 매개변수에 누적시키는것으로 방향을 잡았다.다만 아직도 string 쪽에 대한 키워드를 사용하는데 있어 많이 부족해 보인다."
+  },
+  
+  {
+    "title": "49. 세로 읽기 (ing)",
+    "url": "/posts/49.-%EC%84%B8%EB%A1%9C-%EC%9D%BD%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "이렇게 한 이유",
+    "content": "이렇게 한 이유"
+  },
+  
+  {
+    "title": "48. 문자열 뒤집기 (ing)",
+    "url": "/posts/48.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%92%A4%EC%A7%91%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "이렇게 한 이유",
+    "content": "이렇게 한 이유"
+  },
+  
+  {
+    "title": "47. 접두사인지 확인하기",
+    "url": "/posts/47.-%EC%A0%91%EB%91%90%EC%82%AC%EC%9D%B8%EC%A7%80-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String, _ is_prefix:String) -&gt; Int {    var answer : Int = 0    var arr : [String] = []    var my_String : String = \"\"    my_String = my_string    arr....",
+    "content": "import Foundationfunc solution(_ my_string:String, _ is_prefix:String) -&gt; Int {    var answer : Int = 0    var arr : [String] = []    var my_String : String = \"\"    my_String = my_string    arr.append(my_String)    for i in 1 ... my_String.count-1 {        my_String.removeLast()        arr.append(my_String)    }    answer = arr.contains(is_prefix) ? 1 : 0    return answer}이렇게 한 이유배열을 추가하여 마지막것을 지우면서 하나씩 집어넣었다.그리고 contains를 이용하여 확인하였다. 저번 접미사와 코드가 같다.다른 코드를 보니 너무 심플하다.count를 써서 한 발상이 신선하다. 더 열심히 공부해야겠다.다른 코드import Foundationfunc solution(_ my_string:String, _ is_prefix:String) -&gt; Int {    return my_string.prefix(is_prefix.count) == is_prefix ? 1 : 0}"
+  },
+  
+  {
+    "title": "46. 문자열의 앞의 n글자",
+    "url": "/posts/46.-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%98-%EC%95%9E%EC%9D%98-n%EA%B8%80%EC%9E%90/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {        var arr : [String] = []    var answer : String = \"\"        arr = my_string.map{String($0)}        answer = arr.pref...",
+    "content": "import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {        var arr : [String] = []    var answer : String = \"\"        arr = my_string.map{String($0)}        answer = arr.prefix(n).joined()            return answer}이렇게 생각한 이유append대신 map을 사용해서 해결을 해보려고 하였다. 그냥 map{$0} 을 해보니 type에러가 났다. 그래서 $0을 String으로 감싸서 해결하였다.그다음 suffix의 반대인 prefix를 사용하여 앞글자를 따오려고했고 그다음 joined를 통해 문자열로 바꾸었다."
+  },
+  
+  {
+    "title": "45. 접미사인지 확인하기",
+    "url": "/posts/45.-%EC%A0%91%EB%AF%B8%EC%82%AC%EC%9D%B8%EC%A7%80-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String, _ is_suffix:String) -&gt; Int {        var arr : [String] = []    var my_String : String = \"\"    var answer : Int = 0        my_String = my_string...",
+    "content": "import Foundationfunc solution(_ my_string:String, _ is_suffix:String) -&gt; Int {        var arr : [String] = []    var my_String : String = \"\"    var answer : Int = 0        my_String = my_string        arr.append(my_String)        if my_String.count &gt; 1 {            for i in 1...my_string.count-1{            my_String.removeFirst()            arr.append(my_String)        }    }         answer = arr.contains(is_suffix) ? 1 : 0            return answer}이렇게 생각한 이유44번에서 sort대신 배열에 해당 값이 있는지를 확인하는 contains 메서드를 사용하였다.삼항연산자를 통해 if문을 간단하려고 했다."
+  },
+  
+  {
+    "title": "44. 접미사 배열",
+    "url": "/posts/44.-%EC%A0%91%EB%AF%B8%EC%82%AC-%EB%B0%B0%EC%97%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String) -&gt; [String] {        var arr : [String] = []    var my_String : String = \"\"    var answer : [String] = []        my_String = my_string        a...",
+    "content": "import Foundationfunc solution(_ my_string:String) -&gt; [String] {        var arr : [String] = []    var my_String : String = \"\"    var answer : [String] = []        my_String = my_string        arr.append(my_String)        if my_String.count &gt; 1 {            for i in 1...my_string.count-1{            my_String.removeFirst()            arr.append(my_String)        }    }             answer = arr.sorted(by:&lt;)           return answer}이렇게 생각한 이유.처음에는 마지막글자를 지우는거라고 생각을 하고 removeLast를 했더니 전혀 정답과 다른 결과 가나와서 봤더니 첫번째 글자가 사라지는 방식이었다.그래서 반복문을 통해 앞에 글자를 하나씩 지우면서 그것을 배열에 추가하였다.그전에 입력된 값도 들어가야하기에 먼저 추가해 주었다.그리고서 제출을하니 마지막값이 에러가나서 생각해보니 한글자 일때를 생각지 못해서 난 오류였다.그래서 my_string.count조건을 걸어서 해당 에러를 수정하였다."
+  },
+  
+  {
+    "title": "43. 문자열 뒤의 n글자",
+    "url": "/posts/43.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%92%A4%EC%9D%98-n%EA%B8%80%EC%9E%90/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {        var answer : String = \"\"        var arr : [String] = []        var N : Int = 0        for string in my_string {    ...",
+    "content": "import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {        var answer : String = \"\"        var arr : [String] = []        var N : Int = 0        for string in my_string {                arr.append(String(string))            }        N = arr.count-1 - n        if N &gt; 0 {    arr.removeSubrange(0...N)        answer = arr.joined()    } else {        answer = arr.joined()    }    return answer}이렇게 생각한 이유.고민을 하다가 joined가 생각나서 해당 문자열을 배열로 전환하여 배열에서 인덱스의 범위 값을 제거하는 arr.removeSubrange(startindex … lastindex)를 통하여 제거를 한 뒤에, join을 써서 해결하였다.하지만 3문제가 틀렸는데 알고보니 N 이 무조건 0보다 클때 이 코드는 작동하는 것이었고, 그러지 않을때를 생각하지 못했다.그래서 if조건을 달아서 해결하였다.다른 코드를 보니 심플한것도 많았고, 내가 배열을 만든것을 map이라는 고차함수로 풀어내었다.이것까진 생각못했는데 다음번엔 적용해봐야겠다.다른 코드import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {    let index = my_string.index(my_string.endIndex, offsetBy: -n)    return String(my_string[index...])}//import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {    return String(my_string.suffix(n))}//import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {    let index = my_string.index(my_string.startIndex, offsetBy: my_string.count - n)    return String(my_string[index...])}import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {    let count = my_string.count - n    var myArray = Array(my_string).map{String($0)}    myArray.removeFirst(count)    return myArray.joined(separator : \"\")}"
+  },
+  
+  {
+    "title": "42. 부분 문자열 이어 붙여 문자열 만들기 (ing)",
+    "url": "/posts/42.-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%9D%B4%EC%96%B4-%EB%B6%99%EC%97%AC-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드이렇게 생각한 이유",
+    "content": "나의 코드이렇게 생각한 이유"
+  },
+  
+  {
+    "title": "41. 배열 만들기 5(ing)",
+    "url": "/posts/41.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-5(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-12 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드이렇게 생각한 이유",
+    "content": "나의 코드이렇게 생각한 이유"
+  },
+  
+  {
+    "title": "40. 문자열 여러 번 뒤집기",
+    "url": "/posts/40.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%97%AC%EB%9F%AC-%EB%B2%88-%EB%92%A4%EC%A7%91%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ my_string:String, _ queries:[[Int]]) -&gt; String {        var startNum : Int = 0    var endNum : Int = 0    var my_String : String = \"\"        var substring :...",
+    "content": "나의 코드import Foundationfunc solution(_ my_string:String, _ queries:[[Int]]) -&gt; String {        var startNum : Int = 0    var endNum : Int = 0    var my_String : String = \"\"        var substring : String = \"\"        my_String = my_string        for i in 0 ... queries.count-1 {        startNum = queries[i][0]        endNum = queries[i][1]        let range = my_String.index(my_String.startIndex, offsetBy: startNum) ... my_String.index(my_String.startIndex, offsetBy: endNum)        substring = String(my_String[range].reversed())        my_String.replaceSubrange(range, with:substring)    }    return my_String}이렇게 생각한 이유.reverse를 사용해서 범위의 값을 바꾸려고했다.하지만 구글의 힘을 빌릴 수 밖에 없었다.아래 코드를 도움을 받았다.let range = my_String.index(my_String.startIndex, offsetBy: startNum) ... my_String.index(my_String.startIndex, offsetBy: endNum)        substring = String(my_String[range].reversed())        my_String.replaceSubrange(range, with:substring)다른 코드를 보니 너무 간략하게 했다.더 열심히 공부해야겠다.다른코드import Foundationfunc solution(_ my_string:String, _ queries:[[Int]]) -&gt; String {    var my_string = Array(my_string)    queries.forEach {        my_string.replaceSubrange($0[0]...$0[1], with: Array(my_string[$0[0]...$0[1]].reversed()))    }    return String(my_string)}//import Foundationfunc solution(_ my_string:String, _ queries:[[Int]]) -&gt; String {    var myString = my_string.map { String($0) }    queries.forEach { q in        myString[q[0]...q[1]].reverse()    }    return myString.joined()}//func solution(_ myString: String, _ queries: [[Int]]) -&gt; String {    queries.reduce(myString) { acc, arr in        acc.prefix(arr[0]) + String(acc[acc.index(acc.startIndex, offsetBy: arr[0])...acc.index(acc.startIndex, offsetBy: arr[1])].reversed()) + acc.suffix(from: acc.index(acc.startIndex, offsetBy: arr[1] + 1))    }}import Foundationfunc solution(_ my_string:String, _ queries:[[Int]]) -&gt; String {    var s = my_string.map { $0 }    for q in queries {        let start = q[0]        let end = q[1]        let a = s[start...end].reversed().map { $0 }        s = s[0..&lt;start] + a + s[end + 1..&lt;s.endIndex]    }    return s.map { String($0) }.joined()}//import Foundationfunc solution(_ my_string:String, _ queries:[[Int]]) -&gt; String {    return queries.reduce(into: my_string.map { String($0) }) { result, query in        let arr = result        for index in query[0]...query[1] {            result[index] = arr[query[0] + query[1] - index]        }    }.joined()}"
+  },
+  
+  {
+    "title": "39. 9로 나눈 나머지",
+    "url": "/posts/39.-9%EB%A1%9C-%EB%82%98%EB%88%88-%EB%82%98%EB%A8%B8%EC%A7%80/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ number:String) -&gt; Int {        var sum : Int = 0    var answer : Int = 0        for num in number {        sum += Int(String(num))!    }        answer = sum % 9 ...",
+    "content": "import Foundationfunc solution(_ number:String) -&gt; Int {        var sum : Int = 0    var answer : Int = 0        for num in number {        sum += Int(String(num))!    }        answer = sum % 9        return answer}이렇게 생각한 이유처음에 num을 Int로 바로 형변환 하여 sum이라는 변수에 더하려고했다.하지만 num의 타입이 Character라 에러가 났다.그래서 String으로 형변환을 한 뒤, 다시 Int로 재변환을 시도 하였고, 형변환을 할때마다 optional에러가 나므로 !을 추가하여 unwrapping해주었다.그 이후, 나머지를 구하는 %를 통해 나머지값을 리턴하였다."
+  },
+  
+  {
+    "title": "38. 글자 이어 붙여 문자열 만들기",
+    "url": "/posts/38.-%EA%B8%80%EC%9E%90-%EC%9D%B4%EC%96%B4-%EB%B6%99%EC%97%AC-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ my_string:String, _ index_list:[Int]) -&gt; String {        var answer : String = \"\"        for i in 0 ... index_list.count-1{        answer += String(my_strin...",
+    "content": "나의 코드import Foundationfunc solution(_ my_string:String, _ index_list:[Int]) -&gt; String {        var answer : String = \"\"        for i in 0 ... index_list.count-1{        answer += String(my_string[String.Index(encodedOffset: index_list[i])])    }        return answer}이렇게 생각한 이유특정 index의 문자열을 추출하는 encodedOffset을 사용하여 해결하였다.String으로 감싸지 않고 돌렸더니 타입에러가 나서(character로 되어있었다) 그래서 String 으로 감싸서 해결하였다."
+  },
+  
+  {
+    "title": "37. 주사위 게임 3 (ing)",
+    "url": "/posts/37.-%EC%A3%BC%EC%82%AC%EC%9C%84-%EA%B2%8C%EC%9E%84-3-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드이렇게 생각한 이유",
+    "content": "나의 코드이렇게 생각한 이유"
+  },
+  
+  {
+    "title": "36. 간단한 논리 연산",
+    "url": "/posts/36.-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%85%BC%EB%A6%AC-%EC%97%B0%EC%82%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ x1:Bool, _ x2:Bool, _ x3:Bool, _ x4:Bool) -&gt; Bool {        var answer : Bool = true        answer = (x1||x2) &amp;&amp; (x3||x4)        return answer}이렇게 생각...",
+    "content": "나의 코드import Foundationfunc solution(_ x1:Bool, _ x2:Bool, _ x3:Bool, _ x4:Bool) -&gt; Bool {        var answer : Bool = true        answer = (x1||x2) &amp;&amp; (x3||x4)        return answer}이렇게 생각한 이유.진리표를 보니 ∨는 OR ∧는 AND를 표현한다는 것을 알 수 있었다.그래서 문제의 기호를 논리연산자로 표현하였다.AND : &amp;&amp;OR : ||"
+  },
+  
+  {
+    "title": "33. 카운트 업",
+    "url": "/posts/33.-%EC%B9%B4%EC%9A%B4%ED%8A%B8-%EC%97%85/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ start_num:Int, _ end_num:Int) -&gt; [Int] {        var answer : [Int] = []        for i in start_num ... end_num {        answer.append(i)    }        return a...",
+    "content": "나의 코드import Foundationfunc solution(_ start_num:Int, _ end_num:Int) -&gt; [Int] {        var answer : [Int] = []        for i in start_num ... end_num {        answer.append(i)    }        return answer}이렇게 생각한 이유.반복문을 통해 start~end로 범위를 잡고 그때의 i값을 append를 통해 추가하였다."
+  },
+  
+  {
+    "title": "32. 배열 만들기 2(ing)",
+    "url": "/posts/32.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-2(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드이렇게 생각한 이유",
+    "content": "나의 코드이렇게 생각한 이유"
+  },
+  
+  {
+    "title": "31. 수열과 구간 쿼리 4(ing)",
+    "url": "/posts/31.-%EC%88%98%EC%97%B4%EA%B3%BC-%EA%B5%AC%EA%B0%84-%EC%BF%BC%EB%A6%AC-4(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류중",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드",
+    "content": "나의 코드"
+  },
+  
+  {
+    "title": "30. 수열과 구간 쿼리 2 (fin)",
+    "url": "/posts/30.-%EC%88%98%EC%97%B4%EA%B3%BC-%EA%B5%AC%EA%B0%84-%EC%BF%BC%EB%A6%AC-2-(fin)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류했던문제",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {        var answer : [Int] = []    var Arr : [Int] = []        //print(queries.count)        for i in 0 ... queries....",
+    "content": "나의 코드import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {        var answer : [Int] = []    var Arr : [Int] = []        //print(queries.count)        for i in 0 ... queries.count-1 {        answer.append(arr[queries[i][0] ... queries[i][1]].filter {             element in guard element &gt; queries[i][2] else {                 return false }                 return true }.min() ?? -1)}        return answer    }예외조건에서 잘 안되어서 결국 이것저것 검색하면서 해결하였다.다른 코드들을 보니 optional chaining을 통해서 푼것같은데.이글을 적고 바로 정리를 해야겠다.다른코드import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {    return queries.map {         let (s, e, k) = ($0[0], $0[1], $0[2])        return Array(arr[s...e]).filter { $0 &gt; k }.min() ?? -1    }}//func solution(_ arr: [Int], _ queries: [[Int]]) -&gt; [Int] {    return queries.map { q in        let min = arr[q[0]...q[1]].filter { $0 &gt; q[2] }.min() ?? -1        return min == Int.max ? -1 : min    }}//import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {    return queries.map { element in        arr[element[0]...element[1]].filter { $0 &gt; element[2] }.min() ?? -1    }}"
+  },
+  
+  {
+    "title": "29. 수열과 구간 쿼리 3",
+    "url": "/posts/29.-%EC%88%98%EC%97%B4%EA%B3%BC-%EA%B5%AC%EA%B0%84-%EC%BF%BC%EB%A6%AC-3/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {        var temp : Int = 0    var Arr : [Int] = []        Arr = arr        for i in 0 ... queries.count-1 {        t...",
+    "content": "나의 코드import Foundationfunc solution(_ arr:[Int], _ queries:[[Int]]) -&gt; [Int] {        var temp : Int = 0    var Arr : [Int] = []        Arr = arr        for i in 0 ... queries.count-1 {        temp = Arr[queries[i][0]]        Arr[queries[i][0]] = Arr[queries[i][1]]        Arr[queries[i][1]] = temp    }        return Arr}이렇게 생각한 이유.2차원 배열의 길이만큼 반복을 하기에 2차원 배열의 길이를 구했으며, 그 다음 값을 서로 바꿔치기를 해야하므로 하나의 값을 잠시 담아둘 변수 temp를 만들었다.그리고나서 2차원 배열의 행은 움직이고 열은 0,1 두개밖에 없으므로 i를 하나만 했고, 위치를 바꿔 가며 배열을 변화를 주었다."
+  },
+  
+  {
+    "title": "28. 수 조작하기 2",
+    "url": "/posts/28.-%EC%88%98-%EC%A1%B0%EC%9E%91%ED%95%98%EA%B8%B0-2/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ numLog:[Int]) -&gt; String {        var answer : String = \"\"        for i in 0 ... numLog.count-2 {                switch numLog[i+1] - numLog[i] {            ...",
+    "content": "나의 코드import Foundationfunc solution(_ numLog:[Int]) -&gt; String {        var answer : String = \"\"        for i in 0 ... numLog.count-2 {                switch numLog[i+1] - numLog[i] {            case 1 :                answer += \"w\"            case -1 :                answer += \"s\"            case 10 :                answer += \"d\"            case -10 :                answer += \"a\"            default :            \"\"        }    }        return answer}이렇게 생각한 이유.수 조작하기 1의 역으로 된 문제여서 비슷하게 풀었다.다만 numLog.count-2를 한 이유는 인덱스를 i로 하면 i+1 - i 로 해야하기때문에 실제 배열길이로 하게되면 out of range에러가 나기에 count-2로 해결하였다."
+  },
+  
+  {
+    "title": "27. 수 조작하기 1",
+    "url": "/posts/27.-%EC%88%98-%EC%A1%B0%EC%9E%91%ED%95%98%EA%B8%B0-1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ n:Int, _ control:String) -&gt; Int {        var N : Int = 0    N = n        for i in control {                switch i {                        case \"w\" :     ...",
+    "content": "나의 코드import Foundationfunc solution(_ n:Int, _ control:String) -&gt; Int {        var N : Int = 0    N = n        for i in control {                switch i {                        case \"w\" :                N = N+1            case \"a\" :                N = N-10            case \"s\" :                N = N-1            case \"d\" :                N = N+10            default :                 \"\"         }            }    return N}이렇게 생각한 이유.wasd의 조건을 보고 해당 문제는 if보다는 switch case문이 더 잘어울릴것이라고 판단했다.그래서 switch 문만 쓰고 돌리려고하니 틀려서 생각해보니 control은 문자열이었다.그래서 반복문을 통해서 문자열을 분해하지않고 i로 하나씩 돌려서 값을 처리하였다."
+  },
+  
+  {
+    "title": "25. 이어 붙인 수",
+    "url": "/posts/25.-%EC%9D%B4%EC%96%B4-%EB%B6%99%EC%9D%B8-%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var answer : Int = 0    var sum1 : String = \"\"    var sum2 : String = \"\"        var even = num_list.filter{$0 % 2 == 0}    v...",
+    "content": "나의 코드import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var answer : Int = 0    var sum1 : String = \"\"    var sum2 : String = \"\"        var even = num_list.filter{$0 % 2 == 0}    var odd = num_list.filter{$0 % 2 != 0}        for i in 0 ... even.count-1 {        sum1 += String(even[i])    }        for i in 0 ... odd.count-1 {        sum2 += String(odd[i])    }        answer = Int(sum1)! + Int(sum2)!        return answer}이렇게 생각한 이유.홀수를 나타내는 odd, 짝수를 나타내는 even이라는 배열을 만들어서 고차함수인 filter를 사용해 num_list안에 있는 value값이 짝수, 홀수인지를 구분하여 각각 담기게 하였다.그다음으로 생각을 했떤부분이 이것을 문자열로 변환하여 하나로 붙이는것인데. 현재 나의 지식으로는 for문을 통해 각각의 value를 String으로 더하여 합쳤다.그리고나서 다시 Int형변환을 하여 해결하였다.이때 옵셔널 컴파일 에러가 떠서 unwrapping해주어 답을 도출하였다.다른 코드를 보니 joined라는 메서드를 이용하여 간단하게 구했다.import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {    let even = Int(num_list.filter { $0 % 2 == 0 }.map { String($0) }.joined())!    let odd = Int(num_list.filter { $0 % 2 != 0 }.map { String($0) }.joined())!    return even + odd}배열에서 문자열로 하나로 만들때 joined를 사용한다.joined(separator:) 사용let arr = [\"A\", \"B\", \"C\", \"D\"]let result = arr.joined(separator: \" \")print(result) // \"A B C D\"가독성 면에서도 좋고, separator를 직접 지정할 수 있다.또한, 문자열 끝에 원치 않는 whitespace가 생기는 것도 방지할 수 있다."
+  },
+  
+  {
+    "title": "24. 원소들의 곱과 합",
+    "url": "/posts/24.-%EC%9B%90%EC%86%8C%EB%93%A4%EC%9D%98-%EA%B3%B1%EA%B3%BC-%ED%95%A9/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var sum : Int = 0    var summul : Int = 0    var mul : Int = 0    var answer : Int = 0        sum = num_list.reduce(0,+)    ...",
+    "content": "나의 코드import Foundationfunc solution(_ num_list:[Int]) -&gt; Int {        var sum : Int = 0    var summul : Int = 0    var mul : Int = 0    var answer : Int = 0        sum = num_list.reduce(0,+)    summul = sum * sum    mul = num_list.reduce(1,*)        answer = mul &lt; summul ? 1 : 0        return answer}이렇게 생각한 이유.합을 고차함수인 reduce를 써서 한번 해보았다.굳이 반복문을 하지않기에 간략하게 표현이 가능했다.다만 곱을 표현할때 합처럼 ()안에 0으로 해보니 곱이 계속 0이 나와서 확인해보니 괄호안의 첫번째 parameter가 0이어서 계속 0을 곱하기에 답이 계속 0이 나왔던것이었다.에러를 해결하고나서 삼항연산자를 씀으로써 if문 또한 간략하게 표현했다.이렇게 해보면서 reduce는 조금씩 감이 오는것같다.다음에는 reduce의 다른 표현으로 해봐야겠다."
+  },
+  
+  {
+    "title": "23. 주사위 게임 2",
+    "url": "/posts/23.-%EC%A3%BC%EC%82%AC%EC%9C%84-%EA%B2%8C%EC%9E%84-2/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ a:Int, _ b:Int, _ c:Int) -&gt; Int {        var answer : Int = 0        if a != b &amp;&amp; b != c &amp;&amp; c != a {                answer = a + b + c      ...",
+    "content": "나의 코드import Foundationfunc solution(_ a:Int, _ b:Int, _ c:Int) -&gt; Int {        var answer : Int = 0        if a != b &amp;&amp; b != c &amp;&amp; c != a {                answer = a + b + c            } else if a == b &amp;&amp; b == c {                answer = (a + b + c) * (a*a + b*b + c*c) * (a*a*a + b*b*b + c*c*c)            } else {                answer = (a + b + c) * (a*a + b*b + c*c)            }        return answer}이렇게 생각한 이유.단순히 if 조건을 통해서 해결하였다.모두 다를때, 모두 같을때 만 if조건에 명시를 하면, 2번째 조건은 굳이 서술할 이유가 없기에 위와 같이 표현하였다.처음에는 제곱수라서 pow를 사용해서 해결하려고 했는데 Decimal이 들어가야하는 컴파일 에러가 발생하여 aa / aa*a 이런식으로 그냥 표현하였다."
+  },
+  
+  {
+    "title": "22. 등차수열의 특정한 항만 더하기",
+    "url": "/posts/22.-%EB%93%B1%EC%B0%A8%EC%88%98%EC%97%B4%EC%9D%98-%ED%8A%B9%EC%A0%95%ED%95%9C-%ED%95%AD%EB%A7%8C-%EB%8D%94%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ a:Int, _ d:Int, _ included:[Bool]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        for i in 0 ... included.count-1 {                arr....",
+    "content": "나의 코드import Foundationfunc solution(_ a:Int, _ d:Int, _ included:[Bool]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        for i in 0 ... included.count-1 {                arr.append(a + i*d)            }        for i in 0 ... included.count-1 {        if included[i] == true {            answer += arr[i]        }    }    return answer}이렇게 생각한 이유.먼저 Int타입을 가지는 배열 arr을 생성하여, 해당 배열에 등차수열의 값을 집어넣었다.어차피 included의 길이 만큼 arr이 생성되기에, arr.count와 included.count가 같고그에 해당하는 index 또한 같기때문에 또다른 for문을 생성하여 included를 중심으로 true일때 터해서 해결을 하려고하였다."
+  },
+  
+  {
+    "title": "21. 코드 처리하기 (fin)",
+    "url": "/posts/21.-%EC%BD%94%EB%93%9C-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0-(fin)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류했던문제",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ code:String) -&gt; String {        var mode : Int = 0    var ret : String = \"\"    var count : Int = 0    var arr = code.map{String($0)}.enumerated().map{$0}        ...",
+    "content": "import Foundationfunc solution(_ code:String) -&gt; String {        var mode : Int = 0    var ret : String = \"\"    var count : Int = 0    var arr = code.map{String($0)}.enumerated().map{$0}        var i : Int = 0        count = arr.count-1        while i &lt;= count {        if mode == 0 {            if arr[i].element != \"1\" &amp;&amp; arr[i].offset%2 == 0{                ret += arr[i].element            } else if arr[i].element == \"1\" {                mode = 1            }         } else {            if arr[i].element != \"1\" &amp;&amp; arr[i].offset%2 != 0{                ret += arr[i].element            } else if arr[i].element == \"1\" {                mode = 0            }        }        i+=1    }        if ret == \"\" {        ret=\"EMPTY\"    }       return ret}처음에는 이걸 어떻게 풀어야하나 멍했는데, 일단 보류를 하고 다시 하나하나 생각을 해보았다.일단 mode가 0/1 이라는 큰 조건아래 세부조건사항이 있었다.그리고 code의 index가 필요하여, string의 index보다 dictionary형식으로 만들어 처리하는게 나한테는 더 편해서 enumerated를 써서 offset,element 형식의 딕셔너리로 만들어 주었다.그리고나서 큰틀로 0,1일때를 설정하고그다음 o인상태에서 1일때 그리고 홀수 인덱스일때를 하여 문자열을 추가, 모드 변경등 내용을 넣었다.마지막에 if 문을 추가하지않았을때 12,13케이스가 계속 실패가 떴다. 알고보니이부분에 대한 조건을 하지 않았다.빈문자열이라고해서 “ “ 라고 생각했는데,”” 인 경우였다.그래서 그냥 if문을 써서 해결했는데.isEmpty로 정리하는게 더 이쁜거같다."
+  },
+  
+  {
+    "title": "20. flag에 따라 다른 값 반환하기.",
+    "url": "/posts/20.-flag%EC%97%90-%EB%94%B0%EB%9D%BC-%EB%8B%A4%EB%A5%B8-%EA%B0%92-%EB%B0%98%ED%99%98%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ a:Int, _ b:Int, _ flag:Bool) -&gt; Int {        var answer = 0        answer = flag == true ? a + b : a - b        return answer}이렇게 생각한 이유.flag가 Bool 타입이어서 삼항...",
+    "content": "나의 코드import Foundationfunc solution(_ a:Int, _ b:Int, _ flag:Bool) -&gt; Int {        var answer = 0        answer = flag == true ? a + b : a - b        return answer}이렇게 생각한 이유.flag가 Bool 타입이어서 삼항연산자를 통해 간락하게 표현을 해보았다.그래서 flag가 true일때는 + false일 때는 -로 표현하여 답을 구하였다.요새 간단한 if문을 삼항연산자로 해결하려고 하는데 확실히 자주 쓰다보니 익숙해지는듯하다."
+  },
+  
+  {
+    "title": "19. 조건 문자열 (fin)",
+    "url": "/posts/19.-%EC%A1%B0%EA%B1%B4-%EB%AC%B8%EC%9E%90%EC%97%B4-(fin)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류했던문제",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ ineq:String, _ eq:String, _ n:Int, _ m:Int) -&gt; Int {        var sent : String = \"\"    var answer : Int = 0        if ineq == \"&gt;\"{       if eq == \"=\" {   ...",
+    "content": "나의 코드import Foundationfunc solution(_ ineq:String, _ eq:String, _ n:Int, _ m:Int) -&gt; Int {        var sent : String = \"\"    var answer : Int = 0        if ineq == \"&gt;\"{       if eq == \"=\" {           if n &gt;= m {               answer = 1           } else {               answer = 0           }       } else {           if  n &gt; m {               answer = 1           } else {               answer = 0           }       }    } else {         if eq == \"=\" {           if n &lt;= m {               answer = 1           } else {               answer = 0           }       } else {           if  n &lt; m {               answer = 1           } else {               answer = 0           }       }           }               return answer}이렇게 생각한 이유.처음에는 문자열 그대로 받아서 string으로 해서 해보려고했으나 생각보다 절차가 어려운것 같아다중 if문을 사용하게 되었다.(해결)대부분 에러가 났던이유. if문의 매개변수를 ineq가 아니라 eq를 기준으로 했었다.그랬더니 반례 2,3 일때 결과를 잘못 리턴하는것을 보았다.그래서 어느 인자를 먼저 받아서 처리를 하나 매개변수 순서를 보니.ineq가 먼저 들어왔다. 그래서 if 문의 매개변수를 ineq로 먼저 하였고 푸니 해결이 되었다.해당문제를 삼항연산자로 간단하게 하려고 했을때 더 오히려 안되었다보니 기본으로 돌아가서 확실하게 풀어보자라는 생각으로 if문을 쭉 나열하여 풀었다.if문으로 문제를 풀었으니 해당문제를 삼항연산자로 한번 해봐야겠다.아래는 삼항연산자로 코드를 적어보았다.확실히 if문으로 먼저 풀어쓴다음, 삼항연산자로 정리를 해보니 에러가 안나고 깔끔했다.import Foundationfunc solution(_ ineq:String, _ eq:String, _ n:Int, _ m:Int) -&gt; Int {        var answer : Int = 0        answer = ineq == \"&gt;\" ? (eq == \"=\" ? (n &gt;= m ? 1: 0) : (n &gt; m ? 1: 0)): (eq == \"=\" ? (n &lt;= m ? 1: 0 ) : (n &lt; m ? 1 : 0 ))        return answer}다른코드르 보니 switch case로 아주 간단하게 했다.왜 이렇게 생각을 못했는지 좀 한심하게 느껴지긴한다.import Foundationfunc solution(_ ineq:String, _ eq:String, _ n:Int, _ m:Int) -&gt; Int {    switch ineq+eq {        case \"&gt;=\": return n &gt;= m ? 1 : 0        case \"&lt;=\": return n &lt;= m ? 1 : 0        case \"&gt;!\": return n &gt; m ? 1 : 0        case \"&lt;!\": return n &lt; m ? 1 : 0        default: return 0    }}"
+  },
+  
+  {
+    "title": "11. 문자열 섞기 (fin)",
+    "url": "/posts/11.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%84%9E%EA%B8%B0-(fin)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0, 보류했던문제",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드 beforeimport Foundationfunc solution(_ str1:String, _ str2:String) -&gt; String {            var answer : String = \"\"        var string : String = \"\"        string = String(str1[str1.startInd...",
+    "content": "나의 코드 beforeimport Foundationfunc solution(_ str1:String, _ str2:String) -&gt; String {            var answer : String = \"\"        var string : String = \"\"        string = String(str1[str1.startIndex]) + String(str2[str2.startIndex])        for i in 0 ... str1.count-1 {        answer += string    }        return answer}이렇게 생각한 이유.각 문자열의 첫번째를 추출해서 반복문을 통해 더했다. 하지만 채점하니 대부분이 틀렸다.반례가 있었다.너무 단순하게 1글자가 반복된다고 생각을 해버렸다.개선 한 코드import Foundationfunc solution(_ str1:String, _ str2:String) -&gt; String {            var answer : String = \"\"    var ansarr : [String] = []    var arr : [String] = []    var arr1 : [String] = []        arr = str1.map{String($0)}    arr1 = str2.map{String($0)}        for i in arr.indices{        ansarr.append(arr[i])        ansarr.append(arr1[i])    }        answer = ansarr.joined()        return answer}결국 배열로 접근하여 문제를 풀었다.아마 이당시에는 배열로 전환하는 생각을 아예 못했던거같다.import Foundationfunc solution(_ str1:String, _ str2:String) -&gt; String {    return zip(str1, str2).map { String($0) + String($1) }.joined()}//import Foundationfunc solution(_ str1:String, _ str2:String) -&gt; String {    var result: String = \"\"    for (one, two) in zip(str1, str2) {        result.append(one)        result.append(two)    }    return result}zip으로 간단하게 한걸 볼수있었다. zip은 아예생각지도 못했다.서술하지 않은 다른 코드들도 대부분 배열로 접근하여 풀었다."
+  },
+  
+  {
+    "title": "1. 문자열 출력하기",
+    "url": "/posts/18.-%ED%99%80%EC%A7%9D%EC%97%90-%EB%94%B0%EB%9D%BC-%EB%8B%A4%EB%A5%B8-%EA%B0%92-%EB%B0%98%ED%99%98%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-10 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer = 0       if n % 2 == 0 {            for i in 1 ... n {                if i % 2 == 0 {                    print (i)       ...",
+    "content": "나의 코드import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer = 0       if n % 2 == 0 {            for i in 1 ... n {                if i % 2 == 0 {                    print (i)                    answer += i * i                                   }            }        } else {            for i in 1 ... n {                if i % 2 != 0 {                     print (i)                    answer += i                 }            }        }        return answer}이렇게 생각한 이유.일단 if문을 통해서 풀었다.swich case문으로도 가능한데 일단은 이렇게 풀었다.나중에 내가 다시 이문제를 리마인드할땐 swich case로 풀어봐야겠다."
+  },
+  
+  {
+    "title": "10. 문자열 겹쳐쓰기 (fin)",
+    "url": "/posts/10.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EA%B2%B9%EC%B3%90%EC%93%B0%EA%B8%B0-(fin)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-10 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ my_string:String, _ overwrite_string:String, _ s:Int) -&gt; String {        var answer : String = \"\"    var arr : [String] = []    var arr1 : [String] = []    ...",
+    "content": "나의 코드import Foundationfunc solution(_ my_string:String, _ overwrite_string:String, _ s:Int) -&gt; String {        var answer : String = \"\"    var arr : [String] = []    var arr1 : [String] = []    var n : Int = 0        arr = my_string.map{String($0)}    arr1 = overwrite_string.map{String($0)}        n = arr1.count + s-1        for i in s ... n {        arr[i] = arr1[i-s]    }        answer = arr.joined()    return answer}뒤로 미뤘던.문자열에 index로 간단하게 접근을 해보려고 했으나 그게 되지 않아서 이것저것 찾아보게 되었다.index는 별도로 정리 하였음.Retry어떻게 풀어볼것인가?  정수 s 부터 overwrite_string.count 까지의 범위로 접근.1-1. string자체를 slicing하여 가능한지 도전-&gt; 검색해보니 replacingOccurrences(of:with:)를 사용하여 간단하게 해결이 가능해보인다. 최근에 이런 메서드를 사용해서 푼 코드를 본것같은데 이번참에 한번 써봐야겠다.    let sampleStr = \"12345\"let newStr = sampleStr.replacingOccurrences(of: \"2\", with: \"vv\")print(newStr) // 1vv345        -&gt; 해당문제가 3번같은 예시일때 에러가 생겼다.```swiftimport Foundation  func solution(_ my_string:String, _ overwrite_string:String, _ s:Int) -&gt; String {var answer : String = \"\"var o : String = \"\"var start = my_string.index(my_string.startIndex, offsetBy:s) var end = my_string.index(my_string.startIndex, offsetBy:overwrite_string.count+s) o = my_string.substring(with: start..&lt;end)answer = my_string.replacingOccurrences(of:o, with: overwrite_string)return answer}그게안될경우.2. my_string과 overwrite_string을 배열로 바꾸어서 치환결국 배열로 접근하여 문제를 풀었다.---다른코드```swiftimport Foundationfunc solution(_ myString: String, _ overwriteString: String, _ s: Int) -&gt; String {    var myString = Array(myString)    myString.replaceSubrange(s...(overwriteString.count+s-1), with: Array(overwriteString))    return String(myString)}//import Foundationfunc solution(_ my_string:String, _ overwrite_string:String, _ s:Int) -&gt; String {    let a = my_string.prefix(s)    let b = overwrite_string    let c = my_string.suffix(my_string.count - overwrite_string.count - s)    return a + b + c}//import Foundationfunc solution(_ my_string:String, _ overwrite_string:String, _ s:Int) -&gt; String {    return String(my_string.prefix(s))+overwrite_string+String(my_string.suffix(my_string.count-overwrite_string.count-s))}"
+  },
+  
+  {
+    "title": "17. 공배수",
+    "url": "/posts/17.-%EA%B3%B5%EB%B0%B0%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-09 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ number:Int, _ n:Int, _ m:Int) -&gt; Int {        var answer = 0        answer = number % n == 0 &amp;&amp; number % m == 0 ? 1 : 0        return answer}이렇게 생각한...",
+    "content": "나의 코드import Foundationfunc solution(_ number:Int, _ n:Int, _ m:Int) -&gt; Int {        var answer = 0        answer = number % n == 0 &amp;&amp; number % m == 0 ? 1 : 0        return answer}이렇게 생각한 이유.16번과 유사하지만 m의 배수도 만족해야하는 조건이었기에, 삼항연산자의 조건에서  and인 &amp;&amp;를 붙였다."
+  },
+  
+  {
+    "title": "16. n의 배수",
+    "url": "/posts/16.-n%EC%9D%98-%EB%B0%B0%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-09 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ num:Int, _ n:Int) -&gt; Int {        var answer = 0        answer = num % n == 0 ? 1 : 0        return answer}이렇게 생각한 이유.n의 배수이므로 num을 n으로 나눴을때 무조건 나머지가 0이 되어야...",
+    "content": "나의 코드import Foundationfunc solution(_ num:Int, _ n:Int) -&gt; Int {        var answer = 0        answer = num % n == 0 ? 1 : 0        return answer}이렇게 생각한 이유.n의 배수이므로 num을 n으로 나눴을때 무조건 나머지가 0이 되어야 한다.그래서 삼항연산자를 통해 간략하게 표현을 했다."
+  },
+  
+  {
+    "title": "15. 두 수의 연산값 비교하기",
+    "url": "/posts/15.-%EB%91%90-%EC%88%98%EC%9D%98-%EC%97%B0%EC%82%B0%EA%B0%92-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-09 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ a:Int, _ b:Int) -&gt; Int {        var answer : Int = 0        answer = Int(String(a) + String(b))! &gt; 2*a*b ? Int(String(a) + String(b))! : 2*a*b        ret...",
+    "content": "나의 코드import Foundationfunc solution(_ a:Int, _ b:Int) -&gt; Int {        var answer : Int = 0        answer = Int(String(a) + String(b))! &gt; 2*a*b ? Int(String(a) + String(b))! : 2*a*b        return answer}이렇게 생각한 이유.14번 문제와 너무 같아서 생략하겠다."
+  },
+  
+  {
+    "title": "14. 더 크게 합치기",
+    "url": "/posts/14.-%EB%8D%94-%ED%81%AC%EA%B2%8C-%ED%95%A9%EC%B9%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-09 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ a:Int, _ b:Int) -&gt; Int {            var answer : Int = 0        answer = Int(String(a)+String(b))! &gt; Int(String(b)+String(a))! ? Int(String(a)+String(b))...",
+    "content": "나의 코드import Foundationfunc solution(_ a:Int, _ b:Int) -&gt; Int {            var answer : Int = 0        answer = Int(String(a)+String(b))! &gt; Int(String(b)+String(a))! ? Int(String(a)+String(b))! : Int(String(b)+String(a))!        return answer}이렇게 생각한 이유.일단 연산 ⊕ 이 두 정수를 붙여서 쓴다는 것을 알고 a,b를 String으로 변환 후 붙인다음 다시 Int로 변형하였다.그리고 실행을 하였을때 아래와 같은 optional 이 있을 수 있다는 컴파일 에러가 나오므로 !를 통해 Unwrapping을 하였다.그리고 if문을 쓰려다가, 삼항연산자를 다시 Remind하기 위해 삼항연산자로 해당문제를 풀었다."
+  },
+  
+  {
+    "title": "13. 문자열 곱하기",
+    "url": "/posts/13.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EA%B3%B1%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-09 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ my_string:String, _ k:Int) -&gt; String {        var answer : String = \"\"        for i in 0 ... k-1 {        answer += my_string    }        return answer}이렇게 ...",
+    "content": "나의 코드import Foundationfunc solution(_ my_string:String, _ k:Int) -&gt; String {        var answer : String = \"\"        for i in 0 ... k-1 {        answer += my_string    }        return answer}이렇게 생각한 이유.12번과 거의 같은 문제라고 판단했다.다만 12번은 반복문에서 i값을 answer에 누적시켜서 했다면, 이번에는 반복문 안에서 그냥 my_string이라는 외부의 변수로 가져왔다는 차이 밖에 없다."
+  },
+  
+  {
+    "title": "12. 문자 리스트를 문자열로 반환하기",
+    "url": "/posts/12.-%EB%AC%B8%EC%9E%90-%EB%A6%AC%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EB%AC%B8%EC%9E%90%EC%97%B4%EB%A1%9C-%EB%B0%98%ED%99%98%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-09 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ arr:[String]) -&gt; String {        var answer : String = \"\"        for i in arr {        answer += i    }        return answer}이렇게 생각한 이유.반복문을 돌려서 answer라는 변수...",
+    "content": "나의 코드import Foundationfunc solution(_ arr:[String]) -&gt; String {        var answer : String = \"\"        for i in arr {        answer += i    }        return answer}이렇게 생각한 이유.반복문을 돌려서 answer라는 변수에 누적하였다.정수는 계속 더해지지만 문자는 이어서 붙이게 된다."
+  },
+  
+  {
+    "title": "35. 배열 만들기 4",
+    "url": "/posts/35.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ arr:[Int]) -&gt; [Int] {        var i : Int = 0    var stk : [Int] = []        while i &lt; arr.count {                if stk.count == 0 {                     ...",
+    "content": "나의 코드import Foundationfunc solution(_ arr:[Int]) -&gt; [Int] {        var i : Int = 0    var stk : [Int] = []        while i &lt; arr.count {                if stk.count == 0 {                        stk.append(arr[i])            i = i+1             } else if stk.count != 0 &amp;&amp; stk[stk.count-1] &lt; arr[i] {            stk.append(arr[i])            i = i+1        } else {            stk.removeLast()        }            }        return stk}이렇게 생각한 이유i가 arr의 길이보다 작을때 까지 계속 돌아가야하기에 while문을 사용하였다.그다음 if 조건으로 stk 배열에 값을 추가를 하였다.배열의 마지막값을 비교해야 하는데 lastIndex를 그대로 썼다가 에러가 발생하여 그냥 count를 통하여 에러를 수정했다."
+  },
+  
+  {
+    "title": "34. 콜라츠 수열 만들기",
+    "url": "/posts/34.-%EC%BD%9C%EB%9D%BC%EC%B8%A0-%EC%88%98%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ n:Int) -&gt; [Int] {        var N : Int = 0    var answer : [Int] = []    N = n        answer.append(N)        while N != 1 {        if N % 2 == 0 {           ...",
+    "content": "나의 코드import Foundationfunc solution(_ n:Int) -&gt; [Int] {        var N : Int = 0    var answer : [Int] = []    N = n        answer.append(N)        while N != 1 {        if N % 2 == 0 {            N = N/2            answer.append(N)        } else {            N = (3*N)+1            answer.append(N)        }    }        return answer}이렇게 한 이유while문을 통해 N값이 1이 될때까지 무한 반복을 하게끔했다.그러면서 N값을 주어진 조건에따라 변화하고 배열에 추가하면서 풀었다.처음에 오답이나와서 내답과 결과값을 비교해보니, 초기값을 추가하지 않아서 발생한 오답이었다.그래서 위에 초기값을 추가하고서 해결을 하였다."
+  },
+  
+  {
+    "title": "1. 문자열 출력하기",
+    "url": "/posts/26.-%EB%A7%88%EC%A7%80%EB%A7%89-%EB%91%90-%EC%9B%90%EC%86%8C/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet s1 = readLine()!print(s1)이렇게 생각한 이유.입력을 readLine으로 받기에 그것을 가지고 있는 변수 s1을 출력하였다.그렇다면readLine() 이란?  표준 입력에서 현재 줄의 끝 또는 EOF (End Of File)에 도달할 때까지 읽은 문자열을 반환한다.",
+    "content": "나의 코드import Foundationlet s1 = readLine()!print(s1)이렇게 생각한 이유.입력을 readLine으로 받기에 그것을 가지고 있는 변수 s1을 출력하였다.그렇다면readLine() 이란?  표준 입력에서 현재 줄의 끝 또는 EOF (End Of File)에 도달할 때까지 읽은 문자열을 반환한다."
+  },
+  
+  {
+    "title": "9. 홀짝 구분하기",
+    "url": "/posts/9.-%ED%99%80%EC%A7%9D-%EA%B5%AC%EB%B6%84%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet a = Int(readLine()!)!var str : String = \"\"if a % 2 == 0 {    str = \"is even\"} else {    str = \"is odd\"}print(\"\\(a) \\(str)\")이렇게 했지만 삼항연산자로도 될것같다.import Foundationlet a = In...",
+    "content": "나의 코드import Foundationlet a = Int(readLine()!)!var str : String = \"\"if a % 2 == 0 {    str = \"is even\"} else {    str = \"is odd\"}print(\"\\(a) \\(str)\")이렇게 했지만 삼항연산자로도 될것같다.import Foundationlet a = Int(readLine()!)!var str : String = \"\"str = a % 2 == 0 ? \"is even\" : \"is odd\"print(\"\\(a) \\(str)\")"
+  },
+  
+  {
+    "title": "8. 문자열 돌리기",
+    "url": "/posts/8.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%8F%8C%EB%A6%AC%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet s1 = readLine()!for s in s1 {    print(s)}적을 내용이 없다. 이것도 다른 표현이 있어 적어둔다.import Foundationprint(readLine()!.map { String($0) }.joined(separator: \"\\n\"))//import Foundationgu...",
+    "content": "나의 코드import Foundationlet s1 = readLine()!for s in s1 {    print(s)}적을 내용이 없다. 이것도 다른 표현이 있어 적어둔다.import Foundationprint(readLine()!.map { String($0) }.joined(separator: \"\\n\"))//import Foundationguard let s1 = readLine() else { fatalError() }s1.forEach { print($0) }//import Foundationlet s1 = readLine()!s1.map { print($0) }//Array(readLine()!).forEach{ print($0) }//import Foundationlet s1 = readLine()!for i in 0...s1.length - 1  {    print(\"\\(s1[String.Index(encodedOffset: i)])\")}"
+  },
+  
+  {
+    "title": "7. 문자열 붙여서 출력하기",
+    "url": "/posts/7.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%B6%99%EC%97%AC%EC%84%9C-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet inp = readLine()!.components(separatedBy: [\" \"]).map { $0 }let (s1, s2) = (inp[0], inp[1])var answer : String = \"\"answer = s1+s2print(answer)딱히 적을건 없다.다만 역시 이것도 다른 표현이 있어 ...",
+    "content": "나의 코드import Foundationlet inp = readLine()!.components(separatedBy: [\" \"]).map { $0 }let (s1, s2) = (inp[0], inp[1])var answer : String = \"\"answer = s1+s2print(answer)딱히 적을건 없다.다만 역시 이것도 다른 표현이 있어 적어둔다.import Foundationprint(readLine()!.split(separator: \" \").map { String($0) }.joined())"
+  },
+  
+  {
+    "title": "6. 덧셈식 출력하기",
+    "url": "/posts/6.-%EB%8D%A7%EC%85%88%EC%8B%9D-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }let (a, b) = (n[0], n[1])print(\"\\(a) + \\(b) = \\(a+b)\")해당내용은 딱히 적을것이 없어 pass",
+    "content": "나의 코드import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }let (a, b) = (n[0], n[1])print(\"\\(a) + \\(b) = \\(a+b)\")해당내용은 딱히 적을것이 없어 pass"
+  },
+  
+  {
+    "title": "5. 특수문자 출력하기",
+    "url": "/posts/5.-%ED%8A%B9%EC%88%98%EB%AC%B8%EC%9E%90-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationprint(\"!@#$%^&amp;*(\"+\"\\\\'\"+\"\\\"\"+\"&lt;&gt;?:;\")      ",
+    "content": "import Foundationprint(\"!@#$%^&amp;*(\"+\"\\\\'\"+\"\\\"\"+\"&lt;&gt;?:;\")      "
+  },
+  
+  {
+    "title": "4. 대소문자 바꿔서 출력하기",
+    "url": "/posts/4.-%EB%8C%80%EC%86%8C%EB%AC%B8%EC%9E%90-%EB%B0%94%EA%BF%94%EC%84%9C-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet s1 = readLine()!var answer : String = \"\"for i in s1 {    if i.isLowercase == false {        answer += i.lowercased()    } else if i.isUppercase == false {        answer +=...",
+    "content": "나의 코드import Foundationlet s1 = readLine()!var answer : String = \"\"for i in s1 {    if i.isLowercase == false {        answer += i.lowercased()    } else if i.isUppercase == false {        answer += i.uppercased()    }}print(answer)이렇게 생각한 이유스위프트는 문자열로 for문이 가능하므로 for문으로 접근을 했다.if문을 통해 대문자가 아니라면 대문자로 전환하고소문자가 아니라면 소문자로 전환하여 누적하게 하여 출력했다.  대문자 소문자 변환          uppercased() : 대문자로 변환      lowercased() : 소문자로 변환        대문자 소문자인지 확인          isLowercase : 소문자인지?      isUppercase : 대문자인지?            각각 반환타입은 Bool이다.    이것도 역시 다른 풀이를 보니 간단하게 한것이 많다.  import Foundationprint(readLine()!.map { $0.isLowercase ? $0.uppercased() : $0.lowercased() }.joined())//import Foundationlet s1 = readLine()!var answer = \"\"for s in Array(s1) {    answer += s.isUppercase ? s.lowercased() : s.uppercased()}print(answer)//import Foundationlet s1 = readLine()!print(String(s1.map{ $0.isLowercase ? Character($0.uppercased()) : Character($0.lowercased()) }))//"
+  },
+  
+  {
+    "title": "3. 문자열 반복해서 출력하기",
+    "url": "/posts/3.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%B0%98%EB%B3%B5%ED%95%B4%EC%84%9C-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet inp = readLine()!.components(separatedBy: [\" \"]).map { $0 }let (s1, a) = (inp[0], Int(inp[1])!)var answer : String = \"\"for i in 0 ... a-1 {    answer += s1}print(answer)이렇...",
+    "content": "나의 코드import Foundationlet inp = readLine()!.components(separatedBy: [\" \"]).map { $0 }let (s1, a) = (inp[0], Int(inp[1])!)var answer : String = \"\"for i in 0 ... a-1 {    answer += s1}print(answer)이렇게 생각한 이유.반복문을 이용하여 풀어야한다고 생각을 했으며, 단순히 print()를 하게되면 아래와 같이 나온다는것을 생각하였다.stringstringstringstringstring그래서 새로운 변수 answer를 하나 만들어 string을 누적으로 붙이게 하였다.다른 풀이를 보니 여러 방법으로 한 것을 알았다.일단 아래에 복사를 해두고 나중에 개념을 찾아보면서 내것으로 만들어야겠다.import Foundationlet inp = readLine()!.components(separatedBy: [\" \"]).map { $0 }let (s1, a) = (inp[0], Int(inp[1])!)print(String(repeating: s1, count: a))//let inputValue = readLine()!.split(separator: \" \").map {String($0) }print(String(repeating: inputValue[0], count: Int(inputValue[1])! ))//import Foundationlet inp = readLine()!.components(separatedBy: [\" \"]).map { $0 }let (s1, a) = (inp[0], Int(inp[1])!)for i in 0 ..&lt; a {    print(s1, terminator: \"\")}"
+  },
+  
+  {
+    "title": "2. a와 b 출력하기",
+    "url": "/posts/2.-a%EC%99%80-b-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0-copy/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }let (a, b) = (n[0], n[1])print(\"a =\",a,\"\\nb =\",b)이렇게 생각한 이유.문자 보간법을 사용하여 한줄에 표기하였다.다른 코드를 보니 아래처럼 그냥 한줄에 이어서...",
+    "content": "나의 코드import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }let (a, b) = (n[0], n[1])print(\"a =\",a,\"\\nb =\",b)이렇게 생각한 이유.문자 보간법을 사용하여 한줄에 표기하였다.다른 코드를 보니 아래처럼 그냥 한줄에 이어서 했다.나도 저렇게 하는게 더 이뻤을 것 같다.print(\"a = \\(a)\\nb = \\(b)\")문자보간법.  문자열 내부에 변수 var를 배치하여 더 유용하게 만드는 기능이다.  문자열 안에 모든 유형의 변수를 넣을 수 있다.  \\를 쓰고 괄호() 안에 변수이름을 입력하면 된다 ()var score = 85var str = \"Your score was \\(score)\" // Your score was 85var city = \"서울\"var message = \"Welcome to \\(city)!\" // Welcome to 서울!  문자열 보간 안에서 연산자를 사용 할 수 있다.    var age = 25\"You are \\(age) years old. In another \\(age) years you will be \\(age * 2).\"             트리플 쿼우팅          트리플 쿼우팅 혹은 멀티 라인 쿼우팅 이라고 호칭 되는 이 문법은 개행 문자를 넣지않고도, 개행을 할 수 있게 도와주는 문법이다.      print(\"hello \\n world\")// 'hello //  world'      \\n 을 사용하여 간단하게 문자열 개행을 할 수있다.        여러번 쓰게 될 때는 코드를 깔끔하게 보이기 위해 여러줄에 문자열을 나열해서 사용  let intro = \"hello !\\n\" +     \"my name is lee\\n\" +    \"nice to meet you !\"  트리플 쿼우팅은 말 그대로 “”” “”” 큰 따옴표 세개를 사용해서 우리가 코드를 읽는 그대로 개행되는 문자열을 의미한다.    let intro = \"\"\"안녕하세요 !만나서 반가워요 .잘부탁드립니다.\"\"\"print(intro)// 결과 // 안녕하세요 !// 만나서 반가워요 .// 잘부탁드립니다.      "
+  },
+  
+  {
+    "title": "1. 문자열 출력하기",
+    "url": "/posts/1.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0-copy/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 난이도0",
+    "date": "2024-02-07 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationlet s1 = readLine()!print(s1)이렇게 생각한 이유.입력을 readLine으로 받기에 그것을 가지고 있는 변수 s1을 출력하였다.그렇다면readLine() 이란?  표준 입력에서 현재 줄의 끝 또는 EOF (End Of File)에 도달할 때까지 읽은 문자열을 반환한다.",
+    "content": "나의 코드import Foundationlet s1 = readLine()!print(s1)이렇게 생각한 이유.입력을 readLine으로 받기에 그것을 가지고 있는 변수 s1을 출력하였다.그렇다면readLine() 이란?  표준 입력에서 현재 줄의 끝 또는 EOF (End Of File)에 도달할 때까지 읽은 문자열을 반환한다."
+  },
+  
+  {
+    "title": "4일차(끝)",
+    "url": "/posts/4%EC%9D%BC%EC%B0%A8(%EB%81%9D)/",
+    "categories": "사전학습정리",
+    "tags": "사전학습강의",
+    "date": "2024-02-05 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "테이블 뷰 구현  테이블 뷰 만들기          스토리 보드에서 드래그 앤 드롭        테이블 뷰 셀 추가하기          스토리 보드에서 드래그 앤 드롭      테이블 뷰 안에 사용되는 셀이다.        테이블 뷰 바꾸기화살표가 있는 viewController는 시작할때 해당 화면을 보여준다.Is Initial View Contro...",
+    "content": "테이블 뷰 구현  테이블 뷰 만들기          스토리 보드에서 드래그 앤 드롭        테이블 뷰 셀 추가하기          스토리 보드에서 드래그 앤 드롭      테이블 뷰 안에 사용되는 셀이다.        테이블 뷰 바꾸기화살표가 있는 viewController는 시작할때 해당 화면을 보여준다.Is Initial View Controller를 체크하면 해당 view Controller를 메인 화면으로 한다.새로운 viewController 생성.      우클릭 후 New File        Cocoa Touch Class 클릭        원하는 이름의 viewController 생성.  코드를 작성후, 해당 class를 view Controller에 연결.우측 상단의 Class에서 방금 전 생성한 MyTableViewController를 연결시켜 준다.수업 코드import UIKitclass MyTableViewController: UIViewController {    @IBOutlet weak var myTableView: UITableView!        let friendsNames : [String] = [\"Henry\", \"Leeo\", \"Jay\", \"Key\"]        override func viewDidLoad() {        super.viewDidLoad()        myTableView.backgroundColor = .red        myTableView.delegate = self        // self는 여기서 MyTableViewController이다.        // delegate는 위임하는 의미.        // 즉 위의 코드는 Table와 Controller를 서로 연결해주는것.        myTableView.dataSource = self    }    }extension MyTableViewController: UITableViewDelegate, UITableViewDataSource {        // 몇줄을 보여주는지?    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int {        return friendsNames.count    }        // 각 줄마다 어떤걸 넣을지?    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell {        let cell = myTableView.dequeueReusableCell(withIdentifier: \"MyFirstCell\", for: indexPath)        cell.textLabel?.text = friendsNames[indexPath.row]         //각각의 셀에 FriendNames 배열에 있는 이름을 하나씩 넣는다.        // for 문을 사용하지 않아도 됨.        return cell    }}  네비게이션 및 화면 전환  하나 이상의 화면          Control누른 상태에서 Drag &amp; Drop      segue        아래 방식으로 하면 명확하게 어디가 연결되어있는지 모른다.  아래와 같이 새로운 화살표로 각 view Controller 끼리 연결 되어있는 것을 알 수 있다.실행 결과      네비게이션          우리가 어디로 가야할 지 알려주는 장치      자동으로 뒤로가기 버튼이 생긴다      네비게이션 컨트롤러   ![]   (https://velog.velcdn.com/images/haroldfromk/post/94770b39-fcc6-410a-929e-f0d30d12fc7c/image.png)            Command + Shift + L을 누르지 않고도 아래와 같은 방법으로 생성이 가능.    Command + Shift + L을 눌러서 생성하는 방법          일일이 연결을 해줘야 하므로 위의 방법을 추천한다.        실행결과          아까와는 달라진것을 알 수 있다.      show detail로 modal을 만들었다면 그다음에 show로 연결을 하더라도 modal이 뜬다.예시"
+  },
+  
+  {
+    "title": "3일차",
+    "url": "/posts/3%EC%9D%BC%EC%B0%A8/",
+    "categories": "사전학습정리",
+    "tags": "사전학습강의",
+    "date": "2024-01-26 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "문제풀고 이것저것 적느라 이틀만에 수강을 한거같다.  데이터 관리          배열과 딕셔너리의 사용              배열과 딕셔너리는 비슷하면서도 굉장히 다른 컬렉션      배열 \t- 같은 형태의 데이터를 그리는데 사용                  인덱스로 접근          반복하기가 쉬움                    딕셔너리...",
+    "content": "문제풀고 이것저것 적느라 이틀만에 수강을 한거같다.  데이터 관리          배열과 딕셔너리의 사용              배열과 딕셔너리는 비슷하면서도 굉장히 다른 컬렉션      배열 \t- 같은 형태의 데이터를 그리는데 사용                  인덱스로 접근          반복하기가 쉬움                    딕셔너리  \t- 키와 밸류 형태                  키 값으로 접근          반복이 아닌 접근                      데이터 모델링          데이터의 그룹 \t - 설계를 하고 개발을 하다보면 만나는 데이터들                  데이터의 틀을 만드는 작업인 모델링          의미를 부여하는 작업                    시작할때 Main인 상태에서 option을 누른채로 ViewController를 클릭하여 Main과 viewController 두 화면을 Xcode에 띄워둔다.그상태에서 view.backgroundColor = .색상을 통해 현재 main과 viewController가 잘 연결 되어있는지 확인을 해두자.아래 사진과 같다.수업 전체 코드.import UIKit// 데이터의 그룹화 중 가장 쉬운 방법은 구조체 즉 class를 쓰는것이다.struct Family {    let myName : String    let bestFriendName : String    let nextFriendName : String    let myBrother : String}class ViewController: UIViewController {        let friendsNames : [String] = [\"Henry\", \"Leeo\", \"Jay\", \"Key\"]    // index로 접근하던것을        let koreanNames : [String : String] = [\"Henry\" : \"헨리\", \"Leeo\" : \"리오\", \"Jay\" : \"제이\"]    // Key값으로 접근.        var count : Int = 0    let friend = Family(myName: \"Henry1\", bestFriendName: \"Leeo1\", nextFriendName: \"Jay1\", myBrother: \"Key1\")            @IBOutlet weak var nameLabel: UILabel!    @IBOutlet weak var bestFriendNameLabel: UILabel!    @IBOutlet weak var nextFriendNameLabel: UILabel!          override func viewDidLoad() {        super.viewDidLoad()        // Do any additional setup after loading the view.    }    @IBAction func didTapButton(_ sender: Any) {                nameLabel.text = friend.myName        bestFriendNameLabel.text = friend.bestFriendName        nextFriendNameLabel.text = friend.nextFriendName        //friend.myBrother                // 이 코드에서는 내가 누군지 등 누구인지는 명확하지 않다//        nameLabel.text = friendsNames[0]//        bestFriendNameLabel.text = friendsNames[1]//        nextFriendNameLabel.text = friendsNames[2]                //        let friendName = friendsNames[count]//        //        nameLabel.text = koreanNames[friendName]//        //        count = count + 1//        //        if count &gt; 2 {//            count = 0//        }    }    }주석부분은 데이터를 그룹화 하기전이다.그룹화하기전에는 배열의 인덱스 값으로 접근하였고, 그러면서 각각의 레이블에 대입을 하는 방식으로 진행이 되었다.그러다보니 실제로는 이 배열값으로 예시를 든다면, 내가 누군지, bestfriend는 누군지, nextfriend는 누군지는 정확하게 알수가 없다. 그래서 데이터를 그룹화 하기위해 class를 만들었고 struct라는 명령어를 통해 큰 틀인 Family를 만들고 그 하위에 myname, bestfriendname, nextfriendname, mybroter를 만들었다. 이렇게 되면 각각의 변수에 데이터를 대입함으로써, 각각의 데이터가 뭔지 명확하게 지정이 된다.아래는 전체 코드에서 데이터의 그룹화 관련부분만 따로 빼왔다.struct Family {    let myName : String    let bestFriendName : String    let nextFriendName : String    let myBrother : String}let friend = Family(myName: \"Henry1\", bestFriendName: \"Leeo1\", nextFriendName: \"Jay1\", myBrother: \"Key1\")"
+  },
+  
+  {
+    "title": "2일차",
+    "url": "/posts/2%EC%9D%BC%EC%B0%A8/",
+    "categories": "사전학습정리",
+    "tags": "사전학습강의",
+    "date": "2024-01-23 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "사용자 인터페이스와 로직 연결IBAction 및 IBOutlet 소개  컨셉          UI를 그리는 방법 중 하나                  SwfitUI vs UIKit          Storyboard vs Code          Storyboard에서 화면과 코드를 연결하는 방법                    IBAction  ...",
+    "content": "사용자 인터페이스와 로직 연결IBAction 및 IBOutlet 소개  컨셉          UI를 그리는 방법 중 하나                  SwfitUI vs UIKit          Storyboard vs Code          Storyboard에서 화면과 코드를 연결하는 방법                    IBAction  연결 방법은 드래그 앤 드롭  액션을 연결 함  우리가 어떤 액션을 했을 때, 동작 하는 트리거IBOutlet  연결 방법은 드래그 앤 드롭  컴포넌트를 연결 함      화면에 있는 뷰와 코드를 연결할 때 사용    버튼 클릭과 화면 업데이트          버튼을 눌렀을 때 동작하게      버튼 누름을 트리거로 화면이 업데이트 되는 것      코딩을 최소한으로 구현      위의 화면에서 option을 누른 채로 main을 클릭하게되면이렇게 창을 하나 더 추가 할 수 있다.Component를 클릭하고 Control을 누르고 드래그를 하여 코드쪽에 넣으면 아래 사진처럼 나온다.연결이 잘 되어있는 지 확인을 하려면 11번, 13번 사이에 12대신 새로운게 생기는데 그곳으로 포인터를 갖다 대보자.Action은 보통 override 아래에 추가한다.버튼을 눌렀을때 작동하는 코드를 작성하였다.(IBAction을 만들었다.)실제로 시뮬레이터에서 Tab을 터치하면 오른쪽 아래와 같이 안녕이 라는 단어가 출력이 되는 것을 확인 할 수 있다.command를 누른 상태에서 component같은걸 클릭하면세부 속성을 볼 수 있다.응용 문제.-&gt; Hello를 I’m Harold로 바꿔보자.import UIKitclass ViewController: UIViewController {    @IBOutlet weak var myButton: UIButton!        @IBOutlet weak var helloLabel: UILabel!        override func viewDidLoad() {        super.viewDidLoad()        // Do any additional setup after loading the view.    }        @IBAction func didTapMyButton(_ sender: Any) {        print(\"배경색을 노란색으로!\")//        view.backgroundColor = .yellow        helloLabel.text = \"I'm Harold\"    }    }option키를 누르고 변수를 클릭하면 이렇게 정보를 볼 수 있다."
+  },
+  
+  {
+    "title": "1일차 (4)",
+    "url": "/posts/1%EC%9D%BC%EC%B0%A8(4)/",
+    "categories": "사전학습정리",
+    "tags": "사전학습강의",
+    "date": "2024-01-22 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "조건문, 제어문  컨셉          특정 조건에 다라서 다른 상태를 만들어 주는 문법      코드의 실행 흐름을 관리하는 핵심적인 구성 요소      문법 - if  if 문은 주어진 조건이 true 일때 코드 블록을 실행  else 문은 주어진 조건이 false 일때 코드 블록을 실행    if condition {  // 조건이 true일 때...",
+    "content": "조건문, 제어문  컨셉          특정 조건에 다라서 다른 상태를 만들어 주는 문법      코드의 실행 흐름을 관리하는 핵심적인 구성 요소      문법 - if  if 문은 주어진 조건이 true 일때 코드 블록을 실행  else 문은 주어진 조건이 false 일때 코드 블록을 실행    if condition {  // 조건이 true일 때 실행됩니다.} else if anotherCondition {  // 다른 조건이 true일 때 실행됩니다.} else {  // 위의 모든 조건이 false일 때 실행됩니다.}      문법 - switch  switch 문은 여러 조건을 비교할 때 사용  각각의 case는 특정 조건에 해당할 때의 코드 블록을 실행    switch value {case value1:  // value가 value1일 때 실행됩니다.case value2:  // value가 value2일 때 실행됩니다.default:  // 위의 모든 case에 해당하지 않을 때 실행됩니다.}      반복문  컨셉          같은 코드를 여러번 반복해주는 방법      코드를 간결하게 만들어 주는 방법        for item in [\"Apple\", \"Banana\", \"Cherry\"] {  // 각 아이템에 대해 실행됩니다.}for index in 1...5 {  // 1부터 5까지 실행됩니다.}                    "
+  },
+  
+  {
+    "title": "1일차 (3)",
+    "url": "/posts/1%EC%9D%BC%EC%B0%A8(3)/",
+    "categories": "사전학습정리",
+    "tags": "사전학습강의",
+    "date": "2024-01-22 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "Swift 기본 문법.변수와 상수  컨셉          데이터를 담아두는 공간              불러오기 위한 데이터        문법              변수(Variable) : 데이터를 저장하고 이후에 변경할 수 있는 저장 공간. var 키워드를 사용하여 선언      상수(Constant) : 한번 값이 저장되면 변경할 수 없는 저장...",
+    "content": "Swift 기본 문법.변수와 상수  컨셉          데이터를 담아두는 공간              불러오기 위한 데이터        문법              변수(Variable) : 데이터를 저장하고 이후에 변경할 수 있는 저장 공간. var 키워드를 사용하여 선언      상수(Constant) : 한번 값이 저장되면 변경할 수 없는 저장 공간. let 키워드를 사용하여 선언    코드      var welcome = \"Hello World!\"  let abc = \"Welcome to my world\"            데이터 타입    컨셉          저장한데이터에는 타입이 존재      다양한 타입들에 다양한 쓰임새                  데이터의 종류만큼 존재하는 타입                      해롤 -&gt; 문자열    let name : String = \"해롤\"        20 -&gt; 정수    var age : Int = 20        3.14 -&gt; 실수    var pi : double = 3.14        true / false    var isLoggedIn: Bool = true        컬렉션          같은 타입의 여러개의 변수를 하나로 묶음.      방법에 따라 여러가지 존재.        배열(Array)          같은 데이터를 하나의 변수에 넣는 방법      code        var fruits : [String] = [\"Apple\", \"Banana\", \"Cherry\"]fruits.append(\"Date\")let firstFruit = fruits[0]. // Apple                      사전(Dictionary)          키로 밸류에 접근하는 방법      이 세상의 사전과 같은 방법        var captals: [String: String] = [\"Korea\" : \"Seoul\", \"Japan\" : \"Tokyo\"]capitals[\"China\"] = \"Beijing\"let koreanCapital = capitals.[\"korea\"] // Seoul                      집합 (Set)          순서가 없는 고유한 값들        var colors: Set&lt;String&gt; = [\"Red\", \"Green\", \"Blue\"]colors.insert(\"Yellow\")let isContainsRed = colors.contains(\"Red\")  // true                     "
+  },
+  
+  {
+    "title": "1일차 (2)",
+    "url": "/posts/1%EC%9D%BC%EC%B0%A8(2)/",
+    "categories": "사전학습정리",
+    "tags": "사전학습강의",
+    "date": "2024-01-22 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "Main StoryBoardNavigator가 보이지 않는다면 아래 사진처럼 하자.View Controller 는 View를 Control한다.사진처럼 View안에 View가 있지만 최하위에 있는 View역시 ViewController가 Control 한다.처음엔 여러 Component를 배치하여 inspector를 통해 조작하면서 기초를 쌓아두는게 좋다.",
+    "content": "Main StoryBoardNavigator가 보이지 않는다면 아래 사진처럼 하자.View Controller 는 View를 Control한다.사진처럼 View안에 View가 있지만 최하위에 있는 View역시 ViewController가 Control 한다.처음엔 여러 Component를 배치하여 inspector를 통해 조작하면서 기초를 쌓아두는게 좋다."
+  },
+  
+  {
+    "title": "1일차 (1)",
+    "url": "/posts/1%EC%9D%BC%EC%B0%A8(1)/",
+    "categories": "사전학습정리",
+    "tags": "사전학습강의",
+    "date": "2024-01-22 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "#1 XCode 시작할때시작부분의 Product Name은 프로젝트 명을 의미를 한다. 보통은 CamelCase를 사용.-&gt; CamelCase : 이름을 만드는 방법 중 하나\tex) HelloWorld, ExportDefault, UsingAxeTeam은 비어있어도 됨.Organization Identifier : Webpage 주소와 비슷, 프...",
+    "content": "#1 XCode 시작할때시작부분의 Product Name은 프로젝트 명을 의미를 한다. 보통은 CamelCase를 사용.-&gt; CamelCase : 이름을 만드는 방법 중 하나\tex) HelloWorld, ExportDefault, UsingAxeTeam은 비어있어도 됨.Organization Identifier : Webpage 주소와 비슷, 프로젝트의 고유 주소값이 됨. 신중하게 정해야 하나 추후 변경이 가능.보통은 com.그룹명.프로젝트명 으로 됨.ViewController &amp; design      검색  cmd+shift+L    button, image 등 표시하고 싶은 내용 검색  Drag &amp; Drop  속성 변경 (text, color, alignment 등)"
   }
   
 ]
