@@ -33,4 +33,7 @@ fruits[0]
 fruits[1]
 ```
 
+
+이번에도 아래 컴파일러를 통해 간단히 연습해보자.
+
 <iframe src="https://paiza.io/projects/e/WKfD-BGJ56qEc0hDGODPpw?theme=twilight" width="100%" height="500" scrolling="no" seamless="seamless"></iframe>
