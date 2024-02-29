@@ -578,14 +578,14 @@
 <div id="post-list" class="flex-grow-1 px-xl-1">
   
     <article class="card-wrapper card">
-      <a href="/posts/123.-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/Xylophone-(2)/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">123. 부분 문자열</h1>
+            <h1 class="card-title my-2 mt-md-0">Xylophone (2)</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -595,24 +595,20 @@
 
 
 
-                
+                Xylophone에서 각 버튼을 눌렀을때 다음과같이
+흐려졌다가 다시 밝아지게 해보자.
+
+
+그리고 눌렀을때 Console에 start가 바로 출력이 되었다가. 0.2초 후에 End가 나오게 해보자.
 
 
 
-import Foundation
+before
+import UIKit
+import AVFoundation
 
-func solution(_ str1:String, _ str2:String) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    answer = str2.contains(str1) ? 1 : 0
-    
-    return answer
-}
-
-
-
-배열과 같이 문자열 또한 ...
+class ViewController: UIViewController {
+  ...
               </p>
             </div>
 
@@ -630,11 +626,11 @@ func solution(_ str1:String, _ str2:String) -&amp;gt; Int {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708546380"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 22, 2024
 </time>
 
 
@@ -643,7 +639,7 @@ func solution(_ str1:String, _ str2:String) -&amp;gt; Int {
                   <i class="far fa-folder-open fa-fw me-1"></i>
                   <span class="categories">
                     
-                      코딩테스트
+                      Udemy
                   </span>
                 
               </div>
@@ -658,14 +654,14 @@ func solution(_ str1:String, _ str2:String) -&amp;gt; Int {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/122.-%EB%92%A4%EC%97%90%EC%84%9C-5%EB%93%B1%EA%B9%8C%EC%A7%80/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/Xylophone-(1)/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">122. 뒤에서 5등까지</h1>
+            <h1 class="card-title my-2 mt-md-0">Xylophone (1)</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -676,24 +672,20 @@ func solution(_ str1:String, _ str2:String) -&amp;gt; Int {
 
 
                 
+  
+    UIbutton을 만들어준다. (control &amp;amp; drag)
+  
+  
+    그리고 버튼을 눌렀을때 소리가 나는 코드를 작성해준다. (stackflow에 있다)
+```swift
+import UIKit
+import AVFoundation
+  
 
 
+class ViewController: UIViewController {
 
-import Foundation
-
-func solution(_ num_list:[Int]) -&amp;gt; [Int] {
-
-    var answer : [Int] = []
-
-    answer = Array(num_list.sorted()[0...4])
-
-
-    return answer
-}
-
-
-
-배열의 인덱스로 하려고해서 [0…4]로 하여 Arr...
+var p...
               </p>
             </div>
 
@@ -711,11 +703,11 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708546380"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 22, 2024
 </time>
 
 
@@ -724,7 +716,7 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
                   <i class="far fa-folder-open fa-fw me-1"></i>
                   <span class="categories">
                     
-                      코딩테스트
+                      Udemy
                   </span>
                 
               </div>
@@ -739,14 +731,14 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/121.-%EC%A1%B0%EA%B1%B4%EC%97%90-%EB%A7%9E%EA%B2%8C-%EC%88%98%EC%97%B4-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0-3/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/Auto-Layout-(challenge)/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">121. 조건에 맞게 수열 변환하기 3</h1>
+            <h1 class="card-title my-2 mt-md-0">Auto Layout (challenge)</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -758,19 +750,174 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
 
                 
 
+다음과 같이 만들어 보자.
+
+우선 해당 Project를 clone하여 가져오니 다음과 같다.
 
 
-import Foundation
+내가 해야할건 위의 portrait인상태에서 landscape일때 위와 같은 형태로 보여지게 하면 되는것같다.
 
-func solution(_ arr:[Int], _ k:Int) -&amp;gt; [Int] {
-    
-    var answer : [Int] = []
-    
-    answer = k%2 == 0 ? arr.map{$0 + k} : arr.map{$0 * k}
-    
-    return answer
-}
+먼저 Landscape모드를 보았다.
 
+
+다음과같다.
+
+constraint(제약)을 해야할것같다.
+
+view구성을 보았다.
+
+
+우선 Cont...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708459980"
+  data-df="ll"
+  
+>
+  Feb 21, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/Auto-Layout-(2)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">Auto Layout (2)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                Auto Layout (1)에서 했던것을 바탕으로
+Main의 화면도 Rotate했을때 background, image, button들이 짤리지 않고 유지하게 만들어 보자.
+
+
+  background
+
+
+
+up / down / left / right의 제약조건을 모두 활성화 해준다.
+
+
+
+하지만 이렇게 safe area가 있으므로 그부분도 조절을 해주자...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708459980"
+  data-df="ll"
+  
+>
+  Feb 21, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/Auto-Layout-(1)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">Auto Layout (1)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                Auto Layout 에서는 폰을 Rotate했을때 어플 화면이 변경되게 하는것을 공부할 예정이다.
+
+
+
+현재는 이렇게 화면을 회전할 경우 지원이 되지않는 걸 볼 수 있다.
+
+이렇게 Launch Screen에서도 Rotate했을때 로고가 짤리는 걸 알 수 있다.
+
+
+
+
+Q:그러면 직접 사이즈를 조절하면 되는걸까?
+A:안된다. 아래 이미지를 보자.
 
 
 ...
@@ -791,11 +938,11 @@ func solution(_ arr:[Int], _ k:Int) -&amp;gt; [Int] {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708459980"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 21, 2024
 </time>
 
 
@@ -804,7 +951,7 @@ func solution(_ arr:[Int], _ k:Int) -&amp;gt; [Int] {
                   <i class="far fa-folder-open fa-fw me-1"></i>
                   <span class="categories">
                     
-                      코딩테스트
+                      Udemy
                   </span>
                 
               </div>
@@ -819,14 +966,14 @@ func solution(_ arr:[Int], _ k:Int) -&amp;gt; [Int] {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/120.-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%84-%EC%A0%95%EC%88%98%EB%A1%9C-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/135.-7%EC%9D%98-%EA%B0%9C%EC%88%98/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">120. 문자열을 정수로 변환하기</h1>
+            <h1 class="card-title my-2 mt-md-0">135. 7의 개수</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -842,20 +989,14 @@ func solution(_ arr:[Int], _ k:Int) -&amp;gt; [Int] {
 
 import Foundation
 
-func solution(_ n_str:String) -&amp;gt; Int {
+func solution(_ array:[Int]) -&amp;gt; Int {
     
+    var arr : [String] = []
     var answer : Int = 0
     
-    answer = Int(n_str)!
+    arr = array.map{String($0)}.joined().map{String($0)}
     
-    return answer
-}
-
-
-
-문자열을 정수로 변환할때는 !를 붙여 unwrapping을 해줘야한다.
-
-그렇지...
+    for ...
               </p>
             </div>
 
@@ -873,11 +1014,11 @@ func solution(_ n_str:String) -&amp;gt; Int {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708459980"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 21, 2024
 </time>
 
 
@@ -901,14 +1042,14 @@ func solution(_ n_str:String) -&amp;gt; Int {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/119.-%EB%AC%B8%EC%9E%90%EC%97%B4%EB%A1%9C-%EB%B3%80%ED%99%98/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/134.-%EC%BB%A4%ED%94%BC-%EC%8B%AC%EB%B6%80%EB%A6%84/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">119. 문자열로 변환</h1>
+            <h1 class="card-title my-2 mt-md-0">134. 커피 심부름</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -922,182 +1063,15 @@ func solution(_ n_str:String) -&amp;gt; Int {
 
 
 
-import Foundation
-
-func solution(_ n:Int) -&amp;gt; String {
-    
-    var answer : String = &quot;&quot;
-    
-    answer = String(n)
-    
-    return answer
-}
-
-
-
-숫자를 문자열로 변환하기 위해서 String으로 감싸서 결과값을 리턴하였다.
-
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708114380"
-  data-df="ll"
-  
->
-  Feb 17, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/118.-%EC%A0%95%EC%88%98-%EB%B6%80%EB%B6%84/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">118. 정수 부분</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
 
 import Foundation
 
-func solution(_ flo:Double) -&amp;gt; Int {
+func solution(_ order:[String]) -&amp;gt; Int {
     
-    var answer = 0
-    
-    answer = Int(flo/1)
-    
-    return answer
-}
-
-
-
-나누었을때 몫만 반환하는 / 을 이용하여 Int로 감싸서 결과값을 리턴하고자 하였다.
-
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708114380"
-  data-df="ll"
-  
->
-  Feb 17, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/117.-%EC%A0%95%EC%88%98-%EC%B0%BE%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">2.</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-import Foundation
-
-func solution(_ num_list:[Int], _ n:Int) -&amp;gt; Int {
-    
+    var arr : [Int] = []
     var answer : Int = 0
     
-    answer = num_list.contains(n) ? 1 : 0
-     
-    return answer
-}
-
-
-
-배열안에 특정한 값을 포함하...
+    answer = order.map{$0.contains(&quot;cafelatte&quot;) ? 5000 : 4500}.reduce...
               </p>
             </div>
 
@@ -1115,11 +1089,11 @@ func solution(_ num_list:[Int], _ n:Int) -&amp;gt; Int {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708459980"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 21, 2024
 </time>
 
 
@@ -1143,14 +1117,14 @@ func solution(_ num_list:[Int], _ n:Int) -&amp;gt; Int {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/116.-%EB%B0%B0%EC%97%B4-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/Magic-8-Balls-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">116. 배열 비교하기</h1>
+            <h1 class="card-title my-2 mt-md-0">Magic 8 Balls 만들어보기</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -1161,18 +1135,24 @@ func solution(_ num_list:[Int], _ n:Int) -&amp;gt; Int {
 
 
                 
+  
+    아래와같이 디자인을 한다
+
+  
+  
+    imageview와, button을 viewcontroller와 연결 시켜준다.
+
+  
+  
+    버튼을 눌렀을때 이미지가 변환이되게 코드를 짠다.
+```swift
+import UIKit
+  
 
 
+class ViewController: UIViewController {
 
-
-
-import Foundation
-
-func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    answer = arr1.count &amp;gt; arr2.count ? 1 : (arr1.count == arr2.count ? (arr1.red...
+@IBOutlet w...
               </p>
             </div>
 
@@ -1190,11 +1170,11 @@ func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
 
 <time
   
-  data-ts="1708027980"
+  data-ts="1708373580"
   data-df="ll"
   
 >
-  Feb 16, 2024
+  Feb 20, 2024
 </time>
 
 
@@ -1203,7 +1183,7 @@ func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
                   <i class="far fa-folder-open fa-fw me-1"></i>
                   <span class="categories">
                     
-                      코딩테스트
+                      Udemy
                   </span>
                 
               </div>
@@ -1218,14 +1198,14 @@ func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/115.-%EB%B0%B0%EC%97%B4%EC%9D%98-%EA%B8%B8%EC%9D%B4%EB%A5%BC-2%EC%9D%98-%EA%B1%B0%EB%93%AD%EC%A0%9C%EA%B3%B1%EC%9C%BC%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0-(ing)/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/Dices-(3)/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">115. 배열의 길이를 2의 거듭제곱으로 만들기 (ing)</h1>
+            <h1 class="card-title my-2 mt-md-0">Dices (3)</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -1235,16 +1215,23 @@ func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
 
 
 
-                
+                IBAction 생성하기.
+
+버튼을 눌렀을때 작동하게하는 Action을 할때는
+
+중괄호 사이의 저 부분에 둔다.
 
 
+IB outlet처럼 Control을 누르고 드래그 하면 된다.
 
 
+보통은 버튼을 드래그하면 작동을 하는 의미이므로 Action이 바로 되어있다.
 
 
+그리고 버튼이므로 type을 Uibutton으로 바꿔준다.
 
-2의 거듭제곱이라 거듭제곱을 사용할 수 있는 pow()를 사용해서 풀려고 하였다.
 
+아래 사진으로 대강 어떻...
               </p>
             </div>
 
@@ -1262,11 +1249,11 @@ func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
 
 <time
   
-  data-ts="1708027980"
+  data-ts="1708373580"
   data-df="ll"
   
 >
-  Feb 16, 2024
+  Feb 20, 2024
 </time>
 
 
@@ -1275,7 +1262,7 @@ func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
                   <i class="far fa-folder-open fa-fw me-1"></i>
                   <span class="categories">
                     
-                      코딩테스트
+                      Udemy
                   </span>
                 
               </div>
@@ -1290,14 +1277,14 @@ func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/114.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-6/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/Dices-(2)/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">114. 배열 만들기 6</h1>
+            <h1 class="card-title my-2 mt-md-0">Dices (2)</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -1309,20 +1296,25 @@ func solution(_ arr1:[Int], _ arr2:[Int]) -&amp;gt; Int {
 
                 
 
+viewController는 코드 파일이자 메인이고
+Main은 디자인 파일이다.
+
+이전에도 서술했지만 option누르고 클릭을 하면 새로운 layout이 하나 더 생긴다
+
+
+아래와같이 누르면 좀 더 보기편하게 할 수 있다.
 
 
 
 
-import Foundation
 
-func solution(_ arr:[Int]) -&amp;gt; [Int] {
-    
-    var stk : [Int] = []
-    var i : Int = 0
-    
-    while i &amp;lt; arr.count {
-        if stk.count == 0{
-            stk.appe...
+
+IB outlet, Interface outlet만들기
+
+Control을 누르고 드래그해준다.
+
+
+그리고 이름을 설...
               </p>
             </div>
 
@@ -1340,11 +1332,11 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
 
 <time
   
-  data-ts="1708027980"
+  data-ts="1708373580"
   data-df="ll"
   
 >
-  Feb 16, 2024
+  Feb 20, 2024
 </time>
 
 
@@ -1353,7 +1345,7 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
                   <i class="far fa-folder-open fa-fw me-1"></i>
                   <span class="categories">
                     
-                      코딩테스트
+                      Udemy
                   </span>
                 
               </div>
@@ -1688,12 +1680,51 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
       
 
       
+        <!-- hide number -->
+        
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
+        <!-- hide number -->
+        
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
+        <!-- hide number -->
+        
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
         <!-- show number -->
         <li class="page-item ">
           <a
             class="page-link"
-            href="/page21"
-          >21</a>
+            href="/page24"
+          >24</a>
         </li>
       
     
@@ -1701,7 +1732,7 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
     <!-- mobile pagination -->
     <li class="page-index align-middle">
       <span>9</span>
-      <span class="text-muted">/ 21</span>
+      <span class="text-muted">/ 24</span>
     </li>
 
     <!-- right arrow -->
@@ -1748,35 +1779,35 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/194.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EB%B0%B0%EC%B9%98%ED%95%98%EA%B8%B0/">194. 문자열 내림차순으로 배치하기</a>
+          <a href="/posts/1%EC%9D%BC%EC%B0%A8(1)/">1일차 (1)</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/195.-%EB%B6%80%EC%A1%B1%ED%95%9C-%EA%B8%88%EC%95%A1-%EA%B3%84%EC%82%B0%ED%95%98%EA%B8%B0/">195. 부족한 금액 계산하기</a>
+          <a href="/posts/1%EC%9D%BC%EC%B0%A8(2)/">1일차 (2)</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/196.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%8B%A4%EB%A3%A8%EA%B8%B0-%EA%B8%B0%EB%B3%B8/">196. 문자열 다루기 기본</a>
+          <a href="/posts/1%EC%9D%BC%EC%B0%A8(3)/">1일차 (3)</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/197.-%ED%96%89%EB%A0%AC%EC%9D%98-%EB%8D%A7%EC%85%88/">197. 행렬의 덧셈</a>
+          <a href="/posts/1%EC%9D%BC%EC%B0%A8(4)/">1일차 (4)</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/198.-%EC%A7%81%EC%82%AC%EA%B0%81%ED%98%95-%EB%B3%84%EC%B0%8D%EA%B8%B0/">198. 직사각형 별찍기</a>
+          <a href="/posts/2%EC%9D%BC%EC%B0%A8/">2일차</a>
         </li>
       
     </ul>
@@ -1820,10 +1851,41 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
     
     
     
-      
-        
-        
-
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
   
     
     
@@ -1848,10 +1910,297 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
 
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
   
     
     
@@ -1876,13 +2225,31 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
         <a class="post-tag btn btn-outline-primary" href="/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/">코딩테스트</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/udemy/">Udemy</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%EC%A4%91/">보류중</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/quizzler/">Quizzler</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5%EA%B0%95%EC%9D%98/">사전학습강의</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%ED%96%88%EB%8D%98%EB%AC%B8%EC%A0%9C/">보류했던문제</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/dices/">Dices</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/i-am-rich/">I Am Rich</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/auto-layout/">Auto Layout</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/eggtimer/">EggTimer</a>
       
     </div>
   </section>
@@ -1972,10 +2339,41 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
     
     
     
-      
-        
-        
-
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
   
     
     
@@ -2000,10 +2398,297 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
 
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
   
     
     
@@ -2028,13 +2713,31 @@ func solution(_ arr:[Int]) -&amp;gt; [Int] {
         <a class="post-tag btn btn-outline-primary" href="/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/">코딩테스트</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/udemy/">Udemy</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%EC%A4%91/">보류중</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/quizzler/">Quizzler</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5%EA%B0%95%EC%9D%98/">사전학습강의</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%ED%96%88%EB%8D%98%EB%AC%B8%EC%A0%9C/">보류했던문제</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/dices/">Dices</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/i-am-rich/">I Am Rich</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/auto-layout/">Auto Layout</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/eggtimer/">EggTimer</a>
       
     </div>
   </section>

@@ -578,14 +578,14 @@
 <div id="post-list" class="flex-grow-1 px-xl-1">
   
     <article class="card-wrapper card">
-      <a href="/posts/133.-%EB%82%A0%EC%A7%9C-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/141.-%EC%B5%9C%EB%8C%93%EA%B0%92-%EB%A7%8C%EB%93%A4%EA%B8%B0-(1)/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">2.</h1>
+            <h1 class="card-title my-2 mt-md-0">141. 최댓값 만들기 (1)</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -601,88 +601,14 @@
 
 import Foundation
 
-func solution(_ date1:[Int], _ date2:[Int]) -&amp;gt; Int {
+func solution(_ numbers:[Int]) -&amp;gt; Int {
     
+    var arr : [Int] = []
     var answer : Int = 0
-    var d1 = Int(date1.map{String($0)}.joined())!
-    var d2 = Int(date2.map{String($0)}...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708287180"
-  data-df="ll"
-  
->
-  Feb 19, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/132.-%ED%8A%B9%EB%B3%84%ED%95%9C-%EC%9D%B4%EC%B0%A8%EC%9B%90-%EB%B0%B0%EC%97%B4-1/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">132. 특별한 이차원 배열 1</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-
-
-import Foundation
-
-func solution(_ n:Int) -&amp;gt; [[Int]] {
     
-    var arr : [[Int]] = []
+    arr = numbers.sorted(by:&amp;gt;)
     
-    arr = Array(repeating: Array(repeating:0,count:n), count:n)
-    
-    for i in 0..&amp;lt;n {
+    answer = arr[0] * arr[1]
    ...
               </p>
             </div>
@@ -701,11 +627,11 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
 
 <time
   
-  data-ts="1708287180"
+  data-ts="1708719180"
   data-df="ll"
   
 >
-  Feb 19, 2024
+  Feb 24, 2024
 </time>
 
 
@@ -729,14 +655,14 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/131.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%A0%95%EC%88%98%EC%9D%98-%ED%95%A9/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/140.-%EB%B0%B0%EC%97%B4-%EC%9E%90%EB%A5%B4%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">131. 문자열 정수의 합</h1>
+            <h1 class="card-title my-2 mt-md-0">140. 배열 자르기 (ing)</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -750,20 +676,11 @@ func solution(_ n:Int) -&amp;gt; [[Int]] {
 
 
 
-import Foundation
-
-func solution(_ num_str:String) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    answer = num_str.map{Int(String($0))!}.reduce(0,+)
-
-    return answer
-}
 
 
 
-처음에 Type 에러가 나서 ...
+
+
               </p>
             </div>
 
@@ -781,11 +698,11 @@ func solution(_ num_str:String) -&amp;gt; Int {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708719180"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 24, 2024
 </time>
 
 
@@ -809,14 +726,14 @@ func solution(_ num_str:String) -&amp;gt; Int {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/130.-%EC%A3%BC%EC%82%AC%EC%9C%84-%EA%B2%8C%EC%9E%84-1/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/139.-%EB%B0%B0%EC%97%B4-%EC%9B%90%EC%86%8C%EC%9D%98-%EA%B8%B8%EC%9D%B4/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">130. 주사위 게임 1</h1>
+            <h1 class="card-title my-2 mt-md-0">139. 배열 원소의 길이</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -832,236 +749,19 @@ func solution(_ num_str:String) -&amp;gt; Int {
 
 import Foundation
 
-func solution(_ a:Int, _ b:Int) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    answer = a*b % 2 != 0 ? a*a + b*b : (a%2 == 0 &amp;amp;&amp;amp; b%2 == 0) ? abs(a-b) : 2*(a+b)
-   ...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708114380"
-  data-df="ll"
-  
->
-  Feb 17, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/129.-%EA%BC%AC%EB%A6%AC-%EB%AC%B8%EC%9E%90%EC%97%B4/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">129. 꼬리 문자열</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-import Foundation
-
-func solution(_ str_list:[String], _ ex:String) -&amp;gt; String {
-    
-    var answer : String = &quot;&quot;
-    
-    answer = str_list.map{$0.contains(ex) ? &quot;&quot; : $0}.joined()
-    
-    r...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708114380"
-  data-df="ll"
-  
->
-  Feb 17, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/128.-%EA%B3%B5%EB%B0%B1%EC%9C%BC%EB%A1%9C-%EA%B5%AC%EB%B6%84%ED%95%98%EA%B8%B0-2/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">128. 공백으로 구분하기 2</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-import Foundation
-
-func solution(_ my_string:String) -&amp;gt; [String] {
-    
-    var answer : [String] = []
-    
-    answer = my_string.split(separator : &quot; &quot;).map{String($0)}
-
-    return answer
-}...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708114380"
-  data-df="ll"
-  
->
-  Feb 17, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/127.-%EB%B0%B0%EC%97%B4%EC%9D%98-%EA%B8%B8%EC%9D%B4%EC%97%90-%EB%94%B0%EB%9D%BC-%EB%8B%A4%EB%A5%B8-%EC%97%B0%EC%82%B0%ED%95%98%EA%B8%B0-(fin)/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">127. 배열의 길이에 따라 다른 연산하기 (fin)</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-import Foundation
-
-func solution(_ arr:[Int], _ n:Int) -&amp;gt; [Int] {
+func solution(_ strlist:[String]) -&amp;gt; [Int] {
     
     var answer : [Int] = []
     
-    answer = arr.count % 2 != 0 ? arr.enumerated().map{$0.0%2 != 0 ? $0.1 : $0.1 + n} ...
+    answer = strlist.map{$0.count}
+    
+
+    return answer
+}
+
+
+
+이전 같았으면 for문을쓰고 막 했을텐데 확...
               </p>
             </div>
 
@@ -1079,11 +779,11 @@ func solution(_ arr:[Int], _ n:Int) -&amp;gt; [Int] {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708719180"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 24, 2024
 </time>
 
 
@@ -1107,85 +807,14 @@ func solution(_ arr:[Int], _ n:Int) -&amp;gt; [Int] {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/126.-%EB%B0%B0%EC%97%B4%EC%9D%98-%EC%9B%90%EC%86%8C-%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0-(ing)/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/138.-%ED%8E%B8%EC%A7%80/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">126. 배열의 원소 삭제하기 (ing)</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1708114380"
-  data-df="ll"
-  
->
-  Feb 17, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/125.-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%B8%EC%A7%80-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">125. 부분 문자열인지 확인하기</h1>
+            <h1 class="card-title my-2 mt-md-0">138. 편지</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -1201,18 +830,410 @@ func solution(_ arr:[Int], _ n:Int) -&amp;gt; [Int] {
 
 import Foundation
 
-func solution(_ my_string:String, _ target:String) -&amp;gt; Int {
+func solution(_ message:String) -&amp;gt; Int {
+    
+    
+    var answer : Int = 0
+    answer = message.count * 2
+    
+    return answer
+}
+
+
+
+result를 보니 message의 길이에 2를 곱한값이란걸 알게...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708719180"
+  data-df="ll"
+  
+>
+  Feb 24, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      코딩테스트
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/Quizzler-(1)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">Quizzler (1)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                앱을 키자마자 
+
+위와 같이 문제가 나오게 해보자
+
+import UIKit
+
+class ViewController: UIViewController {
+    
+    @IBOutlet weak var questionLabel: UILabel!
+    @IBOutlet weak var progresBar: UIProgressView!
+    @IBOut...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708632780"
+  data-df="ll"
+  
+>
+  Feb 23, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/EggTimer-(3)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">EggTimer (3)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                EggTimer에서 초가 줄어드는것을 보여주는, 즉 진행률을 보여주는 progress bar를 만들어 보자.
+
+Progressview를 통해 남은 시간을 Visualization할것이다.
+
+우선 progressview를 추가해주자.
+
+
+
+만약 이미 여러 view들을 만들어 둔 상태이고, 내가 원하는 view의 하위에 포함시키고 싶다면 그쪽으로 그냥 드...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708632780"
+  data-df="ll"
+  
+>
+  Feb 23, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/EggTimer-(2)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">EggTimer (2)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                Challenge!
+
+위와 같이 버튼을 눌렀을때
+60부터 countdown하는 코드를 작성해보자!
+
+
+
+before
+import UIKit
+
+class ViewController: UIViewController {
+    
+    let eggTimes = [&quot;Soft&quot; : 5, &quot;Medium&quot; : 7, &quot;Hard&quot; : 12]
+    
+    //le...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708632780"
+  data-df="ll"
+  
+>
+  Feb 23, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/EggTimer-(1)/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">EggTimer (1)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                
+
+현재 이 화면에서 다른 Phone model로 바꾸게 되면
+
+현재의 문장이 … 으로 생략이 될 수있다.
+이럴땐 어떻게 해야할까?
+
+
+
+
+
+  Line의 개수를 0으로 해주는 방법이 있다.
+
+
+
+0이라고해서 줄이 없는게 아니라 무한대로 된다는 의미다.
+
+
+  자동으로 글꼴의 크기를 최소화 해준다.
+
+
+
+
+
+
+아래의 폰트 사이즈로
+
+15~30 까지의 ...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708632780"
+  data-df="ll"
+  
+>
+  Feb 23, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      Udemy
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/137.-%EC%A0%9C%EA%B3%B1%EC%88%98-%ED%8C%90%EB%B3%84%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">137. 제곱수 판별하기</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                
+
+
+
+import Foundation
+
+func solution(_ n:Int) -&amp;gt; Int {
     
     var answer : Int = 0
     
-    answer = my_string.contains(target) ? 1:0
+    answer = Int(sqrt(Double(n))) * Int(sqrt(Double(n))) == n ? 1 : 2
+    
     
     return answer
 }
 
 
 
-12...
+일...
               </p>
             </div>
 
@@ -1230,11 +1251,11 @@ func solution(_ my_string:String, _ target:String) -&amp;gt; Int {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708632780"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 23, 2024
 </time>
 
 
@@ -1258,14 +1279,14 @@ func solution(_ my_string:String, _ target:String) -&amp;gt; Int {
     </article>
   
     <article class="card-wrapper card">
-      <a href="/posts/124.-%EB%92%A4%EC%97%90%EC%84%9C-5%EB%93%B1-%EC%9C%84%EB%A1%9C/" class="post-preview row g-0 flex-md-row-reverse">
+      <a href="/posts/136.-n%EC%9D%98-%EB%B0%B0%EC%88%98-%EA%B3%A0%EB%A5%B4%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
         
 
         
 
         <div class="col-md-12">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">124. 뒤에서 5등 위로</h1>
+            <h1 class="card-title my-2 mt-md-0">136. n의 배수 고르기</h1>
 
             <div class="card-text content mt-0 mb-3">
               <p>
@@ -1281,18 +1302,19 @@ func solution(_ my_string:String, _ target:String) -&amp;gt; Int {
 
 import Foundation
 
-func solution(_ num_list:[Int]) -&amp;gt; [Int] {
+func solution(_ n:Int, _ numlist:[Int]) -&amp;gt; [Int] {
     
-    var answer : [Int] = []
+    var arr : [Int] = []
     
-    answer = Array(num_list.sorted()[5...])
+    arr = numlist.filter{$0%n == 0}
     
-    return answer
+    
+    return arr
 }
 
 
 
-이전 문제 122번과 거의 같은 ...
+n의 배수만 걸러내는 문제였으므로 ...
               </p>
             </div>
 
@@ -1310,11 +1332,11 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
 
 <time
   
-  data-ts="1708114380"
+  data-ts="1708632780"
   data-df="ll"
   
 >
-  Feb 17, 2024
+  Feb 23, 2024
 </time>
 
 
@@ -1658,12 +1680,51 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
       
 
       
+        <!-- hide number -->
+        
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
+        <!-- hide number -->
+        
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
+        <!-- hide number -->
+        
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
         <!-- show number -->
         <li class="page-item ">
           <a
             class="page-link"
-            href="/page21"
-          >21</a>
+            href="/page24"
+          >24</a>
         </li>
       
     
@@ -1671,7 +1732,7 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
     <!-- mobile pagination -->
     <li class="page-index align-middle">
       <span>8</span>
-      <span class="text-muted">/ 21</span>
+      <span class="text-muted">/ 24</span>
     </li>
 
     <!-- right arrow -->
@@ -1718,35 +1779,35 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/194.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EB%B0%B0%EC%B9%98%ED%95%98%EA%B8%B0/">194. 문자열 내림차순으로 배치하기</a>
+          <a href="/posts/1%EC%9D%BC%EC%B0%A8(1)/">1일차 (1)</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/195.-%EB%B6%80%EC%A1%B1%ED%95%9C-%EA%B8%88%EC%95%A1-%EA%B3%84%EC%82%B0%ED%95%98%EA%B8%B0/">195. 부족한 금액 계산하기</a>
+          <a href="/posts/1%EC%9D%BC%EC%B0%A8(2)/">1일차 (2)</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/196.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%8B%A4%EB%A3%A8%EA%B8%B0-%EA%B8%B0%EB%B3%B8/">196. 문자열 다루기 기본</a>
+          <a href="/posts/1%EC%9D%BC%EC%B0%A8(3)/">1일차 (3)</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/197.-%ED%96%89%EB%A0%AC%EC%9D%98-%EB%8D%A7%EC%85%88/">197. 행렬의 덧셈</a>
+          <a href="/posts/1%EC%9D%BC%EC%B0%A8(4)/">1일차 (4)</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/198.-%EC%A7%81%EC%82%AC%EA%B0%81%ED%98%95-%EB%B3%84%EC%B0%8D%EA%B8%B0/">198. 직사각형 별찍기</a>
+          <a href="/posts/2%EC%9D%BC%EC%B0%A8/">2일차</a>
         </li>
       
     </ul>
@@ -1790,10 +1851,41 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
     
     
     
-      
-        
-        
-
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
   
     
     
@@ -1818,10 +1910,297 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
 
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
   
     
     
@@ -1846,13 +2225,31 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
         <a class="post-tag btn btn-outline-primary" href="/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/">코딩테스트</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/udemy/">Udemy</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%EC%A4%91/">보류중</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/quizzler/">Quizzler</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5%EA%B0%95%EC%9D%98/">사전학습강의</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%ED%96%88%EB%8D%98%EB%AC%B8%EC%A0%9C/">보류했던문제</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/dices/">Dices</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/i-am-rich/">I Am Rich</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/auto-layout/">Auto Layout</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/eggtimer/">EggTimer</a>
       
     </div>
   </section>
@@ -1942,10 +2339,41 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
     
     
     
-      
-        
-        
-
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
   
     
     
@@ -1970,10 +2398,297 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
 
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
   
     
     
@@ -1998,13 +2713,31 @@ func solution(_ num_list:[Int]) -&amp;gt; [Int] {
         <a class="post-tag btn btn-outline-primary" href="/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/">코딩테스트</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/udemy/">Udemy</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%EC%A4%91/">보류중</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/quizzler/">Quizzler</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5%EA%B0%95%EC%9D%98/">사전학습강의</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/%EB%B3%B4%EB%A5%98%ED%96%88%EB%8D%98%EB%AC%B8%EC%A0%9C/">보류했던문제</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/dices/">Dices</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/i-am-rich/">I Am Rich</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/auto-layout/">Auto Layout</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/eggtimer/">EggTimer</a>
       
     </div>
   </section>
