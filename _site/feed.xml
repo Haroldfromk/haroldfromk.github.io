@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>Harold`s Daily Log</title>
   <subtitle>A minimal, responsive and feature-rich Jekyll theme for technical writing.</subtitle>
-  <updated>2024-02-29T17:29:16+09:00</updated>
+  <updated>2024-02-29T19:28:30+09:00</updated>
   <author>
     <name>Dongik Song</name>
     <uri>http://localhost:4000/</uri>
@@ -20,16 +20,16 @@
 
   
   <entry>
-    <title>92. 짝수는 싫어요</title>
-    <link href="http://localhost:4000/posts/92.-%EC%A7%9D%EC%88%98%EB%8A%94-%EC%8B%AB%EC%96%B4%EC%9A%94/" rel="alternate" type="text/html" title="92. 짝수는 싫어요" />
-    <published>2024-02-14T05:13:00+09:00</published>
+    <title>203. 크기가 작은 부분 문자열</title>
+    <link href="http://localhost:4000/posts/203.-%ED%81%AC%EA%B8%B0%EA%B0%80-%EC%9E%91%EC%9D%80-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4/" rel="alternate" type="text/html" title="203. 크기가 작은 부분 문자열" />
+    <published>2024-02-29T05:13:00+09:00</published>
   
-    <updated>2024-02-14T05:13:00+09:00</updated>
+    <updated>2024-02-29T05:13:00+09:00</updated>
   
-    <id>http://localhost:4000/posts/92.-%EC%A7%9D%EC%88%98%EB%8A%94-%EC%8B%AB%EC%96%B4%EC%9A%94/</id>
-    <content src="http://localhost:4000/posts/92.-%EC%A7%9D%EC%88%98%EB%8A%94-%EC%8B%AB%EC%96%B4%EC%9A%94/" />
+    <id>http://localhost:4000/posts/203.-%ED%81%AC%EA%B8%B0%EA%B0%80-%EC%9E%91%EC%9D%80-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4/</id>
+    <content src="http://localhost:4000/posts/203.-%ED%81%AC%EA%B8%B0%EA%B0%80-%EC%9E%91%EC%9D%80-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4/" />
     <author>
-      <name>Harold</name>
+      <name>Dongik Song</name>
     </author>
 
   
@@ -49,19 +49,62 @@
       
 
 
+
 import Foundation
 
-func solution(_ n:Int) -&amp;gt; [Int] {
+func solution(_ t:String, _ p:String) -&amp;gt; Int {
     
-    var answer : [Int] = []
+    var arr : [String] = []
+    var answer : [String] = []
+    var string : String = ""
+    var intanswer : Int = 0
     
-    answer = (1...n).filter{$0%2 != 0}.map{$0}
-     
-    return answer
-}
+    arr = t.map{String($0)}
+    
+    if Int(p)! &amp;gt; 1 {
+        for i in 0 ... arr.count-p.count {
+            string = ""
+                for j in i ..&amp;lt; i + (p.count) {
+                    stri...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>202. 삼총사 (ing)</title>
+    <link href="http://localhost:4000/posts/202.-%EC%82%BC%EC%B4%9D%EC%82%AC/" rel="alternate" type="text/html" title="202. 삼총사 (ing)" />
+    <published>2024-02-29T05:13:00+09:00</published>
+  
+    <updated>2024-02-29T05:13:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/202.-%EC%82%BC%EC%B4%9D%EC%82%AC/</id>
+    <content src="http://localhost:4000/posts/202.-%EC%82%BC%EC%B4%9D%EC%82%AC/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="코딩테스트" />
+    
+  
+
+  
+    <summary>
+      
 
 
-filter 와 map을 사용하였다.
+
+
+
+      
+
+
+
+
+
 
     </summary>
   
@@ -70,16 +113,70 @@ filter 와 map을 사용하였다.
 
   
   <entry>
-    <title>91. 피자 나눠 먹기 1</title>
-    <link href="http://localhost:4000/posts/91.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-1/" rel="alternate" type="text/html" title="91. 피자 나눠 먹기 1" />
-    <published>2024-02-14T05:13:00+09:00</published>
+    <title>201. 이상한 문자 만들기</title>
+    <link href="http://localhost:4000/posts/201.-%EC%9D%B4%EC%83%81%ED%95%9C-%EB%AC%B8%EC%9E%90-%EB%A7%8C%EB%93%A4%EA%B8%B0/" rel="alternate" type="text/html" title="201. 이상한 문자 만들기" />
+    <published>2024-02-29T05:13:00+09:00</published>
   
-    <updated>2024-02-14T05:13:00+09:00</updated>
+    <updated>2024-02-29T05:13:00+09:00</updated>
   
-    <id>http://localhost:4000/posts/91.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-1/</id>
-    <content src="http://localhost:4000/posts/91.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-1/" />
+    <id>http://localhost:4000/posts/201.-%EC%9D%B4%EC%83%81%ED%95%9C-%EB%AC%B8%EC%9E%90-%EB%A7%8C%EB%93%A4%EA%B8%B0/</id>
+    <content src="http://localhost:4000/posts/201.-%EC%9D%B4%EC%83%81%ED%95%9C-%EB%AC%B8%EC%9E%90-%EB%A7%8C%EB%93%A4%EA%B8%B0/" />
     <author>
-      <name>Harold</name>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="코딩테스트" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      
+
+
+func solution(_ s:String) -&amp;gt; String {
+    
+    var answer : String = ""
+
+    var index = 0
+    
+    for string in s {
+        if string ==  " " {
+            index = 0
+            answer += " "
+        } else if index % 2 == 0 {
+            answer += string.uppercased()
+            index += 1
+        } else {
+            answer += string.lowercased()
+            index -= 1
+        }
+    }...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>200. 3진법 뒤집기</title>
+    <link href="http://localhost:4000/posts/200.-3%EC%A7%84%EB%B2%95-%EB%92%A4%EC%A7%91%EA%B8%B0/" rel="alternate" type="text/html" title="200. 3진법 뒤집기" />
+    <published>2024-02-29T05:13:00+09:00</published>
+  
+    <updated>2024-02-29T05:13:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/200.-3%EC%A7%84%EB%B2%95-%EB%92%A4%EC%A7%91%EA%B8%B0/</id>
+    <content src="http://localhost:4000/posts/200.-3%EC%A7%84%EB%B2%95-%EB%92%A4%EC%A7%91%EA%B8%B0/" />
+    <author>
+      <name>Dongik Song</name>
     </author>
 
   
@@ -103,17 +200,31 @@ import Foundation
 
 func solution(_ n:Int) -&amp;gt; Int {
     
+    var arr : [Int] = []
+    var N : Int = 0
     var answer : Int = 0
+    N = n
     
-    answer = n &amp;gt; 7 ? (n%7 == 0) ? n/7 : (n/7)+1 : 1
+    while N != 0 {
+        arr.append(N%3)
+        N = N/3
+    }
+    
+    arr = arr.reversed()
+    
+    for i in arr.indices{
+        answer += arr[i] * Int(pow(Double(3),Double(i)))
+    }
+    
+    print(answer)
     
     return answer
 }
 
 
 
-삼항연산자를 2중으로 하여 해결하려고 하였다.
 
+우선 3으로 나눈...
     </summary>
   
 
@@ -121,16 +232,16 @@ func solution(_ n:Int) -&amp;gt; Int {
 
   
   <entry>
-    <title>90. 피자 나눠 먹기 2 (ing)</title>
-    <link href="http://localhost:4000/posts/90.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-2-(ing)/" rel="alternate" type="text/html" title="90. 피자 나눠 먹기 2 (ing)" />
-    <published>2024-02-14T05:13:00+09:00</published>
+    <title>199. 최대공약수와 최소공배수</title>
+    <link href="http://localhost:4000/posts/199.-%EC%B5%9C%EB%8C%80%EA%B3%B5%EC%95%BD%EC%88%98%EC%99%80-%EC%B5%9C%EC%86%8C%EA%B3%B5%EB%B0%B0%EC%88%98/" rel="alternate" type="text/html" title="199. 최대공약수와 최소공배수" />
+    <published>2024-02-29T05:13:00+09:00</published>
   
-    <updated>2024-02-14T05:13:00+09:00</updated>
+    <updated>2024-02-29T05:13:00+09:00</updated>
   
-    <id>http://localhost:4000/posts/90.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-2-(ing)/</id>
-    <content src="http://localhost:4000/posts/90.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-2-(ing)/" />
+    <id>http://localhost:4000/posts/199.-%EC%B5%9C%EB%8C%80%EA%B3%B5%EC%95%BD%EC%88%98%EC%99%80-%EC%B5%9C%EC%86%8C%EA%B3%B5%EB%B0%B0%EC%88%98/</id>
+    <content src="http://localhost:4000/posts/199.-%EC%B5%9C%EB%8C%80%EA%B3%B5%EC%95%BD%EC%88%98%EC%99%80-%EC%B5%9C%EC%86%8C%EA%B3%B5%EB%B0%B0%EC%88%98/" />
     <author>
-      <name>Harold</name>
+      <name>Dongik Song</name>
     </author>
 
   
@@ -150,115 +261,35 @@ func solution(_ n:Int) -&amp;gt; Int {
       
 
 
+func solution(_ n:Int, _ m:Int) -&amp;gt; [Int] {
+
+    var N = n
+    var M = m
+
+    var arr : [Int] = []
+    var gcd : Int = 0
+    var lcm : Int = 0
+
+    var temp : Int = 0
 
 
+    if N &amp;lt; M {
+        temp = N
+        N = M
+        M = temp
+    }
 
+    while M != 0 {
+        temp = N%M
+        N=M
+        M=temp
+    }
 
-    </summary>
-  
+    gcd = N
 
-  </entry>
+    lcm = gcd == 1 ? n * m : (n/gcd) * (m/gcd) * gcd
 
-  
-  <entry>
-    <title>89. 피자 나눠 먹기 3</title>
-    <link href="http://localhost:4000/posts/89.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-3/" rel="alternate" type="text/html" title="89. 피자 나눠 먹기 3" />
-    <published>2024-02-14T05:13:00+09:00</published>
-  
-    <updated>2024-02-14T05:13:00+09:00</updated>
-  
-    <id>http://localhost:4000/posts/89.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-3/</id>
-    <content src="http://localhost:4000/posts/89.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-3/" />
-    <author>
-      <name>Harold</name>
-    </author>
-
-  
-    
-    <category term="코딩테스트" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-
-
-import Foundation
-
-func solution(_ slice:Int, _ n:Int) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    answer = n % slice == 0 ? n/slice : n/slice+1
-
-    return answer
-}
-
-
-
-삼항연산자를 이용하여 간략하게 표현하였다.
-
-올림을 하는 ceil을 써보고 싶었지만 그러러면 n을 소수점으로 타입변형을 해야하기에
-n/slice +1로 처리하였다.
-
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>88. 옷가게 할인 받기</title>
-    <link href="http://localhost:4000/posts/88.-%EC%98%B7%EA%B0%80%EA%B2%8C-%ED%95%A0%EC%9D%B8-%EB%B0%9B%EA%B8%B0/" rel="alternate" type="text/html" title="88. 옷가게 할인 받기" />
-    <published>2024-02-14T05:13:00+09:00</published>
-  
-    <updated>2024-02-14T05:13:00+09:00</updated>
-  
-    <id>http://localhost:4000/posts/88.-%EC%98%B7%EA%B0%80%EA%B2%8C-%ED%95%A0%EC%9D%B8-%EB%B0%9B%EA%B8%B0/</id>
-    <content src="http://localhost:4000/posts/88.-%EC%98%B7%EA%B0%80%EA%B2%8C-%ED%95%A0%EC%9D%B8-%EB%B0%9B%EA%B8%B0/" />
-    <author>
-      <name>Harold</name>
-    </author>
-
-  
-    
-    <category term="코딩테스트" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-
-
-import Foundation
-
-func solution(_ price:Int) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    switch price {
-        case ..&amp;lt;100000 : 
-            answer = price
-        case 100000..&amp;lt;300000 :
-            answer = Int(Double(price) * 0.95)
-        case 300000..&amp;lt;500000 :
-            answer = Int(Double(price) * 0.9)
-        case 500000... :
-            answer = Int(Double(price) *...
+    arr.app...
     </summary>
   
 

@@ -1,10 +1,1880 @@
 [
   
   {
+    "title": "203. 크기가 작은 부분 문자열",
+    "url": "/posts/203.-%ED%81%AC%EA%B8%B0%EA%B0%80-%EC%9E%91%EC%9D%80-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ t:String, _ p:String) -&gt; Int {        var arr : [String] = []    var answer : [String] = []    var string : String = \"\"    var intanswer : Int = 0        arr = t...",
+    "content": "import Foundationfunc solution(_ t:String, _ p:String) -&gt; Int {        var arr : [String] = []    var answer : [String] = []    var string : String = \"\"    var intanswer : Int = 0        arr = t.map{String($0)}        if Int(p)! &gt; 1 {        for i in 0 ... arr.count-p.count {            string = \"\"                for j in i ..&lt; i + (p.count) {                    string += arr[j]                }                answer.append(string)            }             } else {        answer = arr    }    intanswer = answer.filter{Int(String($0))! &lt;= Int(p)!}.count    return intanswer}뭔가 Stylish하게 하고싶었는데 그러지 못했다.일단 t에대해 각각의 원소를 담는 배열로 만들었다.그리고나서 p가 1일때는 map그대로 쓰면 되기에 if조건을 달아서 1보다 클때를 기준으로 나눴다.그리고서 반복문을 사용했는데string은 계속 initializing해주었고, 그하위 반복문을 통해 t의 길이만큼 slicing하였다.처음에는 생각없이 for i에서 in 0..&lt;arr.count를 하는바람에 그다음 for문에서 i+p.count가 i를 벗어나서 out of range에러가 났다. 그래서 확인해보니, for 문에서 t.count만큼 빼주어야하는데 그러질 못했다.그렇게 새로 만들어둔 배열 answer에 p의 갯수만큼 슬라이싱한 값을 넣었다.그리고 filter를 통해 p의 값보다 같거나 작은 갯수를 리턴하였다.문제는 풀었으나 썩 맘에 들진않는다."
+  },
+  
+  {
+    "title": "202. 삼총사 (ing)",
+    "url": "/posts/202.-%EC%82%BC%EC%B4%9D%EC%82%AC/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "201. 이상한 문자 만들기",
+    "url": "/posts/201.-%EC%9D%B4%EC%83%81%ED%95%9C-%EB%AC%B8%EC%9E%90-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ s:String) -&gt; String {        var answer : String = \"\"    var index = 0        for string in s {        if string ==  \" \" {            index = 0            answer += \" \"        } ...",
+    "content": "func solution(_ s:String) -&gt; String {        var answer : String = \"\"    var index = 0        for string in s {        if string ==  \" \" {            index = 0            answer += \" \"        } else if index % 2 == 0 {            answer += string.uppercased()            index += 1        } else {            answer += string.lowercased()            index -= 1        }    }        print(answer)        return answer}enumerated로 하려고했는데 나는 실패했는데components로 안하고 split으로 한게 문제였던것일까….결국 인덱스값으로 만들었다….이것도 처음에 enumerated()를 사용하여 offset,element로 구분하여 offset의 값을 initializing하면서 하고 싶었는데, 의도대로 되지 않았다. 상수이기 때문이었다..그래서 간략하게 index라는 변수를 만들었고 그 변수를 0 부터 시작하고 1씩 증가하되, “ “을 만나면 제로세팅 하도록 하여 해결하였다.다른 코드를 보니 거의 근접하게 했던거같은데 뒷심이 부족했던거같다.다른코드import Foundationfunc solution(_ s:String) -&gt; String {    let a = s.components(separatedBy: \" \").map { $0.enumerated().map { $0.offset % 2 == 0 ? $0.element.uppercased() : $0.element.lowercased() } }    return a.map{ $0.map { $0 }.joined() }.joined(separator: \" \")}"
+  },
+  
+  {
+    "title": "200. 3진법 뒤집기",
+    "url": "/posts/200.-3%EC%A7%84%EB%B2%95-%EB%92%A4%EC%A7%91%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var arr : [Int] = []    var N : Int = 0    var answer : Int = 0    N = n        while N != 0 {        arr.append(N%3)        N = N/3    } ...",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var arr : [Int] = []    var N : Int = 0    var answer : Int = 0    N = n        while N != 0 {        arr.append(N%3)        N = N/3    }        arr = arr.reversed()        for i in arr.indices{        answer += arr[i] * Int(pow(Double(3),Double(i)))    }        print(answer)        return answer}우선 3으로 나눈 값의 나머지를 배열에 담았다.그리고 배열을 반대로 바꾸어 주었다. 왜냐하면 인덱스로 접근하기 위해서였다.그렇게 하고 배열의 값을 pow를 사용해서 곱하여 더했다.전에 찾아보니 radix를 사용하면 쉽게 진수변환이 가능하다는걸 알았다. 여기에 별도로 적어둔다.var sample : Int = 125var conversion : String = \"\"conversion = String(sample, radix: 3)print(conversion) //11122기본적으로 string이지만 int로 바꿔 unwrapping해주면 된다."
+  },
+  
+  {
+    "title": "199. 최대공약수와 최소공배수",
+    "url": "/posts/199.-%EC%B5%9C%EB%8C%80%EA%B3%B5%EC%95%BD%EC%88%98%EC%99%80-%EC%B5%9C%EC%86%8C%EA%B3%B5%EB%B0%B0%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ n:Int, _ m:Int) -&gt; [Int] {    var N = n    var M = m    var arr : [Int] = []    var gcd : Int = 0    var lcm : Int = 0    var temp : Int = 0    if N &lt; M {        temp = N     ...",
+    "content": "func solution(_ n:Int, _ m:Int) -&gt; [Int] {    var N = n    var M = m    var arr : [Int] = []    var gcd : Int = 0    var lcm : Int = 0    var temp : Int = 0    if N &lt; M {        temp = N        N = M        M = temp    }    while M != 0 {        temp = N%M        N=M        M=temp    }    gcd = N    lcm = gcd == 1 ? n * m : (n/gcd) * (m/gcd) * gcd    arr.append(gcd)    arr.append(lcm)    return arr}최대공약수 최소공배수를 너무 오래간만에 해서 숫자를 보면 바로 계산이 되었지만 이걸 어떻게 코드로 풀어나가야할지 고민이 많이 되었다.그래서 최대공약수를 어떻게 구하는지를 먼저 찾아보고그것을 코드로 구현을 했다.코드로 구현을 하고나서 찾아보니 내가 한방식이 틀리지 않았다는걸 알았지만, 한편으로는 뭔가 더 간편하게 할수있는 방법이 있지않을까라는 생각을 좀 하게된다.최소공배수는 직접 계산을 해보고 그에 따른걸 코드로 표현을 하였고 그리고 삼항연산자로 표현이 가능할 것 같아 이렇게 표현을 하게되었다.뭔가 풀고나서도 조금 찝찝한 문제로 느껴진다."
+  },
+  
+  {
+    "title": "198. 직사각형 별찍기",
+    "url": "/posts/198.-%EC%A7%81%EC%82%AC%EA%B0%81%ED%98%95-%EB%B3%84%EC%B0%8D%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }let (a, b) = (n[0], n[1])var row = Array(repeating: \"*\",count:a).joined()for i in 0..&lt;b {    print(row)}repeat...",
+    "content": "import Foundationlet n = readLine()!.components(separatedBy: [\" \"]).map { Int($0)! }let (a, b) = (n[0], n[1])var row = Array(repeating: \"*\",count:a).joined()for i in 0..&lt;b {    print(row)}repeating을 사용하여 행을 만들었고 그다음 for문을 통해 반복출력하였다."
+  },
+  
+  {
+    "title": "197. 행렬의 덧셈",
+    "url": "/posts/197.-%ED%96%89%EB%A0%AC%EC%9D%98-%EB%8D%A7%EC%85%88/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ arr1:[[Int]], _ arr2:[[Int]]) -&gt; [[Int]] {        var answer : [[Int]] = []    answer = zip(arr1,arr2).map{zip($0,$1).map{$0+$1}}        return answer}zip을 사용해보려고 아래와 같이 이것저것 해보았...",
+    "content": "func solution(_ arr1:[[Int]], _ arr2:[[Int]]) -&gt; [[Int]] {        var answer : [[Int]] = []    answer = zip(arr1,arr2).map{zip($0,$1).map{$0+$1}}        return answer}zip을 사용해보려고 아래와 같이 이것저것 해보았다.여기서 예시는 아래와 같다var arr1 : [[Int]]= [[1, 2], [2, 3]]var arr2: [[Int]]= [[3, 4], [5, 6]]첫번째는 zip을 하였을때 합이 아닌 이어 붙이기와 같은 효과가 되어버렸다print(zip(arr1,arr2).map{$0+$1}) //[[1, 2, 3, 4], [2, 3, 5, 6]]print(zip(arr1,arr2).map{($0+$1).reduce(0,+)})//[10, 16]그래서 zip으로 먼저 arr1,arr2를 해서 확인해보면 다음과 같이나온다print(zip(arr1,arr2))//Zip2Sequence&lt;Array&lt;Array&lt;Int&gt;&gt;, Array&lt;Array&lt;Int&gt;&gt;&gt;(_sequence1: [[1, 2], [2, 3]], _sequence2: [[3, 4], [5, 6]])Dictionary와 같이 되어버리기에 map으로 $0,$1을 더하면 배열 합치기의 개념으로 되어버린다.let myFriends = [\"Fuu\", \"Emma\", \"Jason\"]let otherFriends = [\"Mike\", \"Luck\", \"Paul\"]let totalFriends = myFriends + otherFriendsprint(totalFriends) // [\"Fuu\", \"Emma\", \"Jason\", \"Mike\", \"Luck\", \"Paul\"]다만 다른건 arr1+arr2를 하면print(arr1+arr2)// [[1, 2], [2, 3], [3, 4], [5, 6]]2차원 배열은 유지하되, 큰틀의 껍데기에 [3,4],[5,6] 만 추가가 된다.그래서 zip.map{zip}을 다시 해주게 되면 아래와 같다.[Swift.Zip2Sequence&lt;Swift.Array&lt;Swift.Int&gt;, Swift.Array&lt;Swift.Int&gt;&gt;(_sequence1: [1, 2], _sequence2: [3, 4]), Swift.Zip2Sequence&lt;Swift.Array&lt;Swift.Int&gt;, Swift.Array&lt;Swift.Int&gt;&gt;(_sequence1: [2, 3], _sequence2: [5, 6])]첫번째 zip과는 달리 sequence1이 1차배열로 되어있다. 즉 zip-&gt;map-&gt;zip을 이용하여 1차배열로 전환해주는 것이다. 그리고나서 다시 map을 하게되면 클로저들끼리 이어붙여지므로 원하는 결과값이 나온다."
+  },
+  
+  {
+    "title": "196. 문자열 다루기 기본",
+    "url": "/posts/196.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%8B%A4%EB%A3%A8%EA%B8%B0-%EA%B8%B0%EB%B3%B8/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ s:String) -&gt; Bool {        var answer : Bool = true        answer =  s.count == 4 || s.count == 6 ? (s.map{$0.isNumber}.contains(false) ? false : true) : false         return ans...",
+    "content": "func solution(_ s:String) -&gt; Bool {        var answer : Bool = true        answer =  s.count == 4 || s.count == 6 ? (s.map{$0.isNumber}.contains(false) ? false : true) : false         return answer}정수인지 아닌지를 판단하는 isNumber 메서드를 이용하여 풀었다.하지만 처음에는 단순히 변환만 하고 filter를 사용하여 false만 걸러내려고 했는데, 오답이 많이 나와서 이유를 생각해보니, 문자가 여러개 있을때는 filter 를 하게되면 false가 여러개 나와서 [false] 하나로 보기엔 논리적으로 오류가 있었다.그래서 map과 isNumber를 함께 사용하여 true, false를 함께 나타내는 배열에서 false의 갯수와 상관없이 하나라도 포함을 하면 되는것이라고 생각하여 contains를 사용하였다.그리고나서 바로 돌려본 결과 오답이 줄긴했지만 완전한 정답이 아니어서 조건을 다시보니 s.count = 4 와 6일때만 해당 조건식이 성립이 되고 나머지는 false가 되어야 한다고 생각해서 추가로 조건을 더하여 풀었다.처음에는 단순히 s.isNumber로 하려고했는데 에러가 나서 map으로 하게되었다.다른 코드들을 보니 그냥 s를 Int로 감쌌을때 nil인지 아닌지를 이용하여 풀었다.너무 복잡하게 생각을 했던것같다."
+  },
+  
+  {
+    "title": "195. 부족한 금액 계산하기",
+    "url": "/posts/195.-%EB%B6%80%EC%A1%B1%ED%95%9C-%EA%B8%88%EC%95%A1-%EA%B3%84%EC%82%B0%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ price:Int, _ money:Int, _ count:Int) -&gt; Int64{    var answer:Int64 = -1        var Price : Int = 0        Price = (1...count).map{$0}.reduce(0, +) * price       ...",
+    "content": "import Foundationfunc solution(_ price:Int, _ money:Int, _ count:Int) -&gt; Int64{    var answer:Int64 = -1        var Price : Int = 0        Price = (1...count).map{$0}.reduce(0, +) * price        answer = money &gt; Price ? 0 : Int64(Price-money)            return answer}단순 범위를 이용하여 map으로 배열을만들고 reduce를 함으로써 간단하게 범위의 합을 구할 수 있어서 1부터 카운트 까지 합을 구하였다.이유는 입출력의 예를 보고 이용금액이 (3+6+9+12) 라는것은 3(1+2+3+4) 이고즉 price * count까지의 누적합이기 때문이었다.그렇게 총 이용금액을 구해두고 삼항연산자를 통해 return 하였다."
+  },
+  
+  {
+    "title": "194. 문자열 내림차순으로 배치하기",
+    "url": "/posts/194.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EB%B0%B0%EC%B9%98%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ s:String) -&gt; String {        var string : String = \"\"        string = s.map{String($0)}.sorted(by:&gt;).joined()    return string}배열로 변환하여 내림차순으로 한뒤 다시 join으로 하면서 문자열을 하나로 맞추었다.",
+    "content": "func solution(_ s:String) -&gt; String {        var string : String = \"\"        string = s.map{String($0)}.sorted(by:&gt;).joined()    return string}배열로 변환하여 내림차순으로 한뒤 다시 join으로 하면서 문자열을 하나로 맞추었다."
+  },
+  
+  {
+    "title": "193. 약수의 개수와 덧셈",
+    "url": "/posts/193.-%EC%95%BD%EC%88%98%EC%9D%98-%EA%B0%9C%EC%88%98%EC%99%80-%EB%8D%A7%EC%85%88/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ left:Int, _ right:Int) -&gt; Int {        var n : Int = 0    var num : Int = 0    var answer : Int = 0        for i in left ... right {        n = 1        num = 0 ...",
+    "content": "import Foundationfunc solution(_ left:Int, _ right:Int) -&gt; Int {        var n : Int = 0    var num : Int = 0    var answer : Int = 0        for i in left ... right {        n = 1        num = 0        while i &gt;= n {            if i % n == 0 {                num += 1            }            n+=1        }        if num % 2 == 0 {            answer += i        } else {            answer -= i        }           }           return answer}for 문과 while문을 통해 약수를 구하고 while이 끝난 다음 if문을 통해 해당 약수의 개수가 짝수 또는 홀수일때를 판별하여 처리하였다.다른코드func solution(_ left: Int, _ right: Int) -&gt; Int {    return (left...right).map { i in (1...i).filter { i % $0 == 0 }.count % 2 == 0 ? i : -i }.reduce(0, +)}"
+  },
+  
+  {
+    "title": "192. 내적",
+    "url": "/posts/192.-%EB%82%B4%EC%A0%81/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ a:[Int], _ b:[Int]) -&gt; Int {    var answer : Int = 0    for i in a.indices{        answer += a[i]*b[i]    }    return answer}for문을 사용해서 해결했는데 다른코드들을 보니 zip이 있었다....",
+    "content": "import Foundationfunc solution(_ a:[Int], _ b:[Int]) -&gt; Int {    var answer : Int = 0    for i in a.indices{        answer += a[i]*b[i]    }    return answer}for문을 사용해서 해결했는데 다른코드들을 보니 zip이 있었다.다른코드import Foundationfunc solution(_ a:[Int], _ b:[Int]) -&gt; Int {    return zip(a, b).map(*).reduce(0, +)}zip  2개 이상의 시퀀스를 조합하여 하나의 새로운 시퀀스를 생성한다.  zip함수를 사용하면 여러 시퀀스들을 병렬로 순회하며 요소들을 조합 할 수 있다.  zip은 각 시퀀스에서 동일한 인덱스의 요소들을 묶어 새로운 튜플 시퀀스로 반환한다.zip(sequence1, sequence2, sequence3, ...)let numbers = [1, 2, 3, 4, 5]let strings = [\"One\", \"Two\", \"Three\", \"Four\", \"Five\"]let zipped = zip(numbers, strings)for (number, string) in zipped {    print(\"\\(number) is \\(string)\")}"
+  },
+  
+  {
+    "title": "191. 수박수박수박수박수박수?",
+    "url": "/posts/191.-%EC%88%98%EB%B0%95%EC%88%98%EB%B0%95%EC%88%98%EB%B0%95%EC%88%98%EB%B0%95%EC%88%98%EB%B0%95%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ n:Int) -&gt; String {        var answer : String = \"\"    var sent : String = \"\"        sent = String(repeating: \"수박\", count:5000)        answer = String(sent.prefix(n))            r...",
+    "content": "func solution(_ n:Int) -&gt; String {        var answer : String = \"\"    var sent : String = \"\"        sent = String(repeating: \"수박\", count:5000)        answer = String(sent.prefix(n))            return answer}suffix : 시작 기준으로 지정한 문자 개수 출력prefix : 종료 기준으로 지정한 문자 개수 출력요새 자주 까먹는다 기억 잘 해두자.수박수박~ 이렇게 이어져가야해서 repeating을 통해 예문을 만들고그것을 n의 범위까지 추출하는 방식으로 풀었다다른 코드들을 보니 너무 복잡하게 생각을 했나 싶기도 하다.오히려 내가 짠 코드가 생각을 해보면 예문을 만들어야해서 메모리를 더 잡아먹을것이다.다른코드func solution(_ n:Int) -&gt; String {    return \"\\(String(repeating: \"수박\", count: n / 2))\\(n % 2 == 0 ? \"\" : \"수\")\"}//func solution(_ n:Int) -&gt; String {    return (0..&lt;n).map{($0%2==0 ? \"수\":\"박\")}.reduce(\"\", +)}"
+  },
+  
+  {
+    "title": "190. 가운데 글자 가져오기",
+    "url": "/posts/190.-%EA%B0%80%EC%9A%B4%EB%8D%B0-%EA%B8%80%EC%9E%90-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ s:String) -&gt; String {    var answer : String = \"\"    var S : String = \"\"    var n : Int = 0    S = s    n = S.count    answer = n % 2 == 0 ? String(S[String.Index(encodedOffset:(...",
+    "content": "func solution(_ s:String) -&gt; String {    var answer : String = \"\"    var S : String = \"\"    var n : Int = 0    S = s    n = S.count    answer = n % 2 == 0 ? String(S[String.Index(encodedOffset:(n/2)-1)]) + String(S[String.Index(encodedOffset:n/2)]) : String(S[String.Index(encodedOffset:n/2)])    return answer}아래코드와 거의 비슷하나 나는 Index 범위를 생각을 하긴했지만 적용을 하질 못해서 무식하게 그냥 더해서 했다.좀 더 공부해야겠다.다른코드func solution(_ s:String) -&gt; String {    return String(s[String.Index(encodedOffset: (s.count-1)/2)...String.Index(encodedOffset: s.count/2)])}"
+  },
+  
+  {
+    "title": "189. 제일 작은 수 제거하기",
+    "url": "/posts/189.-%EC%A0%9C%EC%9D%BC-%EC%9E%91%EC%9D%80-%EC%88%98-%EC%A0%9C%EA%B1%B0%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ arr:[Int]) -&gt; [Int] {        var answer : [Int] = []        answer = arr        if answer.count &gt; 1 {                answer.remove(at:answer.firstIndex(of:arr.min()!)!)       ...",
+    "content": "func solution(_ arr:[Int]) -&gt; [Int] {        var answer : [Int] = []        answer = arr        if answer.count &gt; 1 {                answer.remove(at:answer.firstIndex(of:arr.min()!)!)                return answer            } else {                return [-1]            }}firstIndex, min 모두 optional 가능성이 있기에 unwrapping을 해줘야하는데 min에만 꽂혀서 거기만 unwrapping하고 생각하다가. of:뒤에 숫자를 넣고 테스트를 해보니 firstIndex역시 unwrapping이 필요했다."
+  },
+  
+  {
+    "title": "188. 없는 숫자 더하기",
+    "url": "/posts/188.-%EC%97%86%EB%8A%94-%EC%88%AB%EC%9E%90-%EB%8D%94%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ numbers:[Int]) -&gt; Int {        var answer : Int = 0        answer = (0...9).map{$0}.reduce(0, +) - numbers.reduce(0,+)        return answer}없는 숫자를 더한다고해서 처음에 con...",
+    "content": "import Foundationfunc solution(_ numbers:[Int]) -&gt; Int {        var answer : Int = 0        answer = (0...9).map{$0}.reduce(0, +) - numbers.reduce(0,+)        return answer}없는 숫자를 더한다고해서 처음에 contains를 써야하나 고민을 하다가 생각해보니 0~9까지 더한 숫자에서 현재 배열에 가지고 있는 숫자를 더한값을 빼면 그게 없는 숫자의 총합이라는것을 알게되었고, reduce를 사용하여 간략하게 해보려고 하였다."
+  },
+  
+  {
+    "title": "187. 핸드폰 번호 가리기",
+    "url": "/posts/187.-%ED%95%B8%EB%93%9C%ED%8F%B0-%EB%B2%88%ED%98%B8-%EA%B0%80%EB%A6%AC%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ phone_number:String) -&gt; String {        var answer : String = \"\"    var arr : [String] = []        arr = phone_number.map{String($0)}        if arr.count &gt; 4 {        for i in...",
+    "content": "func solution(_ phone_number:String) -&gt; String {        var answer : String = \"\"    var arr : [String] = []        arr = phone_number.map{String($0)}        if arr.count &gt; 4 {        for i in 0...arr.count-5 {            arr[i] = \"*\"        }        answer = arr.joined()    } else {        answer = phone_number    }    return answer}우선 배열로 만들었다. 그리고 count -5를하여 뒤의 4자리만 살리게 하려고 하였다.그대로 제출을 하니 count 가 4일때 즉 길이가 4일때는 에러가 발생하였다.그래서 if 문을 걸어서 길이가 4일때는 문자열 그대로 출력하게 하였다.suffix, prefix를 알고있었으나 적용을 할수가 없었다. 지식이 부족했다.repeating을 사용하여 *을 반복적으로 생성하게 하였다.다른코드func solution(_ phone_number:String) -&gt; String {    return String(\"\\(String(repeating: \"*\", count: phone_number.count - 4))\\(phone_number.suffix(4))\")}"
+  },
+  
+  {
+    "title": "186. 음양 더하기",
+    "url": "/posts/186.-%EC%9D%8C%EC%96%91-%EB%8D%94%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ absolutes:[Int], _ signs:[Bool]) -&gt; Int {        var answer : Int = 0        for (index, value) in signs.enumerated() {        if value == true {           ...",
+    "content": "나의 코드import Foundationfunc solution(_ absolutes:[Int], _ signs:[Bool]) -&gt; Int {        var answer : Int = 0        for (index, value) in signs.enumerated() {        if value == true {                answer += absolutes[index]                    } else {                        answer -= absolutes[index]                    }    }        return answer}이렇게 생각한 이유.처음에는 단순한 signs 배열에서 index에 접근해서 하려고 했으나 되지 않았다. (for 문에 count대신, 배열 그자체로 접근해서 안되었다.)알고보니 dictionary type으로 쓸 수있는 enumerated를 사용하는 방법이 있어서 해당 방법으로 문제를 풀었다.역시 처음에 보고 생각했던 map 같은 고차함수를 사용한 풀이를 보았다.나도 생각은 했지만 오래걸릴것 같아 구현하지 못했는데, 추후에 다시 복습할때는 써봐야겠다.      enumerated          array값에 enumerated()함수를 사용하면, (index, value) 튜플형식으로 구현된 리스트형이 리턴      let arr = [\"one\", \"two\", \"three\"]print(arr.enumerated()) // EnumeratedSequence&lt;Array&lt;String&gt;&gt;(_base: [\"one\", \"two\", \"three\"])    for (index, number) in arr.enumerated() {        print(\"\\(index), \\(number)\")}/* 0, one 1, two 2, three */다른코드import Foundationfunc solution(_ absolutes:[Int], _ signs:[Bool]) -&gt; Int {    return (0..&lt;absolutes.count).map { signs[$0] ? absolutes[$0] : -absolutes[$0] }.reduce(0, +)}//mport Foundationfunc solution(_ absolutes:[Int], _ signs:[Bool]) -&gt; Int {    zip(absolutes, signs)        .map { $1 ? $0 : -$0 }        .reduce(0, +)}//import Foundationfunc solution(_ absolutes:[Int], _ signs:[Bool]) -&gt; Int {    var answer = 0    for i in 0..&lt;signs.count {        answer += signs[i] == true ? absolutes[i] : -absolutes[i]    }    return answer}//import Foundationfunc solution(_ absolutes:[Int], _ signs:[Bool]) -&gt; Int {    let n :Int = absolutes.count    var sum: Int = 0    for i in 0..&lt;n {        if signs[i] == true {            sum += absolutes[i]        } else {            sum -= absolutes[i]        }    }    return sum}"
+  },
+  
+  {
+    "title": "185. 나누어 떨어지는 숫자",
+    "url": "/posts/185.-%EB%82%98%EB%88%84%EC%96%B4-%EB%96%A8%EC%96%B4%EC%A7%80%EB%8A%94-%EC%88%AB%EC%9E%90/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ arr:[Int], _ divisor:Int) -&gt; [Int] {        var answer : [Int] = []    for i in arr {        if i % divisor == 0 {            answer.append(i)        }    }        if answer...",
+    "content": "나의 코드func solution(_ arr:[Int], _ divisor:Int) -&gt; [Int] {        var answer : [Int] = []    for i in arr {        if i % divisor == 0 {            answer.append(i)        }    }        if answer.count == 0 {        answer.append(-1)    }        answer.sort()        return answer}이렇게 생각한 이유.어제 문제풀고 깜빡하고 올리지 않아서 오늘 올린다.일단 배열에 접근하여 divisor로 나머지가 0 즉 나누어 떨어지는 값을 answer라는 새로운 배열에 담았다.그리고 하나도 없다는 조건이 있으므로 새로운 if문을 만들어서 추가를 하였다.문제에서 오름차순으로 정렬을 하라고 했기에.sorted를 쓸까 하다가 배열 자체를 바꾸는 sort를 통하여 그냥 answer를 리턴하였다."
+  },
+  
+  {
+    "title": "184. 서울에서 김서방 찾기",
+    "url": "/posts/184.-%EC%84%9C%EC%9A%B8%EC%97%90%EC%84%9C-%EA%B9%80%EC%84%9C%EB%B0%A9-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ seoul:[String]) -&gt; String {        var answer : String = \"\"        answer=\"김서방은 \\(seoul.firstIndex(of:\"Kim\")!)에 있다\"        return answer}이렇게 생각한 이유.처음에는 for 문을 통해 배열에 접근하여 반...",
+    "content": "나의 코드func solution(_ seoul:[String]) -&gt; String {        var answer : String = \"\"        answer=\"김서방은 \\(seoul.firstIndex(of:\"Kim\")!)에 있다\"        return answer}이렇게 생각한 이유.처음에는 for 문을 통해 배열에 접근하여 반복문을 돌리면서 “Kim”과 일치할때의 i값을 찾아 i를 리턴하여 출력을 하려고 하였다.하지만 비효율적이라는것을 알았고, 배열에 직접 접근하는 키워드를 통하여 코드를 간략화 하였다.그리고 firstIndex를 사용하여 일단 내용부터 프린트를 해보니 optional(1)로 나와서 unwrapping을 해주고 출력하였다."
+  },
+  
+  {
+    "title": "183. 콜라츠 추측",
+    "url": "/posts/183.-%EC%BD%9C%EB%9D%BC%EC%B8%A0-%EC%B6%94%EC%B8%A1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ num:Int) -&gt; Int {        var Num : Int = 0    var answer : Int = 0        Num = num        while Num != 1 {                if Num % 2 == 0 {                        Num = Num...",
+    "content": "나의 코드func solution(_ num:Int) -&gt; Int {        var Num : Int = 0    var answer : Int = 0        Num = num        while Num != 1 {                if Num % 2 == 0 {                        Num = Num / 2            answer += 1                    } else {                        Num = (Num * 3) + 1            answer += 1                    }                if answer &gt;= 500{            answer = -1            break        }            }         print(Num)    print(answer)        return answer}이렇게 생각한 이유.우선 제한사항의 수를 넣는것을 깜빡하였다.항상 if로해서 넣었는데 이번에는 깜빡하였고, 다음에는 이런 실수를 하지 않기 위해 코드를 수정하지 않았다.while문에서 깜빡하고, 1이 아닐때 계속 돌게 해야하는데 그걸 반대로 생각을 하는 바람에 코드를 다 작성해두고도 while Num == 1로 해서 코드가 한번도 안돌고 나오는 참사를 맞이 했다.오래간만에 했다고 쳐도 이런 실수를 바로 캐치를 못했기에 다시 복습을 해야할것 같다."
+  },
+  
+  {
+    "title": "182. 두 정수 사이의 합",
+    "url": "/posts/182.-%EB%91%90-%EC%A0%95%EC%88%98-%EC%82%AC%EC%9D%B4%EC%9D%98-%ED%95%A9/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ a:Int, _ b:Int) -&gt; Int64 {        var answer = 0        if a &gt;= -10000000 &amp;&amp; a &lt;= 10000000 &amp;&amp; b &gt;= -10000000 &amp;&amp; b &lt;= 10000000 {        if...",
+    "content": "나의 코드func solution(_ a:Int, _ b:Int) -&gt; Int64 {        var answer = 0        if a &gt;= -10000000 &amp;&amp; a &lt;= 10000000 &amp;&amp; b &gt;= -10000000 &amp;&amp; b &lt;= 10000000 {        if a != b {                        if a&gt;b {                for i in b ... a {                                        answer += i                                    }            }                        else {                for i in a ... b {                                        answer += i                }            }                            } else {                answer = a            return Int64(answer)                    }            }        return Int64(answer)}이렇게 생각한 이유.그냥 기본적인 생각에 입각하여 작성하였다.이것도 다른 풀이를 보니. 최댓값 최솟값 부터 시작해서, 이것도 역시 reduce를 통해 해결하였다.나도 reduce를 생각하였으나 오래걸릴것같아 하지 못했는데, 나중에 시간날때 해봐야겠다."
+  },
+  
+  {
+    "title": "181. 하샤드 수",
+    "url": "/posts/181.-%ED%95%98%EC%83%A4%EB%93%9C-%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ x:Int) -&gt; Bool {        var answer : Bool  = true            answer = x % String(x).compactMap{Int(String($0))}.reduce(0, +) == 0  ? true : false        return answer}이렇게 작성...",
+    "content": "나의 코드func solution(_ x:Int) -&gt; Bool {        var answer : Bool  = true            answer = x % String(x).compactMap{Int(String($0))}.reduce(0, +) == 0  ? true : false        return answer}이렇게 작성한 이유.이번에는 고차함수와 삼항연산자를 모두 써보려고 노력을 했다.그러다보니 더 오랜시간이 걸렸고, 정리를 했으나 아직까지 내것으로 만들지 못했다는 생각이 들었다.확실히 작성을 해두니, 코드가 엄청 깔끔하다는 생각은 든다.다른코드를 보니 reduce를 이용해서도 만들었는데 nil을 처리하기위해 옵셔널 바인딩인 !를 처리한걸 볼 수 있었다. 나는 nil을 처리할 수 있는 compactMap을 이용했다.하지만 뒤의 매개변수를 아직 깔끔하게 하지는 못했다.조금 더 복습과 공부를 하면서 내것으로 만들어야 겠다.reduce를 쓰려고하니 확실히 막힌다.많이 부족함을 느낀다.다른코드String(x).reduce(0, {$0+Int(String($1))!}) == 0더 공부를 해야겠다."
+  },
+  
+  {
+    "title": "180. 정수 내림차순으로 배치하기",
+    "url": "/posts/180.-%EC%A0%95%EC%88%98-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EB%B0%B0%EC%B9%98%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ n:Int64) -&gt; Int64 {            var N : Int64 = 0    var answer : Int64 = 0    var arr : [Int] = []               if n &gt;= 1 &amp;&amp; n &lt;= 8000000000 {                ...",
+    "content": "나의 코드func solution(_ n:Int64) -&gt; Int64 {            var N : Int64 = 0    var answer : Int64 = 0    var arr : [Int] = []               if n &gt;= 1 &amp;&amp; n &lt;= 8000000000 {                N = n                for i in 1 ... n {                        arr.append(Int(N%10))                        N = N/10                        if N &lt; 1 {                break            }        }                   }        var arr1 : [Int] = arr.sorted(by:&gt;)        var answer1 = arr1.map(String.init).joined()        print(answer1)        answer = Int64(answer1)!        return answer}이렇게 생각한 이유.솔직히 좀 방식이 무식하게 했다고 생각한다. 일단 각 자릿수를 반환하기 위해서 배열을 만들고 나머지값을 append를 통해 하나씩 넣었다.그 이후에, 정렬하는 sort함수를 이용해 내림차순 정리를 하였다.하지만 그 이후가 문제였다. 배열에 있는 숫자를 꺼내서 하나로 합쳐야 했기 때문이다.여기서 하나로 합친다는 것은 인덱스 순으로 꺼내어 그냥 이어 붙인다는 의미.그래서 내 생각선에서는 도저히 안되어서 구글링을 하였고, 배열의 정수값을 문자열로 리턴하는 함수를 찾았다.요근래 정리해야했던 고차함수의 응용부분이었다 (map,reduce,filter) 그래서 이왕 이렇게 된거 아래쪽에다가 정리를 하려고한다.(내용이 너무 길어 새로 페이지를 작성한다.)sort / sorted  sort          기존의 배열을 재 정렬한다.      원본이 사라진다.        sorted          기존의 배열은 그대로 두고, 새로운 copy본을 만들어 정렬한다.      원본은 그대로 남아있는다.            내림차순과 오름차순          기본적으로 오름차순이다 (), ()안에 by:&lt; 를 넣어도 된다.      ()안에 by:&gt; 를 넣게 되면 내림차순이 된다      예시var arr = [2, 24, 45, 36, 9]// 오름차순 정렬arr.sort()print(arr) // [2, 9, 24, 36, 45]// 내림차순 정렬arr.sort(by:&gt;) print(arr) // [45, 36, 24, 9, 2]"
+  },
+  
+  {
+    "title": "179. 정수 제곱근 판별",
+    "url": "/posts/179.-%EC%A0%95%EC%88%98-%EC%A0%9C%EA%B3%B1%EA%B7%BC-%ED%8C%90%EB%B3%84/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ n:Int64) -&gt; Int64 {        var N : Double = 0    var answer : Int64 = 0        N = Double(n)        if n &gt;= 1 &amp;&amp; n &lt;= 50000000000000 {        ...",
+    "content": "나의 코드import Foundationfunc solution(_ n:Int64) -&gt; Int64 {        var N : Double = 0    var answer : Int64 = 0        N = Double(n)        if n &gt;= 1 &amp;&amp; n &lt;= 50000000000000 {                if pow(sqrt(N),2.0) ==  N {                        answer = Int64(pow(sqrt(N)+1.0, 2.0))                    } else {                        answer = -1        }                    } else {                return 0            }        return answer}이렇게 생각한 이유.처음에는 어떻게 할지 몰라서 계속 생가하다가 결구 구글링을 하게 되었다, 다른사람의 코드를 직접적으로 본것은 아니지만, 해당글을 통해 아이디어를 얻었고 위와 같이 코드를 작성하였다.하지만 101이이라는 예외의 수가 존재하였고, 제출하였으나 오답이 되었다.그래서 print를 통해 그 답을 찍어보니 101의 경우 -1이 나와야 했으나, 122이라는 엉뚱한 답이 도출이 되었다.그래서 해당부분을 바꾸기위해 int로 돌리려고 하였으나 pow가 지원하는 데이터형식에 맞지 않았다.그래서 해당부분에대해 고전을 하였다.그러다가 이것저것 자료를 더 찾아봐야겠다 싶어서 swift의 소수점에 관한 내용을 찾아보았다.Swift에서의 소수점 다루기.  반올림(round)예시    round(5.55) // 6.0round(5.3) // 5.0        올림(ceil)예시    ceil(5.55) // 6.0ceil(5.4) // 6.0        내림(floor)예시    floor(5.4) // 5.0floor(5.55) // 5.0floor(-3.44) // -4.0floor(-3.677) // -4.0        버림(trunc)예시    trunc(5.6) // 5.0trunc(5.3) // 5.0trunc(-3.44) // -3.0trucn(-3.66) // -3.0          수정한 코드import Foundationfunc solution(_ n:Int64) -&gt; Int64 {        var N : Double = 0    var answer : Int64 = 0        N = Double(n)        if n &gt;= 1 &amp;&amp; n &lt;= 50000000000000 {                if pow(floor(sqrt(N)),2.0) ==  N {                        answer = Int64(pow(sqrt(N)+1.0, 2.0))                    } else {                        answer = -1        }                    } else {                return 0            }        return answer}연산과 관련된 것도 정리해야겠다는 생각이든다."
+  },
+  
+  {
+    "title": "178. 문자열을 정수로 바꾸기",
+    "url": "/posts/178.-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%84-%EC%A0%95%EC%88%98%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ n_str:String) -&gt; Int {        var answer : Int = 0        answer = Int(n_str)!        return answer}이렇게 생각한 이유.일단 일차원적으로 생각을 했다. 단순히 문자열에 인트를 감싼 일차적인 변환.아니나...",
+    "content": "나의 코드import Foundationfunc solution(_ n_str:String) -&gt; Int {        var answer : Int = 0        answer = Int(n_str)!        return answer}이렇게 생각한 이유.일단 일차원적으로 생각을 했다. 단순히 문자열에 인트를 감싼 일차적인 변환.아니나 다를까 역시 데이터형이 맞지않다는 에러가 발생하였다.그러다 문득 자바에서 쓰던 parseInt와 비슷한게 있나 싶어 구글링을 하게 되었다.알고보니 처음에 생각한 방법이 맞았으나, swift에서는 옵셔널 타입이 존재함으로 그걸로 인해서 에러가 났다는것을 알았다.Optional Int -&gt; 문자열에 다른 숫자이외 다른 문자가 포함이되어 변환을 할 수 없는 경우. nil이 리턴이 되는 경우.ex)var string : String = \"1234a\"// 이런경우 옵셔널 인트 타입이 된다.에러는 아래와 같다.간단하게 에러의 의미를 보자면      옵셔널 타입의 인트?는 반드시 인트의 밸류 값에서 언래핑 되어야 한다.        (참고) 옵션 값에 ‘nil’가 포함된 경우 기본값을 제공하기 위해 ‘?’를 사용하여 합친다.        (참고) 옵션 값에 ‘nil’가 포함된 경우 실행을 중단하려면 ‘!’을 사용하여 강제로 랩을 해제합니다.  그래서 옵셔널을 강제로 해제하는 !를 사용하여 문제를 풀었다.물론 예외조건일때는 어떻게 처리하라 라는 문제가 더 있었다면 또 코드를 추가해서 했을것같다."
+  },
+  
+  {
+    "title": "177. 자연수 뒤집어 배열로 만들기",
+    "url": "/posts/177.-%EC%9E%90%EC%97%B0%EC%88%98-%EB%92%A4%EC%A7%91%EC%96%B4-%EB%B0%B0%EC%97%B4%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ n:Int64) -&gt; [Int] {        var answer : [Int] = []    var N : Int64 = n        if N &gt; 0 &amp;&amp; N &lt;= 10000000000 {                for i in 1 ... n {                     ...",
+    "content": "func solution(_ n:Int64) -&gt; [Int] {        var answer : [Int] = []    var N : Int64 = n        if N &gt; 0 &amp;&amp; N &lt;= 10000000000 {                for i in 1 ... n {                        answer.append((Int(N%10)))                        N = N/10                        if N &lt; 1 {                break            }        }                    }        return answer}이렇게 생각한 이유.15,16과 마찬가지로 append를 하여 배열에 입력을 하고자하였다.그리고 최근에 풀었던 각 자리수의 합을 떠올려 나머지값으로 배열에 집어넣었다.왜냐하면 제일 마지막수부터 인덱스의 첫번째 값으로 들어간다는건 10으로 나누었을때 나머지랑 같은 의미이기 때문이다.그래서 N이 즉 10으로 계속 나누다가 소수점이 되었을때, 즉 더이상 나누지 않아도 될때 break를 통해 반복문을 빠져 나오게 했다.처음에는 그냥 나머지값이 1보다 작을때 즉 위의 if문 과 비슷하게 했는데, 테스트문제는 통과하였으나, 실제로 제출했을떼 오답이길래 생각을 해보니, 실제로 중간에 0이 들어간 수에서는 break가 된다는것을 알았고, 그래서 if문에 나머지값 조건대신 실제로 나눠야하는 값을 조건문에 넣어서 해결하였다.오늘은 속이 너무 좋지않아서 코드 문제위주로 적었다.이번주는 좀 공부위주로 정리를 해야겠다.그전에 건강부터"
+  },
+  
+  {
+    "title": "176. x만큼 간격이 있는 n개의 숫자",
+    "url": "/posts/176.-x%EB%A7%8C%ED%81%BC-%EA%B0%84%EA%B2%A9%EC%9D%B4-%EC%9E%88%EB%8A%94-n%EA%B0%9C%EC%9D%98-%EC%88%AB%EC%9E%90/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ x:Int, _ n:Int) -&gt; [Int64] {        var answer : [Int64] = []        if x &gt;= -10000000 &amp;&amp; x &lt;= 10000000 {        if n &gt; 0 &amp;&amp; n &lt;= 1000{          ...",
+    "content": "나의 코드func solution(_ x:Int, _ n:Int) -&gt; [Int64] {        var answer : [Int64] = []        if x &gt;= -10000000 &amp;&amp; x &lt;= 10000000 {        if n &gt; 0 &amp;&amp; n &lt;= 1000{                         for i in 1 ... n {                     answer.append((Int64(x*i)))                         }                    }    }        return answer}이렇게 생각한 이유.입력값인 x의 배수로 n개를 출력하면 되기에, x*i를 하였고 데이터형을 일치시켜주었다."
+  },
+  
+  {
+    "title": "175. 나머지가 1이 되는 수 찾기",
+    "url": "/posts/175.-%EB%82%98%EB%A8%B8%EC%A7%80%EA%B0%80-1%EC%9D%B4-%EB%90%98%EB%8A%94-%EC%88%98-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0    var arr : [Int] = []        for i in 1 ... n {                if n % i == 1 {                        arr.appe...",
+    "content": "나의 코드import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0    var arr : [Int] = []        for i in 1 ... n {                if n % i == 1 {                        arr.append(i)                }                }        answer = arr[0]        return answer    }이렇게 생각한 이유.처음에는 단순히 나머지가 1이 나오게해서 반복문을 하여반복문 사이에서 숫자를 비교하게할까 했었다.하지만 그렇게 했을때 더 꼬일것같아서 배열을 추가해서 넣는 방안으로 선회를 하였다.(물론 숫자를 비교해서 하려고 노력을 하였으나 나의 지식의 부족으로 안된것도 있다.)그래서 배열을 하나 만들고 배열에 append를 사용해서 집어넣게하였고, 최소값이기에 index가 0인 값을 리턴하여서 답을 구해내었다."
+  },
+  
+  {
+    "title": "174. 약수의 합",
+    "url": "/posts/174.-%EC%95%BD%EC%88%98%EC%9D%98-%ED%95%A9/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "func solution(_ n:Int) -&gt; Int {    var answer = 0    if n &gt;= 0 &amp;&amp; n &lt;= 3000 {        if n == 0 {            answer = 0        } else {            for i in 1 ... n {        \t\tif n %...",
+    "content": "func solution(_ n:Int) -&gt; Int {    var answer = 0    if n &gt;= 0 &amp;&amp; n &lt;= 3000 {        if n == 0 {            answer = 0        } else {            for i in 1 ... n {        \t\tif n % i == 0 {            \t\tanswer += i        \t\t}     \t\t}         }    }    return answer}이렇게 작성한 이유처음에 코드를 n == 0인 조건을 하지않고 작성하고 제출을 하니 에러가 났다. 생각해보니 n = 0일때는 for문이 1부터 시작이라 논리적으로 맞지 않다는것을 확인했다.그래서 n = 0일때 결과값이 0이라는걸 미리 설정하고 그다음에 else를 걸어서 1이상의 값을 계산하게 만들었다.다른 풀이를 보니이번에는 filter와 reduce를 통하여 더 심플하게 적은 것을 보았다.공부할것이 또 생겼다.다른코드func solution(_ n:Int) -&gt; Int {    return n != 0 ? (1...n).filter{n % $0 == 0}.reduce(0){$0 + $1} : 0}"
+  },
+  
+  {
+    "title": "173. 자릿수 더하기",
+    "url": "/posts/173.-%EC%9E%90%EB%A6%BF%EC%88%98-%EB%8D%94%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ n:Int) -&gt; Int{        var answer:Int = 0        var N = 0            if n &gt; 0 &amp;&amp; n &lt;= 100000000 {                N = n                while  N...",
+    "content": "나의 코드import Foundationfunc solution(_ n:Int) -&gt; Int{        var answer:Int = 0        var N = 0            if n &gt; 0 &amp;&amp; n &lt;= 100000000 {                N = n                while  N &gt;= 1 {                    answer += N % 10                N = N / 10                }    }        return answer}이렇게 생각한 이유.처음에 자릿수를 어떻게 해야할까 고민을 하면서 배열을 써볼까 어떻게 할까 이런저런 고민을 많이 했다.그러다 문득 계속 10을 나누게 되면 그 값의 나머지가 자릿수를 의미한다는것을 깨달았고 10을 계속 나눈 값을 answer 변수에 계속 넣었다. 그러면서 입력값 n을 대체할 또 다른 변수 N을 대입하면서 그 N 값이 소수가 될때 해당 조건을 그만하게 실행하였다.이거 역시도 reduce로 구한 코드를 보았다.확실히 reduce를 마스터를 해야겠다는 생각이든다.다른코드import Foundationfunc solution(_ n:Int) -&gt; Int{    return String(n).reduce(0, {$0+Int(String($1))!});}코드가 두개의 방식이 존재하는 것 같다.고차함수는 감이 오지만 미흡한 부분이 좀 보인다.다른코드var answer : Int = 0answer = String(N).compactMap{Int(String($0))}.reduce(0, +)"
+  },
+  
+  {
+    "title": "172. 평균 구하기",
+    "url": "/posts/172.-%ED%8F%89%EA%B7%A0-%EA%B5%AC%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ arr:[Int]) -&gt; Double {        var sum = 0        var answer : Double = 0.0        if arr.count &gt;= 1 &amp;&amp; arr.count &lt;= 100 {        if arr[0] &gt;= -10000 &amp;&a...",
+    "content": "나의 코드func solution(_ arr:[Int]) -&gt; Double {        var sum = 0        var answer : Double = 0.0        if arr.count &gt;= 1 &amp;&amp; arr.count &lt;= 100 {        if arr[0] &gt;= -10000 &amp;&amp; arr[arr.count-1] &lt;= 10000 {                        for i in 0 ..&lt; arr.count {                                sum += arr[i]                            }                    }               } else {              answer = 0    }         answer = Double(sum) / Double(arr.count)            return answer}이렇게 작성한 이유.최근에도 비슷한 문제가 있었는데 그때는 in 0 … arr.count-1 로 했었던 걸로 기억한다.그래서 이번에는 … 이 아닌 ..&lt; 을 사용을 해보았다.후기.제출 후 다른 사람들은 어떻게 작성을 했을까 보던 중reduce를 통해서 코드를 아주 심플하게 작성한것을 보았다.코드는 아래와 같다.다른코드func solution(_ arr:[Int]) -&gt; Double {    return Double(arr.reduce(0,+))/Double(arr.count)}뭔가 코드를 보고 공부를 하지않은 상태에서 추론을 해본다면 reduce문이 처음인자부터 시작해서 누적으로 더한다는것을 의미하는 것 같다.즉 for문을 심플하게 사용하는것일까. reduce문을 공부를 해봐야겠다는 생각이 들었다.조만간 여기에도 정리를 해봐야겠다.      추가다른걸 보던 중, for 문은 굳이 0 부터 안하고 배열 자체로 접근을 할 수 있다라고 정리를 했었는데, 해당 부분을 사용을 하질 못했다. 아니 생각을 하질 못했다. 다음번에 비슷한 문제가 나오면 일단은 for 문을 배열로 바로 접근하게 코드를 작성하고 그다음 또 비슷한 문제가 나왔을때 reduce로 해보던가 아니면 두개를 그냥 같이 작성을 해봐야겠다.        24.2.2 추가  오늘 하샤드 수 문제를 풀다가 reduce개념이 안잡힌거 같아 그전에 고차함수를 써야했던 문제를 풀던중해당 문제는 배열의 평균값 문제와 거의 똑같으므로 그 코드에서 정답에 맞춰 수정한다.다른코드import Foundationfunc solution(_ arr:[Int]) -&gt; Double {        var sum : Double = 0.0        var answer : Double = 0.0        answer = Double(arr.reduce(0){$0 + $1}) / Double(arr.count)        return answer}"
+  },
+  
+  {
+    "title": "171. 짝수와 홀수",
+    "url": "/posts/171.-%EC%A7%9D%EC%88%98%EC%99%80-%ED%99%80%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드func solution(_ num:Int) -&gt; String {        var answer : String = num%2 == 0 ? \"Even\" : \"Odd\"        return answer}이렇게 작성한 이유.어제 삼항연산자를 정리했기 때문에, if문을 쓰지않고 삼항연산자를 이용해서 해결을 하려고 하였다.처음에 에러가나서...",
+    "content": "나의 코드func solution(_ num:Int) -&gt; String {        var answer : String = num%2 == 0 ? \"Even\" : \"Odd\"        return answer}이렇게 작성한 이유.어제 삼항연산자를 정리했기 때문에, if문을 쓰지않고 삼항연산자를 이용해서 해결을 하려고 하였다.처음에 에러가나서 보니 num%2 == 0 이 부분을 num%2 = 0 이라고 표기를 해서 에러가 났다.조건문이었기에 ==를 했어야 했는데 아무리 다시 생각해봐도 코드상 문제가 없어서 다시 생각해보니 저부분이 문제였다.간단한 조건문 문제라면 if대신 삼항연산자를 써서 해결을 해봐야겠다. 물론 조건이 if else 이렇게 한개만 될때 해야된다는걸 잊지말자."
+  },
+  
+  {
+    "title": "170. 배열의 평균값",
+    "url": "/posts/170.-%EB%B0%B0%EC%97%B4%EC%9D%98-%ED%8F%89%EA%B7%A0%EA%B0%92/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드 (24.1.24)import Foundationfunc solution(_ numbers:[Int]) -&gt; Double {        var sum : Double = 0.0        var answer : Double = 0.0        if numbers[0] &gt;= 0 &amp;&amp; numbers[numbers....",
+    "content": "나의 코드 (24.1.24)import Foundationfunc solution(_ numbers:[Int]) -&gt; Double {        var sum : Double = 0.0        var answer : Double = 0.0        if numbers[0] &gt;= 0 &amp;&amp; numbers[numbers.count-1] &lt;= 1000 {                if numbers.count &gt;= 1 &amp;&amp; numbers.count &lt;= 100 {                         for i in 0...numbers.count-1 {                            sum += Double(numbers[i])                        }                           }    }        answer = sum / Double(numbers.count)        return answer}이렇게 생각한 이유.우선 배열이 주어지기 때문에 배열의 값을 누적하여 더할 변수 sum과 정답을 반환할 answer두개의 변수를 만들었다.이때 두 변수의 자료형을 double로 한 것은 입출력의 예를 보면 답이 소수를 띄기 때문에 미리 자료형을 Int가 아닌 double로 해두었다 (평균값이 정수만 나온다는 보장도 없기때문에)그 다음 배열의 원소에 접근하려면 0부터 시작하므로 반복문의 시작을 0 ~ 배열.count -1로 하였는데배열.count로 하게되면 에러가 나기때문이다. (0부터 시작하기 때문)배열.count는 배열의 길이 즉, 배열이 가지고있는 데이터가 몇개인지 알 때 쓴다.배열은 다음글에서 다시 서술 할 예정.다시 넘어와서, sum의 데이터형이 double이므로, number[i]에 double로 감싸서 데이터형을 일치시켰다. 마지막 answer도 같은이유.  24.2.2 코드 추가고차함수 reduce를 이용하여 위의 코드를 간략화 하였다.두가지 reduce를 적어보았다.import Foundationvar arr : [Int] = [1,2,3,4]                   var answer : Double = 0.0answer = Double(arr.reduce(0){$0 + $1}) / Double(arr.count)    var answer1 : Double = 0.0answer1 = Double(arr.reduce(0, +)) / Double(arr.count)    print(answer);print(answer1)"
+  },
+  
+  {
+    "title": "161. 두수의 차",
+    "url": "/posts/169.-%EC%A7%9D%EC%88%98%EC%9D%98-%ED%95%A9/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer = 0        if n &gt; 0 &amp;&amp; n &lt;= 1000 {        for i in 1...n where i%2 == 0 {                answer += i            }...",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer = 0        if n &gt; 0 &amp;&amp; n &lt;= 1000 {        for i in 1...n where i%2 == 0 {                answer += i            }    }        return answer}이렇게 한 이유.swift의 for문은 자바와 다른 부분이 있어서 검색을 하던 중 for문에 조건문을 달수 있는것을 발견하여 for문에 where 조건을 달아서 코드를 작성하였다.% 은 나머지를 구할때 사용한다.2를 나누었을때 0이 된다는것은 즉 짝수를 의미하므로+=를 통해 answer에 누적으로 더하게끔 작성하였다.반복문은 다음글에서 별도로 정리를 하겠다."
+  },
+  
+  {
+    "title": "168. 각도기",
+    "url": "/posts/168.-%EA%B0%81%EB%8F%84%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ angle:Int) -&gt; Int {        var answer = 0        if angle &gt; 0 &amp;&amp; angle &lt; 90 {        answer = 1    } else if angle == 90 {        answer = 2  ...",
+    "content": "나의 코드import Foundationfunc solution(_ angle:Int) -&gt; Int {        var answer = 0        if angle &gt; 0 &amp;&amp; angle &lt; 90 {        answer = 1    } else if angle == 90 {        answer = 2    } else if angle &gt; 90 &amp;&amp; angle &lt; 180 {        answer = 3    } else {        answer = 4     }    return answer}이렇게 생각한 이유.다중if문을 통해 범위를 지정함으로써, 예각, 직각, 둔각, 평각을 구현하였다.if말고 switch-case 문을 통해서도 가능하다."
+  },
+  
+  {
+    "title": "167. 두 수의 나눗셈",
+    "url": "/posts/167.-%EB%91%90-%EC%88%98%EC%9D%98-%EB%82%98%EB%88%97%EC%85%88/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드 (24.1.24)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer = 0        if num1 &gt; 0 &amp;&amp; num1 &lt;= 100 {                if num2 &gt; 0 &amp;&amp; nu...",
+    "content": "나의 코드 (24.1.24)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer = 0        if num1 &gt; 0 &amp;&amp; num1 &lt;= 100 {                if num2 &gt; 0 &amp;&amp; num2 &lt;= 100 {                        answer = Int(Double(num1) / Double(num2) * 1000)                     }    }        return answer}처음에 막힌 이유.형변환인데 처음에는 Double로 num1/num2를 전체로 단순하게 감싸서 계산을 하면 될것같다는 안일한 생각을 하였다. 실제로 답이 틀려서 playground를 통해 실제로 나눈값을 출력을 해보니 3/2 = 1 이 나왔다.그래서 전체를 감싸는 것이 아닌, num1, num2를 개별로 Double로 형변환을 한뒤에 나누니 1.5로 잘 나오는 것을 확인하였다.하지만 answer의 형태는 Int 이므로 아무리 뒤에 1000을 곱하여도 우측의 자료형은 현재 Double 이므로 answer와 자료형을 일치시키기 위해 또다시 전체를 Int로 감싸주었다."
+  },
+  
+  {
+    "title": "166. 두수의 합",
+    "url": "/posts/166.-%EB%91%90%EC%88%98%EC%9D%98-%ED%95%A9/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드 (24.1.24)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer = 0        if num1 &gt;= -50000 &amp;&amp; num1 &lt;= 50000 {        if num2 &gt;= -50000 &amp;&a...",
+    "content": "나의 코드 (24.1.24)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer = 0        if num1 &gt;= -50000 &amp;&amp; num1 &lt;= 50000 {        if num2 &gt;= -50000 &amp;&amp; num2 &lt;= 50000 {            answer = num1 + num2        }    }    return answer}이렇게 생각한 이유.단순히 합을 구하는 것이므로 정답을 담을 변수를 하나 생성 한 후 제한조건에 맞게 설정한 뒤 변수에 두수의 합을 담아서 리턴하였다."
+  },
+  
+  {
+    "title": "165. 숫자 비교하기",
+    "url": "/posts/165.-%EC%88%AB%EC%9E%90-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드 (24.1.19)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer = 0        if num1 &gt;= 0 &amp;&amp; num1 &lt;= 10000 &amp;&amp; num2 &gt;= 0 &amp;&amp; num2 &l...",
+    "content": "나의 코드 (24.1.19)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer = 0        if num1 &gt;= 0 &amp;&amp; num1 &lt;= 10000 &amp;&amp; num2 &gt;= 0 &amp;&amp; num2 &lt;= 10000 {        if num1 &gt; num2 || num2 &gt; num1 {                        answer = -1                    } else {                        answer = 1        }    }        return answer}이렇게 생각한 이유.단순히 숫자를 비교하기 위해서 코드를 적었고 or조건을 추가하였다.자체 피드백 (24.1.24)코드를 적고나서 문득 생각이 들었던 것은 굳이 이렇게 or 조건을 하는게 아니라 애초에 서로 값이 다르면 -1 같으면 1을 리턴을 하는것이기 때문에 if조건에 두 값이 같다면으로 하였다면, 더 코드가 깔끔했을 것이다.내가 개선한 코드 (24.1.24)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer = 0        if num1 &gt;= 0 &amp;&amp; num1 &lt;= 10000 &amp;&amp; num2 &gt;= 0 &amp;&amp; num2 &lt;= 10000 {        if num1 == num2 {                        answer = 1                    } else {                        answer = -1        }    }        return answer}"
+  },
+  
+  {
+    "title": "164. 나이 출력",
+    "url": "/posts/164.-%EB%82%98%EC%9D%B4-%EC%B6%9C%EB%A0%A5/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드 (24.1.18)import Foundationfunc solution(_ age:Int) -&gt; Int {    var answer = 0        if age &gt; 0 &amp;&amp; age &lt;= 120{                answer = 2023 - age            } else {         ...",
+    "content": "나의 코드 (24.1.18)import Foundationfunc solution(_ age:Int) -&gt; Int {    var answer = 0        if age &gt; 0 &amp;&amp; age &lt;= 120{                answer = 2023 - age            } else {                return 0    }         return answer}이렇게 생각한 이유.입출력 예를 들었을때 40살을 넣었을때 1983이 출력 된다는것은 2022년을 기준으로 하였을때 한국은 0살이 아닌 1살을 기준으로 하므로 2022-age가 아닌 2023-age로 하였다."
+  },
+  
+  {
+    "title": "163. 몫 구하기",
+    "url": "/posts/163.-%EB%AA%AB-%EA%B5%AC%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드 (24.1.19)import Foundationvar answer = 0func solution(_ num1:Int, _ num2:Int) -&gt; Int {        if 0 &lt; num1 &amp;&amp; num1 &lt;= 100 {        if 0 &lt; num2 &amp;&amp; num2 &lt;= 100 {  ...",
+    "content": "나의 코드 (24.1.19)import Foundationvar answer = 0func solution(_ num1:Int, _ num2:Int) -&gt; Int {        if 0 &lt; num1 &amp;&amp; num1 &lt;= 100 {        if 0 &lt; num2 &amp;&amp; num2 &lt;= 100 {            answer = num1 / num2                    }    }        return answer}이렇게 생각한 이유.제한사항을 반영하여 코드를 작성하기 시작하였고, 몫을 구하는 것이기 때문에 단순 연산자인 / 을 사용하여 몫을 구했다.해당코드는 추후에 더 공부하여 개선점을 찾아 수정할 예정이다.여러 연산자정리는 다음글에서."
+  },
+  
+  {
+    "title": "162. 두수의 곱",
+    "url": "/posts/162.-%EB%91%90%EC%88%98%EC%9D%98-%EA%B3%B1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드 (24.1.18)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var result = num1 * num2        return result}이렇게 생각한 이유.  17일에 작성했던 코드와 동일하게, 곱 부분만 생각해서 대입하였음.변화점.  17일과는 ...",
+    "content": "나의 코드 (24.1.18)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var result = num1 * num2        return result}이렇게 생각한 이유.  17일에 작성했던 코드와 동일하게, 곱 부분만 생각해서 대입하였음.변화점.  17일과는 달리 answer라는 변수를 만들면서 해당 변수에 결과값을 넣어 return하는 방식으로 변화를 주었음.내가 생각한 코드 개선 ver.1 (24.1.23)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var result = 0        if num1 &gt;= 0 &amp;&amp; num1&lt;=100 {                if num2 &gt;= 0 &amp;&amp; num2&lt;=100 {                result = num1 * num2                    }    }        return result}17일자와 같이 제한사항을 충족시키기 위해 if문을 작성하였음."
+  },
+  
+  {
+    "title": "161. 두수의 차",
+    "url": "/posts/161.-%EB%91%90%EC%88%98%EC%9D%98-%EC%B0%A8-copy/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-29 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "블로그 하나로 통합 도중 문제를 푸는걸 두개로 나누었기에 하나로 태그를 통합한다.나의 코드 (24.1.17)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        return num1 - num2}이렇게 생각한 이유.처음에 아무런 생각 없이 그냥 단순히 차로 생각하여제한사항을...",
+    "content": "블로그 하나로 통합 도중 문제를 푸는걸 두개로 나누었기에 하나로 태그를 통합한다.나의 코드 (24.1.17)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        return num1 - num2}이렇게 생각한 이유.처음에 아무런 생각 없이 그냥 단순히 차로 생각하여제한사항을 고려하지 않고 num1-num2를 바로 return하였음.개선한다면?  제한사항을 먼저 고려하여 코드를 작성한다.  return값을 바로 하지않고 또다른 변수를 하나 만들어서 사용한다.내가 생각한 코드 개선 ver.1 (24.1.23)import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {           var answer = 0        if num1 &gt;= -50000 &amp;&amp; num1 &lt;= 50000 {        if num2 &gt;= -50000 &amp;&amp; num2 &lt;= 50000 {            answer = num1 - num2        }    }        return answer}약간 코드가 길어지긴 했지만, 주어진 조건에서는 모두 충족한 코드라고 생각함.예외조건에 대한 서술이 없었으므로 if문 조건 뒤에 else로 예외조건에 대한 return값은 따로 서술하지 않았음.아직 swift가 처음이므로. 추후에 새로운 문법을 알게되면 새롭게 코드 개선을 적을 예정."
+  },
+  
+  {
+    "title": "160. A로 B 만들기",
+    "url": "/posts/160.-A%EB%A1%9C-B-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-27 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ before:String, _ after:String) -&gt; Int {        var answer = 0    var A = String(before).map{$0}.sorted()    var B = String(after).map{$0}.sorted()        answer ...",
+    "content": "import Foundationfunc solution(_ before:String, _ after:String) -&gt; Int {        var answer = 0    var A = String(before).map{$0}.sorted()    var B = String(after).map{$0}.sorted()        answer = A == B ? 1 : 0        return answer}처음에는 각각의 같은 값을 포함해야하는지 생각해서contains를 써보려고했는데 그렇게 했을때는 하나씩 돌다보니 결국 아예 다르지 않고서는 답이 1로만 나오게 되었다.그래서 생각해보니 두개의 값을 모두 하나의 기준으로 정렬을 하고 비교를 해보면 되지않을까 해서 정렬을 하고 그 값을 같을때는 1 아닐땐 0으로 해서 리턴을 하였다.다른코드를 보니 대부분 이런 발상으로 했다."
+  },
+  
+  {
+    "title": "159. 숫자 찾기",
+    "url": "/posts/159.-%EC%88%AB%EC%9E%90-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-27 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num:Int, _ k:Int) -&gt; Int {        var answer : Int = 0    var arr = String(num).map{$0}    var arr1 = arr.enumerated().map{$0}    arr1 = arr1.filter{$0.1 == Char...",
+    "content": "import Foundationfunc solution(_ num:Int, _ k:Int) -&gt; Int {        var answer : Int = 0    var arr = String(num).map{$0}    var arr1 = arr.enumerated().map{$0}    arr1 = arr1.filter{$0.1 == Character(String(k))}    answer = arr1.count &gt; 0 ? arr1[0].offset + 1 : -1     return answer}처음에는 filter와 firstIndex를 써서 하려고했는데 이상하게 막혀버려서 결국 다른 방법을 사용하였다.우선 num을 배열화 하였고. enumerated를 사용하여 만들어진 배열에 인덱스 값을 추가하였다.그이후 filter를 사용해 k값과 일치하는 원소만 추출하였고여러값이 나왔다면 초기값을 리턴하면 되기에 arr1[0]을 리턴하였다.하지만 우리가 생각하는 인덱스와 문제에서 결과값에 대한 인덱스값은 달라서 +1을 해주었다.다른코드를 보니 앞에 array를 씌워야 했는데 나는 씌우지않고 그대로해서 string index가 나와 해결을 하지 못했다… 거의다한건데 나중에 다시 해봐야겠다.다른코드unc solution(_ num: Int, _ k: Int) -&gt; Int { Array(\"-\\(num)\").firstIndex(of: Character(String(k))) ?? -1 }//import Foundationfunc solution(_ num:Int, _ k:Int) -&gt; Int {    let s = String(num).map{ Int(String($0))! }    return (s.firstIndex(of: k) ?? -2) + 1}//import Foundationfunc solution(_ num:Int, _ k:Int) -&gt; Int {    return String(num).contains(Character(String(k))) ? Array(String(num)).firstIndex(of: Character(String(k)))! + 1 : -1}"
+  },
+  
+  {
+    "title": "158. 369게임",
+    "url": "/posts/158.-369%EA%B2%8C%EC%9E%84/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-26 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ order:Int) -&gt; Int {        var answer = String(order).map{String($0)}.filter{$0==\"3\" || $0==\"6\" || $0==\"9\"}.count        return answer}일단 order를 각각 하나로 분류하기위해 ma...",
+    "content": "import Foundationfunc solution(_ order:Int) -&gt; Int {        var answer = String(order).map{String($0)}.filter{$0==\"3\" || $0==\"6\" || $0==\"9\"}.count        return answer}일단 order를 각각 하나로 분류하기위해 map을 사용하여 배열에 담았다.그리고 필터를 사용하였고 처음에는 생각없이 3으로 나눈수에 해당하는 걸 카운트로 해야하는건가 싶었는데 알고보니 3,6,9에 해당하는 내용이라or조건을 사용해서 해결하였다."
+  },
+  
+  {
+    "title": "157. 약수 구하기",
+    "url": "/posts/157.-%EC%95%BD%EC%88%98-%EA%B5%AC%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-25 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; [Int] {        var arr : [Int] = []        arr =  (1...n).map{$0}.filter{n%$0==0}        return arr}약수를 구하기 위해서 먼저 filter를 사용하려고하였다.n에서 1~n까지의 나눴을때 나머지...",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; [Int] {        var arr : [Int] = []        arr =  (1...n).map{$0}.filter{n%$0==0}        return arr}약수를 구하기 위해서 먼저 filter를 사용하려고하였다.n에서 1~n까지의 나눴을때 나머지가 0이어야 하는데 순간 어떻게 해야하지라고 했다가(1…n)을 떠올리고 문제를 해결하였다.잘기억해두자.."
+  },
+  
+  {
+    "title": "156. 가장 큰 수 찾기",
+    "url": "/posts/156.-%EA%B0%80%EC%9E%A5-%ED%81%B0-%EC%88%98-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ array:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr.append(array.max()!)    arr.append(array.firstIndex(of:array.max()!)!)    return arr}단순히 최댓값을 찾고, ...",
+    "content": "import Foundationfunc solution(_ array:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr.append(array.max()!)    arr.append(array.firstIndex(of:array.max()!)!)    return arr}단순히 최댓값을 찾고, 그것에 해당하는 인덱스를 리턴하였는데 다른 코드들을 보니 인덱스를 안쓰고 enumerated를 써서 표현하였다.하긴 그것도 좋은 방법으로 보인다.두번재는 옵셔널 체이닝으로 했는데 아직 이부분을 정리를 제대로 못한거같은데 다음에는 옵셔널 체이닝도 좀 써봐야겠다.다른코드import Foundationfunc solution(_ array:[Int]) -&gt; [Int] {    let max = array.enumerated().max(by: { $0.element &lt; $1.element })!    return [max.element, max.offset]}//func solution(_ array: [Int]) -&gt; [Int] { [array.max() ?? 0, array.firstIndex(of: array.max() ?? 0) ?? 0] }//import Foundationfunc solution(_ array:[Int]) -&gt; [Int] {    return [array.max()!, (1..&lt;array.count).filter{array[$0] == array.max()!}.first!]}"
+  },
+  
+  {
+    "title": "2.",
+    "url": "/posts/155.-%EA%B0%9C%EB%AF%B8%EA%B5%B0%EB%8B%A8/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ hp:Int) -&gt; Int {        var answer = 0        answer = hp/5 + (hp%5)/3 + ((hp%5)%3)/1        return answer}단순하게 생각을 했다.먼저 hp에서 장군개미가 얼마나 필요한지를 구하기위해 hp/5를 한다.그리고...",
+    "content": "import Foundationfunc solution(_ hp:Int) -&gt; Int {        var answer = 0        answer = hp/5 + (hp%5)/3 + ((hp%5)%3)/1        return answer}단순하게 생각을 했다.먼저 hp에서 장군개미가 얼마나 필요한지를 구하기위해 hp/5를 한다.그리고 남은 나머지에서 3을 나누고그나머지에 1을 나누었다. (사실 마지막은 필요없긴한데… 깔맞춤했다)이렇게해서 합을 리턴하였다."
+  },
+  
+  {
+    "title": "154. 대문자와 소문자",
+    "url": "/posts/154.-%EB%8C%80%EB%AC%B8%EC%9E%90%EC%99%80-%EC%86%8C%EB%AC%B8%EC%9E%90/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String) -&gt; String {        var answer = \"\"        answer = my_string.map{String($0) == String($0).uppercased() ? String($0).lowercased() : String($0).u...",
+    "content": "import Foundationfunc solution(_ my_string:String) -&gt; String {        var answer = \"\"        answer = my_string.map{String($0) == String($0).uppercased() ? String($0).lowercased() : String($0).uppercased()}.joined()    return answer}삼항연산자를 사용했고 대문자라고 물어봤을때 대문자면 소문자로 리턴하고 아닌경우엔 대문자로 리턴하게 하였다."
+  },
+  
+  {
+    "title": "2.",
+    "url": "/posts/153.-%EC%95%94%ED%98%B8-%ED%95%B4%EB%8F%85/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ cipher:String, _ code:Int) -&gt; String {        var answer = \"\"    var arr = cipher.map{String($0)}        answer = stride(from:code-1, to:cipher.count, by: code)....",
+    "content": "import Foundationfunc solution(_ cipher:String, _ code:Int) -&gt; String {        var answer = \"\"    var arr = cipher.map{String($0)}        answer = stride(from:code-1, to:cipher.count, by: code).map{arr[$0]}.joined()    print(answer)        return \"\"}일정한 간격으로 출력해주기위해 전에썼던 stride를 이용하였다.다만 그냥stride()만 하게되면 숫자를 간격으로 하기때문에. 이걸인덱스로 가져오기위해 map을 사용하였다.다른코드func solution(_ cipher: String, _ code: Int) -&gt; String { (0..&lt;cipher.count).filter { $0 % code == code - 1 }.map { String(Array(cipher)[$0]) }.joined(separator: \"\") }//import Foundationfunc solution(_ cipher:String, _ code:Int) -&gt; String {    return cipher.enumerated().filter{ ($0.offset + 1) % code == 0 }.reduce(\"\") { $0 + String($1.element) }}"
+  },
+  
+  {
+    "title": "152. 숨어있는 숫자의 덧셈 (1) (ing)",
+    "url": "/posts/152.-%EC%88%A8%EC%96%B4%EC%9E%88%EB%8A%94-%EC%88%AB%EC%9E%90%EC%9D%98-%EB%8D%A7%EC%85%88-(1)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "151. 모음 제거",
+    "url": "/posts/151.-%EB%AA%A8%EC%9D%8C-%EC%A0%9C%EA%B1%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String) -&gt; String {        var answer : String = \"\"        answer = my_string.components(separatedBy:[\"a\",\"e\",\"i\",\"o\",\"u\"]).joined()            return ...",
+    "content": "import Foundationfunc solution(_ my_string:String) -&gt; String {        var answer : String = \"\"        answer = my_string.components(separatedBy:[\"a\",\"e\",\"i\",\"o\",\"u\"]).joined()            return answer}전에 썼던걸 기억해서 components를 사용해서 풀었다. 리턴값이 배열로 나타나기에 joined를 사용하여 문자열로 나타내었다.다른코드를 보니 필터를 사용했는데, 내꺼보다 훨씬 더 아름다웠다.다른코드import Foundationfunc solution(_ my_string:String) -&gt; String {    return my_string.filter { ![\"a\", \"e\", \"i\", \"o\", \"u\"].contains($0)}}"
+  },
+  
+  {
+    "title": "150. 문자 반복 출력하기",
+    "url": "/posts/150.-%EB%AC%B8%EC%9E%90-%EB%B0%98%EB%B3%B5-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {        var result : String = \"\"        for i in my_string {        result += String(repeating:i, count:n)    }       retur...",
+    "content": "import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {        var result : String = \"\"        for i in my_string {        result += String(repeating:i, count:n)    }       return result}각글자가 반복적으로 만들어져야하기에 repeating을 사용하였다.하지만 에러가 발생하였고 처음에는 내가 잘못썼나 싶어서 코드를 확인했는데 문제가 없었다 그래서 혹시나해서 i를 출력했는데 인덱스 값이 나왔다.for문을 사용했지만 보통의 i는 index값을 가져올 때썼는데 너무도 당연하게 그렇게 작성을 했기 때문이다.그래서 이번에는 in my_string그대로 사용하면서 i는 각각 글자 하나씩을 의미하게 하였고 결과 값을 리턴하였다.다른 코드를 보니 map을 사용해서 했는데 더 아름다워보인다.다른코드import Foundationfunc solution(_ my_string:String, _ n:Int) -&gt; String {    guard my_string.count &gt;= 1, my_string.count &lt;= 50, n &gt;= 1 , n &lt;= 50 else {        return \"\"    }    return my_string.map( {         String(repeating: $0, count: n)    } ).joined()}"
+  },
+  
+  {
+    "title": "149. 세균 증식",
+    "url": "/posts/149.-%EC%84%B8%EA%B7%A0-%EC%A6%9D%EC%8B%9D/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int, _ t:Int) -&gt; Int {        var answer : Int = 0        answer = n * Int(pow(Double(2),Double(t)))        return answer}2의 t제곱씩 수가 증가하는것을 보고 pow를 사용하여 결과 값을 ...",
+    "content": "import Foundationfunc solution(_ n:Int, _ t:Int) -&gt; Int {        var answer : Int = 0        answer = n * Int(pow(Double(2),Double(t)))        return answer}2의 t제곱씩 수가 증가하는것을 보고 pow를 사용하여 결과 값을 리턴하였다.pow는 안에 들어가는 매개변수가 소수점의 형태이어야 하므로 Float or Double Type으로 해주어야한다."
+  },
+  
+  {
+    "title": "148. 순서쌍의 개수",
+    "url": "/posts/148.-%EC%88%9C%EC%84%9C%EC%8C%8D%EC%9D%98-%EA%B0%9C%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0        for i in 1...n {        if n%i == 0 {            answer += 1        }    }        return answer}순서쌍으로 포장했지만 자세...",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0        for i in 1...n {        if n%i == 0 {            answer += 1        }    }        return answer}순서쌍으로 포장했지만 자세히보면 약수의 개수를 묻는 문제였다.자연스럽게 for문을 써서 풀었는데, 저번에 비슷한문제를(1…n).filter~이런식으로도 풀려고했던기억이 있는데 너무나도 당연하게 for문을 써버렸다.코드가 아름답지 못했다."
+  },
+  
+  {
+    "title": "147. 삼각형의 완성조건 (1)",
+    "url": "/posts/147.-%EC%82%BC%EA%B0%81%ED%98%95%EC%9D%98-%EC%99%84%EC%84%B1%EC%A1%B0%EA%B1%B4-(1)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ sides:[Int]) -&gt; Int {        var answer : Int = 0    var arr : [Int] = []        arr=sides.sorted(by:&gt;)        answer = arr[0] &lt; arr[1] + arr[2] ? 1 : 2   ...",
+    "content": "import Foundationfunc solution(_ sides:[Int]) -&gt; Int {        var answer : Int = 0    var arr : [Int] = []        arr=sides.sorted(by:&gt;)        answer = arr[0] &lt; arr[1] + arr[2] ? 1 : 2        return answer}배열의 최댓값이 나머지의 값의 합보다 작으면 삼각형이 되는 조건이므로 순서가 뒤죽박죽인 배열을 내림차순으로 정렬하기위해 sorted(by:&gt;)를 사용하여 정렬을 해주었고, 그후에 최댓값은 [0] 나머지는 [1] [2] 이기에 삼항연산자를 사용하여 결과값을 리턴하였다."
+  },
+  
+  {
+    "title": "146. 자릿수 더하기",
+    "url": "/posts/146.-%EC%9E%90%EB%A6%BF%EC%88%98-%EB%8D%94%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0        answer = String(n).map{Int(String($0))!}.reduce(0,+)    return answer}자릿수를 더하기위해서 map을 사용해 각각의 자릿수를 배열에 담았다.그리...",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0        answer = String(n).map{Int(String($0))!}.reduce(0,+)    return answer}자릿수를 더하기위해서 map을 사용해 각각의 자릿수를 배열에 담았다.그리고 reduce를 사용하여 더했고 그값을 리턴하였다."
+  },
+  
+  {
+    "title": "145. 배열의 유사도 (ing)",
+    "url": "/posts/145.-%EB%B0%B0%EC%97%B4%EC%9D%98-%EC%9C%A0%EC%82%AC%EB%8F%84(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "144. 특정 문자 제거하기(ing)",
+    "url": "/posts/144.-%ED%8A%B9%EC%A0%95-%EB%AC%B8%EC%9E%90-%EC%A0%9C%EA%B1%B0%ED%95%98%EA%B8%B0(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "143. 짝수 홀수 개수",
+    "url": "/posts/143.-%EC%A7%9D%EC%88%98-%ED%99%80%EC%88%98-%EA%B0%9C%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr.append(num_list.filter{$0%2 == 0}.count)    arr.append(num_list.filter{$0%2 != 0}.count)    ret...",
+    "content": "import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr.append(num_list.filter{$0%2 == 0}.count)    arr.append(num_list.filter{$0%2 != 0}.count)    return arr}짝수, 홀수의 개수를 새로운 배열에 담아내면 되는것이어서, filter를 사용하여 짝수, 홀수를 판별하였고 그 뒤에.count를 사용해 개수를 리턴하였다.그리고 append를 이용해서 추가를 하였다.다른코드[numList.filter { $0 % 2 == 0 }.count, numList.filter { $0 % 2 == 1 }.count] 다른코드들은 이런식으로 추가를 하였다.뭐 표현의 차이인데 뭐가 더 이뻐보이는지 모르겠다."
+  },
+  
+  {
+    "title": "142. 문자열안에 문자열",
+    "url": "/posts/142.-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%95%88%EC%97%90-%EB%AC%B8%EC%9E%90%EC%97%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ str1:String, _ str2:String) -&gt; Int {        var answer : Int = 0        answer = str1.contains(str2) ? 1 : 2        return answer}문자열을 포함하는지? 에 관한 문제였다.그래서 conta...",
+    "content": "import Foundationfunc solution(_ str1:String, _ str2:String) -&gt; Int {        var answer : Int = 0        answer = str1.contains(str2) ? 1 : 2        return answer}문자열을 포함하는지? 에 관한 문제였다.그래서 contains를 사용하여 풀려고하였고. 삼항연산자를 사용해 결과값을 리턴하였다."
+  },
+  
+  {
+    "title": "141. 최댓값 만들기 (1)",
+    "url": "/posts/141.-%EC%B5%9C%EB%8C%93%EA%B0%92-%EB%A7%8C%EB%93%A4%EA%B8%B0-(1)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ numbers:[Int]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        arr = numbers.sorted(by:&gt;)        answer = arr[0] * arr[1]        return an...",
+    "content": "import Foundationfunc solution(_ numbers:[Int]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        arr = numbers.sorted(by:&gt;)        answer = arr[0] * arr[1]        return answer}배열에서 원소를 두개를 꺼내 그 곱의 최대값을 구하는 문제여서 우선 배열을 내림차순 정렬하여 큰수를 먼저 나오게 하였다.그리고 0, 1 번째 인덱스에 해당하는 값을 곱하여 그 값을 리턴하였다."
+  },
+  
+  {
+    "title": "140. 배열 자르기 (ing)",
+    "url": "/posts/140.-%EB%B0%B0%EC%97%B4-%EC%9E%90%EB%A5%B4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "139. 배열 원소의 길이",
+    "url": "/posts/139.-%EB%B0%B0%EC%97%B4-%EC%9B%90%EC%86%8C%EC%9D%98-%EA%B8%B8%EC%9D%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ strlist:[String]) -&gt; [Int] {        var answer : [Int] = []        answer = strlist.map{$0.count}        return answer}이전 같았으면 for문을쓰고 막 했을텐데 확실히 문제를 많이 풀고 시행착오를...",
+    "content": "import Foundationfunc solution(_ strlist:[String]) -&gt; [Int] {        var answer : [Int] = []        answer = strlist.map{$0.count}        return answer}이전 같았으면 for문을쓰고 막 했을텐데 확실히 문제를 많이 풀고 시행착오를 겪으면서 고차함수도 조금씩 적응이 되고 있는 것 같다.각 배열안에 있는 문자열의 길이를 리턴하면 되기에새로운 배열을 만들었고 map을 사용하고 클로저에 .count를 하면서 각 문자열의 길이를 담게하였다."
+  },
+  
+  {
+    "title": "138. 편지",
+    "url": "/posts/138.-%ED%8E%B8%EC%A7%80/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-24 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ message:String) -&gt; Int {            var answer : Int = 0    answer = message.count * 2        return answer}result를 보니 message의 길이에 2를 곱한값이란걸 알게되었고 길이를 알기위해 coun...",
+    "content": "import Foundationfunc solution(_ message:String) -&gt; Int {            var answer : Int = 0    answer = message.count * 2        return answer}result를 보니 message의 길이에 2를 곱한값이란걸 알게되었고 길이를 알기위해 count를 써서 2를 곱한값을 리턴하였다."
+  },
+  
+  {
+    "title": "137. 제곱수 판별하기",
+    "url": "/posts/137.-%EC%A0%9C%EA%B3%B1%EC%88%98-%ED%8C%90%EB%B3%84%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-23 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0        answer = Int(sqrt(Double(n))) * Int(sqrt(Double(n))) == n ? 1 : 2            return answer}일단 제곱수를 판별하기위해서 sqr...",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0        answer = Int(sqrt(Double(n))) * Int(sqrt(Double(n))) == n ? 1 : 2            return answer}일단 제곱수를 판별하기위해서 sqrt라는 메서드를 이용했다.sqrt는 n라는 수에 루트를 씌운 값을 나타내며 Double Type을 return한다.그래서 sqrt안에는 double을 씌운 값이 들어가야한다.밖에 다시 Int를 씌운건 위에 적었듯이 소수점의 값을 리턴하는데, 여기서 필요한건 정수부의 값이라 Int로 리턴하였다.그래서 해당수를 다시 곱했을때 원래의 n값이 나오면 되므로 삼항연산자를 사용하여 결과값을 리턴하였다."
+  },
+  
+  {
+    "title": "136. n의 배수 고르기",
+    "url": "/posts/136.-n%EC%9D%98-%EB%B0%B0%EC%88%98-%EA%B3%A0%EB%A5%B4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-23 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int, _ numlist:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr = numlist.filter{$0%n == 0}            return arr}n의 배수만 걸러내는 문제였으므로 n으로 나눴을때 나머지가 0이면 ...",
+    "content": "import Foundationfunc solution(_ n:Int, _ numlist:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr = numlist.filter{$0%n == 0}            return arr}n의 배수만 걸러내는 문제였으므로 n으로 나눴을때 나머지가 0이면 되기에 filter를 걸어 해결하였다."
+  },
+  
+  {
+    "title": "135. 7의 개수",
+    "url": "/posts/135.-7%EC%9D%98-%EA%B0%9C%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-21 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ array:[Int]) -&gt; Int {        var arr : [String] = []    var answer : Int = 0        arr = array.map{String($0)}.joined().map{String($0)}        for i in arr.indi...",
+    "content": "import Foundationfunc solution(_ array:[Int]) -&gt; Int {        var arr : [String] = []    var answer : Int = 0        arr = array.map{String($0)}.joined().map{String($0)}        for i in arr.indices {        if arr[i] == \"7\" {            answer += 1        }    }    return answer}7,77,17을 문자열로 합친뒤 다시 map을 하여 7,7,7,1,7 이렇게 분류하였고for문을 통해 7일때 1씩더했다.원래 하고싶었던것은 고차함수로 끝내고 싶었는데 그것까지는 못하였다.다른 코드를 보며 뭐가 부족한지 알았다.filter를 걸고 뒤에 .count만 했으면 끝날 문제였다….array.map{String($0)}.joined().map{String($0)}.filter{$0 == \"7\"}.count"
+  },
+  
+  {
+    "title": "134. 커피 심부름",
+    "url": "/posts/134.-%EC%BB%A4%ED%94%BC-%EC%8B%AC%EB%B6%80%EB%A6%84/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-21 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ order:[String]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        answer = order.map{$0.contains(\"cafelatte\") ? 5000 : 4500}.reduce(0,+)       ...",
+    "content": "import Foundationfunc solution(_ order:[String]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        answer = order.map{$0.contains(\"cafelatte\") ? 5000 : 4500}.reduce(0,+)        return answer}처음에는 따뜻한것 차가운것 그리고 라테, 아메리카노에 따라 가격이 다른줄 알고 switch case문을 사용하려고 했다.하지만 문제를 다시 읽어보니 음료의 온도와는 상관없이 라떼와 아메리카노 가격만 나와있고 아무거나는 아메리카노로 정의한다는것을알고, map을 사용하고 라떼를 기준으로 하였다.그래야 라떼가 아닌경우엔 모두 아메리카로노로 취급하기 때문이었다(Anything의 경우가 있으므로)그래서 cafelatte가 포함되어있는지를 물어보고 맞으면 5000, 아니면 4500을 리턴하게 하였고 reduce를 통해 한번에 더한값을 리턴하였다."
+  },
+  
+  {
+    "title": "2.",
+    "url": "/posts/133.-%EB%82%A0%EC%A7%9C-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-19 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ date1:[Int], _ date2:[Int]) -&gt; Int {        var answer : Int = 0    var d1 = Int(date1.map{String($0)}.joined())!    var d2 = Int(date2.map{String($0)}.joined())...",
+    "content": "import Foundationfunc solution(_ date1:[Int], _ date2:[Int]) -&gt; Int {        var answer : Int = 0    var d1 = Int(date1.map{String($0)}.joined())!    var d2 = Int(date2.map{String($0)}.joined())!        answer = d1 == d2 ? 0 : (d1 &lt; d2 ? 1 : 0)    return answer}날짜비교라고 되어있어서 배열안에 있는 원소들을 joined를 이용하여 하나로 묶으면서 하나의 문자열로 만들었고, 그것을 Int로 형변환 해주었다.다만 값이 없을 수도 있기에 !를 사용하여 unwrapping 해주었다.!를 붙이지 않으면 에러가 발생하기 때문이다.그 이후 삼항 연산자를 이용하여 결과 값을 리턴하였다."
+  },
+  
+  {
+    "title": "132. 특별한 이차원 배열 1",
+    "url": "/posts/132.-%ED%8A%B9%EB%B3%84%ED%95%9C-%EC%9D%B4%EC%B0%A8%EC%9B%90-%EB%B0%B0%EC%97%B4-1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-19 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {        var arr : [[Int]] = []        arr = Array(repeating: Array(repeating:0,count:n), count:n)        for i in 0..&lt;n {        for j in 0...",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {        var arr : [[Int]] = []        arr = Array(repeating: Array(repeating:0,count:n), count:n)        for i in 0..&lt;n {        for j in 0..&lt;n {            if i == j {                arr[i][j] = 1            }        }    }     return arr}repeating을 이용하여 n * n 의 배열을 생성하였다.그 이후 행과 열의 index가 같은 값에 대해서 1의 값으로 바꿔주었다.다른코드import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {    return (1...n).map {         var arr = Array(repeating: 0, count: n)        arr[$0 - 1] = 1        return arr    }}//import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {    var arr = [[Int]](repeating: [Int](repeating: 0, count: n), count: n)    (0..&lt;n).forEach { arr[$0][$0] = 1 }    return arr}//import Foundationfunc solution(_ n:Int) -&gt; [[Int]] {    return (0..&lt;n).map { i in (0..&lt;n).map { j in i==j ? 1 : 0 } }}"
+  },
+  
+  {
+    "title": "131. 문자열 정수의 합",
+    "url": "/posts/131.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%A0%95%EC%88%98%EC%9D%98-%ED%95%A9/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_str:String) -&gt; Int {        var answer : Int = 0        answer = num_str.map{Int(String($0))!}.reduce(0,+)    return answer}처음에 Type 에러가 나서 $0을 Int로 감싸주면 되는줄...",
+    "content": "import Foundationfunc solution(_ num_str:String) -&gt; Int {        var answer : Int = 0        answer = num_str.map{Int(String($0))!}.reduce(0,+)    return answer}처음에 Type 에러가 나서 $0을 Int로 감싸주면 되는줄 알았다.알고보니 문자열이 하나씩 배열에 들어가면서 Character type이 되었기때문에바로 Int형으로 형변환이 안되는것이었다.그래서 Character -&gt; String -&gt; Int 로 형변환을 해주었다.그랬을때 Optional의 가능성이 있기에, Unwrapping을 해주면서 결과값을 리턴하였다."
+  },
+  
+  {
+    "title": "130. 주사위 게임 1",
+    "url": "/posts/130.-%EC%A3%BC%EC%82%AC%EC%9C%84-%EA%B2%8C%EC%9E%84-1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ a:Int, _ b:Int) -&gt; Int {        var answer : Int = 0        answer = a*b % 2 != 0 ? a*a + b*b : (a%2 == 0 &amp;&amp; b%2 == 0) ? abs(a-b) : 2*(a+b)              ...",
+    "content": "import Foundationfunc solution(_ a:Int, _ b:Int) -&gt; Int {        var answer : Int = 0        answer = a*b % 2 != 0 ? a*a + b*b : (a%2 == 0 &amp;&amp; b%2 == 0) ? abs(a-b) : 2*(a+b)                                                                          return answer}삼항연산자를 이용하여 문제를 풀려고하였다.모두 홀수가 아닐때 즉 둘다 짝수일때 절대값을 표현해야하는데 abs()를 사용하여 절대값을 표현하였다."
+  },
+  
+  {
+    "title": "129. 꼬리 문자열",
+    "url": "/posts/129.-%EA%BC%AC%EB%A6%AC-%EB%AC%B8%EC%9E%90%EC%97%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ str_list:[String], _ ex:String) -&gt; String {        var answer : String = \"\"        answer = str_list.map{$0.contains(ex) ? \"\" : $0}.joined()        return answer...",
+    "content": "import Foundationfunc solution(_ str_list:[String], _ ex:String) -&gt; String {        var answer : String = \"\"        answer = str_list.map{$0.contains(ex) ? \"\" : $0}.joined()        return answer}map안에 삼항문자열을 사용해 조건을 걸어서 ex의 단어를 포함할때는 ““로 아닐경우엔 $0으로 리턴하였다.제출해야하는 데이텨형이 String이므로 joined를 통해 문자열로 바꿔주었다."
+  },
+  
+  {
+    "title": "128. 공백으로 구분하기 2",
+    "url": "/posts/128.-%EA%B3%B5%EB%B0%B1%EC%9C%BC%EB%A1%9C-%EA%B5%AC%EB%B6%84%ED%95%98%EA%B8%B0-2/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String) -&gt; [String] {        var answer : [String] = []        answer = my_string.split(separator : \" \").map{String($0)}    return answer}105와 같은 문제인데 ...",
+    "content": "import Foundationfunc solution(_ my_string:String) -&gt; [String] {        var answer : [String] = []        answer = my_string.split(separator : \" \").map{String($0)}    return answer}105와 같은 문제인데 왜 또있는지 모르겠다. 다만 이번에도 map을 빠뜨렸다. 주의하자"
+  },
+  
+  {
+    "title": "127. 배열의 길이에 따라 다른 연산하기 (fin)",
+    "url": "/posts/127.-%EB%B0%B0%EC%97%B4%EC%9D%98-%EA%B8%B8%EC%9D%B4%EC%97%90-%EB%94%B0%EB%9D%BC-%EB%8B%A4%EB%A5%B8-%EC%97%B0%EC%82%B0%ED%95%98%EA%B8%B0-(fin)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류했던문제",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []        answer = arr.count % 2 != 0 ? arr.enumerated().map{$0.0%2 != 0 ? $0.1 : $0.1 + n} : arr.enum...",
+    "content": "import Foundationfunc solution(_ arr:[Int], _ n:Int) -&gt; [Int] {        var answer : [Int] = []        answer = arr.count % 2 != 0 ? arr.enumerated().map{$0.0%2 != 0 ? $0.1 : $0.1 + n} : arr.enumerated().map{$0.0%2 == 0 ? $0.1 : $0.1 + n}        return answer}막혔던 이유. map을 사용해야할 것은 알았지만, map에서 어떻게 인덱스를 해야할지 생각이 나지 않았다.그래서 검색을 해볼 수 밖에 없었고 전에 정리했던 enumerated()를 사용해야한다라는걸 알았다.enumerated()를 보자마자 어떻게 해야하는지 알게 되었고 바로 해결을 하게 되었다.생각보다 쉬운문제였는데, 내 지식이 너무 짧았다."
+  },
+  
+  {
+    "title": "126. 배열의 원소 삭제하기 (ing)",
+    "url": "/posts/126.-%EB%B0%B0%EC%97%B4%EC%9D%98-%EC%9B%90%EC%86%8C-%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "125. 부분 문자열인지 확인하기",
+    "url": "/posts/125.-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%B8%EC%A7%80-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String, _ target:String) -&gt; Int {        var answer : Int = 0        answer = my_string.contains(target) ? 1:0        return answer}123번과 같은 문제이다.",
+    "content": "import Foundationfunc solution(_ my_string:String, _ target:String) -&gt; Int {        var answer : Int = 0        answer = my_string.contains(target) ? 1:0        return answer}123번과 같은 문제이다."
+  },
+  
+  {
+    "title": "124. 뒤에서 5등 위로",
+    "url": "/posts/124.-%EB%92%A4%EC%97%90%EC%84%9C-5%EB%93%B1-%EC%9C%84%EB%A1%9C/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {        var answer : [Int] = []        answer = Array(num_list.sorted()[5...])        return answer}이전 문제 122번과 거의 같은 문제이다.범위만 다른 조건이기에...",
+    "content": "import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {        var answer : [Int] = []        answer = Array(num_list.sorted()[5...])        return answer}이전 문제 122번과 거의 같은 문제이다.범위만 다른 조건이기에 범위만 바꿔서 결과값을 리턴하였다."
+  },
+  
+  {
+    "title": "123. 부분 문자열",
+    "url": "/posts/123.-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ str1:String, _ str2:String) -&gt; Int {        var answer : Int = 0        answer = str2.contains(str1) ? 1 : 0        return answer}배열과 같이 문자열 또한 해당문자열이 포함하는지를 묻는 ...",
+    "content": "import Foundationfunc solution(_ str1:String, _ str2:String) -&gt; Int {        var answer : Int = 0        answer = str2.contains(str1) ? 1 : 0        return answer}배열과 같이 문자열 또한 해당문자열이 포함하는지를 묻는 contains를 사용하였고삼항연산자를 통해 결과값을 리턴하였다."
+  },
+  
+  {
+    "title": "122. 뒤에서 5등까지",
+    "url": "/posts/122.-%EB%92%A4%EC%97%90%EC%84%9C-5%EB%93%B1%EA%B9%8C%EC%A7%80/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {    var answer : [Int] = []    answer = Array(num_list.sorted()[0...4])    return answer}배열의 인덱스로 하려고해서 [0…4]로 하여 Array로 감싸주었다.sorted까지...",
+    "content": "import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {    var answer : [Int] = []    answer = Array(num_list.sorted()[0...4])    return answer}배열의 인덱스로 하려고해서 [0…4]로 하여 Array로 감싸주었다.sorted까지하고나서 해당 범위의 인덱스로 추출하는것을 까먹어서 내가 풀었떤 문제를 기반으로 검색해서 풀었다..잊지않게 잘 기억해둬야할것 같다.다른 코드들을 보니 색다르게 표현한 것도 몇개 있어서 아래 적어본다다른코드import Foundationfunc solution(_ a:[Int]) -&gt; [Int] {    a.sorted()[0..&lt;5].map{Int($0)}}//import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {    return Array(num_list.sorted()[..&lt;5])}//import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {    return (0..&lt;5).map { num_list.sorted()[$0] }}//func solution(_ numList: [Int]) -&gt; [Int] {    return Array(numList.sorted().prefix(5))}"
+  },
+  
+  {
+    "title": "121. 조건에 맞게 수열 변환하기 3",
+    "url": "/posts/121.-%EC%A1%B0%EA%B1%B4%EC%97%90-%EB%A7%9E%EA%B2%8C-%EC%88%98%EC%97%B4-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0-3/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int], _ k:Int) -&gt; [Int] {        var answer : [Int] = []        answer = k%2 == 0 ? arr.map{$0 + k} : arr.map{$0 * k}        return answer}삼항연산자를 통해 간략하게 표현...",
+    "content": "import Foundationfunc solution(_ arr:[Int], _ k:Int) -&gt; [Int] {        var answer : [Int] = []        answer = k%2 == 0 ? arr.map{$0 + k} : arr.map{$0 * k}        return answer}삼항연산자를 통해 간략하게 표현하고자 하였고, 해당 조건이 짝수 홀수에 따라서 배열의 값에 변화를 주어야 하기에for 문 대신 map 을 사용하여 간단하게 표현 하였다.이전에는 for 문을 써서 하나하나 변환하고자 하였을 텐데, 확실히 많이 풀다보니 간단하게 어떻게 해야하는 조금씩 감이 오는듯 하다.하지만 아직 갈길은 멀어보인다"
+  },
+  
+  {
+    "title": "120. 문자열을 정수로 변환하기",
+    "url": "/posts/120.-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%84-%EC%A0%95%EC%88%98%EB%A1%9C-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n_str:String) -&gt; Int {        var answer : Int = 0        answer = Int(n_str)!        return answer}문자열을 정수로 변환할때는 !를 붙여 unwrapping을 해줘야한다.그렇지않으면 컴파일 에러가 나기때문이다.",
+    "content": "import Foundationfunc solution(_ n_str:String) -&gt; Int {        var answer : Int = 0        answer = Int(n_str)!        return answer}문자열을 정수로 변환할때는 !를 붙여 unwrapping을 해줘야한다.그렇지않으면 컴파일 에러가 나기때문이다."
+  },
+  
+  {
+    "title": "119. 문자열로 변환",
+    "url": "/posts/119.-%EB%AC%B8%EC%9E%90%EC%97%B4%EB%A1%9C-%EB%B3%80%ED%99%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; String {        var answer : String = \"\"        answer = String(n)        return answer}숫자를 문자열로 변환하기 위해서 String으로 감싸서 결과값을 리턴하였다.",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; String {        var answer : String = \"\"        answer = String(n)        return answer}숫자를 문자열로 변환하기 위해서 String으로 감싸서 결과값을 리턴하였다."
+  },
+  
+  {
+    "title": "118. 정수 부분",
+    "url": "/posts/118.-%EC%A0%95%EC%88%98-%EB%B6%80%EB%B6%84/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ flo:Double) -&gt; Int {        var answer = 0        answer = Int(flo/1)        return answer}나누었을때 몫만 반환하는 / 을 이용하여 Int로 감싸서 결과값을 리턴하고자 하였다.",
+    "content": "import Foundationfunc solution(_ flo:Double) -&gt; Int {        var answer = 0        answer = Int(flo/1)        return answer}나누었을때 몫만 반환하는 / 을 이용하여 Int로 감싸서 결과값을 리턴하고자 하였다."
+  },
+  
+  {
+    "title": "2.",
+    "url": "/posts/117.-%EC%A0%95%EC%88%98-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-17 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0        answer = num_list.contains(n) ? 1 : 0         return answer}배열안에 특정한 값을 포함하는지 물어보는 contains를...",
+    "content": "import Foundationfunc solution(_ num_list:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0        answer = num_list.contains(n) ? 1 : 0         return answer}배열안에 특정한 값을 포함하는지 물어보는 contains를 사용하였고, 삼항연산자를 통해 결과값을 리턴하였다."
+  },
+  
+  {
+    "title": "116. 배열 비교하기",
+    "url": "/posts/116.-%EB%B0%B0%EC%97%B4-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr1:[Int], _ arr2:[Int]) -&gt; Int {        var answer : Int = 0        answer = arr1.count &gt; arr2.count ? 1 : (arr1.count == arr2.count ? (arr1.reduce(0,+) &gt...",
+    "content": "import Foundationfunc solution(_ arr1:[Int], _ arr2:[Int]) -&gt; Int {        var answer : Int = 0        answer = arr1.count &gt; arr2.count ? 1 : (arr1.count == arr2.count ? (arr1.reduce(0,+) &gt; arr2.reduce(0,+)) ? 1 : (arr1.reduce(0,+) == (arr2.reduce(0,+)) ? 0 : -1) : -1)         return answer}if로 쓰는것도 괜찮았지만, 삼항연산자를 계속 이어나가서 표현하고 싶어서 해보았다.다만 괄호가 많아지기에 하나하나 정확하게 해서 하도록 하자."
+  },
+  
+  {
+    "title": "115. 배열의 길이를 2의 거듭제곱으로 만들기 (ing)",
+    "url": "/posts/115.-%EB%B0%B0%EC%97%B4%EC%9D%98-%EA%B8%B8%EC%9D%B4%EB%A5%BC-2%EC%9D%98-%EA%B1%B0%EB%93%AD%EC%A0%9C%EA%B3%B1%EC%9C%BC%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "2의 거듭제곱이라 거듭제곱을 사용할 수 있는 pow()를 사용해서 풀려고 하였다.",
+    "content": "2의 거듭제곱이라 거듭제곱을 사용할 수 있는 pow()를 사용해서 풀려고 하였다."
+  },
+  
+  {
+    "title": "114. 배열 만들기 6",
+    "url": "/posts/114.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-6/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int]) -&gt; [Int] {        var stk : [Int] = []    var i : Int = 0        while i &lt; arr.count {        if stk.count == 0{            stk.append(arr[i])     ...",
+    "content": "import Foundationfunc solution(_ arr:[Int]) -&gt; [Int] {        var stk : [Int] = []    var i : Int = 0        while i &lt; arr.count {        if stk.count == 0{            stk.append(arr[i])            i+=1        } else {            if stk.count != 0 &amp;&amp; stk[stk.count-1] == arr[i] {                stk.removeLast()                i+=1            } else if stk.count != 0 &amp;&amp; stk[stk.count-1] != arr[i] {                stk.append(arr[i])                i+=1            }        }            }        if stk.count == 0 {        stk = [-1]    }        return stk}무한루프인 while을 통해 문제를 해결하였다.마지막에 나온 결과가 빈배열일때를 위해 마지막에 if문을 만들어 처리하였다."
+  },
+  
+  {
+    "title": "113. 빈 배열에 추가, 삭제하기 (ing)",
+    "url": "/posts/113.-%EB%B9%88-%EB%B0%B0%EC%97%B4%EC%97%90-%EC%B6%94%EA%B0%80,-%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "112. 배열의 원소만큼 추가하기",
+    "url": "/posts/112.-%EB%B0%B0%EC%97%B4%EC%9D%98-%EC%9B%90%EC%86%8C%EB%A7%8C%ED%81%BC-%EC%B6%94%EA%B0%80%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int]) -&gt; [Int] {        var answer : [Int] = []        for i in arr.indices{        var n = 1        while arr[i] &gt;= n {            answer.append(arr[i])...",
+    "content": "import Foundationfunc solution(_ arr:[Int]) -&gt; [Int] {        var answer : [Int] = []        for i in arr.indices{        var n = 1        while arr[i] &gt;= n {            answer.append(arr[i])            n+=1        }    }        return answer}for문과 while문을 합쳐서 배열에 arr[i]만큼 append를 반복시켜서 추가하였다."
+  },
+  
+  {
+    "title": "111. 세 개의 구분자",
+    "url": "/posts/111.-%EC%84%B8-%EA%B0%9C%EC%9D%98-%EA%B5%AC%EB%B6%84%EC%9E%90/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ myStr:String) -&gt; [String] {    var arr : String = \"\"    var answer : [String] = []    var test : [String] = []    answer = myStr.components(separatedBy:[\"a\", \"b\"...",
+    "content": "import Foundationfunc solution(_ myStr:String) -&gt; [String] {    var arr : String = \"\"    var answer : [String] = []    var test : [String] = []    answer = myStr.components(separatedBy:[\"a\", \"b\", \"c\"]).filter{$0 != \"\"}    answer = answer.count != 0 ? answer : [\"EMPTY\"]    return answer}split을 여러문자를 어떻게 해야하나 찾다가 component를 사용했는데 아래와 같이 하면 되는거였다. or조건을 통해서 이어 붙였다.나는 components를 사용하여 a,b,c를 포함하는 단어를 분리하였다.하지만 components는 ““를 기본적으로 포함을 하고 있다.그래서 filter를 통해 각각의 인자가 “” 이 아닌것만 걸러서 배열에 출력하였다.그리고 삼항연산자를 통해 빈배열만 남을경우엔 EMPTY를 리턴하였다.다른코드import Foundationfunc solution(_ myStr:String) -&gt; [String] {    return myStr.split { $0 == \"a\" || $0 == \"b\" || $0 == \"c\" }.map { String($0) }}"
+  },
+  
+  {
+    "title": "110. rny_string",
+    "url": "/posts/110.-rny_string/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ rny_string:String) -&gt; String {        var string : String = \"\"        string = rny_string.map{String($0) == \"m\" ? \"rn\" : String($0)}.joined()            return s...",
+    "content": "import Foundationfunc solution(_ rny_string:String) -&gt; String {        var string : String = \"\"        string = rny_string.map{String($0) == \"m\" ? \"rn\" : String($0)}.joined()            return string}이것역시 map안에 삼항연산자를 통하여 m일경우 rn으로 치환하고 그렇지 않은 경우엔 String($0)을 그대로 써서 해당 문자 그대로 리턴하게 표현하였다."
+  },
+  
+  {
+    "title": "109. 문자열 바꿔서 찾기",
+    "url": "/posts/109.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%B0%94%EA%BF%94%EC%84%9C-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ myString:String, _ pat:String) -&gt; Int {            var string : String = \"\"    var answer : Int = 0        string = myString.map{String($0)==\"A\" ? \"B\" : \"A\"}.joi...",
+    "content": "import Foundationfunc solution(_ myString:String, _ pat:String) -&gt; Int {            var string : String = \"\"    var answer : Int = 0        string = myString.map{String($0)==\"A\" ? \"B\" : \"A\"}.joined()        answer = string.contains(pat) ? 1 : 0    return answer}A일때 B, B일때 A로 바꿔주기에 삼항연산자를 사용하여A일때 B 그외엔 A로 바꿔주는걸로 간략하게 표현을 하였다.그다음 문자열에 포함하는지를 묻는 메서드인 contains를 이용하여 정답을 리턴하였다.contains는 기본적으로 Bool Type이어서 단순히 조건을 저렇게 표현하였다.true일때 1 false일땐 0을 리턴한다."
+  },
+  
+  {
+    "title": "108. 문자열 잘라서 정렬하기.",
+    "url": "/posts/108.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%9E%98%EB%9D%BC%EC%84%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ myString:String) -&gt; [String] {        var answer : [String] = []        answer = myString.split(separator:\"x\").map{String($0)}.sorted()    return answer}문자열을 x기준...",
+    "content": "import Foundationfunc solution(_ myString:String) -&gt; [String] {        var answer : [String] = []        answer = myString.split(separator:\"x\").map{String($0)}.sorted()    return answer}문자열을 x기준으로 잘라내었고 대신 omittingEmptySubsequences 이걸 쓰지 않은건true가 default이기 때문에 공백을 무시한다.그리고 해당 결과를 sorted하여 정렬해주었다"
+  },
+  
+  {
+    "title": "107. x 사이의 개수",
+    "url": "/posts/107.-x-%EC%82%AC%EC%9D%B4%EC%9D%98-%EA%B0%9C%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ myString:String) -&gt; [Int] {        var answer : [Int] = []        answer = myString.split(separator: \"x\", omittingEmptySubsequences: false).map{String($0).count}...",
+    "content": "import Foundationfunc solution(_ myString:String) -&gt; [Int] {        var answer : [Int] = []        answer = myString.split(separator: \"x\", omittingEmptySubsequences: false).map{String($0).count}          return answer}“x”라는 문자를 기준으로 나누기에 split을 사용하였다.다만 이 메서드는 첫번째 두번째 케이스처럼 맨앞, 맨뒤 그리고 xx가 연속으로 나올경우“ “가 필요하기에omittingEmptySubsequences 를 사용하였다.기본적으로 split은 “ “을 생략하기에 해당 메서드르 사용하였다.그리고 문자열의 개수를 리턴해야하므로 $0.count를 사용하여 바로 결과값을 내었다."
+  },
+  
+  {
+    "title": "106. 연속된 수의 합",
+    "url": "/posts/106.-%EC%97%B0%EC%86%8D%EB%90%9C-%EC%88%98%EC%9D%98-%ED%95%A9/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-16 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num:Int, _ total:Int) -&gt; [Int] {        var arr : [Int] = []        var start = (total/num)-(num/2)    var end = (total/num)+(num/2)        arr = num % 2 != 0 ? ...",
+    "content": "import Foundationfunc solution(_ num:Int, _ total:Int) -&gt; [Int] {        var arr : [Int] = []        var start = (total/num)-(num/2)    var end = (total/num)+(num/2)        arr = num % 2 != 0 ? ((start)...end).map{$0} : ((start+1)...end).map{$0}        return arr}우선 중간값을 이용해서 접근을 해보려고 하였다.전체합을 가진 total과 개수를 가진 num이므로 1씩 올라가는것을 활용하여total/num 이 중간 값을 의미한다.그리고 중간값을 기준으로 num을 반으로 나눈값을 빼면 좌측, 더한값은 우측 범위이므로start, end로 하여서 구했다.다만 num이 홀수일때 이것은 유효하고, 짝수일때는 중간값이 애매해 진다./는 버림을 의미하기때문에 start+1 해준값으로 범위를 정해주어 해결하였다."
+  },
+  
+  {
+    "title": "99. 배열 회전시키기",
+    "url": "/posts/99.-%EB%B0%B0%EC%97%B4-%ED%9A%8C%EC%A0%84%EC%8B%9C%ED%82%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-15 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ numbers:[Int], _ direction:String) -&gt; [Int] {        var arr : [Int] = []    var answer : [Int] = []    arr = numbers        if direction == \"left\" {        arr....",
+    "content": "import Foundationfunc solution(_ numbers:[Int], _ direction:String) -&gt; [Int] {        var arr : [Int] = []    var answer : [Int] = []    arr = numbers        if direction == \"left\" {        arr.append(arr[0])        arr.removeFirst()        return arr    } else {        arr.insert(arr[arr.count-1], at:0)        arr.removeLast()        return arr    }}한칸씩 이동한다는 것을 배열의 첫번째 인덱스와 마지막인덱스 값을 어떻게 해주느냐에 따라서 달라진다고 생각을 하였다.그래서 왼쪽으로 이동하는 경우에는 첫번째 인덱스 값을 마지막으로 가게 추가해 준뒤 첫번째 인덱스 값을 제거하는 식으로 하였고,오른쪽으로 이동하는 경우에는 마지막값을 첫번째로 들어가게 삽입을 해주고, 마지막값을 지우는 식으로 하였다.간단한 코드를 보니 한번에 처리하였다.처음에 나도 삼항연산자를 통해 한줄로 처리하고 싶었지만 능력 부족으로 하지 못했다.다른코드import Foundationfunc solution(_ numbers:[Int], _ direction:String) -&gt; [Int] {    var nums = numbers    direction == \"right\" ? nums.insert(nums.removeLast(), at: 0) : nums.append(nums.removeFirst())    return nums}"
+  },
+  
+  {
+    "title": "98. 주사위의 개수",
+    "url": "/posts/98.-%EC%A3%BC%EC%82%AC%EC%9C%84%EC%9D%98-%EA%B0%9C%EC%88%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-15 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ box:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    var volume : Int = 0        volume = box.reduce(1,*)        answer = volume / (n*n*n)        print(vo...",
+    "content": "import Foundationfunc solution(_ box:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    var volume : Int = 0        volume = box.reduce(1,*)        answer = volume / (n*n*n)        print(volume)        return 0}처음에는 이런식으로 문제를 풀려고 했다. 하지만 2번케이스에서 실패하였다.왜 안되는지 이유를 몰라서 질문하기 케이스를 보니 질문한 사람들이 대부분 나와 같은 생각을 하고 있었다.부피의 개념으로 접근을 할때 전체 박스의 부피에서 n의 부피를 나누어서 생긴 문제였다.각각을n으로 나눈 값을 곱하면 금방 해결이 된다.하지만 일일이 n씩 나누는것보다 한번에 배열에 n을 나눈값을 리턴하면 훨씬 편할 거같아서 찾아보았다.너무 나누기에 포커스를 둬서 map을 잊고있었다…..다른코드import Foundationfunc solution(_ box:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    answer = box.map{$0/n}.reduce(1,*)    return answer}"
+  },
+  
+  {
+    "title": "97. 합성수 찾기",
+    "url": "/posts/97.-%ED%95%A9%EC%84%B1%EC%88%98-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-15 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0    var i : Int = 1    var num : Int = 0        while n &gt;= i {        num = 0        for int in 1 ... i {          ...",
+    "content": "import Foundationfunc solution(_ n:Int) -&gt; Int {        var answer : Int = 0    var i : Int = 1    var num : Int = 0        while n &gt;= i {        num = 0        for int in 1 ... i {            if i % int == 0{                num += 1            }        }        if num &gt;= 3 {            answer += 1        }                i += 1    }        return answer}while과 for문을 사용하여 해결하였다.많이 썼던 방식이라 그런가 보자마자 바로 해결이 되었다."
+  },
+  
+  {
+    "title": "105. 공백으로 구분하기 1",
+    "url": "/posts/105.-%EA%B3%B5%EB%B0%B1%EC%9C%BC%EB%A1%9C-%EA%B5%AC%EB%B6%84%ED%95%98%EA%B8%B0-1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-15 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ my_string:String) -&gt; [String] {        var answer = my_string.split(separator: \" \").map{String($0)}           return answer}구분자를 기준으로 나눠주는 split 메서드를 사용하였다.split...",
+    "content": "import Foundationfunc solution(_ my_string:String) -&gt; [String] {        var answer = my_string.split(separator: \" \").map{String($0)}           return answer}구분자를 기준으로 나눠주는 split 메서드를 사용하였다.split은 다음 글에 별도로 정리해야겠다.map을 하지않으면 데이터형이 Array&lt;Substring&gt; 으로 나와서 정답과는 다른 데이터형이기에 에러가 발생한다.그래서 map으로 한번 더 처리하여 데이터형을 일치시켜준다."
+  },
+  
+  {
+    "title": "104. 모스부호 1(ing)",
+    "url": "/posts/104.-%EB%AA%A8%EC%8A%A4%EB%B6%80%ED%98%B8-1(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-15 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
+    "title": "102. 양꼬치",
+    "url": "/posts/102.-%EC%96%91%EA%BC%AC%EC%B9%98/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-15 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ n:Int, _ k:Int) -&gt; Int {        var answer : Int = 0        answer = n * 12000 + (k-(n/10)) * 2000            return answer}10인분에 1개씩이므로 서비스는 n/10 의 몫으로 받는다는 것을 ...",
+    "content": "import Foundationfunc solution(_ n:Int, _ k:Int) -&gt; Int {        var answer : Int = 0        answer = n * 12000 + (k-(n/10)) * 2000            return answer}10인분에 1개씩이므로 서비스는 n/10 의 몫으로 받는다는 것을 알고음료수의 갯수 - n/10 으로 계산하여 답을 구했다."
+  },
+  
+  {
+    "title": "101. 점의 위치 구하기",
+    "url": "/posts/101.-%EC%A0%90%EC%9D%98-%EC%9C%84%EC%B9%98-%EA%B5%AC%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-15 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ dot:[Int]) -&gt; Int {        var answer : Int = 0        var mul : Int = 0    mul = dot.reduce(1,*)        answer = dot[0] &gt; 0 ? (mul &gt; 0 ? 1 : 4) : (mul &gt...",
+    "content": "import Foundationfunc solution(_ dot:[Int]) -&gt; Int {        var answer : Int = 0        var mul : Int = 0    mul = dot.reduce(1,*)        answer = dot[0] &gt; 0 ? (mul &gt; 0 ? 1 : 4) : (mul &gt; 0 ? 3 : 2)       return answer}dot[1]을 쓸 수 있었지만 그냥 reduce를 사용 해보고 싶어서 곱으로 하였다.삼항연산자에 삼항연산자를 이어 표현하였다."
+  },
+  
+  {
+    "title": "100. 공 던지기",
+    "url": "/posts/100.-%EA%B3%B5-%EB%8D%98%EC%A7%80%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-15 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ numbers:[Int], _ k:Int) -&gt; Int {    var answer : Int = 0    answer = numbers[((k-1)*2)%numbers.count]    return answer}단순히 수학적으로 생각하여 풀었다.한칸 띄우고 가고 마지막 공을 받는 사람이...",
+    "content": "import Foundationfunc solution(_ numbers:[Int], _ k:Int) -&gt; Int {    var answer : Int = 0    answer = numbers[((k-1)*2)%numbers.count]    return answer}단순히 수학적으로 생각하여 풀었다.한칸 띄우고 가고 마지막 공을 받는 사람이아닌 공을 준사람이므로 k-1을 하였고 그것에 2를 곱하여 길이를 나누어서 해결하였다."
+  },
+  
+  {
+    "title": "96. 배열 두 배 만들기",
+    "url": "/posts/96.-%EB%B0%B0%EC%97%B4-%EB%91%90-%EB%B0%B0-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ numbers:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr = numbers.map{$0*2}        return arr}반복문 대신 map을 사용하였다.$0으로 배열 각각의 인자에 2를 곱한 값을 리턴하여 답을 구하였다.",
+    "content": "import Foundationfunc solution(_ numbers:[Int]) -&gt; [Int] {        var arr : [Int] = []        arr = numbers.map{$0*2}        return arr}반복문 대신 map을 사용하였다.$0으로 배열 각각의 인자에 2를 곱한 값을 리턴하여 답을 구하였다."
+  },
+  
+  {
+    "title": "95. 나머지 구하기",
+    "url": "/posts/95.-%EB%82%98%EB%A8%B8%EC%A7%80-%EA%B5%AC%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer : Int = 0        answer = num1 % num2        return answer}나머지를 구하는 % 를 사용하여 해결하였다.",
+    "content": "import Foundationfunc solution(_ num1:Int, _ num2:Int) -&gt; Int {        var answer : Int = 0        answer = num1 % num2        return answer}나머지를 구하는 % 를 사용하여 해결하였다."
+  },
+  
+  {
+    "title": "94. 중앙값 구하기",
+    "url": "/posts/94.-%EC%A4%91%EC%95%99%EA%B0%92-%EA%B5%AC%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ array:[Int]) -&gt; Int {        var answer : Int = 0        answer = Int(array.sorted()[array.count/2])    return answer}array를 먼저 오름차순으로 정리를 하고 배열의 개수를 2로 나눈 값을 인덱...",
+    "content": "import Foundationfunc solution(_ array:[Int]) -&gt; Int {        var answer : Int = 0        answer = Int(array.sorted()[array.count/2])    return answer}array를 먼저 오름차순으로 정리를 하고 배열의 개수를 2로 나눈 값을 인덱스로 하여 출력하였다."
+  },
+  
+  {
+    "title": "93. 최빈값 구하기 (ing)",
+    "url": "/posts/93.-%EC%B5%9C%EB%B9%88%EA%B0%92-%EA%B5%AC%ED%95%98%EA%B8%B0-(ing)/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트, 보류중",
+    "date": "2024-02-14 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "",
+    "content": ""
+  },
+  
+  {
     "title": "92. 짝수는 싫어요",
     "url": "/posts/92.-%EC%A7%9D%EC%88%98%EB%8A%94-%EC%8B%AB%EC%96%B4%EC%9A%94/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -21,7 +1891,7 @@
     "title": "91. 피자 나눠 먹기 1",
     "url": "/posts/91.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-1/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -38,7 +1908,7 @@
     "title": "90. 피자 나눠 먹기 2 (ing)",
     "url": "/posts/90.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-2-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -55,7 +1925,7 @@
     "title": "89. 피자 나눠 먹기 3",
     "url": "/posts/89.-%ED%94%BC%EC%9E%90-%EB%82%98%EB%88%A0-%EB%A8%B9%EA%B8%B0-3/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -72,7 +1942,7 @@
     "title": "88. 옷가게 할인 받기",
     "url": "/posts/88.-%EC%98%B7%EA%B0%80%EA%B2%8C-%ED%95%A0%EC%9D%B8-%EB%B0%9B%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -89,7 +1959,7 @@
     "title": "87. 아이스 아메리카노",
     "url": "/posts/87.-%EC%95%84%EC%9D%B4%EC%8A%A4-%EC%95%84%EB%A9%94%EB%A6%AC%EC%B9%B4%EB%85%B8/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -106,7 +1976,7 @@
     "title": "86. 배열 뒤집기",
     "url": "/posts/86.-%EB%B0%B0%EC%97%B4-%EB%92%A4%EC%A7%91%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -123,7 +1993,7 @@
     "title": "85. 문자열 뒤집기",
     "url": "/posts/85.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%92%A4%EC%A7%91%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -140,7 +2010,7 @@
     "title": "84. 직각삼각형 출력하기",
     "url": "/posts/84.-%EC%A7%81%EA%B0%81%EC%82%BC%EA%B0%81%ED%98%95-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -157,7 +2027,7 @@
     "title": "83. 중복된 숫자 개수",
     "url": "/posts/83.-%EC%A4%91%EB%B3%B5%EB%90%9C-%EC%88%AB%EC%9E%90-%EA%B0%9C%EC%88%98/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -174,7 +2044,7 @@
     "title": "82. 머쓱이보다 키 큰 사람",
     "url": "/posts/82.-%EB%A8%B8%EC%93%B1%EC%9D%B4%EB%B3%B4%EB%8B%A4-%ED%82%A4-%ED%81%B0-%EC%82%AC%EB%9E%8C/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -191,7 +2061,7 @@
     "title": "81. 특정 문자열로 끝나는 가장 긴 부분 문자열 찾기 (ing)",
     "url": "/posts/81.-%ED%8A%B9%EC%A0%95-%EB%AC%B8%EC%9E%90%EC%97%B4%EB%A1%9C-%EB%81%9D%EB%82%98%EB%8A%94-%EA%B0%80%EC%9E%A5-%EA%B8%B4-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B0%BE%EA%B8%B0-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-14 05:13:00 +0900",
     
 
@@ -208,7 +2078,7 @@
     "title": "80. 특정한 문자를 대문자로 바꾸기",
     "url": "/posts/80.-%ED%8A%B9%EC%A0%95%ED%95%9C-%EB%AC%B8%EC%9E%90%EB%A5%BC-%EB%8C%80%EB%AC%B8%EC%9E%90%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -225,7 +2095,7 @@
     "title": "79. A 강조하기",
     "url": "/posts/79.-A-%EA%B0%95%EC%A1%B0%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -239,10 +2109,27 @@
   },
   
   {
+    "title": "78. 배열에서 문자열 대소문자 변환하기",
+    "url": "/posts/78.-%EB%B0%B0%EC%97%B4%EC%97%90%EC%84%9C-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%8C%80%EC%86%8C%EB%AC%B8%EC%9E%90-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ strArr:[String]) -&gt; [String] {        var answer : [String] = []        answer = strArr        for i in answer.indices{        if i % 2 == 0 {            answer[...",
+    "content": "import Foundationfunc solution(_ strArr:[String]) -&gt; [String] {        var answer : [String] = []        answer = strArr        for i in answer.indices{        if i % 2 == 0 {            answer[i] = answer[i].lowercased()        } else {            answer[i] = answer[i].uppercased()        }    }        return answer}enumerated와 고차함수를 사용해서 해보고 싶었으나 뒤에 조건을 어떻게 해야할지 몰라 못했는데 아래 코드를 보고 어느부분이 부족한지 알았다.삼항연산자를 쓰면 될까 생각만했는데 코드보니 내생각이 맞았다.다음번엔 시도를 해봐야겠다.다른코드import Foundationfunc solution(_ strArr:[String]) -&gt; [String] {    return strArr.enumerated().map { $0.offset % 2 != 0 ? $0.element.uppercased() : $0.element.lowercased() }}//func solution(_ strArr: [String]) -&gt; [String] { strArr.indices.map { ($0 % 2 == 0) ? strArr[$0].lowercased() : strArr[$0].uppercased() } }//import Foundationfunc solution(_ strArr:[String]) -&gt; [String] {    return strArr.enumerated().map { $0.offset % 2 == 0 ? $0.element.lowercased() : $0.element.uppercased() }}$0.offset / $0.element 를 사용했는데 저번에 정리한 $0.0 / $0.1 과 같은 표현인듯 하다."
+  },
+  
+  {
     "title": "77. 소문자로 바꾸기",
     "url": "/posts/77.-%EC%86%8C%EB%AC%B8%EC%9E%90%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -259,7 +2146,7 @@
     "title": "76. 대문자로 바꾸기",
     "url": "/posts/76.-%EB%8C%80%EB%AC%B8%EC%9E%90%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -273,10 +2160,27 @@
   },
   
   {
+    "title": "75. 원하는 문자열 찾기",
+    "url": "/posts/75.-%EC%9B%90%ED%95%98%EB%8A%94-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B0%BE%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ myString:String, _ pat:String) -&gt; Int {        var answer : Int = 0        if myString.count &gt;= pat.count {                if myString.lowercased().contains(p...",
+    "content": "import Foundationfunc solution(_ myString:String, _ pat:String) -&gt; Int {        var answer : Int = 0        if myString.count &gt;= pat.count {                if myString.lowercased().contains(pat.lowercased()) {                        answer = 1                    } else {                        answer = 0                    }            } else {                answer = 0            }    return answer}문제 에서 대문자와 소문자는 구분하지 않는다고 하였기에 myString, pat 둘다 대문자, 혹은 소문자로 변환을 한뒤 contains 메서드를 이용하여 포함을 하는지를 물어보고 그에따른 결과값을 리턴을 하는걸로 방향을 잡았다."
+  },
+  
+  {
     "title": "74. 길이에 따른 연산",
     "url": "/posts/74.-%EA%B8%B8%EC%9D%B4%EC%97%90-%EB%94%B0%EB%A5%B8-%EC%97%B0%EC%82%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -293,7 +2197,7 @@
     "title": "73. 1로 만들기",
     "url": "/posts/73.-1%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -310,7 +2214,7 @@
     "title": "72. 조건에 맞게 수열 변환하기 2",
     "url": "/posts/72.-%EC%A1%B0%EA%B1%B4%EC%97%90-%EB%A7%9E%EA%B2%8C-%EC%88%98%EC%97%B4-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0-2/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -324,10 +2228,27 @@
   },
   
   {
+    "title": "71. 조건에 맞게 수열 변환하기 1",
+    "url": "/posts/71.-%EC%A1%B0%EA%B1%B4%EC%97%90-%EB%A7%9E%EA%B2%8C-%EC%88%98%EC%97%B4-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0-1/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ arr:[Int]) -&gt; [Int] {        var answer : [Int] = []        answer = arr        for i in answer.indices {                if answer[i] &gt;= 50 &amp;&amp; answer[...",
+    "content": "import Foundationfunc solution(_ arr:[Int]) -&gt; [Int] {        var answer : [Int] = []        answer = arr        for i in answer.indices {                if answer[i] &gt;= 50 &amp;&amp; answer[i] % 2 == 0 {            answer[i] = answer[i] / 2        } else if answer[i] &lt; 50 &amp;&amp; answer[i] % 2 != 0 {            answer[i] = answer[i] * 2        } else {            continue        }            }            return answer}처음에 잘못이해하고 첫번 째 if문에 바로 else를 하여, 정답을 내려고했다그랬더니 99에서 막혔다. 생각해보니 두 조건에 해당하지 않는 숫자는 그대로 내보내야 해서, continue로 넘겼더니 해결이 되었다."
+  },
+  
+  {
     "title": "70. 수열과 구간 쿼리1",
     "url": "/posts/70.-%EC%88%98%EC%97%B4%EA%B3%BC-%EA%B5%AC%EA%B0%84-%EC%BF%BC%EB%A6%AC1/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -341,10 +2262,27 @@
   },
   
   {
+    "title": "69. n보다 커질 때 까지 더하기",
+    "url": "/posts/69.-n%EB%B3%B4%EB%8B%A4-%EC%BB%A4%EC%A7%88-%EB%95%8C-%EA%B9%8C%EC%A7%80-%EB%8D%94%ED%95%98%EA%B8%B0/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    var i : Int = 0        while answer &lt;= n {        answer += numbers[i]        i += 1    }    r...",
+    "content": "import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    var i : Int = 0        while answer &lt;= n {        answer += numbers[i]        i += 1    }    return answer}while문으로 처리하였다.reduce를 써보고 싶었는데 잘 안되어서 다른 코드를 보니 아직 공부할게 많다.다른코드import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {    return numbers.reduce(0) { $0 &gt; n ? $0 : $0 + $1 }}//func solution(_ numbers: [Int], _ n: Int) -&gt; Int {    return numbers.reduce(0) { acc, i in n &gt;= acc ? acc + i : acc }}//"
+  },
+  
+  {
     "title": "68. 할 일 목록",
     "url": "/posts/68.-%ED%95%A0-%EC%9D%BC-%EB%AA%A9%EB%A1%9D/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -361,7 +2299,7 @@
     "title": "67. 5명씩",
     "url": "/posts/67.-5%EB%AA%85%EC%94%A9/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -378,7 +2316,7 @@
     "title": "66. 홀수 vs 짝수",
     "url": "/posts/66.-%ED%99%80%EC%88%98-vs-%EC%A7%9D%EC%88%98/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -395,7 +2333,7 @@
     "title": "1.",
     "url": "/posts/65.-n-%EA%B0%9C-%EA%B0%84%EA%B2%A9%EC%9D%98-%EC%9B%90%EC%86%8C%EB%93%A4/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -412,7 +2350,7 @@
     "title": "64. n 번째 원소까지",
     "url": "/posts/64.-n-%EB%B2%88%EC%A7%B8-%EC%9B%90%EC%86%8C%EA%B9%8C%EC%A7%80/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -429,7 +2367,7 @@
     "title": "63. 왼쪽 오른쪽",
     "url": "/posts/63.-%EC%99%BC%EC%AA%BD-%EC%98%A4%EB%A5%B8%EC%AA%BD/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -446,7 +2384,7 @@
     "title": "62. 순서 바꾸기",
     "url": "/posts/62.-%EC%88%9C%EC%84%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -463,7 +2401,7 @@
     "title": "60. 배열 조각하기(ing)",
     "url": "/posts/60.-%EB%B0%B0%EC%97%B4-%EC%A1%B0%EA%B0%81%ED%95%98%EA%B8%B0(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -480,7 +2418,7 @@
     "title": "59. 2의 영역 (ing)",
     "url": "/posts/59.-2%EC%9D%98-%EC%98%81%EC%97%AD-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -497,7 +2435,7 @@
     "title": "58. 배열 만들기 3",
     "url": "/posts/58.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-3/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -514,7 +2452,7 @@
     "title": "57. 첫 번째로 나오는 음수",
     "url": "/posts/57.-%EC%B2%AB-%EB%B2%88%EC%A7%B8%EB%A1%9C-%EB%82%98%EC%98%A4%EB%8A%94-%EC%9D%8C%EC%88%98/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -531,7 +2469,7 @@
     "title": "56. 리스트 자르기",
     "url": "/posts/56.-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%9E%90%EB%A5%B4%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -548,7 +2486,7 @@
     "title": "55. 가까운 1 찾기",
     "url": "/posts/55.-%EA%B0%80%EA%B9%8C%EC%9A%B4-1-%EC%B0%BE%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -562,10 +2500,27 @@
   },
   
   {
+    "title": "54. 카운트 다운",
+    "url": "/posts/54.-%EC%B9%B4%EC%9A%B4%ED%8A%B8-%EB%8B%A4%EC%9A%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-13 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ start:Int, _ end_num:Int) -&gt; [Int] {        var answer : [Int] = []          answer = (end_num ... start).map{$0}    return answer.sorted(by:&gt;)}이렇게 한 이유map을 사...",
+    "content": "import Foundationfunc solution(_ start:Int, _ end_num:Int) -&gt; [Int] {        var answer : [Int] = []          answer = (end_num ... start).map{$0}    return answer.sorted(by:&gt;)}이렇게 한 이유map을 사용하여 해결하려고 하였고 end~start까지의 범위로 내림차순 정렬로 리턴하여 해결하였다."
+  },
+  
+  {
     "title": "53. 글자 지우기 (ing)",
     "url": "/posts/53.-%EA%B8%80%EC%9E%90-%EC%A7%80%EC%9A%B0%EA%B8%B0-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -582,7 +2537,7 @@
     "title": "52. 배열 만들기1",
     "url": "/posts/52.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B01/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-13 05:13:00 +0900",
     
 
@@ -596,78 +2551,10 @@
   },
   
   {
-    "title": "1.",
-    "url": "/posts/78.-%EB%B0%B0%EC%97%B4%EC%97%90%EC%84%9C-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%8C%80%EC%86%8C%EB%AC%B8%EC%9E%90-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0/",
-    "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
-    "date": "2024-02-12 05:13:00 +0900",
-    
-
-
-
-
-
-    
-    "snippet": "",
-    "content": ""
-  },
-  
-  {
-    "title": "1.",
-    "url": "/posts/75.-%EC%9B%90%ED%95%98%EB%8A%94-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B0%BE%EA%B8%B0/",
-    "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
-    "date": "2024-02-12 05:13:00 +0900",
-    
-
-
-
-
-
-    
-    "snippet": "",
-    "content": ""
-  },
-  
-  {
-    "title": "1.",
-    "url": "/posts/71.-%EC%A1%B0%EA%B1%B4%EC%97%90-%EB%A7%9E%EA%B2%8C-%EC%88%98%EC%97%B4-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0-1/",
-    "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
-    "date": "2024-02-12 05:13:00 +0900",
-    
-
-
-
-
-
-    
-    "snippet": "",
-    "content": ""
-  },
-  
-  {
-    "title": "69. n보다 커질 때 까지 더하기",
-    "url": "/posts/69.-n%EB%B3%B4%EB%8B%A4-%EC%BB%A4%EC%A7%88-%EB%95%8C-%EA%B9%8C%EC%A7%80-%EB%8D%94%ED%95%98%EA%B8%B0/",
-    "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
-    "date": "2024-02-12 05:13:00 +0900",
-    
-
-
-
-
-
-    
-    "snippet": "import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    var i : Int = 0        while answer &lt;= n {        answer += numbers[i]        i += 1    }    r...",
-    "content": "import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {        var answer : Int = 0    var i : Int = 0        while answer &lt;= n {        answer += numbers[i]        i += 1    }    return answer}while문으로 처리하였다.reduce를 써보고 싶었는데 잘 안되어서 다른 코드를 보니 아직 공부할게 많다.다른코드import Foundationfunc solution(_ numbers:[Int], _ n:Int) -&gt; Int {    return numbers.reduce(0) { $0 &gt; n ? $0 : $0 + $1 }}//func solution(_ numbers: [Int], _ n: Int) -&gt; Int {    return numbers.reduce(0) { acc, i in n &gt;= acc ? acc + i : acc }}//"
-  },
-  
-  {
     "title": "61. n 번째 원소부터",
     "url": "/posts/61.-n-%EB%B2%88%EC%A7%B8-%EC%9B%90%EC%86%8C%EB%B6%80%ED%84%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -681,27 +2568,10 @@
   },
   
   {
-    "title": "1.",
-    "url": "/posts/54.-%EC%B9%B4%EC%9A%B4%ED%8A%B8-%EB%8B%A4%EC%9A%B4/",
-    "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
-    "date": "2024-02-12 05:13:00 +0900",
-    
-
-
-
-
-
-    
-    "snippet": "",
-    "content": ""
-  },
-  
-  {
     "title": "51. 문자 개수 세기 (ing)",
     "url": "/posts/51.-%EB%AC%B8%EC%9E%90-%EA%B0%9C%EC%88%98-%EC%84%B8%EA%B8%B0-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -718,7 +2588,7 @@
     "title": "50. qr code",
     "url": "/posts/50.-qr-code/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -735,7 +2605,7 @@
     "title": "49. 세로 읽기 (ing)",
     "url": "/posts/49.-%EC%84%B8%EB%A1%9C-%EC%9D%BD%EA%B8%B0-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -752,7 +2622,7 @@
     "title": "48. 문자열 뒤집기 (ing)",
     "url": "/posts/48.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%92%A4%EC%A7%91%EA%B8%B0-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -769,7 +2639,7 @@
     "title": "47. 접두사인지 확인하기",
     "url": "/posts/47.-%EC%A0%91%EB%91%90%EC%82%AC%EC%9D%B8%EC%A7%80-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -786,7 +2656,7 @@
     "title": "46. 문자열의 앞의 n글자",
     "url": "/posts/46.-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%98-%EC%95%9E%EC%9D%98-n%EA%B8%80%EC%9E%90/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -803,7 +2673,7 @@
     "title": "45. 접미사인지 확인하기",
     "url": "/posts/45.-%EC%A0%91%EB%AF%B8%EC%82%AC%EC%9D%B8%EC%A7%80-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -820,7 +2690,7 @@
     "title": "44. 접미사 배열",
     "url": "/posts/44.-%EC%A0%91%EB%AF%B8%EC%82%AC-%EB%B0%B0%EC%97%B4/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -837,7 +2707,7 @@
     "title": "43. 문자열 뒤의 n글자",
     "url": "/posts/43.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%92%A4%EC%9D%98-n%EA%B8%80%EC%9E%90/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -854,7 +2724,7 @@
     "title": "42. 부분 문자열 이어 붙여 문자열 만들기 (ing)",
     "url": "/posts/42.-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%9D%B4%EC%96%B4-%EB%B6%99%EC%97%AC-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -871,7 +2741,7 @@
     "title": "41. 배열 만들기 5(ing)",
     "url": "/posts/41.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-5(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-12 05:13:00 +0900",
     
 
@@ -885,10 +2755,27 @@
   },
   
   {
+    "title": "103. 가위 바위 보",
+    "url": "/posts/103.-%EA%B0%80%EC%9C%84-%EB%B0%94%EC%9C%84-%EB%B3%B4/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "import Foundationfunc solution(_ rsp:String) -&gt; String {    var answer : String = \"\"    var arr : [String] = []    arr = rsp.map{String($0)}    for i in arr.indices{        switch arr[i] {      ...",
+    "content": "import Foundationfunc solution(_ rsp:String) -&gt; String {    var answer : String = \"\"    var arr : [String] = []    arr = rsp.map{String($0)}    for i in arr.indices{        switch arr[i] {            case \"2\" : answer += \"0\"            case \"0\" : answer += \"5\"            case \"5\" : answer += \"2\"            default : answer = \"\"        }    }    return answer}삼항연산자 map 모두 생각했는데 시도를 안해봤다그냥 for문에 switch case로 해결을 했는데 다음엔 다르게 해봐야겠다.다른코드import Foundationfunc solution(_ rsp:String) -&gt; String {    return rsp.map{$0 == \"0\" ? \"5\" : $0 == \"2\" ? \"0\" : \"2\"}.joined()}"
+  },
+  
+  {
     "title": "40. 문자열 여러 번 뒤집기",
     "url": "/posts/40.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%97%AC%EB%9F%AC-%EB%B2%88-%EB%92%A4%EC%A7%91%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -905,7 +2792,7 @@
     "title": "39. 9로 나눈 나머지",
     "url": "/posts/39.-9%EB%A1%9C-%EB%82%98%EB%88%88-%EB%82%98%EB%A8%B8%EC%A7%80/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -922,7 +2809,7 @@
     "title": "38. 글자 이어 붙여 문자열 만들기",
     "url": "/posts/38.-%EA%B8%80%EC%9E%90-%EC%9D%B4%EC%96%B4-%EB%B6%99%EC%97%AC-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -939,7 +2826,7 @@
     "title": "37. 주사위 게임 3 (ing)",
     "url": "/posts/37.-%EC%A3%BC%EC%82%AC%EC%9C%84-%EA%B2%8C%EC%9E%84-3-(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -956,7 +2843,7 @@
     "title": "36. 간단한 논리 연산",
     "url": "/posts/36.-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%85%BC%EB%A6%AC-%EC%97%B0%EC%82%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -973,7 +2860,7 @@
     "title": "33. 카운트 업",
     "url": "/posts/33.-%EC%B9%B4%EC%9A%B4%ED%8A%B8-%EC%97%85/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -990,7 +2877,7 @@
     "title": "32. 배열 만들기 2(ing)",
     "url": "/posts/32.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-2(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1007,7 +2894,7 @@
     "title": "31. 수열과 구간 쿼리 4(ing)",
     "url": "/posts/31.-%EC%88%98%EC%97%B4%EA%B3%BC-%EA%B5%AC%EA%B0%84-%EC%BF%BC%EB%A6%AC-4(ing)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류중",
+    "tags": "코딩테스트, 보류중",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1024,7 +2911,7 @@
     "title": "30. 수열과 구간 쿼리 2 (fin)",
     "url": "/posts/30.-%EC%88%98%EC%97%B4%EA%B3%BC-%EA%B5%AC%EA%B0%84-%EC%BF%BC%EB%A6%AC-2-(fin)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류했던문제",
+    "tags": "코딩테스트, 보류했던문제",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1041,7 +2928,7 @@
     "title": "29. 수열과 구간 쿼리 3",
     "url": "/posts/29.-%EC%88%98%EC%97%B4%EA%B3%BC-%EA%B5%AC%EA%B0%84-%EC%BF%BC%EB%A6%AC-3/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1058,7 +2945,7 @@
     "title": "28. 수 조작하기 2",
     "url": "/posts/28.-%EC%88%98-%EC%A1%B0%EC%9E%91%ED%95%98%EA%B8%B0-2/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1075,7 +2962,7 @@
     "title": "27. 수 조작하기 1",
     "url": "/posts/27.-%EC%88%98-%EC%A1%B0%EC%9E%91%ED%95%98%EA%B8%B0-1/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1089,10 +2976,27 @@
   },
   
   {
+    "title": "26. 마지막 두 원소",
+    "url": "/posts/26.-%EB%A7%88%EC%A7%80%EB%A7%89-%EB%91%90-%EC%9B%90%EC%86%8C/",
+    "categories": "코딩테스트",
+    "tags": "코딩테스트",
+    "date": "2024-02-11 05:13:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "나의 코드import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {        var `count` : Int = 0    var answer : [Int] = []        answer = num_list        count = answer.count-1        if answer[c...",
+    "content": "나의 코드import Foundationfunc solution(_ num_list:[Int]) -&gt; [Int] {        var `count` : Int = 0    var answer : [Int] = []        answer = num_list        count = answer.count-1        if answer[count] &gt; answer[count-1] {                answer.append(answer[count] - answer[count-1])            } else {        answer.append(answer[count]*2)    }        return answer    }이렇게 생각한 이유.count메서드를 이용하여 배열의 길이를 알아내고 그것의 -1을 한값이 배열의 마지막 값이므로, count라는 변수를 만들었다.이때 `` 백틱을 사용하면 키워드 그대로 변수를 사용 할수있기에 이것을 써보려고 그대로 했다.그래서 마지막 값을 접근했고 변수 count-1이 마지막의 전 인덱스이므로 if문을 통해 값을 비교하였고 append를 사용하여 배열에 값을 추가하였다."
+  },
+  
+  {
     "title": "25. 이어 붙인 수",
     "url": "/posts/25.-%EC%9D%B4%EC%96%B4-%EB%B6%99%EC%9D%B8-%EC%88%98/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1109,7 +3013,7 @@
     "title": "24. 원소들의 곱과 합",
     "url": "/posts/24.-%EC%9B%90%EC%86%8C%EB%93%A4%EC%9D%98-%EA%B3%B1%EA%B3%BC-%ED%95%A9/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1126,7 +3030,7 @@
     "title": "23. 주사위 게임 2",
     "url": "/posts/23.-%EC%A3%BC%EC%82%AC%EC%9C%84-%EA%B2%8C%EC%9E%84-2/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1143,7 +3047,7 @@
     "title": "22. 등차수열의 특정한 항만 더하기",
     "url": "/posts/22.-%EB%93%B1%EC%B0%A8%EC%88%98%EC%97%B4%EC%9D%98-%ED%8A%B9%EC%A0%95%ED%95%9C-%ED%95%AD%EB%A7%8C-%EB%8D%94%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1153,14 +3057,14 @@
 
     
     "snippet": "나의 코드import Foundationfunc solution(_ a:Int, _ d:Int, _ included:[Bool]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        for i in 0 ... included.count-1 {                arr....",
-    "content": "나의 코드import Foundationfunc solution(_ a:Int, _ d:Int, _ included:[Bool]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        for i in 0 ... included.count-1 {                arr.append(a + i*d)            }        for i in 0 ... included.count-1 {        if included[i] == true {            answer += arr[i]        }    }    return answer}이렇게 생각한 이유.먼저 Int타입을 가지는 배열 arr을 생성하여, 해당 배열에 등차수열의 값을 집어넣었다.어차피 included의 길이 만큼 arr이 생성되기에, arr.count와 included.count가 같고그에 해당하는 index 또한 같기때문에 또다른 for문을 생성하여 included를 중심으로 true일때 터해서 해결을 하려고하였다."
+    "content": "나의 코드import Foundationfunc solution(_ a:Int, _ d:Int, _ included:[Bool]) -&gt; Int {        var arr : [Int] = []    var answer : Int = 0        for i in 0 ... included.count-1 {                arr.append(a + i*d)            }        for i in 0 ... included.count-1 {        if included[i] == true {            answer += arr[i]        }    }    return answer}이렇게 생각한 이유.먼저 Int타입을 가지는 배열 arr을 생성하여, 해당 배열에 등차수열의 값을 집어넣었다.어차피 included의 길이 만큼 arr이 생성되기에, arr.count와 included.count가 같고그에 해당하는 index 또한 같기때문에 또다른 for문을 생성하여 included를 중심으로 true일때 더해서 해결을 하려고하였다."
   },
   
   {
     "title": "21. 코드 처리하기 (fin)",
     "url": "/posts/21.-%EC%BD%94%EB%93%9C-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0-(fin)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류했던문제",
+    "tags": "코딩테스트, 보류했던문제",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1177,7 +3081,7 @@
     "title": "20. flag에 따라 다른 값 반환하기.",
     "url": "/posts/20.-flag%EC%97%90-%EB%94%B0%EB%9D%BC-%EB%8B%A4%EB%A5%B8-%EA%B0%92-%EB%B0%98%ED%99%98%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1194,7 +3098,7 @@
     "title": "19. 조건 문자열 (fin)",
     "url": "/posts/19.-%EC%A1%B0%EA%B1%B4-%EB%AC%B8%EC%9E%90%EC%97%B4-(fin)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류했던문제",
+    "tags": "코딩테스트, 보류했던문제",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1211,7 +3115,7 @@
     "title": "11. 문자열 섞기 (fin)",
     "url": "/posts/11.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%84%9E%EA%B8%B0-(fin)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0, 보류했던문제",
+    "tags": "코딩테스트, 보류했던문제",
     "date": "2024-02-11 05:13:00 +0900",
     
 
@@ -1228,7 +3132,7 @@
     "title": "1. 문자열 출력하기",
     "url": "/posts/18.-%ED%99%80%EC%A7%9D%EC%97%90-%EB%94%B0%EB%9D%BC-%EB%8B%A4%EB%A5%B8-%EA%B0%92-%EB%B0%98%ED%99%98%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-10 05:13:00 +0900",
     
 
@@ -1245,7 +3149,7 @@
     "title": "10. 문자열 겹쳐쓰기 (fin)",
     "url": "/posts/10.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EA%B2%B9%EC%B3%90%EC%93%B0%EA%B8%B0-(fin)/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트, 보류했던문제",
     "date": "2024-02-10 05:13:00 +0900",
     
 
@@ -1262,7 +3166,7 @@
     "title": "17. 공배수",
     "url": "/posts/17.-%EA%B3%B5%EB%B0%B0%EC%88%98/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-09 05:13:00 +0900",
     
 
@@ -1279,7 +3183,7 @@
     "title": "16. n의 배수",
     "url": "/posts/16.-n%EC%9D%98-%EB%B0%B0%EC%88%98/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-09 05:13:00 +0900",
     
 
@@ -1296,7 +3200,7 @@
     "title": "15. 두 수의 연산값 비교하기",
     "url": "/posts/15.-%EB%91%90-%EC%88%98%EC%9D%98-%EC%97%B0%EC%82%B0%EA%B0%92-%EB%B9%84%EA%B5%90%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-09 05:13:00 +0900",
     
 
@@ -1313,7 +3217,7 @@
     "title": "14. 더 크게 합치기",
     "url": "/posts/14.-%EB%8D%94-%ED%81%AC%EA%B2%8C-%ED%95%A9%EC%B9%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-09 05:13:00 +0900",
     
 
@@ -1330,7 +3234,7 @@
     "title": "13. 문자열 곱하기",
     "url": "/posts/13.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EA%B3%B1%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-09 05:13:00 +0900",
     
 
@@ -1347,7 +3251,7 @@
     "title": "12. 문자 리스트를 문자열로 반환하기",
     "url": "/posts/12.-%EB%AC%B8%EC%9E%90-%EB%A6%AC%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EB%AC%B8%EC%9E%90%EC%97%B4%EB%A1%9C-%EB%B0%98%ED%99%98%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-09 05:13:00 +0900",
     
 
@@ -1364,7 +3268,7 @@
     "title": "35. 배열 만들기 4",
     "url": "/posts/35.-%EB%B0%B0%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-4/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1381,7 +3285,7 @@
     "title": "34. 콜라츠 수열 만들기",
     "url": "/posts/34.-%EC%BD%9C%EB%9D%BC%EC%B8%A0-%EC%88%98%EC%97%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1395,27 +3299,10 @@
   },
   
   {
-    "title": "1. 문자열 출력하기",
-    "url": "/posts/26.-%EB%A7%88%EC%A7%80%EB%A7%89-%EB%91%90-%EC%9B%90%EC%86%8C/",
-    "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
-    "date": "2024-02-07 05:13:00 +0900",
-    
-
-
-
-
-
-    
-    "snippet": "나의 코드import Foundationlet s1 = readLine()!print(s1)이렇게 생각한 이유.입력을 readLine으로 받기에 그것을 가지고 있는 변수 s1을 출력하였다.그렇다면readLine() 이란?  표준 입력에서 현재 줄의 끝 또는 EOF (End Of File)에 도달할 때까지 읽은 문자열을 반환한다.",
-    "content": "나의 코드import Foundationlet s1 = readLine()!print(s1)이렇게 생각한 이유.입력을 readLine으로 받기에 그것을 가지고 있는 변수 s1을 출력하였다.그렇다면readLine() 이란?  표준 입력에서 현재 줄의 끝 또는 EOF (End Of File)에 도달할 때까지 읽은 문자열을 반환한다."
-  },
-  
-  {
     "title": "9. 홀짝 구분하기",
     "url": "/posts/9.-%ED%99%80%EC%A7%9D-%EA%B5%AC%EB%B6%84%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1432,7 +3319,7 @@
     "title": "8. 문자열 돌리기",
     "url": "/posts/8.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%8F%8C%EB%A6%AC%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1449,7 +3336,7 @@
     "title": "7. 문자열 붙여서 출력하기",
     "url": "/posts/7.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%B6%99%EC%97%AC%EC%84%9C-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1466,7 +3353,7 @@
     "title": "6. 덧셈식 출력하기",
     "url": "/posts/6.-%EB%8D%A7%EC%85%88%EC%8B%9D-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1483,7 +3370,7 @@
     "title": "5. 특수문자 출력하기",
     "url": "/posts/5.-%ED%8A%B9%EC%88%98%EB%AC%B8%EC%9E%90-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1500,7 +3387,7 @@
     "title": "4. 대소문자 바꿔서 출력하기",
     "url": "/posts/4.-%EB%8C%80%EC%86%8C%EB%AC%B8%EC%9E%90-%EB%B0%94%EA%BF%94%EC%84%9C-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1517,7 +3404,7 @@
     "title": "3. 문자열 반복해서 출력하기",
     "url": "/posts/3.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%B0%98%EB%B3%B5%ED%95%B4%EC%84%9C-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1532,9 +3419,9 @@
   
   {
     "title": "2. a와 b 출력하기",
-    "url": "/posts/2.-a%EC%99%80-b-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0-copy/",
+    "url": "/posts/2.-a%EC%99%80-b-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
@@ -1549,9 +3436,9 @@
   
   {
     "title": "1. 문자열 출력하기",
-    "url": "/posts/1.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0-copy/",
+    "url": "/posts/1.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/",
     "categories": "코딩테스트",
-    "tags": "코딩테스트, 난이도0",
+    "tags": "코딩테스트",
     "date": "2024-02-07 05:13:00 +0900",
     
 
