@@ -1,5 +1,5 @@
 ---
-title: [Deep Dive] Variables
+title: (Deep Dive) Variables
 writer: Harold
 date: 2024-01-22 10:13:00 +0800
 categories: [Deep Dive]
