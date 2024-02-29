@@ -578,6 +578,155 @@
 <div id="post-list" class="flex-grow-1 px-xl-1">
   
     <article class="card-wrapper card">
+      <a href="/posts/109.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EB%B0%94%EA%BF%94%EC%84%9C-%EC%B0%BE%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">109. 문자열 바꿔서 찾기</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                
+
+
+
+import Foundation
+
+func solution(_ myString:String, _ pat:String) -&amp;gt; Int {
+        
+    var string : String = &quot;&quot;
+    var answer : Int = 0
+    
+    string = myString.map{String($0)==&quot;A&quot; ? &quot;B&quot;...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708027980"
+  data-df="ll"
+  
+>
+  Feb 16, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      코딩테스트
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/108.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%9E%98%EB%9D%BC%EC%84%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">108. 문자열 잘라서 정렬하기.</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>
+                
+
+
+
+
+
+                
+
+
+
+import Foundation
+
+func solution(_ myString:String) -&amp;gt; [String] {
+    
+    var answer : [String] = []
+    
+    answer = myString.split(separator:&quot;x&quot;).map{String($0)}.sorted()
+
+    return ans...
+              </p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1708027980"
+  data-df="ll"
+  
+>
+  Feb 16, 2024
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      코딩테스트
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
       <a href="/posts/107.-x-%EC%82%AC%EC%9D%B4%EC%9D%98-%EA%B0%9C%EC%88%98/" class="post-preview row g-0 flex-md-row-reverse">
         
 
@@ -1188,168 +1337,6 @@ func solution(_ n:Int, _ k:Int) -&amp;gt; Int {
       </a>
     </article>
   
-    <article class="card-wrapper card">
-      <a href="/posts/101.-%EC%A0%90%EC%9D%98-%EC%9C%84%EC%B9%98-%EA%B5%AC%ED%95%98%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">101. 점의 위치 구하기</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-
-
-import Foundation
-
-func solution(_ dot:[Int]) -&amp;gt; Int {
-    
-    var answer : Int = 0
-    
-    var mul : Int = 0
-    mul = dot.reduce(1,*)
-    
-    answer = dot[0] &amp;gt; 0 ? (mul &amp;gt; 0 ? 1 ...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1707941580"
-  data-df="ll"
-  
->
-  Feb 15, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
-    <article class="card-wrapper card">
-      <a href="/posts/100.-%EA%B3%B5-%EB%8D%98%EC%A7%80%EA%B8%B0/" class="post-preview row g-0 flex-md-row-reverse">
-        
-
-        
-
-        <div class="col-md-12">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">100. 공 던지기</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                
-
-
-
-
-
-                
-
-
-
-
-import Foundation
-
-func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
-
-    var answer : Int = 0
-
-    answer = numbers[((k-1)*2)%numbers.count]
-
-    return answer
-}
-
-
-
-
-단순히 수학적으로 생각하여 풀었다.
-
-한칸...
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1707941580"
-  data-df="ll"
-  
->
-  Feb 15, 2024
-</time>
-
-
-                <!-- categories -->
-                
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    
-                      코딩테스트
-                  </span>
-                
-              </div>
-
-              
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  
 </div>
 <!-- #post-list -->
 
@@ -1770,6 +1757,13 @@ func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
         
         
         <li class="text-truncate lh-lg">
+          <a href="/posts/(Deep-Dive)-Array/">(Deep Dive) Array</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
           <a href="/posts/1.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/">1. 문자열 출력하기</a>
         </li>
       
@@ -1792,13 +1786,6 @@ func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
         
         <li class="text-truncate lh-lg">
           <a href="/posts/1%EC%9D%BC%EC%B0%A8(1)/">1일차 (1)</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/1%EC%9D%BC%EC%B0%A8(2)/">1일차 (2)</a>
         </li>
       
     </ul>
@@ -1887,11 +1874,6 @@ func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
     
     
     
-  
-    
-    
-    
-    
       
         
         
@@ -1990,11 +1972,6 @@ func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
     
     
     
-  
-    
-    
-    
-    
       
         
         
@@ -2098,20 +2075,10 @@ func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
     
     
     
-  
-    
-    
-    
-    
       
         
         
 
-  
-    
-    
-    
-    
   
     
     
@@ -2440,11 +2407,6 @@ func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
     
     
     
-  
-    
-    
-    
-    
       
         
         
@@ -2543,11 +2505,6 @@ func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
     
     
     
-  
-    
-    
-    
-    
       
         
         
@@ -2651,20 +2608,10 @@ func solution(_ numbers:[Int], _ k:Int) -&amp;gt; Int {
     
     
     
-  
-    
-    
-    
-    
       
         
         
 
-  
-    
-    
-    
-    
   
     
     

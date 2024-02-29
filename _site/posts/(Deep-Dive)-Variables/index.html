@@ -30,23 +30,24 @@
 
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <meta name="generator" content="Jekyll v4.3.3" />
-<meta property="og:title" content="Varaibles" />
+<meta property="og:title" content="(Deep Dive) Variables" />
 <meta property="og:locale" content="ko" />
-<meta name="description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing." />
-<meta property="og:description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing." />
-<link rel="canonical" href="http://localhost:4000/tags/varaibles/" />
-<meta property="og:url" content="http://localhost:4000/tags/varaibles/" />
+<meta name="description" content="생각해보니 Deep Dive는 내가 알고있던것들은 그냥 넘어갔는데, 이참에 그냥 내가 알고있는것들도 정리하는게 좋을 것 같아, Deep Dive로 하여 정리를 하고자 한다." />
+<meta property="og:description" content="생각해보니 Deep Dive는 내가 알고있던것들은 그냥 넘어갔는데, 이참에 그냥 내가 알고있는것들도 정리하는게 좋을 것 같아, Deep Dive로 하여 정리를 하고자 한다." />
+<link rel="canonical" href="http://localhost:4000/posts/(Deep-Dive)-Variables/" />
+<meta property="og:url" content="http://localhost:4000/posts/(Deep-Dive)-Variables/" />
 <meta property="og:site_name" content="Harold`s Daily Log" />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-02-29T11:13:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Varaibles" />
+<meta property="twitter:title" content="(Deep Dive) Variables" />
 <meta name="twitter:site" content="@twitter_username" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"A minimal, responsive and feature-rich Jekyll theme for technical writing.","headline":"Varaibles","url":"http://localhost:4000/tags/varaibles/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-02-29T11:13:00+09:00","datePublished":"2024-02-29T11:13:00+09:00","description":"생각해보니 Deep Dive는 내가 알고있던것들은 그냥 넘어갔는데, 이참에 그냥 내가 알고있는것들도 정리하는게 좋을 것 같아, Deep Dive로 하여 정리를 하고자 한다.","headline":"(Deep Dive) Variables","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/(Deep-Dive)-Variables/"},"url":"http://localhost:4000/posts/(Deep-Dive)-Variables/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>Varaibles | Harold`s Daily Log
+  <title>(Deep Dive) Variables | Harold`s Daily Log
   </title>
 
   <!--
@@ -103,9 +104,16 @@
   <link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css">
 
   
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.25.0/dist/tocbot.min.css">
   
 
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css">
+  
+
+  
+    <!-- Manific Popup -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css">
   
 
   <!-- JavaScript -->
@@ -452,14 +460,10 @@
           
         
           
-            <span>
-              <a href="/tags/">Tags</a>
-            </span>
-          
         
           
             
-              <span>Varaibles</span>
+              <span>(Deep Dive) Variables</span>
             
 
           
@@ -473,7 +477,7 @@
     </button>
 
     <div id="topbar-title">
-      Tag
+      Post
     </div>
 
     <button type="button" id="search-trigger" class="btn btn-link">
@@ -499,27 +503,81 @@
         <div class="row flex-grow-1">
           <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
             
-              
+              <!-- Refactor the HTML structure -->
+
+
+
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+
+<!-- Change the icon of checkbox -->
+
+
+
+<!-- Handle images -->
+
+
+
+
+
+<!-- Add header for code snippets -->
+
+
+
+<!-- Create heading anchors -->
+
+
+
+
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+
+
+
+<!-- return -->
+
 
 
 
 <article class="px-1">
-  
-    
+  <header>
+    <h1 data-toc-skip>(Deep Dive) Variables</h1>
 
-
-
-<div id="page-tag">
-  <h1 class="ps-lg-2">
-    <i class="fa fa-tag fa-fw text-muted"></i>
-    Varaibles
-    <span class="lead text-muted ps-2">1</span>
-  </h1>
-  <ul class="content ps-0">
-    
-      <li class="d-flex justify-content-between px-md-3">
-        <a href="/posts/Deep-Dive-Variables/">(Deep Dive) Variables</a>
-        <span class="dash flex-grow-1"></span>
+    <div class="post-meta text-muted">
+      <!-- published date -->
+      <span>
+        Posted
         <!--
   Date format snippet
   See: ${JS_ROOT}/utils/locale-dateime.js
@@ -530,22 +588,240 @@
 
 <time
   
-    class="text-muted small text-nowrap"
-  
-  data-ts="1705889580"
+  data-ts="1709172780"
   data-df="ll"
   
+    data-bs-toggle="tooltip" data-bs-placement="bottom"
+  
 >
-  Jan 22, 2024
+  Feb 29, 2024
 </time>
 
-      </li>
+      </span>
+
+      <!-- lastmod date -->
+      
+
+      
+
+      <div class="d-flex justify-content-between">
+        <!-- author(s) -->
+        <span>
+          
+
+          By
+
+          <em>
+            
+              <a href="https://github.com/haroldfromk">Dongik Song</a>
+            
+          </em>
+        </span>
+
+        <div>
+          <!-- pageviews -->
+          
+
+          <!-- read time -->
+          <!-- Calculate the post's reading time, and display the word count in tooltip -->
+
+
+
+<!-- words per minute -->
+
+
+
+
+
+
+
+
+
+
+<!-- return element -->
+<span
+  class="readtime"
+  data-bs-toggle="tooltip"
+  data-bs-placement="bottom"
+  title="435 words"
+>
+  <em>2 min</em> read</span>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <p>생각해보니 Deep Dive는 내가 알고있던것들은 그냥 넘어갔는데, 이참에 그냥 내가 알고있는것들도 정리하는게 좋을 것 같아, Deep Dive로 하여 정리를 하고자 한다.</p>
+
+<hr />
+<p>어떤 데이터가 있다</p>
+<div class="language-swift highlighter-rouge"><div class="code-header">
+        <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="mi">8907218937</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>이런 데이터에 우리는 이름을 붙일 수 있다.</p>
+
+<div class="language-swift highlighter-rouge"><div class="code-header">
+        <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="kt">Number</span> <span class="o">=</span> <span class="mi">8907218937</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>이런식으로 이름을 붙일 수 있다.</p>
+
+<p>하지만 이걸로는 부족하다 조금 더 작성을 해주어야한다.
+<strong>var</strong> 라는 키워드가 필요하다.</p>
+
+<p>우리가 변수를 생성하고 있다고 알려주는 것이다.</p>
+
+<p>그래서 다시 한번 적어보면,</p>
+<div class="language-swift highlighter-rouge"><div class="code-header">
+        <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">Number</span> <span class="o">=</span> <span class="mi">8907218937</span>
+</pre></td></tr></tbody></table></code></div></div>
+<p>이렇게 되겠다.</p>
+
+<p>그럼 코드를 한번 작성해보자.
+a와 b라는 변수가 있다. 각각 5,8이라는 값을 주고 이것을 프린트 해보자</p>
+
+<div class="language-swift highlighter-rouge"><div class="code-header">
+        <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">a</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">var</span> <span class="nv">b</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="s">"a"</span><span class="p">)</span> <span class="c1">// a</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">// 8</span>
+</pre></td></tr></tbody></table></code></div></div>
+<p>괄호 안에 “a” 이렇게 적어버리면 우리가 원하는 5가 아닌 a를 출력한다.
+그래서 어떤 변수를 출력할때는 괄호안에 그 변수명만 적어두도록 하자.</p>
+
+<p>Q : “ “ 안에는 변수를 넣지 못하는 걸까?
+A : 아니다, 가능하다.
+출력을 할때 \ ()를 사용하게 되면 변수를 담을 수 있다.</p>
+
+<div class="language-swift highlighter-rouge"><div class="code-header">
+        <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">a</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">var</span> <span class="nv">b</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="s">"The value of a is </span><span class="se">\(</span><span class="n">a</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="c1">// the value of a is 5</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"The value of a is </span><span class="se">\(</span><span class="n">b</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="c1">// the value of a is 8</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>아래 간단한 연습을 할 수있는 컴파일러가 있다. 한번 연습 해보도록 하자.</p>
+
+<iframe src="https://paiza.io/projects/e/WKfD-BGJ56qEc0hDGODPpw?theme=twilight" width="100%" height="500" scrolling="no" seamless="seamless"></iframe>
+
+  </div>
+
+  <div class="post-tail-wrapper text-muted">
+    <!-- categories -->
     
-  </ul>
+      <div class="post-meta mb-3">
+        <i class="far fa-folder-open fa-fw me-1"></i>
+        
+          <a href="/categories/deep-dive/">Deep Dive</a>
+      </div>
+    
+
+    <!-- tags -->
+    
+      <div class="post-tags">
+        <i class="fa fa-tags fa-fw me-1"></i>
+        
+          <a
+            href="/tags/deep-dive/"
+            class="post-tag no-text-decoration"
+          >Deep Dive</a>
+        
+      </div>
+    
+
+    <div
+      class="
+        post-tail-bottom
+        d-flex justify-content-between align-items-center mt-5 pb-2
+      "
+    >
+      <div class="license-wrapper">
+        
+          
+
+          This post is licensed under 
+        <a href="https://creativecommons.org/licenses/by/4.0/">
+          CC BY 4.0
+        </a>
+         by the author.
+        
+      </div>
+
+      <!-- Post sharing snippet -->
+
+<div class="share-wrapper d-flex align-items-center">
+  <span class="share-label text-muted">Share</span>
+  <span class="share-icons">
+    
+    
+    
+
+    
+
+      
+
+      <a href="https://twitter.com/intent/tweet?text=(Deep%20Dive)%20Variables%20-%20Harold%60s%20Daily%20Log&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2F%28Deep-Dive%29-Variables%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter">
+        <i class="fa-fw fa-brands fa-square-x-twitter"></i>
+      </a>
+    
+
+      
+
+      <a href="https://www.facebook.com/sharer/sharer.php?title=(Deep%20Dive)%20Variables%20-%20Harold%60s%20Daily%20Log&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2F%28Deep-Dive%29-Variables%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook">
+        <i class="fa-fw fab fa-facebook-square"></i>
+      </a>
+    
+
+      
+
+      <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2F%28Deep-Dive%29-Variables%2F&text=(Deep%20Dive)%20Variables%20-%20Harold%60s%20Daily%20Log" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram">
+        <i class="fa-fw fab fa-telegram"></i>
+      </a>
+    
+
+    <button
+      id="copy-link"
+      aria-label="Copy link"
+      class="btn small"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="Copy link"
+      data-title-succeed="Link copied successfully!"
+    >
+      <i class="fa-fw fas fa-link pe-none fs-6"></i>
+    </button>
+  </span>
 </div>
 
-  
+    </div>
+    <!-- .post-tail-bottom -->
+  </div>
+  <!-- div.post-tail-wrapper -->
 </article>
+
 
             
           </main>
@@ -576,6 +852,13 @@
         
         
         <li class="text-truncate lh-lg">
+          <a href="/posts/(Deep-Dive)-Array/">(Deep Dive) Array</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
           <a href="/posts/1.-%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/">1. 문자열 출력하기</a>
         </li>
       
@@ -598,13 +881,6 @@
         
         <li class="text-truncate lh-lg">
           <a href="/posts/1%EC%9D%BC%EC%B0%A8(1)/">1일차 (1)</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/1%EC%9D%BC%EC%B0%A8(2)/">1일차 (2)</a>
         </li>
       
     </ul>
@@ -693,11 +969,6 @@
     
     
     
-  
-    
-    
-    
-    
       
         
         
@@ -796,11 +1067,6 @@
     
     
     
-  
-    
-    
-    
-    
       
         
         
@@ -904,20 +1170,10 @@
     
     
     
-  
-    
-    
-    
-    
       
         
         
 
-  
-    
-    
-    
-    
   
     
     
@@ -1120,12 +1376,163 @@
             </div>
 
             
+              
+              
+
+
+
+
+            
           </aside>
         </div>
 
         <div class="row">
           <!-- tail -->
           <div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            
+              
+              <!-- Recommend the other 3 posts according to the tags and categories of the current post. -->
+
+<!-- The total size of related posts -->
+
+
+<!-- An random integer that bigger than 0 -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy} -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+  <aside id="related-posts" aria-labelledby="related-label">
+    <h3 class="mb-4" id="related-label">Further Reading</h3>
+    <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+      
+        <article class="col">
+          <a href="/posts/(Deep-Dive)-Array/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1709173140"
+  data-df="ll"
+  
+>
+  Feb 29, 2024
+</time>
+
+              <h4 class="pt-0 my-2">(Deep Dive) Array</h4>
+              <div class="text-muted">
+                <p>
+                  
+
+
+
+
+
+                  Array (배열)
+
+  아이템들의 컬렉션이라고 할 수 있다.
+  변수에서 배열이란 단일 데이터와 연관되어있다.
+
+
+
+  배열의 생성
+    
+      기본적으로 [ ] 대괄호를 사용한다.
+      대괄호 안에 데이터를 , 를 붙여 적어준다.
+        1
+[1, 2, 3, &quot;apple&quot;][X]
+        
+        뒤에 있는 또 다른...
+                </p>
+              </div>
+            </div>
+          </a>
+        </article>
+      
+    </nav>
+  </aside>
+  <!-- #related-posts -->
+
+
+            
+              
+              <!-- Navigation buttons at the bottom of the post. -->
+
+<nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation">
+  
+  
+
+  
+    <a
+      href="/posts/203.-%ED%81%AC%EA%B8%B0%EA%B0%80-%EC%9E%91%EC%9D%80-%EB%B6%80%EB%B6%84-%EB%AC%B8%EC%9E%90%EC%97%B4/"
+      class="btn btn-outline-primary"
+      aria-label="Older"
+    >
+      <p>203. 크기가 작은 부분 문자열</p>
+    </a>
+  
+
+  
+    <a
+      href="/posts/(Deep-Dive)-Array/"
+      class="btn btn-outline-primary"
+      aria-label="Newer"
+    >
+      <p>(Deep Dive) Array</p>
+    </a>
+  
+</nav>
+
+            
+              
+              <!--  The comments switcher -->
+
+
             
 
             <!-- The Footer -->
@@ -1246,11 +1653,6 @@
     
     
     
-  
-    
-    
-    
-    
       
         
         
@@ -1349,11 +1751,6 @@
     
     
     
-  
-    
-    
-    
-    
       
         
         
@@ -1457,20 +1854,10 @@
     
     
     
-  
-    
-    
-    
-    
       
         
         
 
-  
-    
-    
-    
-    
   
     
     
@@ -1727,6 +2114,13 @@
 
 
 
+  
+
+  
+    <!-- image lazy-loading & popup & clipboard -->
+    
+  
+
 
 
 
@@ -1790,20 +2184,45 @@
 
   
 
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/ko.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/ko.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js"></script>
 
 
 
 
 
 
-<script defer src="/assets/js/dist/misc.min.js"></script>
+<script defer src="/assets/js/dist/post.min.js"></script>
 
 
 
 <!-- Pageviews -->
+
+  
+
+  
 
 
 

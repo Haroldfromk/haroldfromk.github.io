@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>Harold`s Daily Log</title>
   <subtitle>A minimal, responsive and feature-rich Jekyll theme for technical writing.</subtitle>
-  <updated>2024-02-29T20:17:20+09:00</updated>
+  <updated>2024-02-29T22:56:13+09:00</updated>
   <author>
     <name>Dongik Song</name>
     <uri>http://localhost:4000/</uri>
@@ -17,6 +17,127 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>(Deep Dive) Array</title>
+    <link href="http://localhost:4000/posts/(Deep-Dive)-Array/" rel="alternate" type="text/html" title="(Deep Dive) Array" />
+    <published>2024-02-29T11:19:00+09:00</published>
+  
+    <updated>2024-02-29T20:56:41+09:00</updated>
+  
+    <id>http://localhost:4000/posts/(Deep-Dive)-Array/</id>
+    <content src="http://localhost:4000/posts/(Deep-Dive)-Array/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="Deep Dive" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Array (배열)
+
+  아이템들의 컬렉션이라고 할 수 있다.
+  변수에서 배열이란 단일 데이터와 연관되어있다.
+
+
+
+  배열의 생성
+    
+      기본적으로 [ ] 대괄호를 사용한다.
+      대괄호 안에 데이터를 , 를 붙여 적어준다.
+        [1, 2, 3, "apple"][X]
+        
+        뒤에 있는 또 다른 대괄호 안의 X는 배열에서 검색하고자 하는 항목의 위치 즉 Index를 가르킨다.
+      
+    
+  
+
+
+Q : 그렇다면 1은 첫번째니까 X 는 1부터 시작하는가?
+A : 안타깝지만 답은 X이다. 우리는 인덱스의 시작을 0으로 정의를 하므로 까먹지 말자.
+
+
+  또한 배열 앞에 변수를 선언 할 수 있다.
+```swift
+var fruits = [“ap...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>(Deep Dive) Variables</title>
+    <link href="http://localhost:4000/posts/(Deep-Dive)-Variables/" rel="alternate" type="text/html" title="(Deep Dive) Variables" />
+    <published>2024-02-29T11:13:00+09:00</published>
+  
+    <updated>2024-02-29T11:13:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/(Deep-Dive)-Variables/</id>
+    <content src="http://localhost:4000/posts/(Deep-Dive)-Variables/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="Deep Dive" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      생각해보니 Deep Dive는 내가 알고있던것들은 그냥 넘어갔는데, 이참에 그냥 내가 알고있는것들도 정리하는게 좋을 것 같아, Deep Dive로 하여 정리를 하고자 한다.
+
+
+어떤 데이터가 있다
+8907218937
+
+
+이런 데이터에 우리는 이름을 붙일 수 있다.
+
+Number = 8907218937
+
+
+이런식으로 이름을 붙일 수 있다.
+
+하지만 이걸로는 부족하다 조금 더 작성을 해주어야한다.
+var 라는 키워드가 필요하다.
+
+우리가 변수를 생성하고 있다고 알려주는 것이다.
+
+그래서 다시 한번 적어보면,
+var Number = 8907218937
+
+이렇게 되겠다.
+
+그럼 코드를 한번 작성해보자.
+a와 b라는 변수가 있다. 각각 5,8이라는 값을 주고 이것을 프린트 해보자
+
+var a = 5
+var b ...
+    </summary>
+  
+
+  </entry>
 
   
   <entry>
@@ -160,136 +281,6 @@ func solution(_ s:String) -&amp;gt; String {
             index -= 1
         }
     }...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>200. 3진법 뒤집기</title>
-    <link href="http://localhost:4000/posts/200.-3%EC%A7%84%EB%B2%95-%EB%92%A4%EC%A7%91%EA%B8%B0/" rel="alternate" type="text/html" title="200. 3진법 뒤집기" />
-    <published>2024-02-29T05:13:00+09:00</published>
-  
-    <updated>2024-02-29T05:13:00+09:00</updated>
-  
-    <id>http://localhost:4000/posts/200.-3%EC%A7%84%EB%B2%95-%EB%92%A4%EC%A7%91%EA%B8%B0/</id>
-    <content src="http://localhost:4000/posts/200.-3%EC%A7%84%EB%B2%95-%EB%92%A4%EC%A7%91%EA%B8%B0/" />
-    <author>
-      <name>Dongik Song</name>
-    </author>
-
-  
-    
-    <category term="코딩테스트" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-
-
-import Foundation
-
-func solution(_ n:Int) -&amp;gt; Int {
-    
-    var arr : [Int] = []
-    var N : Int = 0
-    var answer : Int = 0
-    N = n
-    
-    while N != 0 {
-        arr.append(N%3)
-        N = N/3
-    }
-    
-    arr = arr.reversed()
-    
-    for i in arr.indices{
-        answer += arr[i] * Int(pow(Double(3),Double(i)))
-    }
-    
-    print(answer)
-    
-    return answer
-}
-
-
-
-
-우선 3으로 나눈...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>199. 최대공약수와 최소공배수</title>
-    <link href="http://localhost:4000/posts/199.-%EC%B5%9C%EB%8C%80%EA%B3%B5%EC%95%BD%EC%88%98%EC%99%80-%EC%B5%9C%EC%86%8C%EA%B3%B5%EB%B0%B0%EC%88%98/" rel="alternate" type="text/html" title="199. 최대공약수와 최소공배수" />
-    <published>2024-02-29T05:13:00+09:00</published>
-  
-    <updated>2024-02-29T05:13:00+09:00</updated>
-  
-    <id>http://localhost:4000/posts/199.-%EC%B5%9C%EB%8C%80%EA%B3%B5%EC%95%BD%EC%88%98%EC%99%80-%EC%B5%9C%EC%86%8C%EA%B3%B5%EB%B0%B0%EC%88%98/</id>
-    <content src="http://localhost:4000/posts/199.-%EC%B5%9C%EB%8C%80%EA%B3%B5%EC%95%BD%EC%88%98%EC%99%80-%EC%B5%9C%EC%86%8C%EA%B3%B5%EB%B0%B0%EC%88%98/" />
-    <author>
-      <name>Dongik Song</name>
-    </author>
-
-  
-    
-    <category term="코딩테스트" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-
-
-func solution(_ n:Int, _ m:Int) -&amp;gt; [Int] {
-
-    var N = n
-    var M = m
-
-    var arr : [Int] = []
-    var gcd : Int = 0
-    var lcm : Int = 0
-
-    var temp : Int = 0
-
-
-    if N &amp;lt; M {
-        temp = N
-        N = M
-        M = temp
-    }
-
-    while M != 0 {
-        temp = N%M
-        N=M
-        M=temp
-    }
-
-    gcd = N
-
-    lcm = gcd == 1 ? n * m : (n/gcd) * (m/gcd) * gcd
-
-    arr.app...
     </summary>
   
 
