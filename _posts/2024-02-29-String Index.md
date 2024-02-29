@@ -21,6 +21,7 @@ var string : String = "abcdefg"
 print(string.startIndex) //Index(_rawBits: 15)
 ```
 ---
+
 ## String.distance(from:to:)
 - Int를 리턴한다
  - from : string.startIndex

@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>Harold`s Daily Log</title>
   <subtitle>A minimal, responsive and feature-rich Jekyll theme for technical writing.</subtitle>
-  <updated>2024-02-29T23:16:56+09:00</updated>
+  <updated>2024-02-29T23:24:43+09:00</updated>
   <author>
     <name>Dongik Song</name>
     <uri>http://localhost:4000/</uri>
@@ -24,7 +24,7 @@
     <link href="http://localhost:4000/posts/String-Index/" rel="alternate" type="text/html" title="String Index" />
     <published>2024-02-29T15:52:00+09:00</published>
   
-    <updated>2024-02-29T22:56:48+09:00</updated>
+    <updated>2024-02-29T23:18:37+09:00</updated>
   
     <id>http://localhost:4000/posts/String-Index/</id>
     <content src="http://localhost:4000/posts/String-Index/" />
@@ -52,24 +52,23 @@
 
 String.Index
 
-
-  String.Index
-    
-      Int를 리턴한다.
-      String.Index의 구조체 내용이 나온다.
-        var string : String = "abcdefg"
+  Int를 리턴한다.
+  String.Index의 구조체 내용이 나온다.
+    var string : String = "abcdefg"
 print(string.startIndex) //Index(_rawBits: 15)
-        
-        
-      
+    
     
   
-  String.distance(from:to:)
-    
-      Int를 리턴한다
-      from : string.startIndex
-      to : 변환할 String.Index
-  ...
+
+
+String.distance(from:to:)
+
+  Int를 리턴한다
+  from : string.startIndex
+  to : 변환할 String.Index
+
+
+let distance = string.distance(from: string.startIndex, to: 변환할 Strin...
     </summary>
   
 
@@ -133,7 +132,7 @@ var emptyStrings...
     <link href="http://localhost:4000/posts/(Deep-Dive)-Array/" rel="alternate" type="text/html" title="(Deep Dive) Array" />
     <published>2024-02-29T11:19:00+09:00</published>
   
-    <updated>2024-02-29T20:56:41+09:00</updated>
+    <updated>2024-02-29T23:18:37+09:00</updated>
   
     <id>http://localhost:4000/posts/(Deep-Dive)-Array/</id>
     <content src="http://localhost:4000/posts/(Deep-Dive)-Array/" />
@@ -192,7 +191,7 @@ var fruits = [“ap...
     <link href="http://localhost:4000/posts/(Deep-Dive)-Variables/" rel="alternate" type="text/html" title="(Deep Dive) Variables" />
     <published>2024-02-29T11:13:00+09:00</published>
   
-    <updated>2024-02-29T11:13:00+09:00</updated>
+    <updated>2024-02-29T23:18:37+09:00</updated>
   
     <id>http://localhost:4000/posts/(Deep-Dive)-Variables/</id>
     <content src="http://localhost:4000/posts/(Deep-Dive)-Variables/" />

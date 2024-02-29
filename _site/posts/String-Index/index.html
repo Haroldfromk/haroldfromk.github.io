@@ -43,7 +43,7 @@
 <meta property="twitter:title" content="String Index" />
 <meta name="twitter:site" content="@twitter_username" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-02-29T22:56:48+09:00","datePublished":"2024-02-29T15:52:00+09:00","description":"코딩테스트 문제를 풀다보면 String Index에 관한 문제가 많이 나와 정리한다.","headline":"String Index","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/String-Index/"},"url":"http://localhost:4000/posts/String-Index/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-02-29T23:18:37+09:00","datePublished":"2024-02-29T15:52:00+09:00","description":"코딩테스트 문제를 풀다보면 String Index에 관한 문제가 많이 나와 정리한다.","headline":"String Index","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/String-Index/"},"url":"http://localhost:4000/posts/String-Index/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -546,6 +546,137 @@
   
 
   
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
 
   
   
@@ -613,7 +744,7 @@
 
 <time
   
-  data-ts="1709215008"
+  data-ts="1709216317"
   data-df="ll"
   
     data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -666,7 +797,7 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="671 words"
+  title="670 words"
 >
   <em>3 min</em> read</span>
 
@@ -680,32 +811,27 @@
 
 <p>추가로 더 서술해야할게 있다면 지속적으로 수정을 할 예정</p>
 
-<p>String.Index</p>
-
-<ol>
-  <li>String.Index
-    <ul>
-      <li>Int를 리턴한다.</li>
-      <li>String.Index의 구조체 내용이 나온다.
-        <div class="language-swift highlighter-rouge"><div class="code-header">
+<h2 id="stringindex"><span class="me-2">String.Index</span><a href="#stringindex" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<ul>
+  <li>Int를 리턴한다.</li>
+  <li>String.Index의 구조체 내용이 나온다.
+    <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="k">var</span> <span class="nv">string</span> <span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"abcdefg"</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">startIndex</span><span class="p">)</span> <span class="c1">//Index(_rawBits: 15)</span>
-</pre></td></tr></tbody></table></code></div>        </div>
-        <hr />
-      </li>
-    </ul>
+</pre></td></tr></tbody></table></code></div>    </div>
+    <hr />
   </li>
-  <li>String.distance(from:to:)
-    <ul>
-      <li>Int를 리턴한다</li>
-      <li>from : string.startIndex</li>
-      <li>to : 변환할 String.Index</li>
-    </ul>
-  </li>
-</ol>
+</ul>
+
+<h2 id="stringdistancefromto"><span class="me-2">String.distance(from:to:)</span><a href="#stringdistancefromto" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<ul>
+  <li>Int를 리턴한다</li>
+  <li>from : string.startIndex</li>
+  <li>to : 변환할 String.Index</li>
+</ul>
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
@@ -713,16 +839,14 @@
 </pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">distance</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="nf">distance</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">string</span><span class="o">.</span><span class="n">startIndex</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="n">변환할</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="p">)</span>
 </pre></td></tr></tbody></table></code></div></div>
 <hr />
-<ol>
-  <li>StartIndex (첫글자 구하기)
-    <ul>
-      <li>문자열의 시작 인덱스를 알 수 있다.</li>
-    </ul>
-  </li>
-</ol>
-
+<h2 id="startindex-첫글자-구하기"><span class="me-2">StartIndex (첫글자 구하기)</span><a href="#startindex-첫글자-구하기" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <ul>
-  <li>startIndex를 String의 Subscript로 전달 하면 해당 인덱스의 문자를 알 수 있다.</li>
+  <li>
+    <p>문자열의 시작 인덱스를 알 수 있다.</p>
+  </li>
+  <li>
+    <p>startIndex를 String의 Subscript로 전달 하면 해당 인덱스의 문자를 알 수 있다.</p>
+  </li>
 </ul>
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
@@ -737,31 +861,25 @@
 <span class="nf">print</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="n">first</span><span class="p">])</span> <span class="c1">//a</span>
 </pre></td></tr></tbody></table></code></div></div>
 <hr />
-<ol>
-  <li>prefix(_:)
-    <ul>
-      <li>0~n번째까지의 Substring을 구할 수 있다.
-        <div class="language-swift highlighter-rouge"><div class="code-header">
+<h2 id="prefix_"><span class="me-2">prefix(_:)</span><a href="#prefix_" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<ul>
+  <li>0~n번째까지의 Substring을 구할 수 있다.
+    <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">first</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="nf">prefix</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">first</span><span class="p">)</span> <span class="c1">//ab</span>
-</pre></td></tr></tbody></table></code></div>        </div>
-      </li>
-    </ul>
+</pre></td></tr></tbody></table></code></div>    </div>
   </li>
-</ol>
+</ul>
 
 <hr />
 
-<ol>
-  <li>index(after:)
-    <ul>
-      <li>n번째 글자를 구할 수 있다.</li>
-    </ul>
-  </li>
-</ol>
+<h2 id="indexafter"><span class="me-2">index(after:)</span><a href="#indexafter" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<ul>
+  <li>n번째 글자를 구할 수 있다.</li>
+</ul>
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
@@ -779,9 +897,7 @@
 
 </pre></td></tr></tbody></table></code></div></div>
 <hr />
-<ol>
-  <li>String.Index(endcodedOffset:)</li>
-</ol>
+<h2 id="stringindexendcodedoffset"><span class="me-2">String.Index(endcodedOffset:)</span><a href="#stringindexendcodedoffset" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
 <ul>
   <li>
@@ -802,13 +918,10 @@
 </pre></td></tr></tbody></table></code></div></div>
 <hr />
 
-<ol>
-  <li>index(_:offsetBy:)
-    <ul>
-      <li>offsetBy에 정수 n을 입력하면 Index에서 n만큼 이동한 String.Index를 구할 수 있다.</li>
-    </ul>
-  </li>
-</ol>
+<h2 id="index_offsetby"><span class="me-2">index(_:offsetBy:)</span><a href="#index_offsetby" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<ul>
+  <li>offsetBy에 정수 n을 입력하면 Index에서 n만큼 이동한 String.Index를 구할 수 있다.</li>
+</ul>
 
 <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
@@ -838,9 +951,7 @@
 <span class="c1">//startIndex에서 -1을 하면 string의 범위를 벗어나기 때문.</span>
 </pre></td></tr></tbody></table></code></div></div>
 <hr />
-<ol>
-  <li>endIndex (문자열의 마지막 문자 구하기)</li>
-</ol>
+<h2 id="endindex-문자열의-마지막-문자-구하기"><span class="me-2">endIndex (문자열의 마지막 문자 구하기)</span><a href="#endindex-문자열의-마지막-문자-구하기" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
 <ul>
   <li>그냥 endIndex를 하면 런타임 에러가 발생함
@@ -857,9 +968,7 @@
 </pre></td><td class="rouge-code"><pre><span class="nf">print</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="n">string</span><span class="o">.</span><span class="nf">index</span><span class="p">(</span><span class="nv">before</span><span class="p">:</span> <span class="n">string</span><span class="o">.</span><span class="n">endIndex</span><span class="p">)])</span> <span class="c1">//g</span>
 </pre></td></tr></tbody></table></code></div></div>
 <hr />
-<ol>
-  <li>suffix(_:)</li>
-</ol>
+<h2 id="suffix_"><span class="me-2">suffix(_:)</span><a href="#suffix_" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
 <ul>
   <li>뒤에서 부터 n개의 Substring을 구할 수 있다.
@@ -869,9 +978,7 @@
 </pre></td><td class="rouge-code"><pre><span class="nf">print</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="nf">suffix</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="c1">//efg</span>
 </pre></td></tr></tbody></table></code></div>    </div>
     <hr />
-    <ol>
-      <li>firstIndex(of:)</li>
-    </ol>
+    <h2 id="firstindexof"><span class="me-2">firstIndex(of:)</span><a href="#firstindexof" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
   </li>
   <li>특정 문자의 인덱스를 구할 때 쓴다.
     <div class="language-swift highlighter-rouge"><div class="code-header">
@@ -899,12 +1006,11 @@
 </ul>
 
 <hr />
-<ol>
-  <li>lastIndex(of:)
-    <ul>
-      <li>마지막으로 나오는 String.Index를 반환.</li>
-      <li>일치하지 않는다면 nil을 반환
-        <div class="language-swift highlighter-rouge"><div class="code-header">
+<h2 id="lastindexof"><span class="me-2">lastIndex(of:)</span><a href="#lastindexof" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<ul>
+  <li>마지막으로 나오는 String.Index를 반환.</li>
+  <li>일치하지 않는다면 nil을 반환
+    <div class="language-swift highlighter-rouge"><div class="code-header">
         <span data-label-text="Swift"><i class="fas fa-code fa-fw small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -912,11 +1018,9 @@
 </pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">string</span> <span class="o">=</span> <span class="s">"aaaaa"</span>
 <span class="k">let</span> <span class="nv">distance</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="nf">distance</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">string</span><span class="o">.</span><span class="n">startIndex</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="n">string</span><span class="o">.</span><span class="nf">lastIndex</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="s">"a"</span><span class="p">)</span><span class="o">!</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span> <span class="c1">//4</span>
-</pre></td></tr></tbody></table></code></div>        </div>
-      </li>
-    </ul>
+</pre></td></tr></tbody></table></code></div>    </div>
   </li>
-</ol>
+</ul>
 
   </div>
 
@@ -1043,7 +1147,7 @@
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/String-Index/">String Index</a>
+          <a href="/posts/(Deep-Dive)-Variables/">(Deep Dive) Variables</a>
         </li>
       
         
@@ -1051,6 +1155,13 @@
         
         <li class="text-truncate lh-lg">
           <a href="/posts/(Deep-Dive)-Array/">(Deep Dive) Array</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/String-Index/">String Index</a>
         </li>
       
         
@@ -1065,13 +1176,6 @@
         
         <li class="text-truncate lh-lg">
           <a href="/posts/2.-a%EC%99%80-b-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/">2. a와 b 출력하기</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/22.-%EB%93%B1%EC%B0%A8%EC%88%98%EC%97%B4%EC%9D%98-%ED%8A%B9%EC%A0%95%ED%95%9C-%ED%95%AD%EB%A7%8C-%EB%8D%94%ED%95%98%EA%B8%B0/">22. 등차수열의 특정한 항만 더하기</a>
         </li>
       
     </ul>
@@ -1571,6 +1675,11 @@
               
 
 
+
+  <section id="toc-wrapper" class="ps-0 pe-4">
+    <h2 class="panel-heading ps-3 pt-2 mb-2">Contents</h2>
+    <nav id="toc"></nav>
+  </section>
 
 
             
@@ -4931,9 +5040,16 @@ func solution(_ myString:String, _ pat:String) -&amp;gt; Int {
 
   
 
+  
+    
+
+    
+
+  
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/ko.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/ko.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.25.0/dist/tocbot.min.js"></script>
 
 
 
