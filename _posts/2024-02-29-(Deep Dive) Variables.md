@@ -2,8 +2,8 @@
 title: (Deep Dive) Variables
 writer: Harold
 date: 2024-02-29 10:13:00 +0800
-categories: [Deep Dive]
-tags: [Udemy, Deep Dive]
+categories: [Udemy, Deep Dive]
+tags: [변수]
 
 toc: true
 toc_sticky: true

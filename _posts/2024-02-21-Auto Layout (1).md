@@ -2,20 +2,20 @@
 title: Auto Layout (1)
 writer: Harold
 date: 2024-02-21 04:13:00 +0800
-categories: [Udemy]
-tags: [Udemy, Auto Layout]
+categories: [Udemy, Auto Layout]
+tags: []
 
 toc: true
 toc_sticky: true
 ---
 Auto Layout 에서는 폰을 Rotate했을때 어플 화면이 변경되게 하는것을 공부할 예정이다.
 
-![](https://velog.velcdn.com/images/haroldfromk/post/1c5a526d-48d5-4c55-8fa2-32a61060ff85/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/1c5a526d-48d5-4c55-8fa2-32a61060ff85/image.png){: width="50%" height="50%"}
 
 현재는 이렇게 화면을 회전할 경우 지원이 되지않는 걸 볼 수 있다.
 
 이렇게 Launch Screen에서도 Rotate했을때 로고가 짤리는 걸 알 수 있다.
-![](https://velog.velcdn.com/images/haroldfromk/post/be0fbdbe-3e00-4452-8af6-bfbfc65ae3f5/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/be0fbdbe-3e00-4452-8af6-bfbfc65ae3f5/image.png){: width="50%" height="50%"}
 
 ---
 Q:그러면 직접 사이즈를 조절하면 되는걸까?
@@ -26,12 +26,12 @@ A:안된다. 아래 이미지를 보자.
 Constraints라는 제약조건을 통해 화면을 rotate해도 빈공간이 안생기게끔 해볼것이다.
 
 해당 부분을 클릭하면 다음과 같이 나온다.
-![](https://velog.velcdn.com/images/haroldfromk/post/a5536593-c1b6-4508-9177-f2d29dd6e74f/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/a5536593-c1b6-4508-9177-f2d29dd6e74f/image.png){: width="50%" height="50%"}
 
 지금 위의 이미지는 전부 0이아니다. 그렇다는건
 background가 폰에 정확하게 맞춰져있지 않다는것이다.
 
-![](https://velog.velcdn.com/images/haroldfromk/post/6544936b-565c-4e94-b5a4-bdf2c38991e9/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/6544936b-565c-4e94-b5a4-bdf2c38991e9/image.png){: width="50%" height="50%"}
 
 우측과 아래쪽이 딱 맞지않고 여유분이 있는걸 알 수있다.
 
@@ -39,24 +39,24 @@ background가 폰에 정확하게 맞춰져있지 않다는것이다.
 ![](https://velog.velcdn.com/images/haroldfromk/post/99d47632-ddc1-4590-aea8-25f89980fea0/image.png)
 
 제약 조건을 추가 해보자.
-![](https://velog.velcdn.com/images/haroldfromk/post/1422a1fd-5af2-45f2-9258-cc5011379dc9/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/1422a1fd-5af2-45f2-9258-cc5011379dc9/image.png){: width="50%" height="50%"}
 아래 박스가 제약조건을 추가하기전 (반투명 점선)
 위쪽 박스가 제약조건을 추가한뒤의 모습이다(실선)
 
 ![](https://velog.velcdn.com/images/haroldfromk/post/89bf0b21-1178-49e4-9876-4047ec292f86/image.gif)
 
 제약조건이 추가된걸 볼 수 있다.
-![](https://velog.velcdn.com/images/haroldfromk/post/9a8384e4-ebdf-465e-9745-790419527e3d/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/9a8384e4-ebdf-465e-9745-790419527e3d/image.png){: width="50%" height="50%"}
 
 하지만 아직 회전을 하면 좌우로 공백이 있는걸 볼 수 있다.
-![](https://velog.velcdn.com/images/haroldfromk/post/5fccc34c-25e3-4fa5-922f-cd235720100c/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/5fccc34c-25e3-4fa5-922f-cd235720100c/image.png){: width="50%" height="50%"}
 
 그리고 그라데이션 또한 그대로이다.
 즉 rotate할 때 이미지가 틀어지는게 아니라 그냥 좌우보정만 해주는걸 알 수 있다.
 
 Safe Area.trailing / leading은 참고 이미지를 찾아보면 이해하기 쉽다.
 보통은 배터리정보 or signal정보 같은걸 담기위한 공간이다.
-![](https://velog.velcdn.com/images/haroldfromk/post/c69f1cd1-2c02-44a5-b5e9-3e6b32e4a401/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/c69f1cd1-2c02-44a5-b5e9-3e6b32e4a401/image.png){: width="50%" height="50%"}
 
 ---
 하지만 배경은 저렇게 빈공간을 남기지 않고 화면 전체를 덮어줘야 하기때문에 superview가 되어야 한다.

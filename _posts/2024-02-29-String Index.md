@@ -2,7 +2,7 @@
 title: String Index
 writer: Harold
 date: 2024-02-29 10:52:00 +0800
-categories: [코딩테스트]
+categories: [Deep Dive]
 tags: [코딩테스트]
 
 toc: true

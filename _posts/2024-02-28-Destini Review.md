@@ -2,14 +2,14 @@
 title: Destini
 writer: Harold
 date: 2024-02-28 04:13:00 +0800
-categories: [Udemy]
-tags: [Udemy, Quizzler]
+categories: [Udemy, Quizzler]
+tags: []
 
 toc: true
 toc_sticky: true
 ---
 Quizzler를 했던것을 기반으로 스스로 만들어보자.
-![](https://velog.velcdn.com/images/haroldfromk/post/62dafe74-1c02-4364-9f99-22190d5f4aa4/image.gif)
+![](https://velog.velcdn.com/images/haroldfromk/post/62dafe74-1c02-4364-9f99-22190d5f4aa4/image.gif){: width="50%" height="50%"}
 
 완성 화면은 위와 같다.
 
@@ -123,12 +123,12 @@ func getChoice2 () -> String {
 ```
 
 그리고 실행해 보았다. 중간점검!
-![](https://velog.velcdn.com/images/haroldfromk/post/77ba8968-3db6-4dfe-b884-5680abab0324/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/77ba8968-3db6-4dfe-b884-5680abab0324/image.png){: width="50%" height="50%"}
 
 내가 의도한대로 현재까진 잘 되었다.
 
 빈 깡통이라 초기화면에대한 구성만 되었고 되진 않는다.
-![](https://velog.velcdn.com/images/haroldfromk/post/39a6c6ef-2952-428c-8432-96941b02bf21/image.gif)
+![](https://velog.velcdn.com/images/haroldfromk/post/39a6c6ef-2952-428c-8432-96941b02bf21/image.gif){: width="50%" height="50%"}
 
 ---
 4. 깡통 구성이 되었으니 이젠 버튼에 대한 코드를 작성해보도록 하자.
@@ -191,9 +191,9 @@ mutating func selectDestination (_ choice : String) {
 그랬더니 작동했다.
 
 뭔가 썩 맘에 들진 않지만 작동은한다
-![](https://velog.velcdn.com/images/haroldfromk/post/718f2f8c-3907-498d-8a23-dd1912208f04/image.gif)
+![](https://velog.velcdn.com/images/haroldfromk/post/718f2f8c-3907-498d-8a23-dd1912208f04/image.gif){: width="50%" height="50%"}
 하지만 변수로 선언한게 돌아가진 않는다. 강의해서 노란색뜨는건 무시하라고 한거같은데 이건가..
-![](https://velog.velcdn.com/images/haroldfromk/post/f320513a-d49e-475e-af48-6687bfe2e0af/image.png)
+![](https://velog.velcdn.com/images/haroldfromk/post/f320513a-d49e-475e-af48-6687bfe2e0af/image.png){: width="50%" height="50%"}
 
 코드는 깃에 그냥 저장해야겠다.
 
