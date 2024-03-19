@@ -82,3 +82,46 @@ class ViewController: UIViewController {
     
 }
 ```
+
+>updated(19.Mar)
+
+못들었던 강의를 들으며 해당 부분에대한 설명을 듣는데.
+
+viewDidLoad의 생명주기를 활용을 해주었다고 한다.
+
+```swift
+import UIKit
+
+class ViewController: UIViewController {
+
+    @IBOutlet weak var textLabel: UILabel!
+    private var count: Int = 0
+
+    // 감소 버튼이 클릭된 경우
+    @IBAction func tappedDecreaseButton(_ sender: UIButton) {
+        self.count -= 1 // count를 -1 합니다.
+        self.refreshTextLabel() // textLabel을 새로고침 합니다.
+    }
+    
+    // 증가 버튼이 클릭된 경우
+    @IBAction func tappedIncreaseButton(_ sender: UIButton) {
+        self.count += 1 // count를 +1 합니다.
+        self.refreshTextLabel() // textLabel을 새로고침 합니다.
+    }
+    
+    // count값을 self.textLabel의 text에 반영합니다.
+    private func refreshTextLabel() {
+        self.textLabel.text = String(self.count)
+    }
+    
+    // viewDidLoad 생명주기 활용
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.refreshTextLabel()
+    }
+}
+```
+
+이부분은 미처 생각하지 못했던 부분이다.
+
+생명주기에 대해서 주말에 한번 글을 적어봐야 할 것 같다.
