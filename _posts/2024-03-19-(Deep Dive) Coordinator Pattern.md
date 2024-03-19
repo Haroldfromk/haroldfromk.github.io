@@ -38,7 +38,7 @@ Khanlou라는 분이 제안을 한 글이다. 시간이 되면 읽어보자.
 
 ![](https://i.esdrop.com/d/f/E8Nib9NqGY/DN3oBd2Wqd.png)
 
-- with children (default)
+- with children
 
 ![](https://i.esdrop.com/d/f/E8Nib9NqGY/UmcCFLrudt.png)
 
