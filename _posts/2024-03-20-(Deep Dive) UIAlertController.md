@@ -67,7 +67,6 @@ self.present(alert, animated: true, completion: nil)
 
 ### 2. 2nd Line
 
-1. 
 ```swift
 alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
         NSLog("The \"OK\" alert occured.")
@@ -87,8 +86,8 @@ alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default a
         - ![](https://i.esdrop.com/d/f/NrA2xlqacz/1jgHBc07mw.png){: width="50%" height="50%"}
 - handler : 해당 내용을 눌렀을때 특정한 기능을 수행하게 하는 것
 
-2. 
-alert.addAction도 있지만, 별도로 액션을 개체화 해서 사용하는 것도 가능하다.
+⭐️ alert.addAction도 있지만, 별도로 액션을 개체화 해서 사용하는 것도 가능하다.
+
 ```swift
 let action = UIAlertAction(title, style:) { (action) in }
 alert.addAction(action)
