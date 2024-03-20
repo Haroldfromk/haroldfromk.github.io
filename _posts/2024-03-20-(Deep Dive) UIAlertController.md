@@ -169,10 +169,32 @@ extension ViewController : UITableViewDataSource {
 
 잘된다.
 
-## 5. 출처
+## 6. ETC
+
+textField를 조금 더 보완하고 싶다면?
+
+```swift
+// before
+alert.addTextField()
+
+// after
+alert.addTextField { (textField: UITextField!) in 
+            textField.placeholder = "여기에 입력해주세요"
+            textField.autocorrectionType = .no
+            textField.spellCheckingType = .no
+        }
+```
+
+![](https://i.esdrop.com/d/f/NrA2xlqacz/JbU6MTeV2E.png){: width="50%" height="50%"}
+
+Done!
+
+## 7. 참고사이트
 
 <https://developer.apple.com/documentation/uikit/uialertcontroller>
 
 <https://nshipster.com/uialertcontroller/>
 
 <https://zeddios.tistory.com/249>
+
+<https://stackoverflow.com/questions/15760699/change-the-keyboard-type-of-uitextfield-in-uialertview>
