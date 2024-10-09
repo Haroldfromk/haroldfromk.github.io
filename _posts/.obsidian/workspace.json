@@ -1,0 +1,159 @@
+{
+  "main": {
+    "id": "5b9a44e92a1cee78",
+    "type": "split",
+    "children": [
+      {
+        "id": "0bf8763b294e99f9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bbcff68be261c3ef",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "DeepDive/2024-05-02-(Deep Dive) Combine 기초(2).md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "b9bec187602bc720",
+    "type": "split",
+    "children": [
+      {
+        "id": "d2c66c0a5b0bcb85",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e77f7ba2b9b7b658",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "067c3326288e6933",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "1b1b94c6170c621b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b3af690d08e76fdc",
+    "type": "split",
+    "children": [
+      {
+        "id": "8af171ba81392360",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "02201e685b18bcdd",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "DeepDive/2024-05-02-(Deep Dive) Combine 기초(2).md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "939a9b6ab58c971e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "DeepDive/2024-05-02-(Deep Dive) Combine 기초(2).md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "fb5b5570ee9174cb",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "63b3473e2504b38d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "DeepDive/2024-05-02-(Deep Dive) Combine 기초(2).md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "bbcff68be261c3ef",
+  "lastOpenFiles": [
+    "DeepDive/2024-05-02-(Deep Dive) Diffable DataSource 임시.md",
+    "Udemy/2024-01-25-I Am Rich (1).md",
+    "Tip/2024-03-01-Git 간단한 정리.md",
+    "Tip/2024-03-01-Markdown 정리 및 글 작성법.md",
+    "readme/readme.md",
+    "캠프/2024-06-17-Final (18).md",
+    "캠프/2024-06-18-Final (19).md"
+  ]
+}

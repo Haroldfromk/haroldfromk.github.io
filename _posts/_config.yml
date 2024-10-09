@@ -1,0 +1,22 @@
+title: IT-блог
+description: > # this means to ignore newlines until "baseurl:"
+  Blog with theme Future Imperfect<br>
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "haorldfromk.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+
+author:
+  name: 'Dongik'
+  last_name: 'Song'
+  cv: 'github.com/haroldfromk'
+  avatar: '/images/avatar.jpeg'
+  github_username:  haroldfromk  
+  email: dongik369@naver.com
+  logo: '/images/logo.svg'
+
+# Build settings
+markdown: kramdown
+
+permalink: /:categories/:year/:title.html
+
+

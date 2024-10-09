@@ -1,0 +1,80 @@
+
+# 📝 ToDoList App 📋 
+
+
+[![license](https://img.shields.io/badge/License-AGPL-red)](https://github.com/NDjust/Generate-HeadLine/blob/master/LICENSE)
+[![code](https://img.shields.io/badge/Code-Swift-F05138)](https://developer.apple.com/swift/resources/)
+[![DBMS](https://img.shields.io/badge/DBMS-Firebase-FFCA28)](https://firebase.google.com/brand-guidelines?hl=ko)
+
+> 나만의 ToDoListApp!
+
+
+## 📖 Description
+
+나만의 ToDoListApp 입니다.
+
+등록은 간단하게, 확인도 간단하게
+
+이미지 업로드를 통하여 디테일까지 :)
+
+## :baby_chick: Demo
+<p float="left">
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/2eP7tx7w73.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/KytK8jbKEO.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/HAa59F4ADK.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/NuioasuSG6.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/7TMCJVoqhv.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/RgChE9BRHZ.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/obfQIQGpiG.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/k4z4jKkmVb.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/zY89W2f1Nr.png" width=200 />
+    <img src="https://i.esdrop.com/d/f/NrA2xlqacz/hIqkkEenVL.gif" height=434, width=200>
+
+</p>
+
+## ⭐ Main Feature
+### 할일 등록
+- 간단하게 입력할 수 있는 기능
+
+### 취소선 등록 및 즐겨찾기 기능
+- 간단하게 스와이프를 통해 적용
+
+### 상세페이지 기능
+- 날짜와 이미지 업로드기능
+
+### D-day가 오늘일때 경고해주는 기능
+- 상세페이지를 들어갔을때 오늘해야하는 일이라면 오늘까지라고 강조
+
+### 달력 기능
+- 달력을 통해 그날그날의 할일을 간단하게 볼 수 있는 기능
+
+
+## 🔧 Stack
+- **Language**: Swift
+- **Database** : Firebase
+
+## :open_file_folder: Project Structure
+
+```markdown
+ToDoList
+├── Model
+│   ├── DBModel
+│   ├── ToDoModel
+│   ├── DBManager
+│   ├── AlertManager
+│   └── ImageManager
+│
+├── View
+│   ├── ToDoListCell
+│   └── MainStoryboard
+│
+├── controller
+│   ├── MainViewController
+│   ├── TableViewController
+│   ├── CellDetailViewController
+│   └── SideBarViewController
+└ 
+```
+
+## 👨‍👩‍👧‍👦 Developer
+*  **송동익** ([haroldfromk](https://github.com/Haroldfromk/))
