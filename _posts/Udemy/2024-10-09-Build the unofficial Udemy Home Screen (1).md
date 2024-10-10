@@ -2,6 +2,7 @@
 title: Build the unofficial Udemy Home Screen (1)
 writer: Harold
 date: 2024-10-09 12:13
+modified: 2024-10-10 12:13
 categories: [Udemy]
 tags: []
 
@@ -110,6 +111,8 @@ import Foundation
 
 struct HomeUIModel: Hashable {
     
+    let sectionModels: [SectionModel] // added     
+
     struct SectionModel: Hashable {
         let section: Section
         let body: [Item]
@@ -139,6 +142,8 @@ struct HomeUIModel: Hashable {
 ![CleanShot 2024-10-10 at 03 01 16](https://github.com/user-attachments/assets/f6a9dc34-e7a6-4ae2-b3e8-aeecc5720b7e){: width="50%" height="50%"} 
 
 강의에 있는 이부분에 대한 모델링을 미리 해두는 것이다.
+
+`let sectionModels: [SectionModel]` 이부분이 빠져서 새로 추가 해준다 - 24.10.10 modified
 
 ## MainBannerView 추가
 
@@ -191,7 +196,7 @@ struct MainBannerView: View {
 
 ![CleanShot 2024-10-10 at 03 38 30](https://github.com/user-attachments/assets/32c7c39c-5c35-45ea-a6aa-07e918df30ff){: width="50%" height="50%"} 
 
-이렇게 나온다.
+Preview를 하게 되면 이렇게 나온다.
 
 여기서 새로운건 AsyncImage이다.
 
@@ -199,7 +204,7 @@ struct MainBannerView: View {
 
 간단하게 정의하면 url주소를 통해 이미지를 가져온다고 생각하면 된다.
 
-그리고 거기에있는 새로운것은 바로 `.clipped`
+그리고 거기에있는 새로운 Modifier는 바로 `.clipped`
 
 이녀석은 이미지나 뷰의 일부가 부모 뷰의 경계를 벗어날 때, 그 초과 부분을 잘라내는 역할을 한다.
 
@@ -208,4 +213,3 @@ struct MainBannerView: View {
 이렇게 하면 이미지가 frame의 경계를 벗어나지 않고 깔끔하게 표시된다.
 - clipped()가 없는 경우: 이미지가 지정된 frame을 넘어갈 경우, 초과된 부분이 화면에 그대로 표시될 수 있다.
 - clipped() 사용 시: 이미지가 frame 밖으로 나가는 부분이 잘려서 보이지 않게 된다.
-
