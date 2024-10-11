@@ -1,7 +1,7 @@
 ---
 title: Build the unofficial Udemy Home Screen (2)
 writer: Harold
-date: 2024-10-09 12:13
+date: 2024-10-10 12:13
 categories: [Udemy]
 tags: []
 
@@ -87,6 +87,7 @@ func setupUIModel(uiModel: HomeUIModel) {
 ---
 
 이렇게 객체 생성을 하고난 뒤에는 Datasource를 관리하는 함수를 만든다.
+CellforRowAt과 유사하다고 생각하면 될듯.
 
 ```swift
 private func setupDataSource() {
