@@ -20,6 +20,7 @@ let uiModel = HomeUIModel(sectionModels: [
 
 이렇게 ViewDidLoad에 값을 넣어 주었는데, 이젠 JSON에 값이 있기에 JSON을 사용하여 바로 로드를 해보기로 한다.
 
+ViewDidLoad에 있던 uiModel에 관한 내용은 모두 날리자.
 
 ## Helper 설정
 
@@ -196,7 +197,7 @@ private func loadJSON() {
         
         if let response = apiResponse {
             let uiModel = HomeUIModelHelper.makeUIModel(response: response)
-            collectionView.setupDataSource(uiModel: uiModel)
+            collectionView.setDataSource(uiModel: uiModel)
         }
             
     }
