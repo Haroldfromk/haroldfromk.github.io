@@ -109,7 +109,7 @@ var image: Image {
 1. lowercased(): 문자열을 소문자로 치환
 2. eplacingOccurrences(of: " ", with: ""): of의 값을 with의 값으로 치환.
 
-### 2. Sameple Data 추가하기
+### 2. Sample Data 추가하기
 
 ```swift
     static var previewPlaces: [Place] {
