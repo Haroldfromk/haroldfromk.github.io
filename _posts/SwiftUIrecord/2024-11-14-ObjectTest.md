@@ -2729,6 +2729,155 @@ SwiftData와 CoreData는 모두 Apple의 데이터 영속성 프레임워크로,
 
 ---
 
+## 14. 마지막 개선
+
+(11.17 추가)
+
+ApiStateSubview / ApiDataSubview가 
+
+`ObservedObject` / `StateObject` 말고는 코드가 같기에 하나로 통일한다.
+
+```swift
+struct TestView: View {
+    @ObservedObject var cartViewModel = CartViewModel()
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 5) {
+                // ObservedObject 섹션
+                VStack {
+                    ApiToggleSubview(useStateObject: false, cartViewModel: cartViewModel)
+                        .frame(height: 180)
+                }
+                .padding()
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(10)
+
+                // StateObject 섹션
+                VStack {
+                    ApiToggleSubview(useStateObject: true, cartViewModel: cartViewModel)
+                        .frame(height: 180)
+                }
+                .padding()
+                .background(Color.red.opacity(0.1))
+                .cornerRadius(10)
+
+                // 장바구니 내용 섹션
+                VStack {
+                    Text("장바구니 내용")
+                        .font(.headline)
+
+                    List(cartViewModel.cart, id: \.self) { item in
+                        Text(item.title ?? "No Title")
+                    }
+                    .frame(height: 150)
+
+                    Button("장바구니 초기화") {
+                        cartViewModel.deleteAllData()
+                    }
+                    .padding(.vertical, 5)
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding()
+                .background(Color.green.opacity(0.1))
+                .cornerRadius(10)
+            }
+            .padding()
+        }
+        .navigationBarHidden(true)
+    }
+}
+
+
+struct ApiToggleSubview: View {
+    let useStateObject: Bool
+    @ObservedObject var cartViewModel: CartViewModel
+
+    @StateObject private var stateViewModel: TestWishViewModel
+    @ObservedObject private var observedViewModel: TestWishViewModel
+
+    init(useStateObject: Bool, cartViewModel: CartViewModel) {
+        self.useStateObject = useStateObject
+        self.cartViewModel = cartViewModel
+
+        // 초기화 시점에서 선택적으로 인스턴스를 생성
+        if useStateObject {
+            _stateViewModel = StateObject(wrappedValue: TestWishViewModel())
+            _observedViewModel = ObservedObject(wrappedValue: TestWishViewModel()) // 더미 인스턴스
+        } else {
+            _stateViewModel = StateObject(wrappedValue: TestWishViewModel()) // 더미 인스턴스
+            _observedViewModel = ObservedObject(wrappedValue: TestWishViewModel())
+        }
+    }
+
+    var body: some View {
+        VStack {
+            Text(useStateObject ? "StateObject - API 조회" : "ObservedObject - API 조회")
+                .font(.headline)
+
+            let viewModel = useStateObject ? stateViewModel : observedViewModel
+
+            if let item = viewModel.wishList.first {
+                HStack {
+                    Text(item.title)
+                    Spacer()
+                    Button("담기") {
+                        cartViewModel.addCart(model: item)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding()
+                .background(Color.white.opacity(0.9))
+                .cornerRadius(10)
+            }
+
+            Button("API 조회") {
+                Task {
+                    await viewModel.fetchWishList()
+                }
+            }
+            .padding()
+        }
+    }
+}
+```
+
+이렇게 true / false로 넘겨서 가능하게 했다.
+
+이때 특이점은 init에서 `_`이게 변수앞에 붙는것.
+
+해당 내용은 Docs에 설명이 있다.
+
+[StateObject](https://developer.apple.com/documentation/swiftui/stateobject){:target="_blank"} [ObservedObject](https://developer.apple.com/documentation/swiftui/observedobject){:target="_blank"}를 참고하자.
+
+### 14-1. 왜 언더스코어(`_`)가 필요한가?
+
+Swift에서 `@StateObject`, `@ObservedObject`와 같은 **Property Wrapper**를 사용할 때, **내부 프로퍼티**인 **래퍼 객체**에 접근할 때는 언더스코어(`_`)를 사용해야 함.
+
+#### 14-1-1. Property Wrapper의 구조
+
+Property Wrapper는 다음과 같은 두 가지 요소로 구성됨:
+
+- **래핑된 값 (wrapped value)**: 실제 값
+- **래퍼 객체 (wrapper object)**: Property Wrapper 자체
+
+### 14-2. 초기화 시 언더스코어 사용
+
+- 언더스코어(`_`)를 사용하는 이유는 **래퍼 객체**에 직접 접근해 초기화하기 위함임.
+- Property Wrapper는 일반 변수처럼 직접 초기화할 수 없으며, **래퍼 객체**에 접근해야만 올바른 초기화가 가능함.
+
+### 14-3. 왜 언더스코어가 필요한지 요약
+
+| 접근 방식         | 설명                                      |
+| ----------------- | ----------------------------------------- |
+| `stateViewModel`  | **래핑된 값** (`TestWishViewModel` 인스턴스) |
+| `_stateViewModel` | **래퍼 객체** (`StateObject<TestWishViewModel>`) |
+
+### 14-4. 결론
+
+- `@StateObject`, `@ObservedObject`는 Property Wrapper이므로, 직접 초기화할 때는 언더스코어(`_`)를 사용해 **래퍼 객체**에 접근해야 함.
+- 그렇지 않으면 Swift의 **Property Wrapper 규칙**을 위반하게 됨.
+
 진짜 끝.
 
 확실히 정리할때는 내가 먼저 정리한걸 기반으로 GPT를 사용하면 훨씬 도움이 많이 되는듯하다.
