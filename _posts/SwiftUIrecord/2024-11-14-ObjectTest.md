@@ -1,8 +1,8 @@
 ---
-title: CartAppTest
+title: SwiftUI 상태 관리 및 데이터 저장 비교 - @StateObject, @ObservedObject, CoreData, SwiftData
 writer: Harold
 date: 2024-11-14 7:33:00 +0800
-last_modified_at: 2024-11-16 7:32:00 +0800
+last_modified_at: 2024-11-17 1:32:00 +0800
 categories: [Study, TourApp]
 tags: []
 
@@ -2881,3 +2881,5 @@ Property Wrapper는 다음과 같은 두 가지 요소로 구성됨:
 진짜 끝.
 
 확실히 정리할때는 내가 먼저 정리한걸 기반으로 GPT를 사용하면 훨씬 도움이 많이 되는듯하다.
+
+[GitHub](https://github.com/Haroldfromk/ForSwiftUI/tree/main/ApiCart){:target="_blank"}
