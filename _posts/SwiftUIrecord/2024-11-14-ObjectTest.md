@@ -3,7 +3,7 @@ title: SwiftUI 상태 관리 및 데이터 저장 비교 - @StateObject, @Observ
 writer: Harold
 date: 2024-11-14 7:33:00 +0800
 last_modified_at: 2024-11-17 1:32:00 +0800
-categories: [Study, TourApp]
+categories: [Study, CartApp]
 tags: []
 
 toc: true
