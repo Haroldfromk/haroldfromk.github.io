@@ -1169,10 +1169,15 @@ class UserManager {
 ## 출처 및 참고
 
 [이미지1](https://lucasvandongen.dev/dependency_injection_swift_swiftui.php){:target="_blank"} : https://lucasvandongen.dev/dependency_injection_swift_swiftui.php
+
 [이미지2](https://medium.com/@vipandey54/solid-principles-in-swift-75e0e7895443) : https://medium.com/@vipandey54/solid-principles-in-swift-75e0e7895443
+
 [Medium](https://medium.com/sahibinden-technology/dependency-injection-in-swift-11756a07a064){:target="_blank"} : https://medium.com/sahibinden-technology/dependency-injection-in-swift-11756a07a064
+
 [Youtube1](https://www.youtube.com/watch?v=ooUyCbO4hNw){:target="_blank"} : https://www.youtube.com/watch?v=ooUyCbO4hNw
+
 [Youtube2](https://www.youtube.com/watch?v=l0QehVWz2i0){:target="_blank"} : https://www.youtube.com/watch?v=l0QehVWz2i0
-[cleanSsift](https://clean-swift.com/dependency-inversion-a-little-swifty-architecture/){:target="_blank"} : https://clean-swift.com/dependency-inversion-a-little-swifty-architecture/
+
+[cleanSwift](https://clean-swift.com/dependency-inversion-a-little-swifty-architecture/){:target="_blank"} : https://clean-swift.com/dependency-inversion-a-little-swifty-architecture/
 
 
