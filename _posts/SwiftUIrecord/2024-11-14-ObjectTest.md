@@ -677,6 +677,57 @@ Xcode에서 **`.xcdatamodel`** 확장자를 사용해 파일을 생성하려고 
 
 이때 Entity 명은 `Cart`로 해준다
 
+Entity로 명명한 Cart는 `NSManagedObject`이다.
+
+```swift
+//
+//  Cart+CoreDataClass.swift
+//  
+//
+//  Created by Dongik Song on 11/15/24.
+//
+//  This file was automatically generated and should not be edited.
+//
+
+import Foundation
+import CoreData
+
+@objc(Cart)
+public class Cart: NSManagedObject {
+
+}
+```
+
+이렇게 자동 생성이 되지만.
+
+![CleanShot 2024-11-18 at 19 29 38](https://github.com/user-attachments/assets/38e1456b-120a-4fc7-8ecc-bfbe251408e7)
+
+이렇게 해서도 가능하다.
+
+![CleanShot 2024-11-18 at 19 33 04](https://github.com/user-attachments/assets/62f44afc-0acc-492e-8551-c4b5b9f1d1f9)
+
+이렇게 생성이 되고 
+
+```swift
+extension Cart {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Cart> {
+        return NSFetchRequest<Cart>(entityName: "Cart")
+    }
+
+    @NSManaged public var id: Int64
+    @NSManaged public var price: Double
+    @NSManaged public var title: String?
+
+}
+
+extension Cart : Identifiable {
+
+}
+```
+
+그러면 이렇게 또 코드가 확인이 가능하다.
+
 #### 5-2-2. Container 생성 및 함수 구현
 
 ViewModel에 Container를 생성하고 이때 init을 통해 ViewModel 객체가 만들어질때 자연스럽게 Container를 생성하는 방식으로 이루어 진다.

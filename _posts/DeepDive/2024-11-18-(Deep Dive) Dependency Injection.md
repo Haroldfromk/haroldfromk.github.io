@@ -185,7 +185,39 @@ class와 struct의 차이를 정확하게 알고 넘어가야한다.
 
 #### 1-2-4-1. struct vs class
 
+![dog](https://miro.medium.com/v2/resize:fit:720/format:webp/1*FGOiCRT6MmN7Nb1lyeOV-g.png)
+
 Swift에서 `class`는 **참조 타입(Reference Type)**이고, `struct`는 **값 타입(Value Type)**이다.
+
+```swift
+class SomeClass {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+}
+
+var aClass = SomeClass(name: "Bob")
+var bClass = aClass // aClass and bClass now reference the same instance!
+bClass.name = "Sue"
+
+println(aClass.name) // "Sue"
+println(bClass.name) // "Sue"
+
+struct SomeStruct {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+}
+
+var aStruct = SomeStruct(name: "Bob")
+var bStruct = aStruct // aStruct and bStruct are two structs with the same value!
+bStruct.name = "Sue"
+
+println(aStruct.name) // "Bob"
+println(bStruct.name) // "Sue"
+```
 
 - **값 타입(Value Type)**
   - `struct`는 값 타입으로, 인스턴스가 생성될 때 **값이 복사(copy)**된다.
@@ -1171,6 +1203,8 @@ class UserManager {
 [이미지1](https://lucasvandongen.dev/dependency_injection_swift_swiftui.php){:target="_blank"} : https://lucasvandongen.dev/dependency_injection_swift_swiftui.php
 
 [이미지2](https://medium.com/@vipandey54/solid-principles-in-swift-75e0e7895443) : https://medium.com/@vipandey54/solid-principles-in-swift-75e0e7895443
+
+[이미지3](https://blog.devgenius.io/class-versus-struct-in-swift-b0ce62bee676) : https://blog.devgenius.io/class-versus-struct-in-swift-b0ce62bee676
 
 [Medium](https://medium.com/sahibinden-technology/dependency-injection-in-swift-11756a07a064){:target="_blank"} : https://medium.com/sahibinden-technology/dependency-injection-in-swift-11756a07a064
 
