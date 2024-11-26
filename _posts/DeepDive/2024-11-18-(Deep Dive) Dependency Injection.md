@@ -373,26 +373,26 @@ UIKit에서는 주로 생성자 주입(Initializer Injection)이 많이 사용�
 ```swift
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-private lazy var signViewModel = SignViewModel(signManager: signManager)
+    private lazy var signViewModel = SignViewModel(signManager: signManager)
 
-}
-
-class ManageViewModel {
-    private let manageManager: ManageManager
-    
-    init(manageManager: ManageManager) {
-        self.manageManager = manageManager
     }
-}
 
-class ManageViewController: UIViewController {
-
-    var viewModel: ManageViewModel!
-
-    convenience init(viewModel: ManageViewModel) {
-            self.init()
-            self.viewModel = viewModel
+    class ManageViewModel {
+        private let manageManager: ManageManager
+        
+        init(manageManager: ManageManager) {
+            self.manageManager = manageManager
+        }
     }
+
+    class ManageViewController: UIViewController {
+
+        var viewModel: ManageViewModel!
+
+        convenience init(viewModel: ManageViewModel) {
+                self.init()
+                self.viewModel = viewModel
+        }
 }
 ```
 
