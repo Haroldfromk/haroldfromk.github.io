@@ -1,5 +1,5 @@
 ---
-title: Async_await (2)
+title: Async/Await (2)
 writer: Harold
 date: 2024-11-27 01:13
 categories: [Udemy, Concurrency]
@@ -9,9 +9,17 @@ toc: true
 toc_sticky: true
 ---
 
-## Async를 사용하여 날짜 가져오기
+## Async/Await를 사용하여 날짜 가져오기
 
 강의 흐름에 따라 정리를 해본다.
+
+먼저, Async/Await 패턴은 Swift의 비동기 프로그래밍을 더욱 효율적이고 직관적으로 만드는 패턴이다. 이 패턴의 주요 장점은 다음과 같다.
+
+- **코드의 가독성 향상**: 비동기 코드를 동기 코드와 유사하게 작성할 수 있어 로직의 흐름을 쉽게 이해할 수 있다.  
+- **콜백 지옥 해결**: 중첩된 콜백 대신 선형적인 코드 흐름을 사용하여 복잡한 비동기 로직을 간결하게 표현할 수 있다.  
+- **에러 처리 용이**: `try`/`catch` 구문을 사용하여 비동기 작업에서 발생하는 에러를 효과적으로 처리할 수 있다.  
+
+[출처](https://f-lab.kr/insight/understanding-async-await-in-swift){:target="_blank"} 
 
 ### 1. 기본 구성
 
