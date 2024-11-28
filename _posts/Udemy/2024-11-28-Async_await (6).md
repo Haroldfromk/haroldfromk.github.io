@@ -267,4 +267,32 @@ func getNewsBy(sourceId: String) async {
 }
 ```
 
-기존에는
+기존에는 completion handler를 통해서 만들었기에 switch result를 통해서 또 했어야했지만 바꾸고 난뒤에는 코드가 더 간략해지고 가독성이 좋아졌다.
+
+실제로 파이널 프로젝트를 할때도 사용이 되었다. 이때는 사실 어떻게 쓰이는지 제대로 알지 못했다.
+
+```swift
+func addReport(data: [String: Any]) async throws {
+    return try await withCheckedThrowingContinuation { continuation in
+        reportCollection.addDocument(data: data) { error in
+            if let error = error {
+                continuation.resume(throwing: error)
+            } else {
+                continuation.resume(returning: ())
+            }
+        }
+    }
+}
+```
+
+여기서도 addDocument는 Firebase에서 가져온 하나의 함수이다.
+
+![CleanShot 2024-11-28 at 15 53 39](https://github.com/user-attachments/assets/9d161883-90eb-41a3-abac-a148bd0b6592)
+
+우리는 addDocument에 대해선 정확히 모르지만 적어도 파라미터로 뭘 받고 어떻게 핸들링이 되는지는 유추 할 수 있다.
+
+그래서 이걸 사용하면서 우리가 함수를 만들기 위해 사용하는데 async await를 사용하여 코드를 간결하기 위해서 Continuation을 사용하는것.
+
+여기선 error를 넘기고 에러가 없을때는 ()로 Void만 넘기게 된다.
+
+이제서야 이게 보이기 시작한다.
