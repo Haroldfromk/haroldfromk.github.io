@@ -113,6 +113,108 @@ async { // 지금은 async대신 Task 사용
 }
 ```
 
+실제로 이것 역시도 파이널 프로젝트에서 튜터님이 구현하신 바가 있다.
+
+```swift
+// 가게 단일정보 로드
+func loadStore(with name: String) {
+    
+    if let store = findStore(with: name) {
+            let storeName = store.placeName
+            Task {
+                async let isScrapped = getScrap(for: storeName)
+                async let ratings = getRatings(for: storeName)
+                let presentable = await ShopView(
+                    title: storeName,
+                    address: store.roadAddressName,
+                    rating: getAverageRating(ratings: ratings),
+                    reviews: ratings.count,
+                    latitude: Double(store.y) ?? 0.0,
+                    longitude: Double(store.x) ?? 0.0,
+                    isScrapped: isScrapped,
+                    callNumber: store.phone == "" ? "가게 번호 없음" : store.phone
+                )
+                await MainActor.run {
+                    state = .didLoadedStore(store: presentable)
+                }
+            }
+        } else if let store = findJsonStore(with: name) {
+            // JSON store
+            Task {
+                let presentable = ShopView(
+                    title: store.storeName,
+                    address: store.address,
+                    rating: 0.0,
+                    reviews: 0,
+                    latitude: store.y,
+                    longitude: store.x,
+                    isScrapped: false,
+                    callNumber: "" // JSON 데이터에서 전화번호를 제공하지 않는다고 가정
+                )
+                await MainActor.run {
+                    state = .didLoadedStore(store: presentable)
+                }
+            }
+        }
+}
+
+// 스크랩 정보 확인
+func getScrap(for storeName: String) async -> Bool {
+    await withCheckedContinuation { continuation in
+        fetchScrapStatus(shopName: storeName) {
+            continuation.resume(returning: $0)
+        }
+    }
+}
+
+// 리뷰정보 확인
+func getRatings(for storeName: String) async -> [Float] {
+    await withCheckedContinuation { continuation in
+        fetchRatings(for: storeName) { ratings, error in
+            guard let ratings, error == nil else { return }
+            continuation.resume(returning: ratings)
+        }
+    }
+}
+```
+
+여기가 지도부분인데 튜터님이 팀원분을 도와주시면서 이렇게 작성을 해주신것같은데, 이전에는 몰랐는데 이제서야 보이기 시작했다.
+
+여기서도 보면 `async let` / `Continuation` 두개가 사용이 되었음을 알 수 있다.
+
+Continuation은 [지난글](https://haroldfromk.github.io/posts/Async_await-(6)/){:target="_blank"}에서 조금 다뤘으니 참고 하면 될듯
+
+
+
+위의 강의에선 사용하는 변수 앞에 `try await` 조금 더 정확하게 하자면 `await`를 사용했다. 하지만 위의 방식을 보면 `ShopView`앞에 await를 감싸주는 형태로 작성이 되었다.
+
+```swift
+let presentable = await ShopView(
+    title: storeName,
+    address: store.roadAddressName,
+    rating: getAverageRating(ratings: ratings),
+    reviews: ratings.count,
+    latitude: Double(store.y) ?? 0.0,
+    longitude: Double(store.x) ?? 0.0,
+    isScrapped: isScrapped,
+    callNumber: store.phone == "" ? "가게 번호 없음" : store.phone
+)
+
+let presentable = ShopView(
+    title: storeName,
+    address: store.roadAddressName,
+    rating: getAverageRating(ratings: await ratings),
+    reviews: await ratings.count,
+    latitude: Double(store.y) ?? 0.0,
+    longitude: Double(store.x) ?? 0.0,
+    isScrapped: await isScrapped,
+    callNumber: store.phone == "" ? "가게 번호 없음" : store.phone
+)
+```
+
+위 아래 둘다 코드상 문제는 없다. 하지만 가독성으로 보았을때는 위의 사례가 더 좋다.
+
+하지만 약간의 단점이라고 보면, 타인이 봤을때는 어디서 비동기 작업이 이루어지는지 모를수도 있을것같다.
 
 ### 2. Async-let in a Loop
 
