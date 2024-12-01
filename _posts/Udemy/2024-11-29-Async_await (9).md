@@ -497,8 +497,39 @@ var lines: [String.SubSequence] = [
 
 이렇게 된다.
 
-만약 removeFirst를 사용하지 않으면?
+[RemoveFirst Docs](https://developer.apple.com/documentation/swift/array/removefirst()){:target="_blank"}에 보면 지워진 요소를 반환한다고 한다.
 
-한개씩 계속 늘어나는 배열을 보게 된다.
+여태 잘못생각을 했었다.
 
-내용이 너무 길어져서 다음부분은 다음글에서....
+그 지워진녀석이 리턴이 되고 하나씩 쌓여가는건데, 지워진 배열이 계속 리턴되는걸로 착각했다.
+
+간단한 예를 들어본다.
+
+```swift
+var linesSample = ["Line 1", "Line 2", "Line 3"]
+```
+
+이런 배열있을때 
+
+```swift
+print(linesSample.removeFirst())
+// Line 1
+print(linesSample) // ["Line 2", "Line 3"]
+```
+
+이렇게 되는것이다.
+
+그리고 비슷한 예로 `dropFirst()`도 있다.
+
+```swift
+var linesSample = ["Line 1", "Line 2", "Line 3"]
+
+print(linesSample.dropFirst()) // ["Line 2", "Line 3"]
+print(linesSample) // ["Line 1", "Line 2", "Line 3"]
+```
+
+즉 리턴하는데서 차이가 있다.
+
+여태 헷갈렸던 개념은 firstRemove를 dropFirst의 개념으로 생각해서 생긴 문제였다.
+
+[DropFist Docs](https://developer.apple.com/documentation/swift/string/dropfirst(_:)){:target="_blank"}는 여기.
