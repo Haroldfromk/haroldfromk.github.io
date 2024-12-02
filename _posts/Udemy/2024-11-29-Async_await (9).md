@@ -512,8 +512,7 @@ var linesSample = ["Line 1", "Line 2", "Line 3"]
 이런 배열있을때 
 
 ```swift
-print(linesSample.removeFirst())
-// Line 1
+print(linesSample.removeFirst()) // Line 1
 print(linesSample) // ["Line 2", "Line 3"]
 ```
 
@@ -533,3 +532,29 @@ print(linesSample) // ["Line 1", "Line 2", "Line 3"]
 여태 헷갈렸던 개념은 firstRemove를 dropFirst의 개념으로 생각해서 생긴 문제였다.
 
 [DropFist Docs](https://developer.apple.com/documentation/swift/string/dropfirst(_:)){:target="_blank"}는 여기.
+
+### 2. with AsyncSeqeunce
+
+```swift
+Task {
+    for try await line in endpointURL.lines {
+        print(line)
+    }
+
+}
+```
+
+for에 try await를 통해 작성을 한다.
+
+![CleanShot 2024-12-01 at 23 41 28](https://github.com/user-attachments/assets/994ee247-0052-4049-94b3-dd517bdebca5)
+
+이때 URL에는 lines라는 메서드가 있다.
+
+`The URL’s resource data, as an asynchronous sequence of lines of text.`
+즉 데이터를 비동기적으로 한줄씩 처리를 할 수 있다는것.
+
+이전글처럼 Iterator도 필요 없고, 다운로드 하면서 바로바로 한줄씩 작업을 처리하게 된다.
+
+이전과 비교하면, 이전에는 일단 리소스데이터를 받고나서 Sequence, Iterator를 통해 한줄씩 확인하면서 그걸 가져오는방식으로 했는데,
+
+이건 데이터를 받으면서 한줄씩 바로바로 처리를 하게 되는 장점이 있다.
