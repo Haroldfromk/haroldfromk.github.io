@@ -272,7 +272,7 @@ let item2 = ShoppingListItem(name: "치약", quantity: 1, purchased: true)
 let item3 = ShoppingListItem(name: nil, quantity: 1, purchased: true)
 ```
 
-## 3. num(열거형)
+## 3. enum(열거형)
 - Enum은 관련된 값으로 이뤄진 그룹을 같은 타입으로 선언해 타입 안전성을 보장하는 방법으로 코드를 다룰 수 있게 해준다.
 
 ```swift
@@ -361,10 +361,10 @@ enum Beverage: CaseIterable {
 let numberOfChoices = Beverage.allCases.count
 print("\(numberOfChoices) 잔 주문 가능합니다.")
 // 출력값: 3잔 주문 가능합니다
-
 ```
 
 - Optional은 enum이다. (특강에서도 언급되었던 내용)
+
 ```swift
 // 실제 Optional의 정의
 @frozen public enum Optional<Wrapped> : ExpressibleByNilLiteral {
