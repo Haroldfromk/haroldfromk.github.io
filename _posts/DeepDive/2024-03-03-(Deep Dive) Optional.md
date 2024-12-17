@@ -2,7 +2,7 @@
 title: (Deep Dive) Optional
 writer: Harold
 date: 2024-03-03
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: [옵셔널]
 
 toc: true

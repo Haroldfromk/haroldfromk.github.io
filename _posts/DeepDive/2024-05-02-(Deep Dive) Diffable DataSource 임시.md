@@ -4,7 +4,7 @@ writer: Harold
 date: 2024-05-02 13:00
 #last_modified_at: 2024-03-17 21:11:00
 published: false
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: [Myself]
 
 toc: true

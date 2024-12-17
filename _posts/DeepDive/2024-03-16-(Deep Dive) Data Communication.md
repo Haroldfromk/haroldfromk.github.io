@@ -3,7 +3,7 @@ title: (Deep Dive) Data Communication
 writer: Harold
 date: 2024-03-16 13:32
 last_modified_at: 2024-03-17 21:11:00
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: [Myself]
 
 toc: true

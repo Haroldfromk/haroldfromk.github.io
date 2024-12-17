@@ -3,7 +3,7 @@ title: (Deep Dive) Keywords
 writer: Harold
 date: 2024-04-14 13:00
 #last_modified_at: 2024-03-17 21:11:00
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: [Myself]
 
 toc: true

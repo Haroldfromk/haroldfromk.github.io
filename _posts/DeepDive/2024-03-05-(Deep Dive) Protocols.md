@@ -2,7 +2,7 @@
 title: (Deep Dive) Protocols
 writer: Harold
 date: 2024-03-05 11:11:00 +0800
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: [프로토콜]
 
 toc: true

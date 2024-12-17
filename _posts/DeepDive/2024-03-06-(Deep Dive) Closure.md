@@ -2,7 +2,7 @@
 title: (Deep Dive) Closure
 writer: Harold
 date: 2024-03-06 10:11:00 +0800
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: [클로저]
 
 toc: true

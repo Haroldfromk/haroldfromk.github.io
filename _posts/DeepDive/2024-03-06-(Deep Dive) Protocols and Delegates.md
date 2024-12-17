@@ -2,7 +2,7 @@
 title: (Deep Dive) Protocols and Delegates
 writer: Harold
 date: 2024-03-06
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: []
 
 toc: true

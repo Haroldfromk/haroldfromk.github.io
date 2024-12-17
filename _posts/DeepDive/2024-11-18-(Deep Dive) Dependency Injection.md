@@ -3,7 +3,7 @@ title: (Deep Dive) Dependency Injection
 writer: Harold
 date: 2024-11-18 07:00
 #last_modified_at: 2024-03-17 21:11:00
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: [Myself]
 
 toc: true

@@ -2,7 +2,7 @@
 title: (Deep Dive) Parameter Names
 writer: Harold
 date: 2024-03-08 14:52
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: []
 
 toc: true

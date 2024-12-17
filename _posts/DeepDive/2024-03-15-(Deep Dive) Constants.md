@@ -2,7 +2,7 @@
 title: (Deep Dive) Constants & Functions
 writer: Harold
 date: 2024-03-15 14:52
-categories: [Udemy, Deep Dive]
+categories: [Deep Dive]
 tags: []
 
 toc: true
