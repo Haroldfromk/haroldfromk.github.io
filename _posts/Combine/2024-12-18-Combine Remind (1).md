@@ -352,7 +352,3 @@ Publisher failed with error operationFailed
 retry는 내가 지정한 횟수까지는 error가 발생해도 넘어간다. 즉 기회를 준다고 생각하면된다.
 
 원래는 에러가 발생하면 그시점으로부터 구독이 바로 끊기게 되는데, retry는 구독을 유지하고 재시도한다.
-
----
-
-Github: [Step-Tracker Repository](https://github.com/Haroldfromk/Step-Tracker){:target="_blank"}
