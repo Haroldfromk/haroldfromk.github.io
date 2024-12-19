@@ -1,5 +1,5 @@
 ---
-title: Combine Remind (9)
+title: Combine Remind (3)
 writer: Harold
 date: 2024-12-19 06:16
 categories: [Udemy, Combine]
@@ -382,7 +382,7 @@ struct ContentView: View {
     - 이때 해당 Modifier NavigationStack이 반드시 필요하다.
     - 여기선 App에서 자체적으로 NavigationStack을 씌워주었다.
 - `onChange` Modifier를 사용하여 사용자가 입력한 값에 반응.
-    - 값을 입력할때마다 searchSubject를 통해 setupSearchPublisher로 전달
+    - 값을 입력할때마다 **searchSubject를 통해 setupSearchPublisher로 전달**
 
 이렇게 정리를 하고보니 SwiftUI가 너무 간단하다는게 놀랍고 전에 UIKit으로 Combine을 사용하면서, 그때는 뭔가 제대로 흐름이나, 사용법에대해 완벽하게 이해하지 않고, 마구잡이식으로 했는데, 지금 코드를 다시보니 고쳐야할 부분이 많다라는게 보이기 시작한다.
 
