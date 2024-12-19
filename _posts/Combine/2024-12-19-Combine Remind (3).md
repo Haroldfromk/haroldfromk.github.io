@@ -1,5 +1,5 @@
 ---
-title: Combine Remind (3)
+title: Combine Remind (Fin)
 writer: Harold
 date: 2024-12-19 06:16
 categories: [Udemy, Combine]
@@ -384,6 +384,140 @@ struct ContentView: View {
 - `onChange` Modifier를 사용하여 사용자가 입력한 값에 반응.
     - 값을 입력할때마다 **searchSubject를 통해 setupSearchPublisher로 전달**
 
+---
+
+## Debugging Combine Code
+
+Combine을 사용하면 Subscription 관계를 파악하기 위해 중간중간에 `Print()`를 활용하여 스트림의 상태를 파악하곤 했다.
+
+자주사용한 `print`는 제외하고 다른 방법을 적어본다.
+
+먼저 언급을 해본다면, breakpoint는 특정 조건에서 디버거를 중단시키는 데 주로 사용하고, handleEvents는 전체 스트림의 생명 주기를 추적하는 데 더 적합하다.
+
+### Breakpoint
+
+```swift
+class HTTPClient {
+    
+    func fetchMovies(search: String) -> AnyPublisher<[Movie], Error> {
+        
+        guard let encodedSearch = search.urlEncoded,
+              let url = URL(string: "https://www.omdbapi.com/?s=\(encodedSearch)&page=2&apiKey=564727fa")
+        else {
+            return Fail(error: NetworkError.badUrl).eraseToAnyPublisher()
+        }
+                
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: MovieResponse.self, decoder: JSONDecoder())
+            .map(\.Search)
+            .breakpoint(receiveOutput: { movie in
+                movie.isEmpty
+            })
+            .receive(on: DispatchQueue.main)
+            .catch { error -> AnyPublisher<[Movie], Error> in
+                return Just([]).setFailureType(to: Error.self).eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+    
+}
+```
+
+[Combine Breakpoint Docs](https://developer.apple.com/documentation/combine/publisher/breakpoint(receivesubscription:receiveoutput:receivecompletion:)){:target="_blank"}
+
+여기서는 간단하게 파라미터를 receiveOutput을 사용했다.
+
+즉, URLSession을 통해 전달 받은 값에 대하여, 그값이 어떤 조건일때(이건 우리가 설정)의 true/ false에 따라. breakpoint를 바로 생성한다.
+
+지금은 강제로 띄우기 위해 `!movie.isEmpty` 즉 fetch가 정상적으로 이루어 졌을때 바로 breakpoint를 호출하게 했고 사진과 같다.
+
+![Dec-19-2024 11-28-42](https://github.com/user-attachments/assets/54238469-0435-4d67-a5b4-4dbcd0f2d8ab)
+
+[BreakPoint 설정](https://developer.apple.com/documentation/xcode/setting-breakpoints-to-pause-your-running-app){:target="_blank"} 이건 뭐 다알지만 Docs의 링크를 걸어봤다.
+
+#### 다른 예시
+
+```swift
+let numbers = [1, 2, 3, 4, 5].publisher
+
+let _ = numbers
+    .map({ $0 })
+    .eraseToAnyPublisher()
+    .breakpoint(receiveOutput: { value in
+        value == 3
+    })
+    .sink { value in
+        print(value)
+    }
+
+let _ = numbers
+    .breakpoint(receiveOutput: { $0 == 3 })
+    .sink { print($0) }    
+```
+
+위의 두 코드는 같은결과를 도출하는데, 간결하게 한것과 약간 풀어쓴것이라고 보면 된다.
+
+![CleanShot 2024-12-19 at 12 12 15](https://github.com/user-attachments/assets/faf4e12a-b7c9-461b-80d9-cc1a6cbdff3b)
+
+playground에선 위와같이 에러가 발생.
+
+1~5까지가 정상적으로 출력이 다되었다.
+
+확실히 playground파일과, swift파일은 실행이 다른것같다.
+
+---
+
+### handleEvents
+
+```swift
+let publisher = [1,2,3].publisher
+
+let _ = publisher
+    .handleEvents { _ in
+        print("Subscription received")
+    } receiveOutput: { value in
+        print("receiveOutput")
+        print(value)
+    } receiveCompletion: { completion in
+        print("receiveCompletion")
+    } receiveCancel: {
+        print("receiveCancel")
+    } receiveRequest: { _ in
+        print("receiveRequest")
+    }
+    .map { $0 * 3 }
+   // .filter { $0 % 2 == 0 }
+    .sink { value in
+        print("sink")
+        print(value)
+    }
+
+/*
+Subscription received
+receiveRequest
+receiveOutput
+1
+sink
+3
+receiveOutput
+2
+sink
+6
+receiveOutput
+3
+sink
+9
+receiveCompletion    
+*/
+```
+
+[HandleEvents Docs](https://developer.apple.com/documentation/combine/publisher/handleevents(receivesubscription:receiveoutput:receivecompletion:receivecancel:receiverequest:)){:target="_blank"}
+
+HandleEvents에 경우 지금은 print로 출력을 해봤는데, Stream의 life cycle을 전부 핸들링을 할 수 있다는 장점이 있다.
+
 이렇게 정리를 하고보니 SwiftUI가 너무 간단하다는게 놀랍고 전에 UIKit으로 Combine을 사용하면서, 그때는 뭔가 제대로 흐름이나, 사용법에대해 완벽하게 이해하지 않고, 마구잡이식으로 했는데, 지금 코드를 다시보니 고쳐야할 부분이 많다라는게 보이기 시작한다.
 
-이것만으로도 리마인드가 좋은 부분으로 흘러간다는게 느껴저서 좋은 포스팅이었다.
+그리고 print만 사용했었는데 그게 아니라 breakpoint나 handleevent 등 새로운것에 대해 알게되었다.
+
+다음에 Combine을 사용하여 앱을 하나 만드는 글에 대해 포스팅을 할때는 위의 저 두 요소를 통해 디버깅을 해보는 과정도 적어보도록 하겠다.
