@@ -1,5 +1,5 @@
 ---
-title: BB Quotes (5)
+title: BB Quotes (fin)
 writer: Harold
 date: 2025-5-9 7:33:00 +0800
 categories: [Udemy, SwiftUI]
