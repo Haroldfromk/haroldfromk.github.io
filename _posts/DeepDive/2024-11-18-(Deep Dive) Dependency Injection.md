@@ -757,9 +757,7 @@ struct MainView: View {
         NavigationStack {
             TabView {
                 Tab("Display", systemImage: "eye") {
-                    ItemView(wishViewModel: wishViewModel,
-                             cartViewModel: cartViewModel,
-                             sdCartViewModel: sdCartViewModel)
+                    ItemView()
                 }
                 Tab("CoreCart", systemImage: "cart") {
                     CoreCartView(cartViewModel: cartViewModel)
