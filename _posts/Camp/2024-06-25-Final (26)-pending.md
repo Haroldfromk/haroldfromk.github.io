@@ -4,24 +4,13 @@ writer: Harold
 date: 2024-06-25 01:00
 categories: [캠프, TheLast]
 tags: []
+published: false
 toc: true
 toc_sticky: true
 ---
 
 ## 신고기능 예외처리
 
-### 1. 신고 사유 입력 조건 강화
-
-```swift
-if isEtc == false && !textView.text.isEmpty {
-    showMessage(title: "오류", message: "기타 사유를 선택한 경우에만 내용을 신고할 수 있습니다.")
-    return
-}
-```
-
-기타 항목을 체크하지 않고 텍스트만 입력하면 신고가 가능하던 문제를 해결함.  
-기타 항목이 선택되지 않으면, 텍스트가 있어도 신고를 차단함.  
-UX 실수를 줄이고 신고 항목을 명확하게 구분하기 위한 로직 개선이다.
 
 ---
 
