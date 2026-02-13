@@ -24,7 +24,7 @@ name                     : "Harold"
 description              : "Harold's Devlog"
 url                      : "https://haroldfromk.github.io"
 baseurl                  : ""
-repository               : "Haroldfromk/haroldfromk.github.io"
+repository               : "https://github.com/Haroldfromk/haroldfromk.github.io"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
@@ -328,4 +328,3 @@ defaults:
       related: true
       toc: true # TOC 기본 활성화 (Harold님 필수 기능)
       toc_sticky: true # TOC 스티키 모드 활성화
-      
