@@ -328,3 +328,4 @@ defaults:
       related: true
       toc: true # TOC 기본 활성화 (Harold님 필수 기능)
       toc_sticky: true # TOC 스티키 모드 활성화
+      
