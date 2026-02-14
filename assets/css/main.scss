@@ -8,77 +8,77 @@ search: false
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
 
+/* [폰트 설정] 전체 폰트 패밀리 지정 */
+body {
+  font-family: "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Helvetica", "Arial", sans-serif !important;
+}
 
-/* [최종 통합] 본문(축소), 코드(확대), 사이드바(복구), 헤더 6단계 정렬 */
+/* 1. 본문 텍스트: 가독성 높은 Noto Sans 적용 */
+.page__content p, 
+.page__content li, 
+.page__content dl,
+.page__content blockquote {
+  font-size: 0.88em !important;
+  line-height: 1.6 !important; /* 가독성을 위해 행간을 살짝 넓혔습니다 */
+}
 
-/* 1. 본문 텍스트: 컴팩트한 정보 밀도 */
+/* 2. 코드 블록: 개발자 전용 JetBrains Mono 적용 */
+code, pre, .highlight {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 1em !important;
+}
+
+/* ==========================================================================
+   Harold's Blog 라이트 모드 최적화 (본문 축소, 코드 확대, 위계 정립)
+   ========================================================================== */
+
+/* 1. 본문 텍스트: 컴팩트한 정보 밀도 (0.88em) */
 .page__content p, 
 .page__content li, 
 .page__content dl,
 .page__content blockquote {
   font-size: 0.88em !important; 
-  line-height: 1.55 !important;
-  color: #333;
 }
 
 /* 2. 헤더 6단계 위계 설정 (점진적 축소) */
-.page__content h1 { font-size: 1.50em !important; margin-top: 1.4em !important; }
-.page__content h2 { font-size: 1.35em !important; margin-top: 1.2em !important; border-bottom: 1px solid #eee; padding-bottom: 0.2em; }
-.page__content h3 { font-size: 1.18em !important; margin-top: 1.0em !important; }
-.page__content h4 { font-size: 1.05em !important; margin-top: 0.8em !important; }
-.page__content h5 { font-size: 0.95em !important; margin-top: 0.6em !important; font-weight: bold; }
-.page__content h6 { font-size: 0.88em !important; margin-top: 0.5em !important; color: #666; font-style: italic; }
-
-/* 3. 코드 블록: 본문보다 크게 하여 가독성 확보 */
-code, 
-pre, 
-.highlight {
-  font-size: 0.98em !important; 
-  line-height: 1.45 !important;
-  font-family: "JetBrains Mono", "Menlo", "Monaco", "Consolas", monospace !important;
-}
+.page__content h1 { font-size: 1.50em !important;}
+.page__content h2 { font-size: 1.35em !important;}
+.page__content h3 { font-size: 1.18em !important;}
+.page__content h4 { font-size: 1.05em !important;}
+.page__content h5 { font-size: 0.95em !important;}
+.page__content h6 { font-size: 0.88em !important;}
 
 /* 4. 사이드바 (TOC) 글자 크기 개별 복구 */
-/* 본문이 작아져도 사이드바 목록은 읽기 편한 크기 유지 */
+
 .toc__menu {
-  font-size: 0.92em !important; 
+  font-size: 0.92em !important;
 }
 
 .toc__menu li {
   line-height: 1.4 !important;
-  margin-bottom: 0.3em !important;
 }
 
 .toc__title {
   font-size: 1.0em !important;
   font-weight: bold !important;
 }
-/******************************구분선************************/
 
-
-/******************************구분선************************/
-
-/* 1. 테마가 자동으로 만드는 기존 버튼/텍스트 강제 제거 */
+/* 6. TOP 버튼 (기존 설정 유지) */
 .back-to-top {
   display: none !important;
 }
 
-/* 2. Harold님만의 고유한 버튼 클래스 (테마 JS가 인식 못함) */
 .my-custom-top-btn {
   display: flex !important;
   position: fixed !important;
   bottom: 30px !important;
   right: 30px !important;
   z-index: 9999 !important;
-  
-  /* 디자인 설정 */
   width: 55px;
   height: 55px;
   background-color: #333333 !important;
   color: #ffffff !important;
   border-radius: 50% !important;
-  
-  /* 내부 텍스트 정렬 */
   align-items: center;
   justify-content: center;
   font-size: 13px;
@@ -88,7 +88,6 @@ pre,
   transition: all 0.3s ease;
 }
 
-/* 호버 효과 */
 .my-custom-top-btn:hover {
   background-color: #777777 !important;
   transform: translateY(-5px);
