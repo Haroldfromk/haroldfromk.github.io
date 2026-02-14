@@ -1,10 +1,12 @@
 # main links
 main:
-  - title: "전체 글"
+  - title: "All Posts"
     url: /year-archive/
-  - title: "카테고리"
+  - title: "Categories"
     url: /categories/
   - title: "Udemy"
     url: /categories/#udemy
   - title: "Deep Dive"
     url: /categories/#deep-dive
+  - title: "About Me"
+    url: /about/

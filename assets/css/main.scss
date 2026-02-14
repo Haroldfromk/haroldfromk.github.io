@@ -92,3 +92,84 @@ code, pre, .highlight {
   background-color: #777777 !important;
   transform: translateY(-5px);
 }
+
+/* [메인 페이지] 글 목록 간격 초강력 축소 (Compact Mode) */
+
+/* 1. 글 덩어리(Item) 전체 간격 */
+.list__item {
+  margin-bottom: 15px !important;   /* 글과 글 사이 간격 (기존보다 훨씬 좁게) */
+  padding-bottom: 15px !important;
+}
+
+.list__item:last-child {
+  border-bottom: none !important;
+  margin-bottom: 0 !important;
+}
+
+/* 2. 제목(Title) 여백 및 크기 최적화 */
+.archive__item-title {
+  margin-top: 0 !important;
+  margin-bottom: 4px !important;    /* 제목 아래 딱 4px만 띄움 */
+  font-size: 1.1em !important;      /* 제목 크기도 부담스럽지 않게 조정 */
+  line-height: 1.2 !important;      /* 줄간격도 좁힘 */
+}
+
+/* 3. 읽기 시간(Meta) 여백 제거 */
+.page__meta {
+  margin-top: 0 !important;
+  margin-bottom: 4px !important;    /* 메타 정보 아래 딱 4px */
+  font-size: 0.75em !important;
+}
+
+/* 4. 요약글(Excerpt) 및 내부 문단(p) 여백 '완전 박멸' */
+.archive__item-excerpt {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  font-size: 0.9em !important;
+  line-height: 1.4 !important;
+}
+
+/* 범인 검거: p 태그의 상하 여백을 0으로 강제 */
+.archive__item-excerpt p {
+  margin: 0 !important; 
+  padding: 0 !important;
+}
+
+/* [메인 페이지] 포스트 제목 호버 시 폰트 확대 효과 */
+
+/* 1. 기본 상태 */
+.archive__item-title a {
+  display: inline-block;
+  transition: transform 0.2s ease-in-out; /* 크기 변화를 부드럽게 */
+  text-decoration: none !important;
+  transform-origin: left center; /* 왼쪽을 기준으로 커지게 설정 (정렬 유지) */
+}
+
+/* 2. 마우스를 올렸을 때 (Hover) */
+.archive__item-title a:hover {
+  transform: scale(1.15);      /* 폰트 크기를 15%만큼 확대 */
+}
+
+/* 카테고리 호버 효과 */
+/* [카테고리/태그 페이지] 항목 호버 효과 확실하게 잡기 */
+
+/* 1. 카테고리 인덱스 리스트 (상단 글자들) */
+.taxonomy__index li a,
+.taxonomy__section .archive__item-title a {
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+/* 2. 카테고리 이름 호버 시 색상 변경 */
+.taxonomy__index li a:hover,
+.taxonomy__section .archive__item-title a:hover {
+  color: #f05138 !important; /* Harold 포인트 컬러 */
+  padding: 2px 5px !important;
+  border-radius: 4px !important;
+}
+
+/* 3. 포스트 목록 내의 개별 카테고리/태그 링크 호버 */
+.page__taxonomy-item a:hover {
+  background-color: #f05138 !important; /* 배지 느낌으로 반전 */
+  text-decoration: none !important;
+}
