@@ -60,7 +60,7 @@ body_class: about-page-custom
 
 ## 👨‍💻 Harold (Dongik Song)
 
-![Image](https://github.com/user-attachments/assets/59a0c71b-13d7-4ad5-a979-f6ba06fffb89){: width="25%" height="25%"}
+![Image](https://github.com/user-attachments/assets/79d718f8-b02a-497b-8993-0f229cf51f65){: width="20%" height="20%"}
 
 Hello, I'm **Harold**.
 > I enjoy diving deep into technical causality and believe in the power of clean, logic-driven documentation.
