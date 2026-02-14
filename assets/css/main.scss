@@ -173,3 +173,30 @@ code, pre, .highlight {
   background-color: #f05138 !important; /* 배지 느낌으로 반전 */
   text-decoration: none !important;
 }
+
+/* --- 이미지 확대 및 호버 효과 (Harold 스타일) --- */
+
+/* 1. 이미지 호버 시 투명도 조절로 클릭 유도 */
+.page__content img {
+  transition: opacity 0.3s ease-in-out; /* 부드러운 변화 */
+}
+
+.page__content img:hover {
+  opacity: 0.75; /* 마우스를 올리면 살짝 투명해짐 */
+  cursor: pointer; /* 돋보기 대신 깔끔한 손가락 모양으로 타협 */
+}
+
+/* 2. 이미지가 확대되었을 때의 레이어 순서 (헤더 가림 방지) */
+.medium-zoom-overlay {
+  z-index: 9998 !important;
+}
+
+.medium-zoom-image--opened {
+  z-index: 9999 !important;
+  cursor: zoom-out !important; /* 확대된 상태에서는 축소 커서 허용 */
+}
+
+/* 헤더가 이미지 위로 올라오지 않게 함 */
+.masthead {
+  z-index: 10;
+}
