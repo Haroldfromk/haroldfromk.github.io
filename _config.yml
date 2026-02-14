@@ -205,6 +205,11 @@ markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 # Conversion
 markdown: kramdown
 highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    block_header: true  # 코드 블록 상단에 언어 정보를 포함하는 헤더 생성
+    span_header: true
 lsi: false
 excerpt_separator: "\n\n"
 incremental: false
