@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combine Stream Simulator</title>
+<style>
+    body {
+        margin: 0; padding: 15px;
+        background: #020617; color: white;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        box-sizing: border-box;
+    }
+    #wrapper {
+        width: 100%; max-width: 850px; margin: 0 auto; padding: 20px;
+        border-radius: 24px; background: #050816;
+        box-shadow: 0 20px 80px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.04);
+        box-sizing: border-box;
+    }
+    .header { margin-bottom: 20px; }
+    .header h2 { margin: 0 0 5px 0; font-size: 18px; }
+    .header p { margin: 0; font-size: 13px; color: #9ba3b4; }
+
+    /* Controls */
+    .controls {
+        display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;
+    }
+    .btn {
+        padding: 10px 16px; border: none; border-radius: 10px; font-weight: bold; font-size: 13px;
+        cursor: pointer; transition: 0.2s; color: white; flex: 1; min-width: 120px; text-align: center;
+    }
+    .btn-sub { background: #10b981; } .btn-sub:hover { background: #059669; }
+    .btn-cancel { background: #ef4444; } .btn-cancel:hover { background: #dc2626; }
+    
+    .toggle-wrapper {
+        display: flex; gap: 10px; flex: 2; min-width: 200px;
+    }
+    .toggle-btn {
+        flex: 1; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+        background: #1e293b; color: #94a3b8; font-weight: bold; font-size: 12px; cursor: pointer; transition: 0.2s;
+    }
+    .toggle-btn.active { background: #3b82f6; color: white; border-color: #60a5fa; }
+
+    /* Pipeline Layout (Horizontal) */
+    .pipeline-container {
+        position: relative; width: 100%; height: 180px;
+        background: #0f172a; border-radius: 16px; border: 2px dashed rgba(255,255,255,0.1);
+        display: flex; align-items: center; justify-content: space-between; padding: 0 40px; box-sizing: border-box;
+        overflow: hidden;
+    }
+    
+    /* Nodes */
+    .node {
+        width: 100px; height: 100px; background: #1e293b; border-radius: 16px;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        z-index: 10; border: 2px solid rgba(255,255,255,0.1); position: relative;
+    }
+    .node-title { font-size: 12px; font-weight: bold; color: #94a3b8; margin-bottom: 5px; }
+    .node-icon { font-size: 24px; }
+    .node.active { border-color: #38bdf8; box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
+
+    /* Subscriber Result Area */
+    .result-box {
+        font-size: 28px; font-weight: bold; color: #10b981;
+    }
+
+    /* Moving Data Element */
+    .data-dot {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        width: 40px; height: 40px; background: #f59e0b; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: bold; font-size: 16px; color: #000; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        transition: left 3s linear, background-color 0.3s, transform 0.3s, opacity 0.3s;
+        z-index: 5; left: 40px; /* Start pos */
+    }
+    .data-dot.mapped { background: #3b82f6; color: white; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+    .data-dot.destroyed { transform: translateY(-50%) scale(0); opacity: 0; }
+
+    /* Background Line */
+    .flow-line {
+        position: absolute; top: 50%; left: 40px; right: 40px; height: 4px;
+        background: rgba(255,255,255,0.05); z-index: 1; transform: translateY(-50%);
+    }
+
+    /* Status Text */
+    .status-text { margin-top: 15px; font-size: 13px; color: #64748b; text-align: center; }
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+    <div class="header">
+        <h2>🌊 Combine 파이프라인 시뮬레이터</h2>
+        <p>왼쪽에서 생산된 데이터가 Operator(Filter, Map)를 거쳐 구독자에게 도달하는 과정을 확인하세요.</p>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-sub" onclick="startSubscription()">▶️ 구독 시작 (Sink)</button>
+        <button class="btn btn-cancel" onclick="cancelSubscription()">⏹️ 구독 취소 (Cancel)</button>
+        
+        <div class="toggle-wrapper">
+            <button id="btn-filter" class="toggle-btn" onclick="toggleFilter()">Filter (짝수만 통과)</button>
+            <button id="btn-map" class="toggle-btn" onclick="toggleMap()">Map (값 x 10)</button>
+        </div>
+    </div>
+
+    <div class="pipeline-container" id="pipeline">
+        <div class="flow-line" id="flow-line"></div>
+        
+        <div class="node" id="node-pub">
+            <div class="node-title">Publisher</div>
+            <div class="node-icon">📡</div>
+        </div>
+        
+        <div class="node" id="node-filter">
+            <div class="node-title">Filter</div>
+            <div class="node-icon">🛡️</div>
+        </div>
+        
+        <div class="node" id="node-map">
+            <div class="node-title">Map</div>
+            <div class="node-icon">⚙️</div>
+        </div>
+        
+        <div class="node active" id="node-sub" style="border-color: #10b981;">
+            <div class="node-title">Subscriber</div>
+            <div class="result-box" id="result-text">-</div>
+        </div>
+    </div>
+
+    <div class="status-text" id="status-log">상태: 대기 중 (구독을 시작해주세요)</div>
+</div>
+
+<script>
+    let intervalId = null;
+    let counter = 1;
+    let isFilterActive = false;
+    let isMapActive = false;
+    let isSubscribed = false;
+
+    const pipeline = document.getElementById('pipeline');
+    const resultText = document.getElementById('result-text');
+    const statusLog = document.getElementById('status-log');
+    const flowLine = document.getElementById('flow-line');
+
+    function toggleFilter() {
+        isFilterActive = !isFilterActive;
+        const btn = document.getElementById('btn-filter');
+        btn.classList.toggle('active');
+        document.getElementById('node-filter').classList.toggle('active');
+        logStatus(`Filter Operator 상태 변경: ${isFilterActive ? '활성화 (짝수만)' : '비활성화 (모두 통과)'}`);
+    }
+
+    function toggleMap() {
+        isMapActive = !isMapActive;
+        const btn = document.getElementById('btn-map');
+        btn.classList.toggle('active');
+        document.getElementById('node-map').classList.toggle('active');
+        logStatus(`Map Operator 상태 변경: ${isMapActive ? '활성화 (x10)' : '비활성화 (그대로)'}`);
+    }
+
+    function logStatus(msg) {
+        statusLog.innerText = `상태: ${msg}`;
+    }
+
+    function startSubscription() {
+        if (isSubscribed) return;
+        isSubscribed = true;
+        counter = 1;
+        resultText.innerText = '-';
+        flowLine.style.background = 'rgba(16, 185, 129, 0.3)'; // 연결된 선 표시
+        logStatus("구독 시작! 파이프라인이 연결되었습니다.");
+        
+        // 2초마다 데이터 발행
+        intervalId = setInterval(emitData, 2000);
+        emitData(); // 즉시 1개 발행
+    }
+
+    function cancelSubscription() {
+        isSubscribed = false;
+        clearInterval(intervalId);
+        flowLine.style.background = 'rgba(255,255,255,0.05)'; // 선 끊김 표시
+        
+        // 이동 중인 모든 데이터 삭제 (Cancellable 동작 시뮬레이션)
+        document.querySelectorAll('.data-dot').forEach(dot => dot.remove());
+        
+        resultText.innerText = '취소됨';
+        logStatus("구독 취소 (AnyCancellable). 파이프라인이 파괴되었습니다.");
+    }
+
+    function emitData() {
+        const value = counter++;
+        
+        // 데이터 요소 생성
+        const dot = document.createElement('div');
+        dot.className = 'data-dot';
+        dot.innerText = value;
+        pipeline.appendChild(dot);
+        
+        // 약간의 딜레이 후 애니메이션 시작 (CSS transition)
+        setTimeout(() => {
+            dot.style.left = 'calc(100% - 100px)'; // 끝까지 이동
+            
+            // 1초 뒤: Filter 노드 통과 시점
+            setTimeout(() => {
+                if (isFilterActive && value % 2 !== 0) {
+                    dot.classList.add('destroyed'); // 홀수 파괴
+                    logStatus(`값 ${value} (홀수)가 Filter에서 차단되었습니다.`);
+                }
+            }, 1000);
+            
+            // 2초 뒤: Map 노드 통과 시점
+            setTimeout(() => {
+                if (!dot.classList.contains('destroyed') && isMapActive) {
+                    dot.classList.add('mapped'); // 파란색으로 변환
+                    dot.innerText = value * 10;
+                    logStatus(`값 ${value}가 Map을 거쳐 ${value * 10}으로 변환되었습니다.`);
+                }
+            }, 2000);
+            
+            // 3초 뒤: Subscriber 도달 시점
+            setTimeout(() => {
+                if (!dot.classList.contains('destroyed')) {
+                    resultText.innerText = dot.innerText; // 화면 갱신 (Sink)
+                    
+                    // 스케일업 효과
+                    resultText.style.transform = 'scale(1.3)';
+                    setTimeout(() => resultText.style.transform = 'scale(1)', 200);
+                    
+                    logStatus(`구독자가 최종 값 ${dot.innerText}을(를) 수신했습니다.`);
+                }
+                dot.remove(); // DOM에서 제거
+            }, 3000);
+            
+        }, 50);
+    }
+</script>
+</body>
+</html>

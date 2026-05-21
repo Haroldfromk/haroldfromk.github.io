@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actor vs Class Compact</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#0b1020;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    color:white;
+}
+
+.wrapper{
+    max-width:1100px;
+    margin:20px auto;
+    padding:20px;
+    background:#151515;
+    border-radius:28px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.card{
+    background:#020817;
+    border-radius:24px;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+    min-height:620px;
+}
+
+.class-card{
+    border:1px solid rgba(255,0,80,0.15);
+}
+
+.actor-card{
+    border:1px solid rgba(0,255,150,0.15);
+}
+
+h2{
+    margin:0;
+    font-size:28px;
+    font-weight:800;
+}
+
+.sub{
+    margin-top:10px;
+    color:#9ca3af;
+    font-size:14px;
+}
+
+.ticket{
+    margin-top:28px;
+    width:150px;
+    border-radius:20px;
+    padding:18px;
+    font-weight:700;
+}
+
+.red{
+    background:rgba(255,0,90,0.12);
+    border:1px solid rgba(255,0,90,0.25);
+}
+
+.green{
+    background:rgba(0,255,120,0.12);
+    border:1px solid rgba(0,255,120,0.25);
+}
+
+.ticket-value{
+    font-size:72px;
+    font-weight:900;
+    margin-top:8px;
+}
+
+.play-area{
+    position:relative;
+    height:360px;
+    margin-top:26px;
+    border-radius:24px;
+    background:#010409;
+    overflow:hidden;
+}
+
+.users{
+    position:absolute;
+    left:28px;
+    top:34px;
+
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.user{
+    width:14px;
+    height:14px;
+    border-radius:999px;
+    border:3px solid #d1d5db;
+    opacity:0.9;
+}
+
+.server{
+    position:absolute;
+    right:30px;
+    top:130px;
+
+    width:130px;
+    height:90px;
+
+    border-radius:22px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:16px;
+    font-weight:800;
+}
+
+.red-server{
+    background:rgba(255,0,90,0.18);
+    border:1px solid rgba(255,0,90,0.3);
+}
+
+.green-server{
+    background:rgba(0,255,120,0.18);
+    border:1px solid rgba(0,255,120,0.3);
+}
+
+svg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+.mailbox{
+    margin-top:24px;
+    color:#9ca3af;
+    font-size:14px;
+}
+
+.mail-slot{
+    margin-top:10px;
+    height:90px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.06);
+}
+
+.result{
+    margin-top:24px;
+    font-size:20px;
+    font-weight:700;
+}
+
+.bad{
+    color:#fb7185;
+}
+
+.good{
+    color:#4ade80;
+}
+
+.buttons{
+    display:flex;
+    gap:14px;
+    margin-top:24px;
+}
+
+button{
+    flex:1;
+    border:none;
+    border-radius:18px;
+    padding:18px;
+    font-size:18px;
+    cursor:pointer;
+    background:#2a2f45;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+@media(max-width:900px){
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <div class="layout">
+
+        <div class="card class-card">
+
+            <h2>❌ Class (비격리)</h2>
+            <div class="sub">동시에 접근 → 데이터 꼬임 발생 위험</div>
+
+            <div class="ticket red">
+                🎫 남은 티켓
+                <div class="ticket-value" id="classCount">10</div>
+            </div>
+
+            <div class="play-area">
+
+                <div class="users" id="classUsers"></div>
+
+                <svg id="classSvg"></svg>
+
+                <div class="server red-server">
+                    Ticket Server
+                </div>
+
+            </div>
+
+            <div class="result bad" id="classResult">
+                대기 중...
+            </div>
+
+        </div>
+
+        <div class="card actor-card">
+
+            <h2>✅ Actor (격리)</h2>
+            <div class="sub">Mailbox Queue → 순차 처리</div>
+
+            <div class="ticket green">
+                🎫 남은 티켓
+                <div class="ticket-value" id="actorCount">10</div>
+            </div>
+
+            <div class="mailbox">
+                📬 Mailbox Queue
+                <div class="mail-slot"></div>
+            </div>
+
+            <div class="play-area">
+
+                <div class="users" id="actorUsers"></div>
+
+                <svg id="actorSvg"></svg>
+
+                <div class="server green-server">
+                    Actor Server
+                </div>
+
+            </div>
+
+            <div class="result good" id="actorResult">
+                대기 중...
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="buttons">
+        <button id="startBtn">전체 예매 시작</button>
+        <button id="resetBtn">초기화</button>
+    </div>
+
+</div>
+
+<script>
+
+const classUsers = document.getElementById('classUsers');
+const actorUsers = document.getElementById('actorUsers');
+
+const classSvg = document.getElementById('classSvg');
+const actorSvg = document.getElementById('actorSvg');
+
+const classCount = document.getElementById('classCount');
+const actorCount = document.getElementById('actorCount');
+
+const classResult = document.getElementById('classResult');
+const actorResult = document.getElementById('actorResult');
+
+function createUsers(){
+
+    classUsers.innerHTML = '';
+    actorUsers.innerHTML = '';
+
+    for(let i=0;i<9;i++){
+
+        const c = document.createElement('div');
+        c.className = 'user';
+        classUsers.appendChild(c);
+
+        const a = document.createElement('div');
+        a.className = 'user';
+        actorUsers.appendChild(a);
+    }
+}
+
+function resetAll(){
+
+    createUsers();
+
+    classSvg.innerHTML = '';
+    actorSvg.innerHTML = '';
+
+    classCount.innerText = '10';
+    actorCount.innerText = '10';
+
+    classResult.innerHTML = '대기 중...';
+    actorResult.innerHTML = '대기 중...';
+}
+
+resetAll();
+
+function drawLine(svg,y,color){
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+
+    line.setAttribute('x1','70');
+    line.setAttribute('y1',y);
+
+    line.setAttribute('x2','360');
+    line.setAttribute('y2','175');
+
+    line.setAttribute('stroke',color);
+    line.setAttribute('stroke-width','4');
+
+    svg.appendChild(line);
+}
+
+document.getElementById('startBtn').onclick = async () => {
+
+    resetAll();
+
+    const cUsers = classUsers.querySelectorAll('.user');
+    const aUsers = actorUsers.querySelectorAll('.user');
+
+    for(let i=0;i<cUsers.length;i++){
+
+        drawLine(classSvg,50 + (i*36),'#4f8cff');
+
+        await new Promise(r=>setTimeout(r,80));
+    }
+
+    classCount.innerText = '3';
+
+    classResult.innerHTML = '❌ Remaining Ticket Mismatch';
+
+    for(let i=0;i<aUsers.length;i++){
+
+        drawLine(actorSvg,50 + (i*36),'#4ade80');
+
+        actorCount.innerText = 9 - i;
+
+        await new Promise(r=>setTimeout(r,150));
+    }
+
+    actorCount.innerText = '0';
+
+    actorResult.innerHTML = '✅ All Requests Processed Safely';
+}
+
+document.getElementById('resetBtn').onclick = () => {
+
+    resetAll();
+}
+
+</script>
+
+</body>
+</html>

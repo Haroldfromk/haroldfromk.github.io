@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔀 Combine Operator 3탄 - 멀티 스트림 결합</title>
+<style>
+    body {
+        margin: 0; padding: 12px; background: #020617; color: #f8fafc;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    #wrapper {
+        width: 100%; max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #050816; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);
+        box-sizing: border-box;
+    }
+    .header h2 { margin: 0 0 4px 0; font-size: 18px; color: #38bdf8; }
+    .header p { margin: 0 0 20px 0; font-size: 12px; color: #94a3b8; }
+    
+    .control-panel {
+        display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
+        background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap;
+    }
+    select {
+        flex: 1; min-width: 200px; padding: 8px 12px; background: #0f172a;
+        color: #f8fafc; border: 1px solid #334155; border-radius: 8px;
+        font-size: 13px; font-weight: bold; cursor: pointer; outline: none;
+    }
+    select:focus { border-color: #38bdf8; }
+    .btn-play {
+        padding: 8px 20px; background: #38bdf8; color: #020617; border: none;
+        border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer;
+        transition: 0.1s;
+    }
+    .btn-play:hover { background: #7dd3fc; }
+    .btn-play:active { transform: scale(0.98); }
+
+    .code-container {
+        background: #02040d; padding: 12px 16px; border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.04); font-family: monospace;
+        font-size: 13px; color: #e2e8f0; margin-bottom: 25px; min-height: 40px;
+        display: flex; align-items: center;
+    }
+    .keyword { color: #c678dd; }
+    .operator-text { color: #61afef; font-weight: bold; }
+
+    /* Diagram Canvas Track area */
+    .diagram-area {
+        position: relative; background: #0f172a; border-radius: 14px;
+        padding: 20px; border: 1px solid rgba(255,255,255,0.05);
+        display: flex; flex-direction: column; gap: 25px; overflow: hidden;
+    }
+    
+    .stream-row {
+        display: flex; align-items: center; position: relative; height: 50px;
+    }
+    .stream-label {
+        width: 100px; font-size: 11px; font-weight: bold; color: #64748b;
+        text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .track {
+        flex: 1; position: relative; height: 100%; display: flex; align-items: center;
+    }
+    .line {
+        position: absolute; left: 0; right: 0; height: 2px; background: #334155; z-index: 1;
+    }
+    .line::after {
+        content: ''; position: absolute; right: 0; top: -4px;
+        border: 5px solid transparent; border-left-color: #334155;
+    }
+    
+    .ticks {
+        position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr);
+        z-index: 2;
+    }
+    .tick-col {
+        position: relative; display: flex; align-items: center; justify-content: center;
+    }
+    .tick-label-row {
+        display: flex; margin-top: -15px; margin-bottom: -10px; padding-left: 100px;
+    }
+    .tick-label-row .label-col {
+        flex: 1; text-align: center; font-size: 10px; font-family: monospace; color: #475569;
+    }
+
+    /* Marble Styling */
+    .marble {
+        width: 32px; height: 32px; border-radius: 50%; display: flex;
+        align-items: center; justify-content: center; font-size: 12px; font-weight: bold;
+        color: #000; z-index: 3; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        animation: pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .m-p1 { background: #fbbf24; border: 2px solid #f59e0b; } /* Stream 1: Orange/Yellow */
+    .m-p2 { background: #a78bfa; border: 2px solid #8b5cf6; color: #fff; } /* Stream 2: Purple */
+    .m-out { background: #34d399; border: 2px solid #10b981; } /* Output: Green */
+    .m-nil { background: #64748b; border: 2px solid #475569; color: #fff; font-size: 10px; }
+    .m-special { background: #f87171; border: 2px solid #ef4444; color: #fff; }
+
+    /* Stream Completion Line */
+    .completion-bar {
+        width: 4px; height: 30px; background: #94a3b8; border-radius: 2px; z-index: 3;
+        animation: pop 0.2s ease-out both;
+    }
+
+    /* Scan Line Effect */
+    .scan-line {
+        position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(56, 189, 248, 0.4);
+        box-shadow: 0 0 8px #38bdf8; z-index: 10; left: 100px; display: none; pointer-events: none;
+    }
+
+    
+
+    @keyframes pop {
+        0% { transform: scale(0); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+    <div class="header">
+        <h2>🔀 Combine Operator 3탄 - 멀티 스트림 결합</h2>
+        <p>여러 개의 Publisher 스트림을 조합 및 연결하는 결합 그룹</p>
+    </div>
+
+    <div class="control-panel">
+        <select id="operator-select" onchange="loadOperator()">
+            <!-- Options dynamically loaded -->
+        </select>
+        <button class="btn-play" onclick="playTimeline()">▶️ 재생 (Play)</button>
+    </div>
+
+    <div class="code-container" id="code-display">
+        <span class="keyword">let</span> output = p1<span class="operator-text" id="op-text">.map { $0 * 2 }</span>
+    </div>
+
+    <div class="tick-label-row">
+        <div class="label-col">t0</div>
+        <div class="label-col">t1</div>
+        <div class="label-col">t2</div>
+        <div class="label-col">t3</div>
+    </div>
+
+    <div class="diagram-area" id="diagram-container">
+        <div class="scan-line" id="scanner"></div>
+
+        <!-- 입력 스트림 1 -->
+        <div class="stream-row">
+            <div class="stream-label">Input 1 (p1)</div>
+            <div class="track">
+                <div class="line"></div>
+                <div class="ticks">
+                    <div class="tick-col" id="p1-t0"></div>
+                    <div class="tick-col" id="p1-t1"></div>
+                    <div class="tick-col" id="p1-t2"></div>
+                    <div class="tick-col" id="p1-t3"></div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- 입력 스트림 2 -->
+        <div class="stream-row" id="stream2-row">
+            <div class="stream-label">Input 2 (p2)</div>
+            <div class="track">
+                <div class="line"></div>
+                <div class="ticks">
+                    <div class="tick-col" id="p2-t0"></div>
+                    <div class="tick-col" id="p2-t1"></div>
+                    <div class="tick-col" id="p2-t2"></div>
+                    <div class="tick-col" id="p2-t3"></div>
+                </div>
+            </div>
+        </div>
+    
+
+        <!-- 출력 스트림 -->
+        <div class="stream-row">
+            <div class="stream-label" style="color: #34d399;">Output</div>
+            <div class="track">
+                <div class="line" style="background: rgba(16, 185, 129, 0.2);"></div>
+                <div class="ticks">
+                    <div class="tick-col" id="out-t0"></div>
+                    <div class="tick-col" id="out-t1"></div>
+                    <div class="tick-col" id="out-t2"></div>
+                    <div class="tick-col" id="out-t3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const operators = {
+    "1. combineLatest": { "p1": ["1", "0", "3", "0"], "p2": ["0", "5", "0", "7"], "op": "p1.combineLatest(p2)", "out": ["0", "(1,5)", "(5,3)", "(3,7)"] },
+    "2. merge": { "p1": ["1", "0", "3", "4"], "p2": ["0", "5", "0", "0"], "op": "p1.merge(p2)", "out": ["1", "5", "3", "4"] },
+    "3. zip": { "p1": ["1", "0", "3", "0"], "p2": ["0", "5", "0", "7"], "op": "p1.zip(p2)", "out": ["0", "(1,5)", "0", "(3,7)"] },
+    "4. flatMap": { "p1": ["[1,2]", "0", "[3]", "[4]"], "op": "flatMap { $0.publisher }", "out": ["1", "2", "3", "4"] },
+    "5. switchToLatest": { "p1": ["1", "2", "0", "4"], "p2": ["0", "0", "5", "0"], "op": "switchToLatest()", "out": ["1", "2", "5", "0"] }
+};
+
+    const select = document.getElementById('operator-select');
+    const opText = document.getElementById('op-text');
+    const scanner = document.getElementById('scanner');
+
+    // Load dropdown options
+    Object.keys(operators).forEach(key => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.innerText = key + ' (' + operators[key].op.split('(')[0].split('{')[0].trim() + ')';
+        select.appendChild(opt);
+    });
+
+    function createMarble(val, type) {
+        if (val === '0') return null;
+        if (val === '|' || val === '-2') {
+            const bar = document.createElement('div');
+            bar.className = 'completion-bar';
+            return bar;
+        }
+        const m = document.createElement('div');
+        m.className = 'marble ' + (type === 'out' ? 'm-out' : (type === 'p2' ? 'm-p2' : 'm-p1'));
+        if (val.toLowerCase() === 'nil') {
+            m.className = 'marble m-nil';
+        } else if (val === 'true' || val === 'false') {
+            m.className = 'marble m-special';
+        }
+        m.innerText = val;
+        return m;
+    }
+
+    function clearStreams() {
+        for(let t=0; t<4; t++) {
+            document.getElementById(`p1-t${t}`).innerHTML = '';
+            const p2Target = document.getElementById(`p2-t${t}`);
+            if(p2Target) p2Target.innerHTML = '';
+            document.getElementById(`out-t${t}`).innerHTML = '';
+        }
+    }
+
+    function loadOperator() {
+        clearStreams();
+        const opKey = select.value;
+        const op = operators[opKey];
+        opText.innerText = op.op;
+        
+        // Dynamic Stream 2 Visibility logic if applicable
+        const s2Row = document.getElementById('stream2-row');
+        if (s2Row) {
+            if (op.p2) {
+                s2Row.style.display = 'flex';
+            } else {
+                s2Row.style.display = 'none';
+            }
+        }
+    }
+
+    let playTimeout = null;
+    function playTimeline() {
+        clearStreams();
+        const opKey = select.value;
+        const op = operators[opKey];
+        
+        scanner.style.display = 'block';
+        scanner.style.left = '100px';
+        
+        const trackWidth = document.querySelector('.track').offsetWidth;
+        const stepWidth = trackWidth / 4;
+
+        if(playTimeout) clearTimeout(playTimeout);
+
+        function triggerTick(tick) {
+            if (tick >= 4) {
+                scanner.style.display = 'none';
+                return;
+            }
+
+            // Move scanner bar to center of the current tick column
+            const targetLeft = 100 + (stepWidth * tick) + (stepWidth / 2);
+            scanner.style.transition = 'left 0.25s linear';
+            scanner.style.left = targetLeft + 'px';
+
+            // Spawn elements
+            const p1Val = op.p1[tick];
+            const p1Node = createMarble(p1Val, 'p1');
+            if(p1Node) document.getElementById(`p1-t${tick}`).appendChild(p1Node);
+
+            if (op.p2) {
+                const p2Val = op.p2[tick];
+                const p2Node = createMarble(p2Val, 'p2');
+                if(p2Node) document.getElementById(`p2-t${tick}`).appendChild(p2Node);
+            }
+
+            const outVal = op.out[tick];
+            const outNode = createMarble(outVal, 'out');
+            if(outNode) document.getElementById(`out-t${tick}`).appendChild(outNode);
+
+            playTimeout = setTimeout(() => triggerTick(tick + 1), 600);
+        }
+
+        // Start scanning animation
+        setTimeout(() => triggerTick(0), 100);
+    }
+
+    // Initial setup
+    window.onload = () => {
+        loadOperator();
+    };
+</script>
+</body>
+</html>

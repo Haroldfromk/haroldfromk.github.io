@@ -36,7 +36,7 @@ positoin: .camera(
 
 heading, pitch의 경우는
 
-[여기서](https://haroldfromk.github.io/posts/MapKit/){:target="_blank"} 언급을 했었기에 패스
+[여기서](https://haroldfromk.github.io/udemy/swiftui/MapKit/){:target="_blank"} 언급을 했었기에 패스
 
 현재는 preview에만 적용을 했고
 

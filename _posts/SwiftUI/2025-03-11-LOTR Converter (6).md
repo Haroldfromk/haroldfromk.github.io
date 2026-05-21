@@ -138,6 +138,11 @@ struct ContentView: View {
 
 이전에 currency가 있던 부분이 전부 `@State`로 되어있었는데 전부 `@Binding`으로 바꿔준다.
 
+```swift
+@Binding var topCurrency: Currency
+@Binding var bottomCurrency: Currency
+```
+
 이때 preview쪽에 에러가 발생하는데
 
 ```swift
@@ -158,6 +163,7 @@ struct ContentView: View {
 간단하게 Wrapper를 바꾼 이유를 적어본다면
 
 ### ✅ `@State` vs `@Binding` 차이 요약
+
 | 속성 래퍼 | 역할 | 소유권 | 값 변경 시 | 주 사용 위치 |
 |------------|------|--------|------------|---------------|
 | `@State`   | 상태를 소유하고 관리함 | 자신(뷰) | 뷰가 다시 렌더링됨 | 부모 뷰 |

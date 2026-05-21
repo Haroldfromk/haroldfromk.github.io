@@ -56,16 +56,18 @@ print(multiplyArray)
 - filter 메서드는 클로저를 인자로 받고, 이 클로저 내부에는 어떤 데이터를 포함시킬지 그 조건을 정의한다.
 
 - 선언 
-```swift
 
+```swift
 func reduce<Result>(_ initialResult: Result, _ nextPartialResult: (Result, Element) throws -> Result) rethrows -> Result
 ```
+
 - 매개변수
     - initialResult : 초기값으로 사용할 값을 넣으면 클로저가 처음 실행될 때, nextPartialResult에 전달된다.
     - nextPartialResult : 컨테이너 요소를 새로운 누적값으로 결합하는 클로저이다.
         - 리턴타입 : 최종 누적 값이 반환되며, 컨테이너 요소가 없다면 initialResult의 값이 반환된다.
 
 - 예시 (for문을 사용 했을 때)
+
 ```swift
 // 각 요소의 합 구하기
 
@@ -81,6 +83,7 @@ print(sum)
 ```
 
 - 예시 (reduce를 사용했을 때)
+
 ```swift
 // 각 요소의 합 구하기 (1)
 
@@ -101,6 +104,7 @@ print(sum)
 ```
 
 - 예시 (for문을 사용 했을 때)
+
 ```swift
 // 각 요소의 곱셈 결과 구하기
 
@@ -114,7 +118,9 @@ for number in numbers {
 print(sum)
 // 120
 ```
+
 - 예시 (reduce를 사용했을 때)
+
 ```swift
 // 각 요소의 곱셈 결과 구하기 (1)
 
@@ -133,6 +139,7 @@ let sum = numbers.reduce(1) { $0 * $1 }
 print(sum)
 // 120
 ```
+
 ## filter
 - 컬렉션 내부의 데이터들을 하나로 통합시킨다
 - 다른 고차함수들과는 다르게 reduce는 두 개의 인자를 받는다.
@@ -142,6 +149,7 @@ print(sum)
      - 이때 사용되는 두 파라미터 중 첫번째는 바로 이전값에 대한 통합된 데이터를 의미하고, 두번째는 이번에 새로 통합할 데이터를 의미한다.
  
 - 선언
+
 ```swift
 func filter(_ isIncluded: (Self.Element) throws -> Bool) rethrows -> [Self.Element]
 ```
@@ -151,6 +159,7 @@ func filter(_ isIncluded: (Self.Element) throws -> Bool) rethrows -> [Self.Eleme
         
     - 리턴 타입 : inIncluded 에 맞게 true로 반환되는 값만 리턴한다.
 - 예시 (일반적인 For문을 사용 했을 때)
+
 ```swift
 // numbers에서 짝수만 추출하기
 
@@ -168,6 +177,7 @@ print(evenNumbers)
 ```
 
 - 예시 (filter를 사용했을 때)
+
 ```swift
 // numbers에서 짝수만 추출하기
 
@@ -177,6 +187,7 @@ let evenNumbers = numbers.filter { $0 % 2 == 0 }
 print(evenNumbers)
 // [2, 4, 6, 8]
 ```
+
 ---
 
 # 다른 고차함수들
@@ -185,6 +196,7 @@ print(evenNumbers)
 - 옵셔널 바인딩을 지원한다.
     
 - 예시
+
 ```swift
 let students : [String?] = ["Mike", "Jane", nil, "John", nil]
 // nil이 섞여 있는 컬렉션에서 존재하는 모든 이름앞에 "Boost2021-" 키워드를 붙여주자.
@@ -200,9 +212,11 @@ let boostStudents = students.compactMap({ $0 }).map( {"BoostCamp2021-" + $0})
  
 print(boostStudents) // ["BoostCamp2021-Mike", "BoostCamp2021-Jane", "BoostCamp2021-John"
 ```
+
 ## FlatMap
 	- 2차원 배열에 나누어져있는 데이터들을 1차원 배열로 합쳐주는 기능이 포함되어있다.
 예시
+
 ```swift
 let students = [["Mike", nil], [nil, nil, "Jane"], ["John"]]
 // 먼저 위와 같은 배열을 1차원으로 만들때 사용한다.
@@ -214,8 +228,6 @@ print(goodStudents) // [Optional("Mike"), nil, nil, nil, Optional("Jane"), Optio
 
 let goodStudents = students.flatMap({$0}).compactMap({ $0 })
 print(goodStudents) // ["Mike", "Jane", "John"]
-
-
 ```
 
 ## ForEach

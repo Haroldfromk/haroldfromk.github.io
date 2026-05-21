@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body { margin: 0; padding: 10px; background: #020617; color: white; font-family: sans-serif; box-sizing: border-box; }
+    #wrapper { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; border-radius: 20px; background: #050816; border: 1px solid rgba(255,255,255,0.05); box-sizing: border-box; }
+    .header h2 { margin: 0 0 5px 0; font-size: 16px; }
+    .header p { margin: 0; font-size: 11px; color: #9ba3b4; margin-bottom: 15px; }
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    
+    .phone { width: 100%; height: 340px; border-radius: 20px; border: 5px solid #1e293b; background: #0f172a; position: relative; overflow: hidden; box-sizing: border-box; }
+    .view-layer { position: absolute; inset: 0; background: #0f172a; transition: transform 0.3s ease; display: flex; flex-direction: column; }
+    .nav-bar { height: 40px; background: rgba(30, 41, 59, 0.9); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.1); position: relative;}
+    .back-btn { position: absolute; left: 10px; color: #38bdf8; font-size: 11px; cursor: pointer; padding: 5px; }
+    
+    .list-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin: 8px 15px; color: #38bdf8; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.1s; display: flex; justify-content: space-between; }
+    .list-item:hover { background: rgba(255,255,255,0.1); }
+    
+    .data-panel { background: rgba(255,255,255,0.02); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.05); height: 340px; box-sizing: border-box;}
+    .code-block { background: #02040d; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 11px; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.04); margin-top: 10px; flex: 1; overflow-y: auto; line-height: 1.5; }
+    .type { color: #e5c07b; } .string { color: #98c379; } .keyword { color: #c678dd; }
+    
+    .btn-row { display: flex; gap: 5px; margin-top: 8px; }
+    button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-size: 11px; font-weight: bold; color: white; cursor: pointer; transition: 0.1s; }
+    button:active { transform: scale(0.95); }
+    .b-push { background: #0ea5e9; } .b-pop { background: #475569; } .b-root { background: #e11d48; }
+</style>
+</head>
+<body>
+<div id="wrapper">
+    <div class="header">
+        <h2>🚀 2단계: 배열(Array)이 가진 멀티 뎁스의 힘</h2>
+        <p>목록을 계속 클릭하며 화면 깊이(Depth)만큼 배열이 어떻게 쌓이는지 확인해 보세요.</p>
+    </div>
+    <div class="layout">
+        <div class="phone" id="phone">
+            <div class="view-layer" style="z-index: 1;">
+                <div class="nav-bar">Grub Spots</div>
+                <div style="margin-top: 10px;">
+                    <div class="list-item" onclick="pushData('해운대 암소갈비')">📍 해운대 암소갈비 <span>›</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="data-panel">
+            <div style="font-size: 13px; font-weight: bold;">path 배열 상태 (히스토리 관리)</div>
+            <div class="code-block">
+                <span class="keyword">@State var</span> path: [<span class="type">DDGLocation</span>] = [<br>
+                <div id="array-content" style="padding-left: 15px; color: #64748b;">// 비어있음</div>
+                ]
+            </div>
+            
+            <div class="btn-row">
+                <button class="b-push" onclick="deepLink()">3단계 딥링크 한 번에 주입</button>
+            </div>
+            <div class="btn-row">
+                <button class="b-pop" onclick="popData()">뒤로 가기 (removeLast)</button>
+                <button class="b-root" onclick="popToRoot()">홈으로 (removeAll)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let path = [];
+    const phone = document.getElementById('phone');
+    const arrayContent = document.getElementById('array-content');
+
+    function updateUI() {
+        // 1. 우측 코드블록(배열 내용) 갱신
+        if (path.length === 0) {
+            arrayContent.innerHTML = '// 비어있음 (Root)';
+        } else {
+            arrayContent.innerHTML = path.map(i => `<span class="type">DDGLocation</span>(name: <span class="string">"${i}"</span>)`).join(',<br>');
+        }
+
+        // 2. 화면(View) 동기화
+        const currentViews = document.querySelectorAll('.dynamic-view');
+        const targetCount = path.length;
+
+        // 배열 길이가 화면 수보다 길면 -> 뷰 추가 (순차적으로 생성되도록 처리)
+        if (currentViews.length < targetCount) {
+            let i = currentViews.length;
+            
+            function renderNext() {
+                if (i >= targetCount) return;
+                const item = path[i];
+                const depth = i + 1;
+
+                const newView = document.createElement('div');
+                newView.className = 'view-layer dynamic-view';
+                newView.style.zIndex = depth + 1;
+                newView.style.transform = 'translateX(100%)'; // 오른쪽에서 대기
+
+                // 화면 뎁스별로 들어갈 다음 버튼 구성
+                let nextContent = '';
+                if (depth === 1) {
+                    nextContent = `<div class="list-item" onclick="pushData('리뷰 152개')">⭐ 리뷰 모아보기 <span>›</span></div>`;
+                } else if (depth === 2) {
+                    nextContent = `<div class="list-item" onclick="pushData('작성자: 해롤드')">👤 작성자 프로필 <span>›</span></div>`;
+                } else {
+                    nextContent = `<div style="text-align:center; color:#64748b; font-size: 11px; margin-top:25px;">더 이상 들어갈 수 없습니다.<br>(배열 길이: 3)</div>`;
+                }
+
+                newView.innerHTML = `
+                    <div class="nav-bar"><span class="back-btn" onclick="popData()">❮ Back</span>${item}</div>
+                    <div style="padding: 10px; margin-top: 10px;">
+                        <div style="font-size: 15px; font-weight: bold; text-align: center; margin-bottom: 20px;">${item} 상세 화면</div>
+                        ${nextContent}
+                    </div>
+                `;
+                
+                phone.appendChild(newView);
+                setTimeout(() => newView.style.transform = 'translateX(0)', 20); // 슬라이드 애니메이션
+
+                i++;
+                if (i < targetCount) {
+                    setTimeout(renderNext, 200); // 딥링크처럼 한 번에 여러 개 들어올 때 따다닥 애니메이션
+                }
+            }
+            renderNext();
+        } 
+        // 배열 길이가 화면 수보다 짧으면 -> 뷰 제거
+        else if (currentViews.length > targetCount) {
+            for (let i = targetCount; i < currentViews.length; i++) {
+                currentViews[i].style.transform = 'translateX(100%)';
+                setTimeout(() => { currentViews[i].remove(); }, 300);
+            }
+        }
+    }
+
+    // 데이터 하나씩 추가 (사용자가 직접 클릭할 때)
+    function pushData(item) {
+        if(path.length >= 3) return;
+        path.push(item);
+        updateUI();
+    }
+
+    // 데이터 하나 삭제 (뒤로가기)
+    function popData() {
+        if (path.length > 0) {
+            path.pop();
+            updateUI();
+        }
+    }
+
+    // 배열 비우기 (처음으로)
+    function popToRoot() {
+        path = [];
+        updateUI();
+    }
+
+    // 딥링크 배열 꽂아넣기
+    function deepLink() {
+        path = []; // 먼저 초기화
+        updateUI(); 
+        
+        setTimeout(() => {
+            // 빈 상태에서 3개를 한 번에 채움
+            path = ['해운대 암소갈비', '리뷰 152개', '작성자: 해롤드'];
+            updateUI(); 
+        }, 350); // 앞의 초기화 애니메이션 끝난 뒤 실행
+    }
+</script>
+</body>
+</html>

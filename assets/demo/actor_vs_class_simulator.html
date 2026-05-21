@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actor vs Class Simulator</title>
+<style>
+    body {
+        margin: 0; padding: 15px;
+        background: #020617; color: white;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        box-sizing: border-box;
+    }
+    #wrapper {
+        width: 100%; max-width: 920px; margin: 0 auto; padding: 20px;
+        border-radius: 24px; background: #050816;
+        box-shadow: 0 20px 80px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.04);
+        box-sizing: border-box;
+    }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .header h2 { margin: 0; font-size: 20px; white-space: nowrap; }
+    .buttons { display: flex; gap: 8px; }
+    .buttons button {
+        border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer;
+        font-weight: bold; font-size: 12px; background: #10172d; color: white; transition: 0.2s;
+    }
+    .buttons button:hover { background: #1c2645; transform: translateY(-2px); }
+    
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    
+    .card {
+        border-radius: 16px; padding: 16px; position: relative;
+        background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+        border: 1px solid rgba(255,255,255,0.06); overflow: hidden;
+        display: flex; flex-direction: column;
+    }
+    .class-card { box-shadow: inset 0 0 40px rgba(255,0,90,0.05); }
+    .actor-card { box-shadow: inset 0 0 40px rgba(0,255,150,0.05); }
+    
+    .card h3 { margin: 0 0 4px 0; font-size: 17px; }
+    .sub { color: #9ba3b4; font-size: 11px; margin-bottom: 12px; height: 16px; }
+    
+    .top-section { display: flex; justify-content: space-between; align-items: flex-start; height: 60px; margin-bottom: 10px; }
+    
+    .ticket {
+        display: inline-block; padding: 10px 14px; border-radius: 12px;
+        font-size: 12px; font-weight: bold; width: 35%; box-sizing: border-box;
+    }
+    .ticket span { display: block; font-size: 24px; margin-top: 2px; }
+    .red-bg { background: rgba(255,0,80,0.1); border: 1px solid rgba(255,0,80,0.3); }
+    .green-bg { background: rgba(0,255,120,0.1); border: 1px solid rgba(0,255,120,0.3); }
+
+    .mailbox {
+        background: rgba(255,255,255,0.05); border-radius: 10px; padding: 8px;
+        width: 60%; box-sizing: border-box; display: flex; gap: 4px; align-items: center; flex-wrap: wrap; align-content: flex-start; height: 100%;
+    }
+    .mailbox-title { font-size: 11px; color: #91a0b8; font-weight: bold; width: 100%; margin-bottom: 4px; }
+    .mail-item { width: 12px; height: 12px; background: #00ff78; border-radius: 50%; box-shadow: 0 0 8px rgba(0,255,120,0.5); }
+
+    .play-area {
+        height: 200px; background: rgba(0,0,0,0.3); border-radius: 14px;
+        position: relative; overflow: hidden; flex-shrink: 0;
+    }
+    
+    .user { width: 10px; height: 10px; border-radius: 50%; background: white; transition: all 0.4s ease-in-out; position: absolute; }
+    
+    .server {
+        position: absolute; right: 15px; top: 65px; width: 70px; height: 70px;
+        border-radius: 14px; display: flex; justify-content: center; align-items: center;
+        font-weight: bold; font-size: 11px; text-align: center; z-index: 10; line-height: 1.3;
+    }
+    .red-svr { background: rgba(255,0,80,0.2); border: 1px solid rgba(255,0,80,0.5); }
+    .green-svr { background: rgba(0,255,120,0.2); border: 1px solid rgba(0,255,120,0.5); }
+
+    .log {
+        margin-top: 10px; height: 100px; overflow-y: auto; background: #02040d;
+        border-radius: 10px; padding: 10px; font-family: monospace; font-size: 10px;
+        border: 1px solid rgba(255,255,255,0.05); line-height: 1.5; flex-shrink: 0;
+    }
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+    <div class="header">
+        <h2>🎟️ Actor vs Class 시뮬레이터</h2>
+        <div class="buttons">
+            <button onclick="runClass()" id="btn-class">Class 실행</button>
+            <button onclick="runActor()" id="btn-actor">Actor 실행</button>
+            <button onclick="resetAll()">초기화</button>
+        </div>
+    </div>
+
+    <div class="layout">
+        <div class="card class-card">
+            <h3>❌ Class (비격리)</h3>
+            <div class="sub">동시 접근 허용 → 데이터 경합(Data Race) 발생</div>
+            <div class="top-section">
+                <div class="ticket red-bg">남은 티켓 <span id="c-tick">10</span></div>
+            </div>
+            
+            <div class="play-area" id="c-area">
+                <div class="server red-svr" id="c-svr">Ticket<br>Server</div>
+            </div>
+            <div class="log" id="c-log"></div>
+        </div>
+
+        <div class="card actor-card">
+            <h3>✅ Actor (격리)</h3>
+            <div class="sub">Mailbox 대기 → 순차적(Serial) 처리</div>
+            <div class="top-section">
+                <div class="ticket green-bg">남은 티켓 <span id="a-tick">10</span></div>
+                <div class="mailbox">
+                    <div class="mailbox-title">📬 Mailbox Queue</div>
+                    <div id="a-mail" style="display:flex; gap:4px; flex-wrap:wrap;"></div>
+                </div>
+            </div>
+            
+            <div class="play-area" id="a-area">
+                <div class="server green-svr" id="a-svr">Actor<br>Server</div>
+            </div>
+            <div class="log" id="a-log"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cTick = 10, aTick = 10;
+    let isRunning = false;
+    
+    function log(elId, msg, color="white") {
+        const el = document.getElementById(elId);
+        el.innerHTML += `<div style="color:${color}">${msg}</div>`;
+        el.scrollTop = el.scrollHeight;
+    }
+
+    function initArea(areaId) {
+        const area = document.getElementById(areaId);
+        area.querySelectorAll('.user').forEach(u => u.remove());
+        for(let i=0; i<10; i++) {
+            let u = document.createElement('div');
+            u.className = 'user';
+            u.style.top = (12 + i*18) + 'px'; 
+            u.style.left = '15px';
+            area.appendChild(u);
+        }
+    }
+
+    function resetAll() {
+        if (isRunning) return;
+        cTick = 10; aTick = 10;
+        document.getElementById('c-tick').innerText = '10';
+        document.getElementById('a-tick').innerText = '10';
+        document.getElementById('c-log').innerHTML = '';
+        document.getElementById('a-log').innerHTML = '';
+        document.getElementById('a-mail').innerHTML = '';
+        initArea('c-area');
+        initArea('a-area');
+    }
+
+    function runClass() {
+        if (isRunning) return;
+        isRunning = true;
+        resetAll();
+        
+        const users = document.getElementById('c-area').querySelectorAll('.user');
+        const svr = document.getElementById('c-svr');
+        const targetX = svr.offsetLeft - 10; 
+        const targetY = svr.offsetTop + 30;
+
+        // 1. 유저 10명의 랜덤 접근 시간 생성 (0~600ms 사이)
+        let requests = [];
+        for(let i=0; i<10; i++) {
+            requests.push({ id: i, time: Math.random() * 600 });
+        }
+        requests.sort((a, b) => a.time - b.time); // 먼저 도착한 순서대로 정렬
+
+        // 2. Data Race (스레드 충돌) 로직 계산
+        let simulatedTick = 10;
+        let lastWriteTime = -100; // 마지막으로 DB에 값이 업데이트된 시간
+        
+        requests.forEach((req) => {
+            // "앞사람이 처리되기 전(60ms 이내)에 뒷사람이 들어오면 충돌(같은 잔량 읽음)"
+            if (req.time - lastWriteTime < 60) {
+                req.isCollision = true;
+                req.displayTick = simulatedTick; // 차감되지 않은 예전 값을 그대로 가짐
+            } else {
+                req.isCollision = false;
+                simulatedTick--; // 정상 차감
+                req.displayTick = simulatedTick;
+                lastWriteTime = req.time;
+            }
+        });
+
+        // 3. 계산된 로직을 화면에 애니메이션으로 뿌려줌
+        requests.forEach((req) => {
+            setTimeout(() => {
+                const u = users[req.id];
+                u.style.left = targetX + 'px';
+                u.style.top = targetY + 'px';
+                u.style.opacity = '0'; 
+
+                cTick = req.displayTick; // 계산해둔 꼬인 잔량을 화면에 반영
+                document.getElementById('c-tick').innerText = cTick;
+
+                if (req.isCollision) {
+                    log('c-log', `⚠️ 유저${req.id+1} 예매 (잔량: ${cTick} - 충돌!)`, '#ff4c73');
+                } else {
+                    log('c-log', `유저${req.id+1} 예매 완료 (잔량: ${cTick})`, '#a3b8cc');
+                }
+            }, req.time); 
+        });
+
+        setTimeout(() => {
+            log('c-log', `<br>❌ 무작위 동시 접근으로 최종 남은 티켓: ${simulatedTick}장 (꼬임 발생)`, '#ff4c73');
+            isRunning = false;
+        }, 800);
+    }
+
+    async function runActor() {
+        if (isRunning) return;
+        isRunning = true;
+        resetAll();
+        
+        const users = document.getElementById('a-area').querySelectorAll('.user');
+        const mailBox = document.getElementById('a-mail');
+        
+        for(let i=0; i<users.length; i++) {
+            users[i].style.opacity = '0'; 
+            
+            let mItem = document.createElement('div');
+            mItem.className = 'mail-item';
+            mailBox.appendChild(mItem);
+            
+            log('a-log', `📬 유저${i+1} Mailbox 대기열 진입`, '#a3b8cc');
+            await new Promise(r => setTimeout(r, 60)); 
+        }
+
+        log('a-log', `<br>🛡️ --- 직렬(Serial) 처리 시작 ---`, '#59ffa2');
+        await new Promise(r => setTimeout(r, 300)); 
+
+        for(let i=0; i<10; i++) {
+            if(mailBox.firstChild) mailBox.firstChild.remove(); 
+            
+            aTick--;
+            document.getElementById('a-tick').innerText = aTick;
+            
+            const svr = document.getElementById('a-svr');
+            svr.style.background = 'rgba(0,255,120,0.6)';
+            setTimeout(() => svr.style.background = 'rgba(0,255,120,0.2)', 150);
+
+            log('a-log', `✅ 유저${i+1} 예매 완료 (잔량: ${aTick})`, '#59ffa2');
+            await new Promise(r => setTimeout(r, 200)); 
+        }
+        log('a-log', '<br>🎉 안전하게 모든 티켓 0장 소진 완료!', '#59ffa2');
+        isRunning = false;
+    }
+
+    resetAll();
+</script>
+</body>
+</html>

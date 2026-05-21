@@ -1,0 +1,302 @@
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://localhost:4000/</id>
+  <title>Harold`s DLog</title>
+  <subtitle>Harold's Devlog</subtitle>
+  <updated>2024-11-16T15:19:15+09:00</updated>
+  <author>
+    <name>Dongik Song</name>
+    <uri>http://localhost:4000/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="ko-KR"
+    href="http://localhost:4000/"/>
+  <generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator>
+  <rights> © 2024 Dongik Song </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>CartAppTest</title>
+    <link href="http://localhost:4000/posts/ObjectTest/" rel="alternate" type="text/html" title="CartAppTest" />
+    <published>2024-11-14T08:33:00+09:00</published>
+  
+    <updated>2024-11-16T08:32:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/ObjectTest/</id>
+    <content src="http://localhost:4000/posts/ObjectTest/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="Study" />
+    
+    <category term="TourApp" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      어제 @ObservableObject, @StateObject와 관련된 글을 작성하면서 뭔가 테스트를 해보고싶어서 간단한 앱을 하나 만들어보려한다.
+
+장바구니 앱이며, https://dummyjson.com/products/1 사이트를 사용해서 DummyData가 있는 api를 호출하여 맘에드는 것을 담고,
+
+장바구니를 초기화할때 @ObservableObject, @StateObject의 차이를 통해 보여지는 화면이 다를것으로 판단이 들어서 그걸 확인해보려한다.
+
+
+
+우선 파일구조는 다음과 같다.
+
+1. 모델링
+
+struct WishModel: Codable {
+    let id: Int
+    let title, description, category: String
+    let price, dis...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>(Deep Dive) @ObservedObject vs @StateObject</title>
+    <link href="http://localhost:4000/posts/(Deep-Dive)-Object/" rel="alternate" type="text/html" title="(Deep Dive) @ObservedObject vs @StateObject" />
+    <published>2024-11-13T13:00:00+09:00</published>
+  
+    <updated>2024-11-13T13:00:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/(Deep-Dive)-Object/</id>
+    <content src="http://localhost:4000/posts/(Deep-Dive)-Object/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="Udemy" />
+    
+    <category term="Deep Dive" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      @ObservedObject vs @StateObject 이부분은 좀 더 자세히 알아봐야할것같아서 이렇게 새롭게 글을 작성한다
+
+코드 예시는 여기를 참고하여 작성을 한다.
+
+@ObservedObject vs @StateObject
+
+우선 둘의 공통점은 ObservableObject 프로토콜을 따른다는 것이다.
+
+
+
+그리고 지금 아래 코드를 보면 viewModel에 대해 Wrapper를 다르게 했는데 이렇게 해도 실행 결과는 같다.
+
+final class CounterViewModel: ObservableObject {
+    @Published var count = 0
+
+    func incrementCounter() {
+        count += 1
+    }
+}
+
+struct CounterVi...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>TourApp (6)</title>
+    <link href="http://localhost:4000/posts/TourApp_6/" rel="alternate" type="text/html" title="TourApp (6)" />
+    <published>2024-11-12T08:33:00+09:00</published>
+  
+    <updated>2024-11-12T08:33:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/TourApp_6/</id>
+    <content src="http://localhost:4000/posts/TourApp_6/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="Study" />
+    
+    <category term="TourApp" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Api 적용하기
+
+우선 json으로 만든 파일을 웹사이트에 올려 api처럼 가져오게 했다.
+
+이후, Medium 글을 통해서 코드를 작성했다.
+
+이글을 통해서 작성한것은 바로 Generic을 사용했다는 점이다. 이전에 Generic을 사용해본적이 없기에 이번에는 좀 사용하면서 내걸로 조금씩 만들고 싶었다.
+
+ApiModel 만들기
+
+struct ApiModel: Codable {
+    let tours: [Tour]
+}
+
+enum NetworkError: Error {
+    case badUrl
+    case invalidRequest
+    case badResponse
+    case badStatus
+    case failedToDecodeResponse
+}
+
+class ApiService...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>TourApp (5)</title>
+    <link href="http://localhost:4000/posts/TourApp_5/" rel="alternate" type="text/html" title="TourApp (5)" />
+    <published>2024-11-11T08:33:00+09:00</published>
+  
+    <updated>2024-11-11T08:33:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/TourApp_5/</id>
+    <content src="http://localhost:4000/posts/TourApp_5/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="Study" />
+    
+    <category term="TourApp" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      회고중 있었던일 정리
+
+오늘은 크게 한게 없어서 같이 공부하던분의 문제점을 좀 같이 해결하면서 있었던 일을 정리해보려한다.
+
+문제점
+
+우선 문제는 이전에 scrollview를 사용하려할때 Frame을 설정하지않으면 사이즈가 바뀌게되는데 이때 나는 귀찮아서 frame을 수동으로 설정을 주고 하다가 귀찮아서
+
+Scrollview를 해제하고 그냥 Vstack을 사용하고 넘어갔다.
+
+근데 팀원분은 사이즈를 나처럼 고정값이 아닌 Device에 따라서 이미지를 유동적으로 설정하고 싶다고 했다.
+
+Text는 괜찮았으나 Tabview에서 이미지가 제대로 사이즈 조절이 안되는게 문제였다.
+
+여러시도
+
+코드는 팀원분것이 아닌 내걸로 일단 적용하여 이야기를 해본다.
+
+ScrollView {
+    VStack(spacin...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>TourApp (4)</title>
+    <link href="http://localhost:4000/posts/TourApp_4/" rel="alternate" type="text/html" title="TourApp (4)" />
+    <published>2024-11-08T08:33:00+09:00</published>
+  
+    <updated>2024-11-08T08:33:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/TourApp_4/</id>
+    <content src="http://localhost:4000/posts/TourApp_4/" />
+    <author>
+      <name>Dongik Song</name>
+    </author>
+
+  
+    
+    <category term="Study" />
+    
+    <category term="TourApp" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      json 적용하기
+
+우선 json 양식으로 파일을 바꿔준다.
+
+이때 이전과 특이점이라면 json 로드가 from server가 아닌 from local이라는것.
+
+모델링
+
+모델링을 해준다.
+
+struct JsonModel: Codable {
+    let tours: [Tour]
+}
+
+// MARK: - Tour
+struct Tour: Codable {
+    let title: String
+    let imageURL: String
+    let description, address: String
+    let latitude, longitude: Double
+    let resList: [ResList]
+
+    enum CodingKeys: String, CodingKey {
+        c...
+    </summary>
+  
+
+  </entry>
+
+</feed>
+
+
