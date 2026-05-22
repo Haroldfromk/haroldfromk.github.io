@@ -26,6 +26,7 @@
     json: '{{ '/assets/js/data/search.json' | relative_url }}',
     searchResultTemplate: '{{ result_elem | strip_newlines }}',
     noResultsText: '{{ not_found }}',
+    limit: 50, // 검색 갯수 설정
     templateMiddleware: function(prop, value, template) {
       if (prop === 'categories') {
         if (value === '') {
