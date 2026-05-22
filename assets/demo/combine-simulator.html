@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combine Simulator: AnyPublisher & Future</title>
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --card-bg: #2d2d2d;
+            --text-main: #e0e0e0;
+            --text-muted: #9e9e9e;
+            --accent-blue: #0a84ff;
+            --accent-green: #30d158;
+            --accent-red: #ff453a;
+            --accent-purple: #bf5af2;
+            --accent-orange: #ff9f0a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container { max-width: 600px; margin: 0 auto; }
+
+        .section {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: #fff;
+            border-bottom: 1px solid #444;
+            padding-bottom: 8px;
+        }
+
+        /* --- Section 1: AnyPublisher (유지) --- */
+        .pipeline { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; }
+        .node { background: #444; padding: 8px 12px; border-radius: 6px; font-family: monospace; font-size: 0.9rem; transition: all 0.3s; }
+        .arrow { color: var(--text-muted); font-weight: bold; }
+        .type-display { background: #111; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; text-align: center; margin-bottom: 16px; word-break: break-all; }
+        .type-complex { color: var(--accent-orange); }
+        .type-erased { color: var(--accent-blue); }
+        .wrapper-box { border: 2px dashed var(--accent-blue); }
+
+        .btn {
+            background: var(--accent-blue);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .btn:hover { opacity: 0.8; }
+        .btn:disabled { background: #555; cursor: not-allowed; opacity: 0.5; }
+
+        /* --- Section 2: Callback vs Future --- */
+        .tabs {
+            display: flex;
+            background: #111;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+        .tab.active-legacy { background: #444; color: #fff; border-bottom: 3px solid var(--accent-orange); }
+        .tab.active-future { background: rgba(191, 90, 242, 0.2); color: #fff; border-bottom: 3px solid var(--accent-purple); }
+
+        .code-container {
+            background: #111;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            min-height: 180px;
+        }
+
+        /* 탭별 코드 스타일 */
+        .code-block { display: none; }
+        .code-block.active { display: block; animation: fadeIn 0.3s; }
+
+        .indent-1 { margin-left: 15px; border-left: 1px solid #444; padding-left: 10px;}
+        .indent-2 { margin-left: 30px; border-left: 1px solid #555; padding-left: 10px; color: var(--accent-orange);}
+        
+        .chain { color: var(--accent-purple); margin-top: 4px; }
+        .chain-step { display: inline-block; padding: 4px 8px; background: rgba(191,90,242,0.1); border: 1px solid var(--accent-purple); border-radius: 4px; margin-bottom: 4px; width: 100%;}
+
+        .visual-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #333;
+            min-height: 80px;
+        }
+
+        .flow-item {
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0.3;
+            transition: all 0.3s;
+        }
+        .flow-item.active { opacity: 1; transform: scale(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+
+        .log-list { background: #111; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; min-height: 120px; list-style-type: none; }
+        .log-list li { margin-bottom: 6px; animation: fadeIn 0.3s; border-bottom: 1px solid #222; padding-bottom: 4px;}
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="section">
+        <h2>📦 AnyPublisher (타입 소거)</h2>
+        <div class="pipeline">
+            <div class="node">Just(1)</div><div class="arrow">→</div>
+            <div class="node">.filter</div><div class="arrow">→</div>
+            <div class="node">.map</div>
+        </div>
+        <div class="type-display" id="typeBox">
+            <span class="type-complex">Publishers.Map&lt;Publishers.Filter&lt;Just&lt;Int&gt;&gt;, String&gt;</span>
+        </div>
+        <button class="btn" id="toggleBtn" onclick="toggleErasure()">.eraseToAnyPublisher() 적용</button>
+    </div>
+</div>
+
+<script>
+    // AnyPublisher
+    let isErased = false;
+    function toggleErasure() {
+        isErased = !isErased;
+        const typeBox = document.getElementById('typeBox');
+        const nodes = document.querySelectorAll('.pipeline .node');
+        const btn = document.getElementById('toggleBtn');
+        if (isErased) {
+            typeBox.innerHTML = '<span class="type-erased">AnyPublisher&lt;String, Never&gt;</span>';
+            nodes.forEach(n => n.classList.add('wrapper-box'));
+            btn.innerText = '포장 뜯기 (타입 노출)';
+            btn.style.background = '#444';
+        } else {
+            typeBox.innerHTML = '<span class="type-complex">Publishers.Map&lt;Publishers.Filter&lt;Just&lt;Int&gt;&gt;, String&gt;</span>';
+            nodes.forEach(n => n.classList.remove('wrapper-box'));
+            btn.innerText = '.eraseToAnyPublisher() 적용';
+            btn.style.background = 'var(--accent-blue)';
+        }
+    }
+
+    // Callback vs Future Logic
+    let currentMode = 'legacy';
+    let isRunning = false;
+
+    function switchTab(mode) {
+        if (isRunning) return; // 실행 중 탭 변경 금지
+        currentMode = mode;
+        
+        // Tab UI
+        document.getElementById('tabLegacy').className = `tab ${mode === 'legacy' ? 'active-legacy' : ''}`;
+        document.getElementById('tabFuture').className = `tab ${mode === 'future' ? 'active-future' : ''}`;
+        
+        // Code Block UI
+        document.getElementById('codeLegacy').classList.toggle('active', mode === 'legacy');
+        document.getElementById('codeFuture').classList.toggle('active', mode === 'future');
+
+        // Reset Visuals
+        const flow = document.getElementById('visualFlow');
+        const runBtn = document.getElementById('runBtn');
+        const log = document.getElementById('simLog');
+
+        if (mode === 'legacy') {
+            runBtn.style.background = 'var(--accent-orange)';
+            flow.innerHTML = `
+                <div class="flow-item" id="f1" style="background:#444; border:1px solid #666;">1. fetchUser</div>
+                <div style="color:#555">↘</div>
+                <div class="flow-item" id="f2" style="background:#555; border:1px solid #777; margin-top:20px;">2. fetchProfile</div>
+                <div style="color:#555">↘</div>
+                <div class="flow-item" id="f3" style="background:#666; border:1px solid var(--accent-orange); margin-top:40px; color:var(--accent-orange);">3. UI 업데이트</div>
+            `;
+            log.innerHTML = '<li style="color: var(--text-muted);">[준비] 기존 콜백 방식은 데이터가 클로저 내부로 깊게 파고듭니다.</li>';
+        } else {
+            runBtn.style.background = 'var(--accent-purple)';
+            flow.innerHTML = `
+                <div class="flow-item" id="f1" style="background:rgba(191,90,242,0.2); border:1px solid var(--accent-purple);">Future</div>
+                <div style="color:var(--accent-purple)">→</div>
+                <div class="flow-item" id="f2" style="background:rgba(10,132,255,0.2); border:1px solid var(--accent-blue);">.flatMap</div>
+                <div style="color:var(--accent-blue)">→</div>
+                <div class="flow-item" id="f3" style="background:rgba(48,209,88,0.2); border:1px solid var(--accent-green);">.sink</div>
+            `;
+            log.innerHTML = '<li style="color: var(--text-muted);">[준비] Future 방식은 콜백을 리턴값(퍼블리셔)으로 바꿔 평탄한 체이닝을 만듭니다.</li>';
+        }
+
+        // Reset Code highlights
+        document.querySelectorAll('.chain-step').forEach(el => el.style.background = 'rgba(191,90,242,0.1)');
+        document.getElementById('legacyActive').style.background = 'transparent';
+    }
+
+    function runSimulation() {
+        if (isRunning) return;
+        isRunning = true;
+        
+        const runBtn = document.getElementById('runBtn');
+        runBtn.disabled = true;
+        
+        const log = document.getElementById('simLog');
+        const f1 = document.getElementById('f1');
+        const f2 = document.getElementById('f2');
+        const f3 = document.getElementById('f3');
+
+        log.innerHTML = '';
+
+        if (currentMode === 'legacy') {
+            log.innerHTML += '<li>⚠️ [시작] 콜백 함수 호출...</li>';
+            f1.classList.add('active');
+            
+            setTimeout(() => {
+                f1.classList.remove('active'); f2.classList.add('active');
+                log.innerHTML += '<li>⚠️ [진행] 결과가 다음 클로저 <b>내부로 깊숙이</b> 들어갑니다. (들여쓰기 발생)</li>';
+                
+                setTimeout(() => {
+                    f2.classList.remove('active'); f3.classList.add('active');
+                    document.getElementById('legacyActive').style.background = 'rgba(255,159,10,0.2)';
+                    log.innerHTML += '<li style="color: var(--accent-orange);">❌ [문제] 데이터가 갇혔습니다! 다른 연산(.map 등)을 밖에서 연결할 수 없습니다.</li>';
+                    
+                    setTimeout(() => { f3.classList.remove('active'); isRunning = false; runBtn.disabled = false; }, 1500);
+                }, 1000);
+            }, 1000);
+
+        } else {
+            log.innerHTML += '<li>🚀 [시작] Future가 비동기 결과를 퍼블리셔로 방출합니다.</li>';
+            f1.classList.add('active');
+            document.getElementById('future1').style.background = 'rgba(191,90,242,0.4)';
+            
+            setTimeout(() => {
+                f1.classList.remove('active'); f2.classList.add('active');
+                document.getElementById('future1').style.background = 'rgba(191,90,242,0.1)';
+                document.getElementById('future2').style.background = 'rgba(191,90,242,0.4)';
+                document.getElementById('future3').style.background = 'rgba(191,90,242,0.4)';
+                
+                log.innerHTML += '<li>🔄 [진행] 들여쓰기 없이 <b>동등한 레벨(평탄화)</b>에서 체이닝 연산(.flatMap, .map)을 수행합니다.</li>';
+                
+                setTimeout(() => {
+                    f2.classList.remove('active'); f3.classList.add('active');
+                    document.getElementById('future2').style.background = 'rgba(191,90,242,0.1)';
+                    document.getElementById('future3').style.background = 'rgba(191,90,242,0.1)';
+                    document.getElementById('future4').style.background = 'rgba(48,209,88,0.3)';
+                    
+                    log.innerHTML += '<li style="color: var(--accent-green);">✅ [해결] 데이터가 갇히지 않고 파이프라인을 타고 깔끔하게 도착했습니다!</li>';
+                    
+                    setTimeout(() => { 
+                        f3.classList.remove('active'); 
+                        document.getElementById('future4').style.background = 'rgba(191,90,242,0.1)';
+                        isRunning = false; runBtn.disabled = false; 
+                    }, 1500);
+                }, 1000);
+            }, 1000);
+        }
+    }
+
+    // 초기화
+    switchTab('legacy');
+</script>
+</body>
+</html>

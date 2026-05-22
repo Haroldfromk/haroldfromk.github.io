@@ -1,7 +1,7 @@
 ---
 title: GitExplorer (1)
 writer: Harold
-date: 2026-05-21 08:06
+date: 2026-05-14 08:06
 categories: [Combine]
 tags: []
 
@@ -152,26 +152,72 @@ View 안에서 먼저 기능을 구현하고 데이터 흐름을 검증하려다
 
 ---
 
-#### 해결책: TextField와 Subject를 이용한 수동 파이프라인 개설
+#### 해결책: 중요한 건 UI가 아니라 구독관계였다
 
 결국 지금 당장 포커스를 둬야 할 것은 UI가 아니라 **'데이터 스트리밍의 완벽한 제어'**였다.
 
-따라서 `.searchable`을 포기하더라도, `TextField`를 사용하고 입력 변화(`onChange`)를 수동으로 Combine의 `PassthroughSubject`에 밀어 넣는 방식을 택하기로 했다.
-
-이렇게 하면 UIKit 시절 `textPublisher`를 만들어서 썼던 것처럼, 내 입맛대로 오퍼레이터들을 체이닝하고 콘솔에서 데이터 흐름을 검증할 수 있기 때문이다.
-
 ```swift
-// View 내부에 스트림의 시작점이 될 파이프 개설
-private let searchPublisher = PassthroughSubject<String, Never>()
-
-// TextField의 변화를 감지해 파이프에 데이터를 쏴준다
-TextField("Search GitHub users", text: $query)
-    .onChange(of: query) { _, newValue in
-        searchPublisher.send(newValue)
-    }
+// Before
+.searchable(text: $query, prompt: "Search GitHub users")
+// After
+HStack(spacing: 10) {
+   Image(systemName: "magnifyingglass")
+      .foregroundStyle(.secondary)
+   TextField("Search GitHub users", text: $query)
+      .autocorrectionDisabled()
+      .textInputAutocapitalization(.never)
+   if !query.isEmpty {
+      Button {
+            query = ""
+      } label: {
+            Image(systemName: "xmark.circle.fill")
+               .foregroundStyle(.secondary)
+      }
+   }
+}
+// Modifier 생략
 ```
 
-이제 데이터가 흐를 파이프(`searchPublisher`)가 생겼다. 본격적으로 이 뒤에 `debounce`와 `removeDuplicates`를 달아 노이즈 캔슬링을 구현해 보자.
+그래서 위와 같이 UI를 변경해주었다. (searchable → TextField)
+
+---
+
+일단 여기서 내가 생각을 해내야하는건? TextField를 사용했을때 어떻게 이걸
+`var textPublisher = PassthroughSubject<String, Never>()`를 연결해서 실시간 데이터 스트리밍으로 연결하냐는 것이다.
+
+우선 구독이 필요하고.
+
+그다음 그 구독을 이용해서 PassthroughSubject가 값을 보내면 subsciber가 값을 print 하는 매커니즘이 필요.
+
+그렇다면 이걸 어떻게 TextField에서 가능하게 할것인가?
+
+보통이라면 ViewModel에서 `@Pulished`를 사용하여 변수를 하나를 만들고.
+
+`init()`을 통해 DataStreaming을 만들면 끝이다.
+
+그렇게 고민을 하다가... Udemy강의를 잠깐 봤는데 생각이 났다.
+
+지금 TextField와 Searchable은 사실 중요하지 않았다.
+
+onChange를 통해 publisher가 값을 보내면 구독한 Subscriber가 값을 스트리밍하면되는데
+
+구독을 어떻게 해야하는지 너무 기억이 안났는데 `onAppear`를 내가 생각을 못했다.
+(UI는 다시 searchable로 변경....ㅎㅎ)
+
+---
+
+왜 이렇게 내가 해결책을 썼냐면 구독관계를 내가 함수를 만들고도 어떻게 정의를 해야할지 아무 생각이 없었다.
+
+근데 onAppear가 있었다.
+
+실제로 UIKit에서도 `ViewDidLoad`에 구독함수를 넣어서 View가 로드되자마자 구독관계를 만들었는데, 그걸 생각지 못했던것.
+
+| 단계 (Phase) | UIKit | SwiftUI |
+| :--- | :--- | :--- |
+| **구독 관계 형성**<br>(Subscription) | `viewDidLoad()` 에서<br>`.sink` 구독 함수 호출 | `.onAppear()` 에서<br>`.sink` 구독 함수 호출 |
+| **입력 이벤트 감지**<br>(Event Observation) | `NotificationCenter`<br>`textDidChangeNotification` | `.onChange(of: query)`<br>상태 변화 감지 |
+| **스트림에 데이터 방출**<br>(Data Emission) | 커스텀 `textPublisher` 내<br>`.map` 가공 후 방출 | `PassthroughSubject`<br>`.send(newValue)` 호출 |   
+
 
 ---
 

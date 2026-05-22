@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E2E Data Flow: Callback vs Combine</title>
+    <style>
+        :root {
+            --bg: #1e1e1e;
+            --card: #2d2d2d;
+            --text: #e0e0e0;
+            --blue: #0a84ff;
+            --green: #30d158;
+            --purple: #bf5af2;
+            --orange: #ff9f0a;
+            --gray: #444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+        .container { max-width: 650px; margin: 0 auto; background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        
+        h2 { text-align: center; margin-bottom: 20px; font-size: 1.2rem; }
+
+        .tabs { display: flex; background: #111; border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+        .tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; font-weight: bold; color: #888; transition: 0.3s; }
+        .tab.active-legacy { background: #333; color: #fff; border-bottom: 3px solid var(--orange); }
+        .tab.active-combine { background: rgba(191,90,242,0.2); color: #fff; border-bottom: 3px solid var(--purple); }
+
+        /* Architecture Layout */
+        .arch-container { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; margin-bottom: 20px; }
+        
+        .layer { flex: 1; background: #111; border-radius: 8px; padding: 15px; text-align: center; position: relative; border: 1px solid #333; display: flex; flex-direction: column; justify-content: space-between;}
+        .layer-title { font-size: 0.85rem; font-weight: bold; color: #aaa; margin-bottom: 10px; border-bottom: 1px dashed #444; padding-bottom: 5px; }
+        
+        .box { padding: 10px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 8px; transition: 0.3s; background: #222; border: 1px solid #444; }
+        .box.active { transform: scale(1.05); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+
+        /* Specific Boxes */
+        .ui-screen { background: #000; border: 2px solid #555; height: 60px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: monospace; color: var(--green); margin-bottom: 10px;}
+        .btn-trigger { background: var(--blue); color: white; cursor: pointer; font-weight: bold; padding: 10px; border-radius: 6px; user-select: none;}
+        .btn-trigger:active { background: #005bb5; }
+
+        .log-panel { background: #000; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; height: 130px; overflow-y: auto; list-style: none; }
+        .log-panel li { margin-bottom: 5px; animation: fadeIn 0.3s; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Flow Connections (Visual only) */
+        .flow-arrow { font-size: 1.5rem; color: #555; align-self: center; margin-top: 40px;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📱 End-to-End 앱 생명주기 (View ↔ VM ↔ Service)</h2>
+    
+    <div class="tabs">
+        <div class="tab active-legacy" id="tabLegacy" onclick="setMode('legacy')">❌ 1. 기존 콜백 방식</div>
+        <div class="tab" id="tabCombine" onclick="setMode('combine')">✅ 2. Combine (Future) 방식</div>
+    </div>
+
+    <div class="arch-container">
+        <div class="layer" style="border-top: 3px solid var(--blue);">
+            <div class="layer-title">UI (View)</div>
+            <div class="ui-screen" id="uiLabel">"대기 중..."</div>
+            <div class="btn-trigger" id="actionBtn" onclick="runFlow()">터치: 유저 불러오기</div>
+        </div>
+        
+        <div class="flow-arrow">↔</div>
+
+        <div class="layer" style="border-top: 3px solid var(--orange);">
+            <div class="layer-title">ViewModel</div>
+            <div id="vmFlow">
+                </div>
+        </div>
+
+        <div class="flow-arrow">↔</div>
+
+        <div class="layer" style="border-top: 3px solid var(--green);">
+            <div class="layer-title">Service (API)</div>
+            <div class="box" id="svcRequest">네트워크 요청</div>
+            <div class="box" id="svcWait" style="opacity: 0.5;">... 1초 대기 ...</div>
+            <div class="box" id="svcResponse">결과 반환 ("Harold")</div>
+        </div>
+    </div>
+
+    <ul class="log-panel" id="logBox">
+        <li style="color: #888;">버튼을 눌러 전체 데이터 흐름을 확인하세요.</li>
+    </ul>
+</div>
+
+<script>
+    let mode = 'legacy';
+    let isRunning = false;
+
+    function setMode(newMode) {
+        if(isRunning) return;
+        mode = newMode;
+        
+        document.getElementById('tabLegacy').className = `tab ${mode === 'legacy' ? 'active-legacy' : ''}`;
+        document.getElementById('tabCombine').className = `tab ${mode === 'combine' ? 'active-combine' : ''}`;
+        
+        resetUI();
+    }
+
+    function resetUI() {
+        document.getElementById('uiLabel').innerText = '"대기 중..."';
+        document.getElementById('uiLabel').style.color = 'var(--text)';
+        document.getElementById('logBox').innerHTML = '<li style="color: #888;">버튼을 눌러 전체 데이터 흐름을 확인하세요.</li>';
+        
+        const vmFlow = document.getElementById('vmFlow');
+        if(mode === 'legacy') {
+            vmFlow.innerHTML = `
+                <div class="box" id="vmCall">service.fetchUser()</div>
+                <div class="box" id="vmSwitch" style="border-color: var(--orange); margin-top: 20px;">switch result { ... }</div>
+                <div class="box" id="vmProcess" style="margin-left: 15px; font-size: 0.75rem;">.uppercased()<br>+ "Hello"</div>
+                <div class="box" id="vmDispatch" style="margin-left: 15px; font-size: 0.75rem; border-color: red;">DispatchQueue.main.async</div>
+            `;
+        } else {
+            vmFlow.innerHTML = `
+                <div class="box" id="vmCall">service.fetchFuture()</div>
+                <div class="box" id="vmProcess" style="border-color: var(--purple); margin-top: 5px;">.map { .uppercased() }</div>
+                <div class="box" id="vmProcess2" style="border-color: var(--purple);">.map { "Hello..." }</div>
+                <div class="box" id="vmDispatch" style="border-color: var(--blue);">.receive(on: main)</div>
+                <div class="box" id="vmSink" style="border-color: var(--green);">.sink { updateUI }</div>
+            `;
+        }
+    }
+
+    function log(msg, color = '#e0e0e0') {
+        const ul = document.getElementById('logBox');
+        ul.innerHTML += `<li style="color: ${color}">${msg}</li>`;
+        ul.scrollTop = ul.scrollHeight;
+    }
+
+    function activate(id, color) {
+        const el = document.getElementById(id);
+        if(el) {
+            el.classList.add('active');
+            el.style.backgroundColor = color || '#444';
+            setTimeout(() => {
+                el.classList.remove('active');
+                el.style.backgroundColor = '#222';
+            }, 800);
+        }
+    }
+
+    function runFlow() {
+        if(isRunning) return;
+        isRunning = true;
+        resetUI();
+
+        document.getElementById('uiLabel').innerText = '"로딩 중..."';
+        document.getElementById('uiLabel').style.color = 'var(--orange)';
+        
+        log('1. [View] 버튼 터치 -> ViewModel의 loadUser() 호출', 'var(--blue)');
+
+        setTimeout(() => {
+            activate('vmCall', 'var(--orange)');
+            log('2. [VM] Service에 데이터 요청', 'var(--orange)');
+            
+            setTimeout(() => {
+                activate('svcRequest', 'var(--green)');
+                activate('svcWait', '#333');
+                log('3. [Service] 백그라운드 스레드에서 API 통신 시작...', 'var(--green)');
+                
+                setTimeout(() => {
+                    activate('svcResponse', 'var(--green)');
+                    log('4. [Service] 1초 뒤 데이터("Harold") 반환 완료!', 'var(--green)');
+
+                    setTimeout(() => {
+                        if(mode === 'legacy') {
+                            runLegacyCallback();
+                        } else {
+                            runCombinePipeline();
+                        }
+                    }, 800);
+
+                }, 1000);
+            }, 500);
+        }, 500);
+    }
+
+    function runLegacyCallback() {
+        activate('vmSwitch', 'var(--orange)');
+        log('5. [VM] 콜백 도착. switch문으로 성공/실패 껍데기 까기', 'var(--orange)');
+        
+        setTimeout(() => {
+            activate('vmProcess', 'var(--orange)');
+            log('6. [VM] 콜백 블록 내부에서 데이터 가공 (대문자 + 인사말)', 'var(--orange)');
+            
+            setTimeout(() => {
+                activate('vmDispatch', 'red');
+                log('7. [VM] ⚠️ 백그라운드 스레드라서 메인 스레드로 수동 전환 (DispatchQueue.main)', 'red');
+                
+                setTimeout(() => {
+                    document.getElementById('uiLabel').innerText = '"Hello, HAROLD!"';
+                    document.getElementById('uiLabel').style.color = 'var(--green)';
+                    log('8. [View] UI 업데이트 완료!', 'var(--green)');
+                    isRunning = false;
+                }, 800);
+            }, 800);
+        }, 800);
+    }
+
+    function runCombinePipeline() {
+        activate('vmProcess', 'var(--purple)');
+        log('5. [VM] .map 파이프라인 탑승 -> 대문자로 변환', 'var(--purple)');
+        
+        setTimeout(() => {
+            activate('vmProcess2', 'var(--purple)');
+            log('6. [VM] .map 파이프라인 탑승 -> 인사말 부착', 'var(--purple)');
+            
+            setTimeout(() => {
+                activate('vmDispatch', 'var(--blue)');
+                log('7. [VM] .receive(on:) -> 메인 스레드로 자동/깔끔하게 전환', 'var(--blue)');
+                
+                setTimeout(() => {
+                    activate('vmSink', 'var(--green)');
+                    log('8. [VM] .sink 도착! 완성된 데이터 수신', 'var(--green)');
+                    
+                    setTimeout(() => {
+                        document.getElementById('uiLabel').innerText = '"Hello, HAROLD!"';
+                        document.getElementById('uiLabel').style.color = 'var(--green)';
+                        log('9. [View] UI 업데이트 완료!', 'var(--green)');
+                        isRunning = false;
+                    }, 500);
+                }, 800);
+            }, 800);
+        }, 800);
+    }
+
+    resetUI();
+</script>
+</body>
+</html>

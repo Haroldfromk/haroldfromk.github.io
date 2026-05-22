@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future 시뮬레이터</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #111117;
+  --surface: #1c1c26;
+  --surface2: #242432;
+  --border: rgba(255,255,255,0.08);
+  --text: #e2e2f0;
+  --dim: #7070a0;
+  --muted: #3a3a58;
+  --cb-color: #f97316;
+  --cb-glow: rgba(249,115,22,0.15);
+  --ft-color: #a78bfa;
+  --ft-glow: rgba(167,139,250,0.15);
+  --ok: #34d399;
+  --ok-glow: rgba(52,211,153,0.15);
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+}
+body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
+.wrap { max-width: 700px; margin: 0 auto; }
+
+.hdr { text-align: center; margin-bottom: 28px; }
+.hdr h1 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.hdr p { font-size: 12px; color: var(--dim); line-height: 1.6; }
+
+/* 핵심 차이 카드 */
+.diff-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.8;
+}
+.diff-card strong { color: var(--text); }
+.diff-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; }
+.diff-row:last-child { margin-bottom: 0; }
+.diff-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; flex-shrink: 0; margin-top: 2px; }
+.cb-badge { background: var(--cb-glow); color: var(--cb-color); border: 1px solid rgba(249,115,22,0.3); }
+.ft-badge { background: var(--ft-glow); color: var(--ft-color); border: 1px solid rgba(167,139,250,0.3); }
+
+/* 두 패널 */
+.panels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.panel { background: var(--surface); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; transition: border-color 0.4s; }
+.panel.cb-panel { border-color: rgba(249,115,22,0.25); }
+.panel.ft-panel { border-color: rgba(167,139,250,0.25); }
+
+.panel-head { padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.panel-head h3 { font-size: 11px; font-weight: 600; flex: 1; }
+.panel-head .dot { width: 7px; height: 7px; border-radius: 50%; }
+.cb-head h3 { color: var(--cb-color); }
+.cb-head .dot { background: var(--cb-color); }
+.ft-head h3 { color: var(--ft-color); }
+.ft-head .dot { background: var(--ft-color); }
+
+.code-area { padding: 12px 14px; font-family: var(--mono); font-size: 10.5px; line-height: 1.9; background: var(--bg); min-height: 160px; }
+.kw { color: var(--ft-color); }
+.cm { color: var(--muted); }
+.str { color: #fbbf24; }
+.fn { color: #60a5fa; }
+.hl { border-radius: 3px; padding: 0 2px; transition: background 0.3s; }
+.hl-cb { background: rgba(249,115,22,0.2); }
+.hl-ft { background: rgba(167,139,250,0.2); }
+
+/* 체이닝 가능 여부 */
+.chain-area { padding: 10px 14px; border-top: 1px solid var(--border); }
+.chain-label { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.chain-label.cb { color: var(--cb-color); }
+.chain-label.ft { color: var(--ft-color); }
+.chain-steps { display: flex; flex-direction: column; gap: 4px; }
+.chain-step { font-family: var(--mono); font-size: 9.5px; padding: 4px 8px; border-radius: 5px; border: 1px solid; transition: all 0.3s; opacity: 0.35; }
+.chain-step.cb-step { border-color: rgba(249,115,22,0.2); color: var(--cb-color); }
+.chain-step.ft-step { border-color: rgba(167,139,250,0.2); color: var(--ft-color); }
+.chain-step.locked { text-decoration: line-through; opacity: 0.2; }
+.chain-step.active { opacity: 1; }
+.chain-step.ft-step.active { background: var(--ft-glow); border-color: rgba(167,139,250,0.5); }
+.chain-step.ok-step.active { background: var(--ok-glow); border-color: rgba(52,211,153,0.5); color: var(--ok); }
+
+/* 실행 결과 */
+.result-area { padding: 10px 14px; border-top: 1px solid var(--border); min-height: 56px; }
+.result-lbl { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin-bottom: 5px; }
+.result-val { font-family: var(--mono); font-size: 10px; line-height: 1.7; }
+.result-val .ok { color: var(--ok); }
+.result-val .warn { color: var(--cb-color); }
+.result-val .info { color: var(--ft-color); }
+
+/* 버튼 */
+.btns { display: flex; gap: 8px; margin-bottom: 16px; }
+.btn { flex: 1; padding: 11px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+.btn:active { transform: scale(0.97); }
+.btn-run { background: var(--ft-glow); color: var(--ft-color); border: 1px solid rgba(167,139,250,0.3); }
+.btn-run:hover { background: rgba(167,139,250,0.25); }
+.btn-reset { background: var(--surface2); color: var(--dim); border: 1px solid var(--border); }
+.btn-reset:hover { color: var(--text); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* 핵심 정리 */
+.summary { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; font-size: 11.5px; color: var(--dim); line-height: 1.8; }
+.summary strong { color: var(--text); }
+.summary .ok { color: var(--ok); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <h1>왜 Future를 쓰는가?</h1>
+    <p>completion handler와 Future — 같은 비동기 작업, 다른 결과</p>
+  </div>
+
+  <!-- 핵심 차이 -->
+  <div class="diff-card">
+    <div class="diff-row">
+      <span class="diff-badge cb-badge">Callback</span>
+      <span>비동기 결과를 클로저 <strong>안으로 전달</strong>한다. 값이 클로저 내부에 갇혀 밖에서 Combine 연산을 붙일 수 없다.</span>
+    </div>
+    <div class="diff-row">
+      <span class="diff-badge ft-badge">Future</span>
+      <span>비동기 결과를 <strong>Publisher로 반환</strong>한다. 값이 스트림으로 흘러나와 밖에서 .map, .decode 등 Combine 파이프라인을 자유롭게 연결할 수 있다.</span>
+    </div>
+  </div>
+
+  <!-- 코드 패널 -->
+  <div class="panels">
+
+    <!-- Callback -->
+    <div class="panel cb-panel">
+      <div class="panel-head cb-head">
+        <div class="dot"></div>
+        <h3>Completion Handler</h3>
+      </div>
+      <div class="code-area">
+<span class="kw">func</span> <span class="fn">loadFile</span>(
+  completion: <span class="kw">@escaping</span>
+  (Result&lt;Data, Error&gt;) -&gt; <span class="kw">Void</span>
+) {
+  <span class="kw">guard let</span> url = ... <span class="kw">else</span> {
+    completion(.<span class="fn">failure</span>(err))
+    <span class="kw">return</span>
+  }
+  completion(.<span class="fn">success</span>(data))
+}
+
+<span class="cm">// 호출</span>
+<span class="fn">loadFile</span> { <span class="hl hl-cb" id="cb-result">result <span class="kw">in</span>
+  <span class="cm">// 값이 여기 갇힘</span>
+  <span class="cm">// 밖에서 .map 불가</span>
+</span>}
+      </div>
+      <div class="chain-area">
+        <div class="chain-label cb">Combine 파이프라인</div>
+        <div class="chain-steps">
+          <div class="chain-step cb-step locked" id="cb-map">.map { decode($0) }  ← 불가</div>
+          <div class="chain-step cb-step locked" id="cb-filter">.filter { ... }  ← 불가</div>
+          <div class="chain-step cb-step locked" id="cb-sink">.sink { }  ← 불가</div>
+        </div>
+      </div>
+      <div class="result-area">
+        <div class="result-lbl">실행 결과</div>
+        <div class="result-val" id="cb-log"><span style="color:var(--muted)">실행 전</span></div>
+      </div>
+    </div>
+
+    <!-- Future -->
+    <div class="panel ft-panel">
+      <div class="panel-head ft-head">
+        <div class="dot"></div>
+        <h3>Future</h3>
+      </div>
+      <div class="code-area">
+<span class="kw">func</span> <span class="fn">loadFile</span>()
+  -&gt; <span class="hl hl-ft">AnyPublisher&lt;Data, Error&gt;</span> {
+  <span class="kw">Future</span> { promise <span class="kw">in</span>
+    <span class="kw">guard let</span> url = ... <span class="kw">else</span> {
+      promise(.<span class="fn">failure</span>(err))
+      <span class="kw">return</span>
+    }
+    promise(.<span class="fn">success</span>(data))
+  }
+  .<span class="fn">eraseToAnyPublisher</span>()
+}
+
+<span class="cm">// 호출 — Publisher 반환</span>
+<span class="fn">loadFile</span>()  <span class="cm">// ← 값이 밖으로 흘러나옴</span>
+      </div>
+      <div class="chain-area">
+        <div class="chain-label ft">Combine 파이프라인</div>
+        <div class="chain-steps">
+          <div class="chain-step ft-step" id="ft-map">.map { decode($0) }</div>
+          <div class="chain-step ft-step" id="ft-filter">.filter { $0.isValid }</div>
+          <div class="chain-step ok-step ft-step" id="ft-sink">.sink { updateUI($0) }</div>
+        </div>
+      </div>
+      <div class="result-area">
+        <div class="result-lbl">실행 결과</div>
+        <div class="result-val" id="ft-log"><span style="color:var(--muted)">실행 전</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="btns">
+    <button class="btn btn-run" id="runBtn" onclick="run()">▶ 실행 — 같은 작업, 다른 흐름</button>
+    <button class="btn btn-reset" onclick="reset()">↺ 초기화</button>
+  </div>
+
+  <div class="summary" id="summary" style="display:none">
+    <strong>결론</strong><br>
+    completion handler는 결과를 <strong>클로저 안에 가둔다</strong>. 그래서 Combine 파이프라인과 연결할 수 없다.<br>
+    Future는 결과를 <strong>Publisher로 반환</strong>한다. 그래서 <span class="ok">.map, .filter, .sink</span> 등 Combine 연산을 자유롭게 체이닝할 수 있다.<br><br>
+    Future는 <strong>"기존 콜백 코드를 Combine 파이프라인의 시작점으로 만드는 진입점"</strong>이다.
+  </div>
+
+</div>
+
+<script>
+let running = false;
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function run() {
+  if (running) return;
+  running = true;
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('summary').style.display = 'none';
+  reset(true);
+
+  const cbLog = document.getElementById('cb-log');
+  const ftLog = document.getElementById('ft-log');
+
+  // 동시에 시작
+  cbLog.innerHTML = '<span class="info">⏳ 비동기 작업 시작...</span>';
+  ftLog.innerHTML = '<span class="info">⏳ 비동기 작업 시작...</span>';
+
+  await delay(800);
+
+  // Callback: 결과가 클로저 안으로
+  document.getElementById('cb-result').style.background = 'rgba(249,115,22,0.3)';
+  cbLog.innerHTML = '<span class="warn">⚠ 결과가 클로저 안으로 들어감</span><br><span style="color:var(--muted)">밖에서 .map 연결 불가</span>';
+
+  // Future: 결과가 Publisher로 반환
+  ftLog.innerHTML = '<span class="ok">✓ Publisher로 반환됨</span><br><span style="color:var(--muted)">파이프라인 연결 시작...</span>';
+
+  await delay(600);
+
+  // Future 파이프라인 순서대로 활성화
+  document.getElementById('ft-map').classList.add('active');
+  ftLog.innerHTML += '<br><span class="info">→ .map 실행 중...</span>';
+
+  await delay(600);
+
+  document.getElementById('ft-filter').classList.add('active');
+  ftLog.innerHTML += '<br><span class="info">→ .filter 실행 중...</span>';
+
+  await delay(600);
+
+  document.getElementById('ft-sink').classList.add('active');
+  ftLog.innerHTML = '<span class="ok">✓ 파이프라인 완료</span><br><span class="ok">→ UI 업데이트 성공</span>';
+  cbLog.innerHTML += '<br><span class="warn">✗ 파이프라인 연결 없음</span>';
+
+  await delay(400);
+  document.getElementById('summary').style.display = 'block';
+
+  running = false;
+  document.getElementById('runBtn').disabled = false;
+}
+
+function reset(silent) {
+  ['ft-map','ft-filter','ft-sink'].forEach(id => {
+    document.getElementById(id).classList.remove('active');
+  });
+  document.getElementById('cb-result').style.background = 'rgba(249,115,22,0.2)';
+  if (!silent) {
+    document.getElementById('cb-log').innerHTML = '<span style="color:var(--muted)">실행 전</span>';
+    document.getElementById('ft-log').innerHTML = '<span style="color:var(--muted)">실행 전</span>';
+    document.getElementById('summary').style.display = 'none';
+    document.getElementById('runBtn').disabled = false;
+    running = false;
+  }
+}
+</script>
+</body>
+</html>
