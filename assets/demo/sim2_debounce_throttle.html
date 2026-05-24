@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>debounce vs throttle</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #16213e;
+  --border: rgba(255,255,255,0.08); --text: #e2e2f0; --dim: #7070a0;
+  --accent: #a78bfa; --ok: #34d399; --warn: #fbbf24; --danger: #f87171;
+  --mono: monospace;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; padding: 16px; }
+h2 { font-size: 14px; color: var(--accent); margin-bottom: 6px; font-family: var(--mono); }
+.desc { font-size: 11px; color: var(--dim); margin-bottom: 14px; line-height: 1.6; }
+
+.tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.tab {
+  flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--dim); font-size: 12px; font-family: var(--mono);
+  cursor: pointer; text-align: center; transition: all .2s;
+}
+.tab.active { border-color: var(--accent); color: var(--accent); background: rgba(167,139,250,.1); }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+.info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 11px; color: var(--dim); line-height: 1.7; }
+.info-box strong { color: var(--text); }
+
+.btn-area { margin-bottom: 12px; }
+.tap-btn {
+  background: var(--accent); color: #fff; border: none; border-radius: 8px;
+  padding: 10px 24px; font-size: 13px; cursor: pointer; font-family: var(--mono);
+  transition: opacity .15s;
+}
+.tap-btn:hover { opacity: .85; }
+.tap-btn:active { opacity: .7; }
+
+.log-wrap { background: var(--surface2); border-radius: 8px; padding: 10px 12px; min-height: 120px; }
+.log-lbl { font-size: 10px; color: var(--dim); margin-bottom: 6px; letter-spacing: .06em; text-transform: uppercase; }
+.log { font-family: var(--mono); font-size: 11px; }
+.log-item { padding: 3px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+.log-item:last-child { border-bottom: none; }
+.log-in { color: var(--dim); }
+.log-out { color: var(--ok); font-weight: bold; }
+.log-block { color: var(--danger); }
+</style>
+</head>
+<body>
+<h2>debounce vs throttle</h2>
+<p class="desc">버튼을 연타해서 두 오퍼레이터가 어떻게 다르게 동작하는지 확인해보자.</p>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('debounce')">debounce</div>
+  <div class="tab" onclick="switchTab('throttle')">throttle</div>
+</div>
+
+<!-- debounce panel -->
+<div class="panel active" id="panel-debounce">
+  <div class="info-box">
+    <strong>debounce(0.5s)</strong><br>
+    버튼을 눌러도 0.5초 동안 추가 입력이 없을 때만 통과한다.<br>
+    연타하면 계속 타이머가 리셋되어 마지막 입력만 통과한다.
+  </div>
+  <div class="btn-area">
+    <button class="tap-btn" onclick="tapDebounce()">버튼 탭 (연타해보세요)</button>
+  </div>
+  <div class="log-wrap">
+    <div class="log-lbl">이벤트 로그</div>
+    <div class="log" id="log-debounce"><span style="color:var(--dim)">버튼을 눌러보세요...</span></div>
+  </div>
+</div>
+
+<!-- throttle panel -->
+<div class="panel" id="panel-throttle">
+  <div class="info-box">
+    <strong>throttle(2s)</strong><br>
+    2초 안에 아무리 많이 눌러도 첫 번째 입력만 통과한다.<br>
+    2초가 지나야 다음 입력이 통과된다.
+  </div>
+  <div class="btn-area">
+    <button class="tap-btn" onclick="tapThrottle()">버튼 탭 (연타해보세요)</button>
+  </div>
+  <div class="log-wrap">
+    <div class="log-lbl">이벤트 로그</div>
+    <div class="log" id="log-throttle"><span style="color:var(--dim)">버튼을 눌러보세요...</span></div>
+  </div>
+</div>
+
+<script>
+let debounceTimer = null;
+let debounceCount = 0;
+let throttleLastTime = 0;
+let throttleCount = 0;
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && name === 'debounce') || (i === 1 && name === 'throttle'));
+  });
+  document.getElementById('panel-debounce').classList.toggle('active', name === 'debounce');
+  document.getElementById('panel-throttle').classList.toggle('active', name === 'throttle');
+}
+
+function addLog(logId, text, type) {
+  const log = document.getElementById(logId);
+  if (log.querySelector('span')) log.innerHTML = '';
+  const item = document.createElement('div');
+  item.className = 'log-item';
+  const time = new Date().toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  item.innerHTML = `<span class="log-${type}">${text}</span><span style="color:var(--dim);font-size:10px">${time}</span>`;
+  log.insertBefore(item, log.firstChild);
+  if (log.children.length > 8) log.removeChild(log.lastChild);
+}
+
+function tapDebounce() {
+  debounceCount++;
+  const n = debounceCount;
+  addLog('log-debounce', `입력 #${n} — 타이머 리셋`, 'in');
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    addLog('log-debounce', `✓ #${n} 통과 — 0.5초 경과`, 'out');
+  }, 500);
+}
+
+function tapThrottle() {
+  throttleCount++;
+  const n = throttleCount;
+  const now = Date.now();
+  if (now - throttleLastTime >= 2000) {
+    throttleLastTime = now;
+    addLog('log-throttle', `✓ #${n} 통과`, 'out');
+  } else {
+    const remain = ((2000 - (now - throttleLastTime)) / 1000).toFixed(1);
+    addLog('log-throttle', `✗ #${n} 차단 — ${remain}초 남음`, 'block');
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer Connect Simulator</title>
+    <style>
+        :root {
+            --bg: #1e1e1e;
+            --card: #2d2d2d;
+            --text: #e0e0e0;
+            --blue: #0a84ff;
+            --green: #30d158;
+            --orange: #ff9f0a;
+            --red: #ff453a;
+        }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .panel { flex: 1; background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #444; min-width: 250px; }
+        h3 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #444; padding-bottom: 10px; text-align: center; }
+        
+        .timer-display { font-size: 2.5rem; text-align: center; margin: 20px 0; font-family: monospace; color: var(--green); min-height: 45px; }
+        
+        .btn { display: block; width: 100%; padding: 10px; margin-bottom: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; font-size: 0.85rem;}
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .btn-subscribe { background: var(--blue); }
+        .btn-connect { background: var(--orange); }
+        .btn-cancel { background: var(--red); }
+        
+        .log { background: #111; padding: 10px; border-radius: 6px; height: 120px; overflow-y: auto; font-family: monospace; font-size: 0.8rem; list-style: none; margin: 0; }
+        .log li { margin-bottom: 4px; border-bottom: 1px solid #222; padding-bottom: 4px;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="panel">
+        <h3>수동 연결 (connect)</h3>
+        <div class="timer-display" id="manualTimer">-</div>
+        <button class="btn btn-subscribe" id="btnManualSub" onclick="manualSubscribe()">1. .sink (구독하기)</button>
+        <button class="btn btn-connect" id="btnManualConn" onclick="manualConnect()" disabled>2. connection.connect() (시작)</button>
+        <button class="btn btn-cancel" id="btnManualCancel" onclick="manualCancel()" disabled>3. connection.cancel() (연결 직접 끊기)</button>
+        <ul class="log" id="manualLog"></ul>
+    </div>
+
+    <div class="panel">
+        <h3>자동 연결 (autoconnect)</h3>
+        <div class="timer-display" id="autoTimer">-</div>
+        <button class="btn btn-subscribe" id="btnAutoSub" onclick="autoSubscribe()">1. .sink (구독 + 자동 시작)</button>
+        <button class="btn btn-connect" style="visibility: hidden; margin-bottom: 10px;">빈 공간</button>
+        <button class="btn btn-cancel" id="btnAutoCancel" onclick="autoCancel()" disabled>2. 구독 해제 (알아서 연결 끊어짐)</button>
+        <ul class="log" id="autoLog"></ul>
+    </div>
+</div>
+
+<script>
+    function logMsg(elementId, msg, color = '#ccc') {
+        const ul = document.getElementById(elementId);
+        ul.innerHTML += `<li style="color: ${color}">${msg}</li>`;
+        ul.scrollTop = ul.scrollHeight;
+    }
+
+    // Manual Timer Logic
+    let manualInterval = null;
+    let manualCount = 0;
+
+    function manualSubscribe() {
+        document.getElementById('btnManualSub').disabled = true;
+        document.getElementById('btnManualConn').disabled = false;
+        logMsg('manualLog', '구독 완료. (아직 값 안 나옴)', 'var(--blue)');
+    }
+
+    function manualConnect() {
+        document.getElementById('btnManualConn').disabled = true;
+        document.getElementById('btnManualCancel').disabled = false;
+        logMsg('manualLog', 'connect() 호출! 타이머 연결됨.', 'var(--orange)');
+        
+        manualInterval = setInterval(() => {
+            manualCount++;
+            document.getElementById('manualTimer').innerText = manualCount;
+            logMsg('manualLog', `값 방출: ${manualCount}`, 'var(--green)');
+        }, 1000);
+    }
+
+    function manualCancel() {
+        clearInterval(manualInterval);
+        manualCount = 0;
+        document.getElementById('manualTimer').innerText = '-';
+        document.getElementById('btnManualSub').disabled = false;
+        document.getElementById('btnManualConn').disabled = true;
+        document.getElementById('btnManualCancel').disabled = true;
+        document.getElementById('manualLog').innerHTML = '';
+        logMsg('manualLog', '연결 객체를 통해 타이머 수동 종료.', 'var(--red)');
+    }
+
+    // Auto Timer Logic
+    let autoInterval = null;
+    let autoCount = 0;
+
+    function autoSubscribe() {
+        document.getElementById('btnAutoSub').disabled = true;
+        document.getElementById('btnAutoCancel').disabled = false;
+        logMsg('autoLog', '구독 완료! -> 자동으로 타이머 시작', 'var(--orange)');
+        
+        autoInterval = setInterval(() => {
+            autoCount++;
+            document.getElementById('autoTimer').innerText = autoCount;
+            logMsg('autoLog', `값 방출: ${autoCount}`, 'var(--green)');
+        }, 1000);
+    }
+
+    function autoCancel() {
+        clearInterval(autoInterval);
+        autoCount = 0;
+        document.getElementById('autoTimer').innerText = '-';
+        document.getElementById('btnAutoSub').disabled = false;
+        document.getElementById('btnAutoCancel').disabled = true;
+        document.getElementById('autoLog').innerHTML = '';
+        logMsg('autoLog', '구독(Cancellable) 해제됨 -> 알아서 종료.', 'var(--red)');
+    }
+</script>
+</body>
+</html>

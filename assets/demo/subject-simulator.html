@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Simulator</title>
+    <style>
+        :root {
+            --bg: #1e1e1e;
+            --card: #2d2d2d;
+            --text: #e0e0e0;
+            --blue: #0a84ff;
+            --green: #30d158;
+            --orange: #ff9f0a;
+            --red: #ff453a;
+        }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .panel { flex: 1; background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #444; min-width: 250px; }
+        h3 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #444; padding-bottom: 10px; text-align: center; }
+        .desc { font-size: 0.85rem; color: #aaa; text-align: center; margin-bottom: 15px; height: 35px; }
+        
+        .state-display { font-size: 1.2rem; text-align: center; margin: 15px 0; font-family: monospace; color: var(--green); background: #111; padding: 10px; border-radius: 6px; }
+        
+        .btn { display: block; width: 100%; padding: 10px; margin-bottom: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; font-size: 0.85rem;}
+        .btn:active { opacity: 0.7; }
+        
+        .btn-send { background: var(--orange); }
+        .btn-sub { background: var(--blue); }
+        .btn-clear { background: #555; margin-top: 10px; }
+        
+        .log { background: #111; padding: 10px; border-radius: 6px; height: 150px; overflow-y: auto; font-family: monospace; font-size: 0.8rem; list-style: none; margin: 0; }
+        .log li { margin-bottom: 4px; border-bottom: 1px solid #222; padding-bottom: 4px;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="panel">
+        <h3>PassthroughSubject</h3>
+        <div class="desc">상태 보관 X.<br>구독 이후에 방출된 이벤트만 받음.</div>
+        <div class="state-display" style="color: #666;">저장된 값: 없음</div>
+        <button class="btn btn-send" onclick="ptSend()">1. .send(데이터) 방출</button>
+        <button class="btn btn-sub" onclick="ptSubscribe()">2. 새로운 Subscriber 연결 (.sink)</button>
+        <ul class="log" id="ptLog"></ul>
+        <button class="btn btn-clear" onclick="clearLog('pt')">로그 초기화</button>
+    </div>
+
+    <div class="panel">
+        <h3>CurrentValueSubject</h3>
+        <div class="desc">최신 상태 보관 O.<br>구독 즉시 보관된 최신 값을 받음.</div>
+        <div class="state-display">저장된 값: <span id="cvState">"초기값"</span></div>
+        <button class="btn btn-send" onclick="cvSend()">1. .send(데이터) 방출</button>
+        <button class="btn btn-sub" onclick="cvSubscribe()">2. 새로운 Subscriber 연결 (.sink)</button>
+        <ul class="log" id="cvLog"></ul>
+        <button class="btn btn-clear" onclick="clearLog('cv')">로그 초기화</button>
+    </div>
+</div>
+
+<script>
+    function logMsg(elementId, msg, color = '#ccc') {
+        const ul = document.getElementById(elementId);
+        ul.innerHTML += `<li style="color: ${color}">${msg}</li>`;
+        ul.scrollTop = ul.scrollHeight;
+    }
+
+    // PassthroughSubject Logic
+    let ptValue = 0;
+    let ptSubCount = 0;
+
+    function ptSend() {
+        ptValue++;
+        logMsg('ptLog', `[Publisher] 값 '${ptValue}' 방출!`, 'var(--orange)');
+        if (ptSubCount === 0) {
+            logMsg('ptLog', `-> 듣는 사람(Subscriber)이 없어 허공에 사라짐`, '#666');
+        } else {
+            for(let i=1; i<=ptSubCount; i++) {
+                logMsg('ptLog', `-> Subscriber ${i} 수신: '${ptValue}'`, 'var(--green)');
+            }
+        }
+    }
+
+    function ptSubscribe() {
+        ptSubCount++;
+        logMsg('ptLog', `[Subscriber ${ptSubCount}] 구독 완료. (아무 값도 받지 못함)`, 'var(--blue)');
+    }
+
+    // CurrentValueSubject Logic
+    let cvValue = "초기값";
+    let cvDataCounter = 0;
+    let cvSubCount = 0;
+
+    function cvSend() {
+        cvDataCounter++;
+        cvValue = `데이터${cvDataCounter}`;
+        document.getElementById('cvState').innerText = `"${cvValue}"`;
+        logMsg('cvLog', `[Publisher] 값 '${cvValue}' 방출 및 상태 업데이트!`, 'var(--orange)');
+        
+        if (cvSubCount === 0) {
+            logMsg('cvLog', `-> 듣는 사람은 없지만 최신 상태는 저장됨`, '#666');
+        } else {
+            for(let i=1; i<=cvSubCount; i++) {
+                logMsg('cvLog', `-> Subscriber ${i} 수신: '${cvValue}'`, 'var(--green)');
+            }
+        }
+    }
+
+    function cvSubscribe() {
+        cvSubCount++;
+        logMsg('cvLog', `[Subscriber ${cvSubCount}] 구독 완료!`, 'var(--blue)');
+        logMsg('cvLog', `-> 구독 즉시 보관된 값 '${cvValue}' 수신!`, 'var(--green)');
+    }
+
+    function clearLog(type) {
+        if (type === 'pt') {
+            document.getElementById('ptLog').innerHTML = '';
+            ptSubCount = 0;
+            ptValue = 0;
+        } else {
+            document.getElementById('cvLog').innerHTML = '';
+            cvSubCount = 0;
+            cvDataCounter = 0;
+            cvValue = "초기값";
+            document.getElementById('cvState').innerText = `"${cvValue}"`;
+        }
+    }
+</script>
+</body>
+</html>

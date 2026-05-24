@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>catch 위치 시뮬레이터</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #16213e;
+  --border: rgba(255,255,255,0.08); --text: #e2e2f0; --dim: #7070a0;
+  --accent: #a78bfa; --ok: #34d399; --warn: #fbbf24; --danger: #f87171;
+  --mono: monospace;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; padding: 16px; }
+h2 { font-size: 14px; color: var(--accent); margin-bottom: 6px; font-family: var(--mono); }
+.desc { font-size: 11px; color: var(--dim); margin-bottom: 14px; line-height: 1.6; }
+.tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.tab {
+  flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--dim); font-size: 11px; font-family: var(--mono);
+  cursor: pointer; text-align: center; transition: all .2s;
+}
+.tab.active-bad { border-color: var(--danger); color: var(--danger); background: rgba(248,113,113,.1); }
+.tab.active-good { border-color: var(--ok); color: var(--ok); background: rgba(52,211,153,.1); }
+.panel { display: none; }
+.panel.active { display: block; }
+.info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 11px; color: var(--dim); line-height: 1.7; }
+.info-box strong { color: var(--text); }
+.btns { display: flex; gap: 8px; margin-bottom: 12px; }
+.btn {
+  flex: 1; padding: 9px; border-radius: 8px; border: none; font-size: 12px;
+  font-family: var(--mono); cursor: pointer; transition: opacity .15s;
+}
+.btn:hover { opacity: .85; }
+.btn-ok { background: rgba(52,211,153,.2); color: var(--ok); border: 1px solid rgba(52,211,153,.3); }
+.btn-err { background: rgba(248,113,113,.2); color: var(--danger); border: 1px solid rgba(248,113,113,.3); }
+.timeline { display: flex; flex-direction: column; gap: 5px; }
+.tl-item {
+  padding: 7px 10px; border-radius: 6px; font-family: var(--mono); font-size: 11px;
+  border: 1px solid var(--border); background: var(--surface2);
+  animation: fadeIn .3s;
+}
+.tl-ok { border-color: rgba(52,211,153,.3); color: var(--ok); }
+.tl-err { border-color: rgba(248,113,113,.3); color: var(--danger); }
+.tl-dead { border-color: rgba(248,113,113,.5); color: var(--danger); background: rgba(248,113,113,.08); font-weight: bold; }
+.tl-warn { border-color: rgba(251,191,36,.3); color: var(--warn); }
+.tl-info { color: var(--dim); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<h2>catch 위치가 전부다</h2>
+<p class="desc">에러 발생 후 검색창을 다시 입력해봐. flatMap 바깥 catch는 스트림이 죽어서 아무 반응이 없다.</p>
+
+<div class="tabs">
+  <div class="tab active-bad" id="tab-bad" onclick="switchTab('bad')">❌ catch 바깥 (스트림 사망)</div>
+  <div class="tab" id="tab-good" onclick="switchTab('good')">✅ catch 안쪽 (스트림 생존)</div>
+</div>
+
+<div class="panel active" id="panel-bad">
+  <div class="info-box">
+    <strong>잘못된 방법: catch를 flatMap 바깥에</strong><br>
+    에러가 발생하면 전체 스트림이 즉시 종료된다. 이후 검색창에 타이핑해도 반응이 없다.
+  </div>
+  <div class="btns">
+    <button class="btn btn-ok" onclick="badAction('search')">검색어 입력</button>
+    <button class="btn btn-err" onclick="badAction('error')">⚠ 에러 발생</button>
+  </div>
+  <div class="timeline" id="tl-bad"><div class="tl-item tl-info">버튼을 눌러보세요...</div></div>
+</div>
+
+<div class="panel" id="panel-good">
+  <div class="info-box">
+    <strong>올바른 방법: catch를 flatMap 안쪽에</strong><br>
+    에러가 발생해도 내부 요청만 실패하고, 외부 스트림은 살아있다. 다음 검색어를 계속 받을 수 있다.
+  </div>
+  <div class="btns">
+    <button class="btn btn-ok" onclick="goodAction('search')">검색어 입력</button>
+    <button class="btn btn-err" onclick="goodAction('error')">⚠ 에러 발생</button>
+  </div>
+  <div class="timeline" id="tl-good"><div class="tl-item tl-info">버튼을 눌러보세요...</div></div>
+</div>
+
+<script>
+let badDead = false;
+let searchCount = { bad: 0, good: 0 };
+
+function switchTab(name) {
+  document.getElementById('tab-bad').className = name === 'bad' ? 'tab active-bad' : 'tab';
+  document.getElementById('tab-good').className = name === 'good' ? 'tab active-good' : 'tab';
+  document.getElementById('panel-bad').classList.toggle('active', name === 'bad');
+  document.getElementById('panel-good').classList.toggle('active', name === 'good');
+}
+
+function addTl(id, text, cls) {
+  const tl = document.getElementById(id);
+  if (tl.querySelector('.tl-info')) tl.innerHTML = '';
+  const item = document.createElement('div');
+  item.className = 'tl-item ' + cls;
+  item.textContent = text;
+  tl.insertBefore(item, tl.firstChild);
+  if (tl.children.length > 7) tl.removeChild(tl.lastChild);
+}
+
+function badAction(type) {
+  if (type === 'search') {
+    if (badDead) {
+      addTl('tl-bad', '💀 스트림이 죽어있음 — 아무 반응 없음', 'tl-dead');
+    } else {
+      searchCount.bad++;
+      addTl('tl-bad', `검색어 #${searchCount.bad} → API 호출 성공`, 'tl-ok');
+    }
+  } else {
+    if (badDead) {
+      addTl('tl-bad', '💀 이미 사망 — 에러도 처리 불가', 'tl-dead');
+    } else {
+      addTl('tl-bad', '⚠ 에러 발생!', 'tl-err');
+      setTimeout(() => {
+        addTl('tl-bad', '💀 catch가 바깥에 있어서 전체 스트림 종료', 'tl-dead');
+        badDead = true;
+      }, 400);
+    }
+  }
+}
+
+function goodAction(type) {
+  if (type === 'search') {
+    searchCount.good++;
+    addTl('tl-good', `검색어 #${searchCount.good} → API 호출 성공`, 'tl-ok');
+  } else {
+    addTl('tl-good', '⚠ 에러 발생!', 'tl-err');
+    setTimeout(() => {
+      addTl('tl-good', 'catch가 안쪽에 있어서 내부 요청만 실패 → []', 'tl-warn');
+      setTimeout(() => {
+        addTl('tl-good', '✓ 외부 스트림 생존 — 다음 입력 대기 중', 'tl-ok');
+      }, 300);
+    }, 300);
+  }
+}
+</script>
+</body>
+</html>

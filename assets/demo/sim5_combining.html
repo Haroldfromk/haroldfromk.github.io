@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>combineLatest / merge</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #16213e;
+  --border: rgba(255,255,255,0.08); --text: #e2e2f0; --dim: #7070a0;
+  --accent: #a78bfa; --ok: #34d399; --warn: #fbbf24; --danger: #f87171;
+  --blue: #60a5fa; --mono: monospace;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; padding: 16px; }
+h2 { font-size: 14px; color: var(--accent); margin-bottom: 6px; font-family: var(--mono); }
+.desc { font-size: 11px; color: var(--dim); margin-bottom: 14px; line-height: 1.6; }
+.tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.tab {
+  flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--dim); font-size: 12px; font-family: var(--mono);
+  cursor: pointer; text-align: center; transition: all .2s;
+}
+.tab.active { border-color: var(--accent); color: var(--accent); background: rgba(167,139,250,.1); }
+.panel { display: none; }
+.panel.active { display: block; }
+.info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 11px; color: var(--dim); line-height: 1.7; }
+.info-box strong { color: var(--text); }
+.streams { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.stream { background: var(--surface2); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
+.stream-name { font-family: var(--mono); font-size: 11px; }
+.stream-val { font-family: var(--mono); font-size: 12px; font-weight: bold; }
+.stream-btn {
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  border-radius: 6px; padding: 5px 12px; font-size: 11px; font-family: var(--mono);
+  cursor: pointer; transition: all .15s;
+}
+.stream-btn:hover { border-color: var(--accent); color: var(--accent); }
+.result-box { background: var(--surface2); border-radius: 8px; padding: 10px 12px; font-family: var(--mono); font-size: 11px; min-height: 80px; }
+.r-lbl { font-size: 10px; color: var(--dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
+.tl-item { padding: 4px 0; border-bottom: 1px solid var(--border); animation: fadeIn .3s; }
+.tl-item:last-child { border-bottom: none; }
+.c-ok { color: var(--ok); }
+.c-warn { color: var(--warn); }
+.c-dim { color: var(--dim); }
+.c-blue { color: var(--blue); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+<h2>combineLatest / merge</h2>
+<p class="desc">각 스트림 버튼을 눌러서 동작 방식의 차이를 확인해보자.</p>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('combine')">combineLatest</div>
+  <div class="tab" onclick="switchTab('merge')">merge</div>
+</div>
+
+<!-- combineLatest -->
+<div class="panel active" id="panel-combine">
+  <div class="info-box">
+    <strong>combineLatest</strong><br>
+    <span style="color:var(--warn)">모든 스트림에서 최소 1개씩 값이 도착해야</span> 결과를 방출한다.<br>
+    이후에는 어느 하나라도 바뀌면 즉시 최신값 조합으로 방출한다.
+  </div>
+  <div class="streams">
+    <div class="stream">
+      <span class="stream-name" style="color:var(--ok)">Stream A (프로필)</span>
+      <span class="stream-val" id="c-a" style="color:var(--dim)">미도착</span>
+      <button class="stream-btn" onclick="sendCombine('a')">값 전송</button>
+    </div>
+    <div class="stream">
+      <span class="stream-name" style="color:var(--blue)">Stream B (레포)</span>
+      <span class="stream-val" id="c-b" style="color:var(--dim)">미도착</span>
+      <button class="stream-btn" onclick="sendCombine('b')">값 전송</button>
+    </div>
+    <div class="stream">
+      <span class="stream-name" style="color:var(--accent)">Stream C (팔로워)</span>
+      <span class="stream-val" id="c-c" style="color:var(--dim)">미도착</span>
+      <button class="stream-btn" onclick="sendCombine('c')">값 전송</button>
+    </div>
+  </div>
+  <div class="r-lbl">결과 로그</div>
+  <div class="result-box" id="log-combine"><span class="c-dim">모든 스트림에서 값이 도착하면 방출됩니다...</span></div>
+</div>
+
+<!-- merge -->
+<div class="panel" id="panel-merge">
+  <div class="info-box">
+    <strong>merge</strong><br>
+    어느 스트림에서든 값이 오면 <span style="color:var(--ok)">즉시 단일 파이프라인으로 방출</span>한다.<br>
+    여러 에러 스트림을 하나로 합쳐 처리할 때 유용하다.
+  </div>
+  <div class="streams">
+    <div class="stream">
+      <span class="stream-name" style="color:var(--ok)">Stream A (프로필 에러)</span>
+      <button class="stream-btn" onclick="sendMerge('a')">에러 발생</button>
+    </div>
+    <div class="stream">
+      <span class="stream-name" style="color:var(--blue)">Stream B (레포 에러)</span>
+      <button class="stream-btn" onclick="sendMerge('b')">에러 발생</button>
+    </div>
+  </div>
+  <div class="r-lbl">결과 로그 (단일 파이프라인)</div>
+  <div class="result-box" id="log-merge"><span class="c-dim">버튼을 눌러보세요...</span></div>
+</div>
+
+<script>
+let cState = { a: null, b: null, c: null };
+let cCount = { a: 0, b: 0, c: 0 };
+let mCount = 0;
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && name === 'combine') || (i === 1 && name === 'merge'));
+  });
+  document.getElementById('panel-combine').classList.toggle('active', name === 'combine');
+  document.getElementById('panel-merge').classList.toggle('active', name === 'merge');
+}
+
+function addLog(id, html) {
+  const box = document.getElementById(id);
+  if (box.querySelector('.c-dim')) box.innerHTML = '';
+  const item = document.createElement('div');
+  item.className = 'tl-item';
+  item.innerHTML = html;
+  box.insertBefore(item, box.firstChild);
+  if (box.children.length > 6) box.removeChild(box.lastChild);
+}
+
+function sendCombine(stream) {
+  cCount[stream]++;
+  const labels = { a: '프로필', b: '레포', c: '팔로워' };
+  const colors = { a: 'var(--ok)', b: 'var(--blue)', c: 'var(--accent)' };
+  cState[stream] = `${labels[stream]}#${cCount[stream]}`;
+  document.getElementById('c-' + stream).textContent = cState[stream];
+  document.getElementById('c-' + stream).style.color = colors[stream];
+
+  if (cState.a && cState.b && cState.c) {
+    addLog('log-combine',
+      `<span class="c-ok">✓ 방출: (${cState.a}, ${cState.b}, ${cState.c})</span>`
+    );
+  } else {
+    const missing = ['a','b','c'].filter(s => !cState[s]).map(s => ({ a:'프로필', b:'레포', c:'팔로워' })[s]);
+    addLog('log-combine',
+      `<span class="c-warn">⏳ 대기 중 — 미도착: [${missing.join(', ')}]</span>`
+    );
+  }
+}
+
+function sendMerge(stream) {
+  mCount++;
+  const labels = { a: 'AppError.profile', b: 'AppError.repo' };
+  const color = stream === 'a' ? 'var(--ok)' : 'var(--blue)';
+  addLog('log-merge',
+    `<span style="color:${color}">→ ${labels[stream]}(error) 수신 #${mCount}</span><br>` +
+    `<span class="c-dim" style="font-size:10px;padding-left:10px">errorMessage = error.localizedDescription</span>`
+  );
+}
+</script>
+</body>
+</html>

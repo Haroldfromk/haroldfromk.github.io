@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>map / compactMap / flatMap</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #16213e;
+  --border: rgba(255,255,255,0.08); --text: #e2e2f0; --dim: #7070a0;
+  --accent: #a78bfa; --ok: #34d399; --warn: #fbbf24; --danger: #f87171;
+  --mono: monospace;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; padding: 16px; }
+h2 { font-size: 14px; color: var(--accent); margin-bottom: 6px; font-family: var(--mono); }
+.desc { font-size: 11px; color: var(--dim); margin-bottom: 14px; line-height: 1.6; }
+.tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.tab {
+  flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--dim); font-size: 12px; font-family: var(--mono);
+  cursor: pointer; text-align: center; transition: all .2s;
+}
+.tab.active { border-color: var(--accent); color: var(--accent); background: rgba(167,139,250,.1); }
+.panel { display: none; }
+.panel.active { display: block; }
+.info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 11px; color: var(--dim); line-height: 1.7; }
+.info-box strong { color: var(--text); }
+.input-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+input[type=text] {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; outline: none;
+  font-family: var(--mono);
+}
+input:focus { border-color: var(--accent); }
+.run-btn {
+  background: var(--accent); color: #fff; border: none; border-radius: 8px;
+  padding: 8px 16px; font-size: 12px; cursor: pointer; font-family: var(--mono);
+  white-space: nowrap;
+}
+.run-btn:hover { opacity: .85; }
+.result-box { background: var(--surface2); border-radius: 8px; padding: 10px 12px; font-family: var(--mono); font-size: 12px; min-height: 50px; }
+.r-lbl { font-size: 10px; color: var(--dim); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .06em; }
+.r-ok { color: var(--ok); }
+.r-nil { color: var(--danger); }
+.r-warn { color: var(--warn); }
+
+/* flatMap */
+.fm-btns { display: flex; gap: 8px; margin-bottom: 10px; }
+.fm-btn {
+  flex: 1; padding: 9px; border-radius: 8px; border: none; font-size: 11px;
+  font-family: var(--mono); cursor: pointer; transition: opacity .15s;
+}
+.fm-btn:hover { opacity: .85; }
+.fm-btn-a { background: rgba(52,211,153,.2); color: var(--ok); border: 1px solid rgba(52,211,153,.3); }
+.fm-btn-b { background: rgba(167,139,250,.2); color: var(--accent); border: 1px solid rgba(167,139,250,.3); }
+.tl { display: flex; flex-direction: column; gap: 4px; }
+.tl-item { padding: 5px 8px; border-radius: 6px; font-family: var(--mono); font-size: 11px; border: 1px solid var(--border); background: var(--surface2); animation: fadeIn .3s; }
+.tl-ok { border-color: rgba(52,211,153,.3); color: var(--ok); }
+.tl-info { color: var(--dim); }
+.tl-warn { border-color: rgba(251,191,36,.3); color: var(--warn); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<h2>map / compactMap / flatMap</h2>
+<p class="desc">각 오퍼레이터에 값을 넣어서 어떻게 변환되는지 확인해보자.</p>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('map')">map</div>
+  <div class="tab" onclick="switchTab('compactMap')">compactMap</div>
+  <div class="tab" onclick="switchTab('flatMap')">flatMap</div>
+</div>
+
+<!-- map -->
+<div class="panel active" id="panel-map">
+  <div class="info-box">
+    <strong>map { $0.uppercased() }</strong><br>
+    모든 값을 변환한다. 값의 타입이나 형태를 바꿀 때 사용한다.
+  </div>
+  <div class="input-row">
+    <input type="text" id="map-input" placeholder="텍스트를 입력하세요">
+    <button class="run-btn" onclick="runMap()">실행</button>
+  </div>
+  <div class="r-lbl">결과</div>
+  <div class="result-box" id="map-result" style="color:var(--dim)">입력 후 실행을 눌러보세요</div>
+</div>
+
+<!-- compactMap -->
+<div class="panel" id="panel-compactMap">
+  <div class="info-box">
+    <strong>compactMap { Int($0) }</strong><br>
+    변환 결과가 nil이면 자동으로 걸러낸다. 숫자로 변환할 수 없는 값은 제거된다.
+  </div>
+  <div class="input-row">
+    <input type="text" id="cm-input" placeholder="쉼표로 구분: 1, 둘, 3, four, 5">
+    <button class="run-btn" onclick="runCompactMap()">실행</button>
+  </div>
+  <div class="r-lbl">결과</div>
+  <div class="result-box" id="cm-result" style="color:var(--dim)">입력 후 실행을 눌러보세요</div>
+</div>
+
+<!-- flatMap -->
+<div class="panel" id="panel-flatMap">
+  <div class="info-box">
+    <strong>flatMap { API 호출 }</strong><br>
+    단순 이벤트를 새로운 비동기 스트림으로 전환한다.<br>
+    새 이벤트가 오면 이전 요청을 취소하고 새 요청으로 교체한다.
+  </div>
+  <div class="fm-btns">
+    <button class="fm-btn fm-btn-a" onclick="fmSend('harold')">검색: "harold"</button>
+    <button class="fm-btn fm-btn-b" onclick="fmSend('dongik')">검색: "dongik"</button>
+  </div>
+  <div class="r-lbl">스트림 로그</div>
+  <div class="result-box">
+    <div class="tl" id="fm-log"><span style="color:var(--dim)">버튼을 눌러보세요...</span></div>
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  ['map','compactMap','flatMap'].forEach((n, i) => {
+    document.querySelectorAll('.tab')[i].classList.toggle('active', n === name);
+    document.getElementById('panel-' + n).classList.toggle('active', n === name);
+  });
+}
+
+function runMap() {
+  const val = document.getElementById('map-input').value;
+  const box = document.getElementById('map-result');
+  if (!val) { box.textContent = '값을 입력하세요'; box.style.color = 'var(--dim)'; return; }
+  box.innerHTML = `입력: <span style="color:var(--dim)">"${val}"</span><br>` +
+    `map { $0.uppercased() }<br>` +
+    `출력: <span class="r-ok">"${val.toUpperCase()}"</span>`;
+}
+
+function runCompactMap() {
+  const val = document.getElementById('cm-input').value;
+  const box = document.getElementById('cm-result');
+  if (!val) { box.textContent = '값을 입력하세요'; box.style.color = 'var(--dim)'; return; }
+  const items = val.split(',').map(s => s.trim());
+  const results = items.map(s => ({ raw: s, result: isNaN(parseInt(s)) ? null : parseInt(s) }));
+  const passed = results.filter(r => r.result !== null).map(r => r.result);
+  let html = `입력: <span style="color:var(--dim)">[${items.map(i => '"'+i+'"').join(', ')}]</span><br><br>`;
+  results.forEach(r => {
+    if (r.result !== null) html += `<span class="r-ok">✓ "${r.raw}" → ${r.result}</span><br>`;
+    else html += `<span class="r-nil">✗ "${r.raw}" → nil (제거)</span><br>`;
+  });
+  html += `<br>최종: <span class="r-ok">[${passed.join(', ')}]</span>`;
+  box.innerHTML = html;
+}
+
+let fmTimer = null;
+let fmCount = 0;
+
+function fmSend(query) {
+  fmCount++;
+  const log = document.getElementById('fm-log');
+  if (log.querySelector('span')) log.innerHTML = '';
+
+  // 이전 요청 취소
+  if (fmTimer) {
+    clearTimeout(fmTimer);
+    const cancel = document.createElement('div');
+    cancel.className = 'tl-item tl-warn';
+    cancel.textContent = '✗ 이전 요청 취소됨';
+    log.insertBefore(cancel, log.firstChild);
+  }
+
+  const start = document.createElement('div');
+  start.className = 'tl-item tl-info';
+  start.textContent = `→ flatMap: "${query}" 검색 요청 시작`;
+  log.insertBefore(start, log.firstChild);
+
+  fmTimer = setTimeout(() => {
+    fmTimer = null;
+    const done = document.createElement('div');
+    done.className = 'tl-item tl-ok';
+    done.textContent = `✓ "${query}" 결과 수신 완료`;
+    log.insertBefore(done, log.firstChild);
+    if (log.children.length > 8) log.removeChild(log.lastChild);
+  }, 800);
+
+  if (log.children.length > 8) log.removeChild(log.lastChild);
+}
+</script>
+</body>
+</html>

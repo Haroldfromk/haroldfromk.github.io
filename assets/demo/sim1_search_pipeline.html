@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>검색 파이프라인 시뮬레이터</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #16213e;
+  --border: rgba(255,255,255,0.08); --text: #e2e2f0; --dim: #7070a0;
+  --accent: #a78bfa; --ok: #34d399; --warn: #fbbf24; --danger: #f87171;
+  --mono: monospace;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; padding: 16px; }
+h2 { font-size: 14px; color: var(--accent); margin-bottom: 6px; font-family: var(--mono); }
+.desc { font-size: 11px; color: var(--dim); margin-bottom: 14px; line-height: 1.6; }
+
+.input-row { display: flex; gap: 8px; margin-bottom: 6px; }
+input[type=text] {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; outline: none;
+  font-family: var(--mono);
+}
+input[type=text]:focus { border-color: var(--accent); }
+.resend-btn {
+  background: var(--surface2); border: 1px solid var(--border); color: var(--dim);
+  border-radius: 8px; padding: 8px 12px; font-size: 11px; font-family: var(--mono);
+  cursor: pointer; white-space: nowrap; transition: all .2s;
+}
+.resend-btn:hover { border-color: var(--warn); color: var(--warn); }
+
+.hint { font-size: 10px; color: var(--dim); margin-bottom: 14px; }
+.hint span { color: var(--warn); }
+
+.pipeline { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.stage {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;
+  transition: border-color .3s, background .3s;
+}
+.stage.pass { border-color: rgba(52,211,153,.4); background: rgba(52,211,153,.06); }
+.stage.block { border-color: rgba(248,113,113,.4); background: rgba(248,113,113,.06); }
+.stage.waiting { border-color: rgba(251,191,36,.4); background: rgba(251,191,36,.06); }
+.stage-name { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+.stage-val { font-family: var(--mono); font-size: 11px; margin-top: 3px; }
+.stage-status { font-size: 10px; font-family: var(--mono); }
+.s-pass { color: var(--ok); }
+.s-block { color: var(--danger); }
+.s-wait { color: var(--warn); }
+
+.result-lbl { font-size: 10px; color: var(--dim); margin-bottom: 4px; letter-spacing: .06em; text-transform: uppercase; }
+.result { background: var(--surface2); border-radius: 8px; padding: 10px 12px; font-family: var(--mono); font-size: 11px; min-height: 36px; }
+</style>
+</head>
+<body>
+<h2>검색 파이프라인 시뮬레이터</h2>
+<p class="desc">검색어를 입력하면 각 오퍼레이터를 단계별로 통과하는 과정을 확인할 수 있다.<br>
+<span style="color:var(--warn)">같은 값 재전송</span> 버튼으로 removeDuplicates 동작을 확인해보자.</p>
+
+<div class="input-row">
+  <input type="text" id="searchInput" placeholder="검색어를 입력하세요..." oninput="onInput(this.value)">
+  <button class="resend-btn" onclick="resend()">같은 값 재전송</button>
+</div>
+<div class="hint">💡 값 입력 후 <span>같은 값 재전송</span> 버튼을 눌러보세요 — removeDuplicates가 차단합니다</div>
+
+<div class="pipeline">
+  <div class="stage" id="s1">
+    <div>
+      <div class="stage-name">.removeDuplicates()</div>
+      <div class="stage-val" id="v1" style="color:var(--dim)">-</div>
+    </div>
+    <div class="stage-status" id="st1">-</div>
+  </div>
+  <div class="stage" id="s2">
+    <div>
+      <div class="stage-name">.debounce(0.5s)</div>
+      <div class="stage-val" id="v2" style="color:var(--dim)">대기 중...</div>
+    </div>
+    <div class="stage-status s-wait" id="st2">⏳</div>
+  </div>
+  <div class="stage" id="s3">
+    <div>
+      <div class="stage-name">.filter { count > 1 }</div>
+      <div class="stage-val" id="v3" style="color:var(--dim)">-</div>
+    </div>
+    <div class="stage-status" id="st3">-</div>
+  </div>
+  <div class="stage" id="s4">
+    <div>
+      <div class="stage-name">.flatMap { API 호출 }</div>
+      <div class="stage-val" id="v4" style="color:var(--dim)">-</div>
+    </div>
+    <div class="stage-status" id="st4">-</div>
+  </div>
+</div>
+
+<div class="result-lbl">최종 결과</div>
+<div class="result" id="result" style="color:var(--dim)">입력 대기 중...</div>
+
+<script>
+let debounceTimer = null;
+let lastValue = null;
+
+function onInput(val) {
+  processValue(val, false);
+}
+
+function resend() {
+  const val = document.getElementById('searchInput').value;
+  if (!val) return;
+  processValue(val, true);
+}
+
+function processValue(val, isResend) {
+  const s1 = document.getElementById('s1');
+  const v1 = document.getElementById('v1');
+  const st1 = document.getElementById('st1');
+
+  // removeDuplicates
+  if (val === lastValue) {
+    s1.className = 'stage block';
+    v1.textContent = `"${val}" (이전과 동일)`;
+    v1.style.color = 'var(--danger)';
+    st1.textContent = '✗ 중복 차단';
+    st1.className = 'stage-status s-block';
+    resetBelow(2);
+    document.getElementById('result').textContent = '중복 값 — removeDuplicates가 차단함';
+    document.getElementById('result').style.color = 'var(--danger)';
+    clearTimeout(debounceTimer);
+    return;
+  }
+
+  lastValue = val;
+  s1.className = 'stage pass';
+  v1.textContent = `"${val}"`;
+  v1.style.color = 'var(--ok)';
+  st1.textContent = '✓ 통과';
+  st1.className = 'stage-status s-pass';
+
+  // debounce
+  const s2 = document.getElementById('s2');
+  const v2 = document.getElementById('v2');
+  const st2 = document.getElementById('st2');
+  s2.className = 'stage waiting';
+  v2.textContent = '0.5초 대기 중...';
+  v2.style.color = 'var(--warn)';
+  st2.textContent = '⏳';
+  st2.className = 'stage-status s-wait';
+  resetBelow(3);
+  document.getElementById('result').textContent = '0.5초 대기 중...';
+  document.getElementById('result').style.color = 'var(--warn)';
+
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    s2.className = 'stage pass';
+    v2.textContent = `"${val}"`;
+    v2.style.color = 'var(--ok)';
+    st2.textContent = '✓ 통과';
+    st2.className = 'stage-status s-pass';
+    runFilter(val);
+  }, 500);
+}
+
+function runFilter(val) {
+  const s3 = document.getElementById('s3');
+  const v3 = document.getElementById('v3');
+  const st3 = document.getElementById('st3');
+  if (val.length <= 1) {
+    s3.className = 'stage block';
+    v3.textContent = `"${val}" (${val.length}글자)`;
+    v3.style.color = 'var(--danger)';
+    st3.textContent = '✗ 2글자 미만 차단';
+    st3.className = 'stage-status s-block';
+    document.getElementById('s4').className = 'stage';
+    document.getElementById('v4').textContent = '-';
+    document.getElementById('v4').style.color = 'var(--dim)';
+    document.getElementById('st4').textContent = '-';
+    document.getElementById('result').textContent = '2글자 미만 — 차단됨';
+    document.getElementById('result').style.color = 'var(--danger)';
+  } else {
+    s3.className = 'stage pass';
+    v3.textContent = `"${val}" (${val.length}글자)`;
+    v3.style.color = 'var(--ok)';
+    st3.textContent = '✓ 통과';
+    st3.className = 'stage-status s-pass';
+    runAPI(val);
+  }
+}
+
+function runAPI(val) {
+  const s4 = document.getElementById('s4');
+  const v4 = document.getElementById('v4');
+  const st4 = document.getElementById('st4');
+  s4.className = 'stage waiting';
+  v4.textContent = `"${val}" 검색 중...`;
+  v4.style.color = 'var(--warn)';
+  st4.textContent = '⏳ API 호출';
+  st4.className = 'stage-status s-wait';
+  document.getElementById('result').textContent = 'API 호출 중...';
+  document.getElementById('result').style.color = 'var(--warn)';
+
+  setTimeout(() => {
+    s4.className = 'stage pass';
+    v4.textContent = `"${val}" → 결과 수신`;
+    v4.style.color = 'var(--ok)';
+    st4.textContent = '✓ 완료';
+    st4.className = 'stage-status s-pass';
+    document.getElementById('result').textContent = `"${val}" 검색 완료 — 결과 표시됨`;
+    document.getElementById('result').style.color = 'var(--ok)';
+  }, 400);
+}
+
+function resetBelow(from) {
+  for (let i = from; i <= 4; i++) {
+    document.getElementById('s'+i).className = 'stage';
+    document.getElementById('v'+i).textContent = '-';
+    document.getElementById('v'+i).style.color = 'var(--dim)';
+    document.getElementById('st'+i).textContent = '-';
+    document.getElementById('st'+i).className = 'stage-status';
+  }
+}
+</script>
+</body>
+</html>
