@@ -214,7 +214,9 @@ print(boostStudents) // ["BoostCamp2021-Mike", "BoostCamp2021-Jane", "BoostCamp2
 ```
 
 ## FlatMap
-	- 2차원 배열에 나누어져있는 데이터들을 1차원 배열로 합쳐주는 기능이 포함되어있다.
+
+- 2차원 배열에 나누어져있는 데이터들을 1차원 배열로 합쳐주는 기능이 포함되어있다.
+
 예시
 
 ```swift

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchronous Execution Simulator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        h3 { text-align: center; margin-top: 0; }
+        .target-list {
+            background: #e5e5ea;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        #btnCombine { background-color: #ff9500; }
+        #btnAsyncSerial { background-color: #34c759; }
+        #btnAsyncTaskGroup { background-color: #0071e3; }
+        
+        .status-panel {
+            background: #f5f5f7;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .status-title { font-weight: bold; margin-bottom: 8px; display: block; }
+        .progress-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .progress-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .bar-bg { width: 120px; height: 8px; background: #d1d1d6; border-radius: 4px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 0%; background: #1d1d1f; transition: width 0.1s linear; }
+        .result-box {
+            background: #e5e5ea;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            min-height: 18px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>비동기 처리 방식 시뮬레이터</h3>
+    <div class="target-list">요청 대상: ["Google", "Apple", "Kakao", "Naver"]</div>
+    
+    <div class="btn-group">
+        <button id="btnCombine">1. Combine (MergeMany) 실행 [병렬 / 랜덤 순서]</button>
+        <button id="btnAsyncSerial">2. async/await (for-in 루프) 실행 [직렬 / 순서 보장]</button>
+        <button id="btnAsyncTaskGroup">3. async/await (TaskGroup) 실행 [병렬 / 랜덤 순서]</button>
+    </div>
+    
+    <div class="status-panel">
+        <span class="status-title" id="statusTitle">현재 모드: 대기 중</span>
+        <div class="progress-zone" id="progressZone">
+            </div>
+        <div>최종 결과 배열 (users):</div>
+        <div class="result-box" id="resultBox">[]</div>
+    </div>
+</div>
+
+<script>
+    const names = ["Google", "Apple", "Kakao", "Naver"];
+
+    // 무작위 네트워크 지연 시간 생성 함수 (300ms ~ 1200ms 사이)
+    const getRandomDelay = () => Math.floor(Math.random() * 900) + 300;
+
+    const btnCombine = document.getElementById('btnCombine');
+    const btnAsyncSerial = document.getElementById('btnAsyncSerial');
+    const btnAsyncTaskGroup = document.getElementById('btnAsyncTaskGroup');
+    const statusTitle = document.getElementById('statusTitle');
+    const progressZone = document.getElementById('progressZone');
+    const resultBox = document.getElementById('resultBox');
+
+    function setButtonsDisabled(disabled) {
+        btnCombine.disabled = disabled;
+        btnAsyncSerial.disabled = disabled;
+        btnAsyncTaskGroup.disabled = disabled;
+    }
+
+    function initProgressRows() {
+        progressZone.innerHTML = '';
+        names.forEach(name => {
+            const row = document.createElement('div');
+            row.className = 'progress-row';
+            row.innerHTML = `<span>${name}</span><div class="bar-bg"><div class="bar-fill" id="bar-${name}"></div></div><span id="status-${name}">대기</span>`;
+            progressZone.appendChild(row);
+        });
+        resultBox.innerText = '[]';
+    }
+
+    function animateBar(name, duration) {
+        return new Promise(resolve => {
+            const bar = document.getElementById(`bar-${name}`);
+            const status = document.getElementById(`status-${name}`);
+            status.innerText = '요청 중...';
+            status.style.color = '#ff9500';
+            
+            let start = null;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                let progress = timestamp - start;
+                let width = Math.min((progress / duration) * 100, 100);
+                bar.style.width = width + '%';
+                if (progress < duration) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    status.innerText = '완료';
+                    status.style.color = '#34c759';
+                    resolve(name);
+                }
+            }
+            window.requestAnimationFrame(step);
+        });
+    }
+
+    // 병렬 처리 모드 (Combine & TaskGroup)
+    async function runParallel(modeName) {
+        setButtonsDisabled(true);
+        initProgressRows();
+        statusTitle.innerText = `현재 모드: ${modeName} 실행 중...`;
+        
+        const result = [];
+        
+        // 실행할 때마다 각 요청의 지연 시간을 랜덤으로 부여
+        const promises = names.map((name) => {
+            const delay = getRandomDelay();
+            return animateBar(name, delay).then(completedName => {
+                result.push(completedName);
+                resultBox.innerText = `[${result.join(', ')}]`;
+            });
+        });
+
+        await Promise.all(promises);
+        statusTitle.innerText = `현재 모드: ${modeName} 완료 (순서 랜덤 섞임)`;
+        setButtonsDisabled(false);
+    }
+
+    // 직렬 처리 모드 (async/await for-in)
+    async function runSerial() {
+        setButtonsDisabled(true);
+        initProgressRows();
+        statusTitle.innerText = '현재 모드: async/await (직렬 루프) 실행 중...';
+        
+        const result = [];
+
+        // 순차적으로 실행하되, 개별 요청의 처리 시간 자체는 랜덤
+        for (let i = 0; i < names.length; i++) {
+            const delay = getRandomDelay();
+            await animateBar(names[i], delay);
+            result.push(names[i]);
+            resultBox.innerText = `[${result.join(', ')}]`;
+        }
+
+        statusTitle.innerText = '현재 모드: async/await (직렬 루프) 완료 (순서 무조건 보장)';
+        setButtonsDisabled(false);
+    }
+
+    btnCombine.addEventListener('click', () => runParallel('Combine (MergeMany)'));
+    btnAsyncSerial.addEventListener('click', runSerial);
+    btnAsyncTaskGroup.addEventListener('click', () => runParallel('async/await (TaskGroup)'));
+</script>
+
+</body>
+</html>

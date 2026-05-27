@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Interactive IndexSet Simulator</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.desc {
+    font-size: 13px;
+    opacity: 0.75;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.panel {
+    background: #111827;
+    border-radius: 18px;
+    padding: 16px;
+}
+
+.panel h2 {
+    margin-top: 0;
+    font-size: 17px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.cell {
+    height: 48px;
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid transparent;
+    transition: 0.25s;
+}
+
+.cell.selected {
+    border-color: #facc15;
+    background: #312e81;
+    transform: scale(1.02);
+}
+
+.cell.removing {
+    transform: translateX(-120%);
+    opacity: 0;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.index {
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    background: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.name {
+    font-size: 14px;
+}
+
+.action-row {
+    display: flex;
+    gap: 6px;
+}
+
+.btn {
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.select-btn {
+    background: #facc15;
+    color: black;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.green-btn {
+    background: #22c55e;
+    color: white;
+}
+
+.white-btn {
+    background: white;
+    color: black;
+}
+
+.btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.section {
+    margin-top: 18px;
+}
+
+.label {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 8px;
+}
+
+.chips {
+    min-height: 48px;
+    background: black;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.chip {
+    background: #1d4ed8;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    animation: pop 0.25s ease;
+}
+
+.chip.yellow {
+    background: #ca8a04;
+}
+
+.chip.green {
+    background: #15803d;
+}
+
+@keyframes pop {
+
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.arrow {
+    text-align: center;
+    opacity: 0.5;
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+.highlight {
+    color: #facc15;
+    font-weight: bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Index vs IndexSet</h1>
+
+    <div class="grid">
+
+        <!-- LEFT -->
+        <div class="panel">
+
+            <h2>Index</h2>
+
+            <div class="list" id="intList"></div>
+
+            <div class="section">
+
+                <div class="label">
+                    현재 전달되는 값
+                </div>
+
+                <div class="chips" id="singleValue">
+                    <span style="opacity:0.4;font-size:12px;">
+                        없음
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="btn-row">
+
+                <button class="btn white-btn"
+                        onclick="resetInt()">
+                    초기화
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="panel">
+
+            <h2>IndexSet</h2>
+
+            <div class="list" id="setList"></div>
+
+            <div class="section">
+
+                <div class="label">
+                    사용자 선택 순서
+                </div>
+
+                <div class="chips"
+                     id="selectionOrder">
+                </div>
+
+                <div class="arrow">
+                    ↓ SwiftUI가 IndexSet 생성
+                </div>
+
+                <div class="label">
+                    실제 생성된 IndexSet
+                </div>
+
+                <div class="chips"
+                     id="indexSetView">
+                </div>
+
+            </div>
+
+            <div class="btn-row">
+
+                <button class="btn green-btn"
+                        onclick="deleteSelected()">
+                    선택 삭제
+                </button>
+
+                <button class="btn white-btn"
+                        onclick="resetSet()">
+                    초기화
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const original = [
+    "Apple",
+    "Banana",
+    "Orange",
+    "Mango"
+];
+
+let intItems = [...original];
+let setItems = [...original];
+
+let selectedIndexes = [];
+
+const intList = document.getElementById("intList");
+const setList = document.getElementById("setList");
+
+function render() {
+
+    renderInt();
+    renderSet();
+}
+
+function renderInt() {
+
+    intList.innerHTML = "";
+
+    intItems.forEach((item, index) => {
+
+        const cell = document.createElement("div");
+
+        cell.className = "cell";
+
+        cell.innerHTML = `
+            <div class="left">
+
+                <div class="index">
+                    ${index}
+                </div>
+
+                <div class="name">
+                    ${item}
+                </div>
+
+            </div>
+
+            <button class="btn delete-btn">
+                Delete
+            </button>
+        `;
+
+        cell.querySelector(".delete-btn")
+            .onclick = () => deleteInt(index, cell);
+
+        intList.appendChild(cell);
+    });
+}
+
+function renderSet() {
+
+    setList.innerHTML = "";
+
+    setItems.forEach((item, index) => {
+
+        const selected =
+            selectedIndexes.includes(index)
+            ? "selected"
+            : "";
+
+        const cell = document.createElement("div");
+
+        cell.className = `cell ${selected}`;
+
+        cell.innerHTML = `
+            <div class="left">
+
+                <div class="index">
+                    ${index}
+                </div>
+
+                <div class="name">
+                    ${item}
+                </div>
+
+            </div>
+
+            <div class="action-row">
+
+                <button class="btn select-btn">
+                    Select
+                </button>
+
+                <button class="btn delete-btn">
+                    Delete
+                </button>
+
+            </div>
+        `;
+
+        cell.querySelector(".select-btn")
+            .onclick = () => toggleIndex(index);
+
+        cell.querySelector(".delete-btn")
+            .onclick = () => deleteSingle(index, cell);
+
+        setList.appendChild(cell);
+    });
+}
+
+function toggleIndex(index) {
+
+    if (selectedIndexes.includes(index)) {
+
+        selectedIndexes =
+            selectedIndexes.filter(i => i !== index);
+
+    } else {
+
+        selectedIndexes.push(index);
+    }
+
+    updateVisuals();
+
+    renderSet();
+}
+
+function updateVisuals() {
+
+    const selectionView =
+        document.getElementById("selectionOrder");
+
+    const indexSetView =
+        document.getElementById("indexSetView");
+
+    selectionView.innerHTML = "";
+    indexSetView.innerHTML = "";
+
+    if (selectedIndexes.length === 0) {
+
+        selectionView.innerHTML =
+            `<span style="opacity:0.4;font-size:12px;">
+                없음
+            </span>`;
+
+        indexSetView.innerHTML =
+            `<span style="opacity:0.4;font-size:12px;">
+                없음
+            </span>`;
+
+        return;
+    }
+
+    // 선택 순서 표시
+    selectedIndexes.forEach(index => {
+
+        const chip =
+            document.createElement("div");
+
+        chip.className = "chip";
+
+        chip.innerHTML = index;
+
+        selectionView.appendChild(chip);
+    });
+
+    // 실제 IndexSet 정렬
+    const sorted =
+        [...selectedIndexes]
+        .sort((a, b) => a - b);
+
+    sorted.forEach(index => {
+
+        const chip =
+            document.createElement("div");
+
+        chip.className = "chip yellow";
+
+        chip.innerHTML = index;
+
+        indexSetView.appendChild(chip);
+    });
+
+}
+
+async function deleteInt(index, cell) {
+
+    const singleValue =
+        document.getElementById("singleValue");
+
+    singleValue.innerHTML =
+        `<div class="chip green">
+            ${index}
+        </div>`;
+
+    await wait(350);
+
+    cell.classList.add("removing");
+
+    await wait(300);
+
+    intItems.splice(index, 1);
+
+    renderInt();
+}
+
+async function deleteSingle(index, cell) {
+
+    selectedIndexes = [index];
+
+    updateVisuals();
+
+    await wait(350);
+
+    cell.classList.add("removing");
+
+    await wait(300);
+
+    setItems.splice(index, 1);
+
+    selectedIndexes = [];
+
+    updateVisuals();
+
+    renderSet();
+}
+
+async function deleteSelected() {
+
+    if (selectedIndexes.length === 0) {
+        return;
+    }
+
+    const sorted =
+        [...selectedIndexes]
+        .sort((a, b) => b - a);
+
+    await wait(450);
+
+    sorted.forEach(index => {
+        setItems.splice(index, 1);
+    });
+
+    selectedIndexes = [];
+
+    updateVisuals();
+
+    renderSet();
+}
+
+function resetInt() {
+
+    intItems = [...original];
+
+    document.getElementById("singleValue")
+        .innerHTML =
+        `<span style="opacity:0.4;font-size:12px;">
+            없음
+        </span>`;
+
+    renderInt();
+}
+
+function resetSet() {
+
+    setItems = [...original];
+
+    selectedIndexes = [];
+
+    updateVisuals();
+
+    renderSet();
+}
+
+function wait(ms) {
+
+    return new Promise(resolve => {
+        setTimeout(resolve, ms);
+    });
+}
+
+render();
+
+</script>
+
+</body>
+</html>

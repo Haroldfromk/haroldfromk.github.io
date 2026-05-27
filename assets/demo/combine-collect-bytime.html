@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combine Collect Simulator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+        button {
+            background-color: #0071e3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 12px;
+            transition: background 0.2s;
+        }
+        button:active {
+            background-color: #005bb5;
+        }
+        .timer-zone {
+            height: 24px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #86868b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .progress-bar {
+            width: 100px;
+            height: 6px;
+            background-color: #e5e5ea;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #0071e3;
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+        .board {
+            text-align: left;
+            background: #f5f5f7;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .row {
+            margin: 12px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .label { font-weight: bold; }
+        .time-label { color: #0071e3; }
+        .count-label { color: #ff9500; }
+        .result-val { background: #e5e5ea; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .reset-btn {
+            background: none;
+            color: #86868b;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+            border: none;
+            padding: 0;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>Combine Collect 시뮬레이터</h3>
+    <button id="sendBtn">💥 데이터 전송 (현재 값: 1)</button>
+    
+    <div class="timer-zone">
+        <span id="timerText">⏳ 수집 주기: 4.0초</span>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+    
+    <div class="board">
+        <div class="row">
+            <span class="label time-label">⏱️ collect(.byTime(4초)) -> 일괄 저장 배열</span>
+            <span id="timeResult">현재 보관고: []</span>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 8px 0;">
+        <div class="row">
+            <span class="label count-label">🔢 collect(3) -> 3개 찰 때마다 방출</span>
+            <span id="countResult">현재 보관고: []</span>
+        </div>
+    </div>
+    <button class="reset-btn" id="resetBtn">시뮬레이터 리셋</button>
+</div>
+
+<script>
+    let clickCount = 0;
+    let timeQueue = [];
+    let countQueue = [];
+    
+    let timeLeft = 40; 
+    let timerInterval = null;
+
+    const sendBtn = document.getElementById('sendBtn');
+    const timeResult = document.getElementById('timeResult');
+    const countResult = document.getElementById('countResult');
+    const resetBtn = document.getElementById('resetBtn');
+    const timerText = document.getElementById('timerText');
+    const progressFill = document.getElementById('progressFill');
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft >= 0) {
+                timerText.innerText = `⏳ 수집 주기: ${(timeLeft / 10).toFixed(1)}초`;
+                progressFill.style.width = `${(timeLeft / 40) * 100}%`;
+            }
+            
+            if (timeLeft === 0) {
+                // 4초 만료 -> 수집된 배열을 통째로 방출하고 초기화
+                timeResult.innerHTML = `📦 방출됨! <span class="result-val">[${timeQueue.join(', ')}]</span>`;
+                timeQueue = [];
+                
+                // 타이머 리셋 후 다시 돌기
+                timeLeft = 40;
+                progressFill.style.width = '100%';
+            }
+        }, 100);
+    }
+
+    sendBtn.addEventListener('click', () => {
+        clickCount++;
+        sendBtn.innerText = `💥 데이터 전송 (현재 값: ${clickCount + 1})`;
+        
+        // 양쪽 바구니에 일단 다 주입
+        timeQueue.push(clickCount);
+        countQueue.push(clickCount);
+        
+        // 1. byTime 화면 갱신 (대기 중인 상태 보여주기)
+        if (timeLeft > 0) {
+            timeResult.innerText = `📥 수집 중... [${timeQueue.join(', ')}]`;
+        }
+        
+        // 2. count(3) 로직 제어
+        if (countQueue.length === 3) {
+            countResult.innerHTML = `📦 방출됨! <span class="result-val">[${countQueue.join(', ')}]</span>`;
+            countQueue = [];
+        } else {
+            countResult.innerText = `📥 수집 중... [${countQueue.join(', ')}] (현재 ${countQueue.length}/3)`;
+        }
+    });
+
+    resetBtn.addEventListener('click', () => {
+        clickCount = 0;
+        timeQueue = [];
+        countQueue = [];
+        timeLeft = 40;
+        sendBtn.innerText = `💥 데이터 전송 (현재 값: 1)`;
+        timerText.innerText = `⏳ 수집 주기: 4.0초`;
+        progressFill.style.width = '100%';
+        timeResult.innerText = '현재 보관고: []';
+        countResult.innerText = '현재 보관고: []';
+    });
+
+    // 시작하자마자 4초 타이머 무한 루프 가동
+    startTimer();
+</script>
+
+</body>
+</html>

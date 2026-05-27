@@ -220,7 +220,7 @@ func fetchNews(by sourceId: String, url: URL?, completion: @escaping (Result<[Ne
 2. `withCheckedThrowingContinuation` 사용 (왜냐 1에서 throws로 던지기 때문)
     - `withCheckedThrowingContinuation` 사용함으로써 에러를 던지는게 직관적이다.
 3. `fetchNews` 호출
-4. `switch~case` 를 통해 contiuation을 사용
+4. `switch~case` 를 통해 continuation을 사용
 
 결과
 
