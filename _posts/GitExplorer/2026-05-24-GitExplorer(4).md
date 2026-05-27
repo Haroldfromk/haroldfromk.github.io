@@ -1140,6 +1140,115 @@ if selectedSegment == 0 {
 
 ---
 
+### HotFix
+#### 1. UI 변경문제
+
+즐겨찾기의 목록을 삭제하면 UI업데이트가 안되는 문제를 발견했다.
+
+<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/d1cc8e2d-ea8b-46f0-9082-9d01a4c07b38" />{: width="50%" height="50%"}
+
+```swift
+removeSubject
+   .receive(on: DispatchQueue.main)
+   .sink { [weak self] id in
+         self?.names.removeAll { $0 == id }
+         UserDefaults.standard.set(self?.names, forKey: Constants.favoritesKey)
+         self?.getData()
+   }.store(in: &cancellables)
+```
+
+삭제후에 getData를 통해 데이터를 다시 로드하게 하였다.
+
+---
+
+#### 2. 배열 순서 꼬임에 따른 삭제 꼬임 문제
+
+현재 삭제를 하면, 다른게 삭제 되는 문제가 있다.
+
+<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/936e92d5-850f-4025-a2ba-6f6d3969bd2c" />{: width="50%" height="50%"}
+
+이건 UserDefault값을 넣은 배열과, 그걸 통해 GithubUser를 담은 배열값이 서로 달라서 그렇다.
+
+즉, 예를 들어 `names = ["apple", "banana", "cherry"]` 순서로 저장되어 있는데, API 응답 속도에 따라 `users = [cherry, apple, banana]` 순서로 담길 수 있다.
+
+이 상태에서 인덱스 0번을 삭제하면 `names[0]` = "apple"을 지우는데, 화면에 보이는 0번은 "cherry"라서 사용자 입장에선 엉뚱한 게 삭제되는 것처럼 보이는 것이다.
+
+이걸 해결하기 위해서, api 순서대로 결과를 담는 방식 이었던
+
+```swift
+func asyncFetchFavoriteDataBefore() async throws {
+        var result = [GithubUser]()
+        for name in names {
+            let data = try await service.asyncFetchGitUser(user: name)
+            result.append(data)
+        }
+        users = result
+    }
+```
+
+이걸 사용한다.
+
+그리고 FavoriteView에서도
+
+```swift
+.task {
+      do {
+         try await viewModel.reloadData()                    
+      } catch {
+         print(error)
+      }
+      isRefresh = true
+      viewModel.refreshData(isRefresh: true)
+}
+```
+
+task로 바꾸어 적용한다. 위에서 언급했지만 한번더 적는다.
+
+그리고 삭제할때 위에서 적었는데
+
+```swift
+ removeSubject
+   .receive(on: DispatchQueue.main)
+   .sink { [weak self] id in
+         self?.names.removeAll { $0 == id }
+         UserDefaults.standard.set(self?.names, forKey: Constants.favoritesKey)
+         self?.getData()
+   }.store(in: &cancellables)
+```
+
+여기의 `getData()`때문에 결과값이 다시 섞인다.
+이유는 전에도 언급했지만 `MergeMany`를 쓰기때문에 순서가 보장되지 않기 때문이다.
+
+<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/18c2b794-0067-4909-ad40-6ecfec11fb7a" />{: width="50%" height="50%"}
+
+removeSubject에도 비동기 함수가 들어가야하는데 그냥 넣으면 아래와 같이 에러가 발생한다.
+
+```
+Cannot pass function of type '@concurrent (String) async -> Void' to parameter expecting synchronous function type
+```
+
+그래서 이 에러를 해결하기 위해서 `Task`를 사용하여 
+
+```swift
+removeSubject
+   .receive(on: DispatchQueue.main)
+   .sink { [weak self] id in
+         self?.names.removeAll { $0 == id }
+         UserDefaults.standard.set(self?.names, forKey: Constants.favoritesKey)
+         Task {
+            try? await self?.asyncFetchFavoriteDataBefore()
+         }
+   }.store(in: &cancellables)
+```
+
+이렇게 수정해준다.
+
+<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/d5738a64-21b8-4a5a-baf5-b2a598d3abb7" />{: width="50%" height="50%"}
+
+이제는 이상없이 잘 되는걸 알 수 있다.
+
+---
+
 이렇게 Day 4 도 끝나면서 Git Explorer 앱 만들기도 끝이 났다.
 
 각 일차별로 간단하게 정리해보면:
