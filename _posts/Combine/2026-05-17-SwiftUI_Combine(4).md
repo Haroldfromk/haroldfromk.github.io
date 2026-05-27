@@ -92,6 +92,8 @@ Json 로드 부분은 뭐 이미 언급을 전에 했기에 생략한다.
 
 그리고 클로저 내부의 강한 순환 참조(메모리 누수)를 막기 위해 `[weak self]`를 사용했고, 이로 인해 옵셔널이 된 `self`를 `guard let`으로 안전하게 추출(바인딩) 해주었다.
 
+---
+
 #### in
 [RunLoop.Mode Docs](https://developer.apple.com/documentation/foundation/runloop/mode){:target="_blank"}를 정리를 해보면
 
@@ -268,6 +270,8 @@ final class FighterStreamViewModel: ObservableObject {
 * 메모리 누수 방지: 클로저 내부에서 `self`를 강하게 참조하면 뷰나 뷰모델이 닫혀도 메모리에서 해제되지 않는 강한 순환 참조가 발생한다.
 * 자원 반환: `[weak self]`를 통해 약한 참조를 하면 해당 객체를 더 이상 사용하지 않을 때 메모리를 정상적으로 반환(Release)할 수 있다.
 * 성능 저하 방지: 약한 참조를 하지 않으면 해당 화면이나 뷰모델을 사용할 때마다 메모리가 반환되지 않고 계속 쌓이게 되어 치명적인 성능 저하를 일으킨다.
+
+---
 
 ### View 만들기
 

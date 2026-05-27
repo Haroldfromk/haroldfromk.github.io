@@ -4,3 +4,8 @@
 @import 'main';
 
 /* append your custom style below */
+hr {
+  border: none;
+  border-top: 2px solid rgba(128, 128, 128, 0.5);
+  margin: 2em 0;
+}
