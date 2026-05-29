@@ -1,5 +1,5 @@
 ---
-title: GitExplorer (5)
+title: GitExplorer day5
 writer: Harold
 date: 2026-05-25 08:06
 categories: [Combine]

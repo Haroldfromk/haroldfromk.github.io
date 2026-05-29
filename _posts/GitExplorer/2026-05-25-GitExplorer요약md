@@ -50,4 +50,19 @@ published: false
 * **Combine-Async 브릿지 구현:** 구형 Combine 스트림 기반 비동기 코드를 최신 `async/await` 구조로 안전하게 래핑하기 위해 `withCheckedThrowingContinuation` 기술을 도입함. 스트림의 결과 또는 에러 시점을 정확히 포착하여 `continuation.resume`으로 던져주는 안전 브릿지를 설계함.
 * **참고 사이트:** [이전글1](https://haroldfromk.github.io/posts/Final-(8)/), [이전글2](https://haroldfromk.github.io/posts/High-order-function/), [이전글3](https://haroldfromk.github.io/posts/Async_await-(6)/)
 
+#### [HotFix] UI 업데이트 지연 및 배열 정렬 불일치에 따른 삭제 버그 해결
+* **핵심 로직 및 흐름:** 즐겨찾기 유저 삭제 시 UI가 즉각적으로 동기화되지 않는 결함과, 디스크 저장 배열(`names`)과 화면 렌더링 배열(`users`)의 인덱스 불일치로 인해 엉뚱한 데이터가 삭제되는 레이스 컨디션을 정밀하게 교정함.
+* **1. UI 변경 결함 제어:** 즐겨찾기 목록에서 특정 항목을 제거(Swipe Delete 등)했을 때 로컬 DB만 수정되고 화면 렌더링에 즉각 반영되지 않던 문제를 발견함. `removeSubject` 파이프라인 내부의 `sink` 클로저 연쇄 반응 끝단에 갱신 메서드를 강제 수행하도록 결합하여 해결함.
+* **시각 자료 1:**
+  <img width="302" height="630" alt="UI 업데이트 미반영 결함" src="https://github.com/user-attachments/assets/d1cc8e2d-ea8b-46f0-9082-9d01a4c07b38" />
 
+* **2. 비동기 응답 속도에 따른 인덱스 뒤틀림(삭제 꼬임) 규명:** `UserDefaults`의 원본 ID 순서(`names`)와 `Publishers.MergeMany` 기반의 네트워크 응답 도착 순서(`users`)가 비동기 레이스 컨디션에 의해 서로 다르게 배치되는 인과관계를 찾아냄. 이 상태에서 특정 행(Row)의 인덱스로 삭제를 시도하면 샌드박스 내부 배열과 화면 뷰의 매핑 기준이 달라 사용자가 선택하지 않은 다른 유저가 파괴되는 심각한 오작동이 유발됨.
+* **시각 자료 2:**
+  <img width="302" height="630" alt="배열 순서 뒤틀림 결함" src="https://github.com/user-attachments/assets/936e92d5-850f-4025-a2ba-6f6d3969bd2c" />
+
+* **3. 순차적 비동기 처리(`async/await`) 우회 및 동시성 컨텍스트 매핑:** [코드 4] 순서 보장이 불가능한 Combine 스트림 구조 대신, 반복문을 순차적으로 순회하며 호출 순서를 완벽히 제어하는 `for-in` 기반의 `async/await` 메서드로 전환함. 뷰 계층 역시 `.task` 모디파이어를 장착하여 동시성 수명 주기를 제어함.
+* **4. 동시성 컨텍스트 스위칭 에러 해결:** `removeSubject` 스트림 수신부 내부에서 비동기 메서드를 직접 호출할 때 `Cannot pass function of type @concurrent (String) async -> Void to parameter expecting synchronous function type` 컴파일 에러가 발생함. 동기식 클로저 영역 내부에서 비동기 작업을 안전하게 격리·수행할 수 있도록 최신 동시성 도구인 `Task { ... }` 블록으로 래핑하여 인과 흐름을 완성함.
+* **시각 자료 3:**
+  <img width="302" height="630" alt="MergeMany 재호출에 따른 데이터 혼선" src="https://github.com/user-attachments/assets/18c2b794-0067-4909-ad40-6ecfec11fb7a" />
+* **시각 자료 4:**
+  <img width="302" height="630" alt="최종 HotFix 적용 후 정상 작동" src="https://github.com/user-attachments/assets/d5738a64-21b8-4a5a-baf5-b2a598d3abb7" />
