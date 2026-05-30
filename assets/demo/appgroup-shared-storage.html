@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Group Shared Storage Simulator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 580px;
+            width: 100%;
+        }
+        h3 { text-align: center; margin-top: 0; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 13px; color: #86868b; margin-bottom: 24px; }
+        
+        .architecture {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .side {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .app-side { border-top: 4px solid #0071e3; }
+        .widget-side { border-top: 4px solid #5856d6; }
+        
+        .side-title { font-weight: bold; font-size: 14px; margin-bottom: 12px; display: block; }
+        
+        /* 가운데 공유 컨테이너 */
+        .shared-container {
+            background: #f5f5f7;
+            border: 2px dashed #86868b;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .container-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #86868b;
+            background: #e8e8ed;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+            font-family: monospace;
+        }
+        
+        /* 데이터 연출 상자 */
+        .data-box {
+            background: white;
+            border: 1px solid #d2d2d7;
+            border-radius: 6px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 13px;
+            min-height: 40px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* 위젯 밝은 배경으로 수정 */
+        .widget-view {
+            background: white;
+            color: #1d1d1f;
+            border: 1px solid #d2d2d7;
+            border-radius: 14px;
+            padding: 12px;
+            width: 90%;
+            min-height: 54px;
+            font-size: 12px;
+            text-align: left;
+            box-sizing: border-box;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .widget-empty {
+            color: #86868b;
+            text-align: center;
+            font-style: italic;
+            padding-top: 8px;
+        }
+        
+        .empty-tag { color: #86868b; font-style: italic; }
+        
+        /* 뱃지 스타일 */
+        .user-tag {
+            background: #e1f5fe;
+            color: #0288d1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .widget-tag {
+            background: #f2f2f7;
+            color: #1d1d1f;
+            border: 1px solid #d2d2d7;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 500;
+            display: inline-block;
+            margin: 2px;
+            font-size: 11px;
+            animation: pop 0.3s ease;
+        }
+        
+        input {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #d2d2d7;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+        button {
+            border: none;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            width: 90%;
+        }
+        .app-side button { background-color: #0071e3; }
+        .widget-side button { background-color: #5856d6; }
+        
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>App Group 데이터 공유 시뮬레이터</h3>
+    <div class="subtitle">Main App에서 추가한 정보가 App Group을 거쳐 Widget UI에 반영되는 흐름</div>
+    
+    <div class="architecture">
+        <div class="top-row">
+            <div class="side app-side">
+                <span class="side-title">📱 GitExplorer (Main App)</span>
+                <input type="text" id="appInput" value="apple" placeholder="유저 ID 입력">
+                <button id="btnAppSave">즐겨찾기 추가</button>
+            </div>
+            
+            <div class="side widget-side">
+                <span class="side-title">🧩 Widget UI (결과화면)</span>
+                <div class="widget-view" id="widgetView">
+                    <div class="widget-empty">표시할 유저 없음</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="shared-container">
+            <div class="container-title">📦 App Group: group.co.harold.GitExplorer</div>
+            <div style="font-size: 12px; margin-bottom: 6px; color: #1d1d1f; font-weight: bold;">공유 저장소 (UserDefaults Suite)</div>
+            <div class="data-box" id="sharedStorage">
+                <span class="empty-tag">"FavoriteNames" 수집함이 비어있음</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let favoriteNames = [];
+
+    const appInput = document.getElementById('appInput');
+    const btnAppSave = document.getElementById('btnAppSave');
+    const sharedStorage = document.getElementById('sharedStorage');
+    const widgetView = document.getElementById('widgetView');
+
+    function updateUI() {
+        if (favoriteNames.length === 0) {
+            sharedStorage.innerHTML = '<span class="empty-tag">"FavoriteNames" 수집함이 비어있음</span>';
+        } else {
+            sharedStorage.innerHTML = `<div>Key: "FavoriteNames"</div><div>[ ${favoriteNames.map(name => `<span class="user-tag">${name}</span>`).join(', ')} ]</div>`;
+        }
+
+        if (favoriteNames.length === 0) {
+            widgetView.innerHTML = '<div class="widget-empty">표시할 유저 없음</div>';
+        } else {
+            widgetView.innerHTML = `<div style="font-weight:bold; color:#5856d6; margin-bottom:6px;">⭐ GitExplorer</div><div>${favoriteNames.map(name => `<span class="widget-tag">👤 ${name}</span>`).join('')}</div>`;
+        }
+    }
+
+    btnAppSave.addEventListener('click', () => {
+        const name = appInput.value.trim();
+        if (name && !favoriteNames.includes(name)) {
+            favoriteNames.push(name);
+            updateUI();
+            appInput.value = '';
+            
+            sharedStorage.style.backgroundColor = '#e1f5fe';
+            setTimeout(() => sharedStorage.style.backgroundColor = 'white', 200);
+        }
+    });
+</script>
+
+</body>
+</html>

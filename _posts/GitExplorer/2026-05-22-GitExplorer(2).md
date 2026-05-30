@@ -2,7 +2,7 @@
 title: GitExplorer (2)
 writer: Harold
 date: 2026-05-22 08:06
-categories: [Combine]
+categories: [GitExplorer]
 tags: [Combine]
 
 toc: true
