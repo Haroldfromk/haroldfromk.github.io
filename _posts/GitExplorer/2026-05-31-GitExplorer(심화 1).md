@@ -1,5 +1,5 @@
 ---
-title: GitExplorer(심화 1)
+title: GitExplorer (심화 1)
 writer: Harold
 date: 2026-05-31 08:06
 categories: [GitExplorer]
@@ -291,7 +291,7 @@ struct ProfileView: View {
 
 현재 `addSubject`, `removeSubject`의 sink 클로저에서 `receive(on: DispatchQueue.main)`을 명시적으로 호출하고 있는데, ViewModel이 UI 상태를 관리하는 이상 어차피 메인 스레드에서 동작해야 한다. 
 
-매번 `.receive(on: DispatchQueue.main)`을 붙이는 건 반복적인 보일러플레이트에 불과하다.
+~~매번 `.receive(on: DispatchQueue.main)`을 붙이는 건 반복적인 보일러플레이트에 불과하다.~~ (5.31 수정)
 
 `@MainActor`를 클래스 레벨에 선언하면 컴파일러가 해당 타입의 모든 프로퍼티와 메서드가 메인 스레드에서 실행됨을 보장해주기 때문에, 이런 반복적인 코드를 제거할 수 있다.
 
@@ -312,7 +312,7 @@ final class FavoriteViewModel {
 ---
 
 우선 이제는 MainThread에 실행이 되기에
-init에 있는 `.receive(on: DispatchQueue.main)` 이부분을 전부 지워주도록 한다.
+~~init에 있는 `.receive(on: DispatchQueue.main)` 이부분을 전부 지워주도록 한다.~~ (5.31 수정)
 
 ```swift
 // before
@@ -690,7 +690,7 @@ nonisolated enum GitHubRequest {
 ```
 ---
 
-#### 4. 크래시 에러
+#### 4. App Crash 발생
 
 빌드 후 에러가 해결된거 같아 실행을 해보니
 
@@ -1098,7 +1098,7 @@ func getData() {
 
 `fetchFavoriteData`는 이미 MainActor와 분리되어 있으므로 로직 자체는 수정할 필요가 없다.
 
-다만 `@MainActor`가 클래스 전체에 붙어있으므로 `.receive(on: DispatchQueue.main)` 여기만 제거해주었다.
+~~다만 `@MainActor`가 클래스 전체에 붙어있으므로 `.receive(on: DispatchQueue.main)` 여기만 제거해주었다.~~ (5.31 수정)
 
 ```swift
 func getData() {
@@ -1240,5 +1240,316 @@ addSubject
 지금까지 했던 것처럼 네트워크 작업은 `nonisolated`로 분리하고, 최종 UI 상태 변경만 `@MainActor`에서 수행하도록 역할을 나눠주면 된다.
 
 따라서 `ProfileViewModel`, `SearchViewModel`도 동일한 방식으로 적용해주면 된다.
+
+---
+
+### 2. `@Observable` 마이그레이션 이어서 끝내기
+#### 1. ProfileViewModel
+
+```swift
+@Observable @MainActor
+final class ProfileViewModel {
+    
+    var totalProfile = TotalProfile(
+        repos: [],
+        followers: [],
+        followings: []
+    )
+    
+    @ObservationIgnored private let service = GitHubNetworkService()
+    @ObservationIgnored private var cancellables: Set<AnyCancellable> = []
+    
+    init(requestUser: GithubUser) {
+        Publishers.CombineLatest3(service.fetchGitData(requestType: .repo(requestUser.login))
+            .catch { error -> Just<[GithubRepo]> in
+                print(error)
+                return Just([])
+            }, service.fetchGitData(requestType: .follower(requestUser.login))
+            .catch { error -> Just<[GithubUser]> in
+                print(error)
+                return Just([])
+            }, service.fetchGitData(requestType: .following(requestUser.login))
+            .catch { error -> Just<[GithubUser]> in
+                print(error)
+                return Just([])
+            })
+        .sink { [weak self] repos, followers, followings in
+            self?.totalProfile = TotalProfile(repos: repos,
+                                              followers: followers,
+                                              followings: followings)
+        }.store(in: &cancellables)
+    }
+
+}
+```
+
+여긴 위에서 설명한대로 하면되기에 크게 어려운 부분이 없다.
+
+Class에서는 `@Observable @MainActor`를 추가하고 `ObservableObject` 프로토콜을 삭제 해주고 내부에서는 `@Published,`삭제, ~~`.receive(on:)`, 삭제~~ 그리고 `@ObservationIgnored`를 추가해주면 된다.
+
+이게 전부이다.
+
+---
+
+이떄 ProfileView 에서 에러가 발생하는데
+
+```swift
+struct ProfileView: View {
+
+   @StateObject var viewModel: ProfileViewModel
+
+   // 생략
+
+   init(user: GithubUser) {
+      self.user = user
+      _viewModel = StateObject(wrappedValue: ProfileViewModel(requestUser: user))
+   }
+   // 생략
+}
+```
+
+두군데에서
+
+```swift
+Generic struct 'StateObject' requires that 'ProfileViewModel' conform to 'ObservableObject'
+```
+
+에러가 발생한다.
+
+이건 object를 빼주면 된다.
+
+`@StateObject`는 `ObservableObject`를 관리하기 위한 프로퍼티 래퍼다.
+
+하지만 `@Observable`은 Observation 프레임워크를 사용하므로 `ObservableObject`를 채택하지 않는다.
+
+따라서 `@StateObject` 대신 `@State`를 사용하면 된다.
+
+```swift
+struct ProfileView: View {
+    
+   @State var viewModel: ProfileViewModel
+   // 생략
+    
+   init(user: GithubUser) {
+        self.user = user
+        _viewModel = State(wrappedValue: ProfileViewModel(requestUser: user))
+   }
+   // 생략
+}
+```
+
+여기서 한 가지 궁금증이 생길 수 있다.
+
+처음 `FavoriteViewModel`처럼 App 레벨에서 생성하면 안 될까?
+
+대답을 먼저 말하면 아니오다.
+
+`ProfileViewModel`은 `FavoriteViewModel`이랑 다르다.
+
+`FavoriteViewModel`은 앱 전체에서 공유되는 글로벌 상태다.
+반면 `ProfileViewModel`은 특정 프로필 화면에 진입할 때마다 `requestUser`를 받아 생성되는 화면 전용 상태다.
+
+따라서 App에서 미리 생성하는 것이 아니라 `ProfileView`에서 직접 생성하는 것이 맞다.
+
+---
+
+#### 2. SearchViewModel
+
+```swift
+@Observable @MainActor
+final class SearchViewModel {
+    
+    var searchText: String = "" {
+        didSet {
+            searchSubject.send(searchText)
+        }
+    }
+    
+    var users = [GithubUser]()
+    var status: Staus = .idle
+    
+    @ObservationIgnored var searchSubject = PassthroughSubject<String, Never>()
+    @ObservationIgnored private var cancellables: Set<AnyCancellable> = []
+    @ObservationIgnored private let service = GitHubNetworkService()
+    
+    init() {
+        searchSubject
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .handleEvents(receiveOutput: { [weak self] _ in
+                guard let self else { return }
+                self.status = .loading
+            })
+            .map { text in
+                self.service.fetchGitUser(user: text)
+                    .retry(2)
+                    .replaceError(with: [])
+            }
+            .switchToLatest()
+            .sink(receiveValue: { [weak self] value in
+                guard let self else { return }
+                if value.isEmpty {
+                    self.status = .failure
+                } else {
+                    self.status = .success(value)
+                }
+                self.users = value
+            })
+            .store(in: &cancellables)
+    }
+    
+}
+```
+
+여기는 ProfileViewModel하는것과 과정이 유사하다.
+
+우선 Wrapper 부분은 바로 위에서도 언급했으니 패스하고
+
+여기도 기존에 searchText가 `@Pulbished` Wrapper를 통해 Publisher 역할을 대신 했으나 이젠 그게 가능하지 않기에
+
+```swift
+@ObservationIgnored var searchSubject = PassthroughSubject<String, Never>()
+```
+
+별도의 subjectPublisher를 만들어 주었다.
+
+그리고 didSet을 통해 자기 자신의 값이 바뀌면 그 값을 send를 통해 전달하게 하였다.
+
+```swift
+var searchText: String = "" {
+   didSet {
+      searchSubject.send(searchText)
+   }
+}
+```
+
+---
+
+역시나 SearchView에서도 ProfileView와 같은 에러가 발생
+
+```swift
+Generic struct 'StateObject' requires that 'SearchViewModel' conform to 'ObservableObject'
+```
+
+object를 지워주도록 하자.
+
+```swift
+@State private var viewModel = SearchViewModel()
+```
+
+---
+
+##### 또 App Crash 발생
+
+이번에는 앱 실행 시점이 아니라 검색을 시작하는 순간 크래시가 발생했다.
+
+크래시 로그를 확인해보니 다음과 같았다.
+
+```swift
+Thread 8 Crashed:
+0  _dispatch_assert_queue_fail
+...
+4  closure #3 in SearchViewModel.init()
+```
+
+또한 Xcode에서도 `SearchViewModel.init()` 내부에서 문제가 발생한 것을 확인할 수 있었다.
+
+<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/635d9594-86b7-4a07-84e6-4707ee629db6" />
+
+`SearchViewModel`은 `@MainActor`로 선언되어 있는데, 크래시 스택에는 `_dispatch_assert_queue_fail`이 찍혀 있었다.
+
+[dispatch_assert_queue Docs](https://developer.apple.com/documentation/dispatch/dispatch_assert_queue){:target="_blank"}에 따르면 이 크래시는 코드가 예상된 Queue가 아닌 곳에서 실행될 때 발생한다.
+
+따라서 `@MainActor` 상태를 변경하는 `sink` 내부를 가장 먼저 의심하게 되었다.
+
+```swift
+.sink(receiveValue: { [weak self] value in
+    guard let self else { return }
+
+    if value.isEmpty {
+        self.status = .failure
+    } else {
+        self.status = .success(value)
+    }
+
+    self.users = value
+})
+```
+
+위 코드는 `status`, `users`처럼 MainActor로 격리된 상태를 변경하고 있는데, Combine 체인에서 전달되는 값이 반드시 Main Queue에서 실행된다는 보장이 없다.
+
+그래서 제거했던 `.receive(on: DispatchQueue.main)`를 다시 추가해주었다.
+
+```swift
+.receive(on: DispatchQueue.main)
+```
+
+그러자 SearchView는 정상적으로 동작했지만, 이번에는 `ProfileView`가 렌더링되는 시점에 동일한 크래시가 발생했다.
+
+원인은 같았다.
+
+`ProfileViewModel` 역시 Combine 체인에서 MainActor 상태를 변경하고 있었기 때문에 동일하게 `.receive(on: DispatchQueue.main)`를 복구해주었다.
+
+그러자 모든 화면이 정상적으로 동작했다.
+
+---
+
+이와 비슷한 사례는 [Swift Issue](https://github.com/swiftlang/swift/issues/83339){:target="_blank"}에서도 찾아볼 수 있다.
+
+해당 이슈를 제기한 Antoine van der Lee 역시 본인의 글인 [Combine and Swift Concurrency: A threading risk](https://www.avanderlee.com/concurrency/combine-and-swift-concurrency-a-threading-risk/){:target="_blank"}에서 같은 문제를 다루고 있다.
+
+```
+No compile-time feedback for sink closures
+
+A crucial aspect of this crash is that compile-time safety does not apply to sink closures at this point.
+```
+
+번역하면 현재 시점에서는 `sink` 클로저에 대해 MainActor 격리 검사가 컴파일 타임에 수행되지 않는다는 의미다.
+
+처음에는 `@MainActor`를 적용했으니 `.receive(on: DispatchQueue.main)`도 필요 없을 것이라고 생각했다.
+
+하지만 Combine의 `sink` 클로저는 MainActor 격리에 대한 컴파일 타임 검사를 제공하지 않으며, 실제 실행 시점에는 다른 Queue에서 호출될 수 있다.
+
+따라서 MainActor 상태를 변경하는 Combine 체인에서는 기존처럼 `.receive(on: DispatchQueue.main)`을 유지하는 것이 안전했다.
+
+즉, `@MainActor`를 붙였다고 해서 Combine의 모든 `sink`가 자동으로 MainActor에서 실행되는 것은 아니었다.
+
+---
+
+##### 여기서 마지막 보완
+
+이렇게 앱크래시 문제를 수정 다했지만 딱 한가지 아쉬워서 마지막으로 적어본다.
+
+현재는 검색 화면에 진입한 뒤 검색창을 탭하기만 해도 검색 요청이 한 번 발생했다.
+
+<img width="252" height="514" alt="Image" src="https://github.com/user-attachments/assets/128e5334-5f64-456b-8a85-232f4eda388c" />
+
+이건 
+
+```swift
+var searchText: String = "" {
+   didSet {
+      searchSubject.send(searchText)
+   }
+}
+```
+
+검색창에 아무것도 입력하지 않았더라도 ""(빈 문자열)이 전달되면서 검색 파이프라인이 실행되고 있었던 것이다.
+
+그래서 Publisher 단계에서 빈 문자열은 아예 전달되지 않도록 필터를 추가했다.
+
+```swift
+searchSubject
+      .filter { !$0.isEmpty } // new
+      .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+```
+
+이렇게 하면 실제 검색어가 입력된 경우에만 실행이 된다.
+
+<img width="252" height="514" alt="Image" src="https://github.com/user-attachments/assets/1647725c-7763-4182-9244-d71cf866f9a5" />
+
+이제 검색창을 눌러도 불필요한 요청은 발생하지 않고, 사용자가 실제로 검색어를 입력했을 때만 검색이 수행된다.
+
+---
 
 이렇게 긴~~~~~ 작업이 모두 끝이났다.
