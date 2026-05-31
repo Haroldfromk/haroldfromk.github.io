@@ -40,7 +40,7 @@ published: true
 
 ## iOS
 
-### 1. `@Observable` 마이그레이션
+### 1. @Observable 마이그레이션
 
 현재 ViewModel의 경우 `ObservableObject` 프로토콜을 준수하고 있는데 iOS17 이후부터는 `@Observable`을 지원한다. (단, `import Observation`가 필요)
 
@@ -1243,7 +1243,7 @@ addSubject
 
 ---
 
-### 2. `@Observable` 마이그레이션 이어서 끝내기
+### 2. @Observable 마이그레이션 이어서 끝내기
 #### 1. ProfileViewModel
 
 ```swift
