@@ -1,7 +1,8 @@
 ---
 title: GitExplorer (심화 1)
 writer: Harold
-date: 2026-05-31 08:06
+date: 2026-05-30 08:06
+last_modified_at: 2026-05-31 21:30
 categories: [GitExplorer]
 tags: [Combine]
 
@@ -720,6 +721,19 @@ Thread 4 Crashed:
 ...
 5  @objc WatchConnectivityService.session(_:activationDidCompleteWith:error:)
 ```
+
+---
+(5.31 수정)
+
+<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/10f4e795-04c2-4915-9fd2-c4fbf70e7a5d" />
+
+나중에 알게 된 사실이지만, 워치 시뮬레이터 없이도 Xcode에서 확인이 가능했다. 
+
+Thread 2를 클릭해서 스택 프레임을 펼치면 동일하게 `WatchConnectivityService.session` 프레임이 보인다. 
+
+당시엔 `_dispatch_assert_queue_fail` 프레임 자체만 클릭해서 어셈블리만 봤던 게 문제였다.
+
+---
 
 `FavoriteViewModel`이 아니라 `WatchConnectivityService`가 범인이었다.
 
