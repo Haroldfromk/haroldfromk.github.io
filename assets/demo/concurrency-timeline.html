@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Swift Concurrency Full Pipeline Monitor</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f5f5f7; padding: 15px; color: #1d1d1f; display: flex; flex-direction: column; align-items: center; }
+        .container { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 540px; width: 100%; box-sizing: border-box; }
+        h3 { text-align: center; margin-top: 0; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 13px; color: #86868b; margin-bottom: 20px; }
+        
+        /* ⏳ 1. Task 보류실 */
+        .suspension-zone { background: #fff2e0; border: 2px dashed #ff9500; border-radius: 10px; padding: 12px; margin-bottom: 14px; box-sizing: border-box; }
+        .zone-title { font-size: 11px; font-weight: bold; color: #ff9500; font-family: monospace; margin-bottom: 4px; text-transform: uppercase; }
+        .suspend-card { display: inline-block; background: #ff9500; color: white; padding: 6px 12px; border-radius: 5px; font-size: 11px; font-weight: bold; font-family: monospace; display: none; }
+
+        /* 🌐 2. 가독성 개선된 백그라운드 네트워크 채널 */
+        .network-pipeline { background: #f0f4ff; border: 2px solid #5856d6; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; min-height: 76px; box-sizing: border-box; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+        .net-title { font-size: 11px; font-weight: bold; color: #5856d6; font-family: monospace; text-transform: uppercase; }
+        
+        /* 📝 상태 고정 텍스트 영역 (눈이 편안함) */
+        .net-status-text { font-size: 12px; font-family: monospace; font-weight: bold; color: #1c1c1e; margin-top: 4px; z-index: 2; }
+        
+        /* ⚡ 움직이는 순수 데이터 패킷 레일 (글자 없이 그래픽만 무빙) */
+        .packet-rail { width: 100%; height: 12px; background: rgba(88,86,214,0.1); border-radius: 6px; position: relative; overflow: hidden; margin-top: 8px; display: none; }
+        .packet-dot { position: absolute; width: 40px; height: 100%; background: #5856d6; border-radius: 6px; left: -50px; box-shadow: 0 0 8px #5856d6; }
+        .packet-dot.running { animation: bulletFlow 1.4s linear infinite; }
+        @keyframes bulletFlow { 0% { left: -50px; } 100% { left: 100%; } }
+
+        /* 📱 3. 가상 아이폰 스크린 모니터 */
+        .app-monitor { background: #2c2c2e; border-radius: 12px; padding: 16px; color: #fff; margin-bottom: 14px; border: 1px solid #3a3a3c; width: 100%; box-sizing: border-box; }
+        .monitor-title { font-size: 11px; color: #aeaeb2; font-family: monospace; margin-bottom: 10px; display: flex; justify-content: space-between; font-weight: bold; }
+        .screen-view { background: #1c1c1e; border-radius: 10px; padding: 14px; height: 150px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; }
+        
+        .component-box { background: #2c2c2e; border-radius: 8px; padding: 10px; font-size: 12px; font-family: monospace; border: 1px solid #3a3a3c; min-height: 48px; box-sizing: border-box; transition: all 0.3s; }
+        .component-box.highlight-green { border-color: #34c759; background: rgba(52,199,89,0.05); }
+        .component-box.highlight-blue { border-color: #0071e3; background: rgba(0,113,227,0.05); }
+        .comp-title { font-size: 10px; color: #86868b; font-weight: bold; margin-bottom: 4px; }
+        .user-chip { display: inline-block; background: #0071e3; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; animation: popIn 0.3s ease-out forwards; }
+        
+        /* 🧵 4. 메인 스레드 궤적 상태 */
+        .thread-track { background: #1c1c1e; border-radius: 8px; padding: 12px; color: white; font-size: 12px; font-family: monospace; display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box; }
+
+        .action-btn { width: 100%; background: #1d1d1f; color: white; border: none; padding: 14px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; margin-top: 14px; }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>await: 보류실과 백그라운드의 협업</h3>
+    <div class="subtitle">Task가 보류된 동안 백그라운드 통신 채널이 중단 없이 작동하는 현장</div>
+    
+    <div class="suspension-zone">
+        <div class="zone-title">⏳ Potential Suspension Point (Task 보류실)</div>
+        <div id="poolPlaceholder" style="color: #8e8e93; font-size: 11px;">[ 보류된 작업 없음 ]</div>
+        <div class="suspend-card" id="susCard">📌 Task 1 (즐겨찾기 목록) - 보류 대기 중</div>
+    </div>
+
+    <div class="network-pipeline">
+        <div class="net-title">🌐 Background Network Executor (백그라운드 통신 채널)</div>
+        <div class="net-status-text" id="netStatusText">⚪ 대기 상태 (통신 비활성)</div>
+        <div class="packet-rail" id="packetRail">
+            <div class="packet-dot" id="packetDot"></div>
+        </div>
+    </div>
+
+    <div class="app-monitor">
+        <div class="monitor-title">
+            <span>📱 아이폰 실시간 화면</span>
+            <span id="renderState" style="color:#86868b;">Ready</span>
+        </div>
+        <div class="screen-view">
+            <div class="component-box" id="boxA">
+                <div class="comp-title">💬 일반 컴포넌트 (Task 2 구역)</div>
+                <div id="contentA" style="color:#636366;">[ 대기 중 ]</div>
+            </div>
+            <div class="component-box" id="boxB">
+                <div class="comp-title">⭐ 즐겨찾기 유저 목록 (Task 1 구역)</div>
+                <div id="contentB" style="color:#636366;">[ 대기 중 ]</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="thread-track">
+        <span>🧵 Main Thread 일꾼 상태:</span>
+        <span id="threadStatus" style="font-weight:bold; color:#34c759;">IDLE</span>
+    </div>
+    
+    <button class="action-btn" id="startBtn">비동기 파이프라인 가동</button>
+</div>
+
+<script>
+    const startBtn = document.getElementById('startBtn');
+    const poolPlaceholder = document.getElementById('poolPlaceholder');
+    const susCard = document.getElementById('susCard');
+    const netStatusText = document.getElementById('netStatusText');
+    const packetRail = document.getElementById('packetRail');
+    const packetDot = document.getElementById('packetDot');
+    const boxA = document.getElementById('boxA');
+    const boxB = document.getElementById('boxB');
+    const contentA = document.getElementById('contentA');
+    const contentB = document.getElementById('contentB');
+    const renderState = document.getElementById('renderState');
+    const threadStatus = document.getElementById('threadStatus');
+
+    startBtn.addEventListener('click', () => {
+        startBtn.disabled = true;
+        
+        // 초기화
+        susCard.style.display = "none";
+        poolPlaceholder.style.display = "block";
+        netStatusText.innerText = "⚪ 대기 상태 (통신 비활성)";
+        netStatusText.style.color = "#86868b";
+        packetRail.style.display = "none";
+        packetDot.classList.remove('running');
+        
+        boxA.className = "component-box";
+        boxB.className = "component-box";
+        contentA.innerText = "[ 관찰 시작 ]";
+        contentB.innerText = "⏳ 데이터 요청 출발";
+        renderState.innerText = "● 가동 중";
+        renderState.style.color = "#34c759";
+        threadStatus.innerText = "RUNNING (Task 1 시동)";
+        threadStatus.style.color = "#0071e3";
+
+        // 1단계: Task 1 보류실 이동 및 백그라운드 텍스트 고정 + 펄스 가동
+        setTimeout(() => {
+            poolPlaceholder.style.display = "none";
+            susCard.style.display = "inline-block";
+            
+            // 🌐 백그라운드 텍스트는 명확히 고정하고 아래 파이프라인만 발사
+            netStatusText.innerText = "⚡ [수신 중] GitHub 서버로부터 apple, google 데이터 패킷 수집 진행 중...";
+            netStatusText.style.color = "#5856d6";
+            packetRail.style.display = "block";
+            packetDot.classList.add('running');
+            
+            contentB.innerText = "⏳ await 일시 중단 (보류실 안착)";
+            threadStatus.innerText = "FREE (Task 1 보류 처리 완료 ➡️ UI 처리하러 떠남)";
+            threadStatus.style.color = "#34c759";
+        }, 1100);
+
+        // 2단계: 메인스레드가 Task 2 갱신을 쳐내는 도중에도 백그라운드는 계속 수신 중 명시
+        setTimeout(() => {
+            renderState.innerText = "● Task 2 처리 중";
+            boxA.classList.add('highlight-green');
+            contentA.innerHTML = "<span style='color:#34c759; font-weight:bold;'>✅ 유저가 요청한 메인 피드 스크롤 완료!</span>";
+            
+            threadStatus.innerText = "RUNNING (보류 기간 중 Task 2 렌더링 갱신)";
+            threadStatus.style.color = "#0071e3";
+        }, 2500);
+
+        // 3단계: 백그라운드 수집 마감 및 완료 텍스트 고정 고지
+        setTimeout(() => {
+            susCard.style.display = "none";
+            poolPlaceholder.style.display = "block";
+            packetDot.classList.remove('running');
+            packetRail.style.display = "none";
+            
+            netStatusText.innerText = "✅ [전달 완료] 데이터 패킷 수신 완료 후 메인 스레드로 복귀 신호 전달";
+            netStatusText.style.color = "#34c759";
+            
+            renderState.innerText = "● 최종 화면 업데이트";
+            boxB.classList.add('highlight-blue');
+            contentB.innerHTML = `<span class="user-chip">🐱 apple</span> <span class="user-chip" style='animation-delay:0.1s;'>🐱 google</span>`;
+            
+            threadStatus.innerText = "RUNNING (최종 바인딩 완료)";
+            threadStatus.style.color = "#0071e3";
+        }, 4600);
+
+        // 마감
+        setTimeout(() => {
+            renderState.innerText = "Ready";
+            renderState.style.color = "#86868b";
+            threadStatus.innerText = "IDLE";
+            threadStatus.style.color = "#34c759";
+            startBtn.disabled = false;
+        }, 5500);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Swift Actor Random Bug Simulator</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f5f5f7; padding: 15px; color: #1d1d1f; display: flex; flex-direction: column; align-items: center; }
+        .container { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 550px; width: 100%; box-sizing: border-box; }
+        h3 { text-align: center; margin-top: 0; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 13px; color: #86868b; margin-bottom: 20px; }
+        
+        .mode-select { display: flex; gap: 10px; margin-bottom: 16px; }
+        .mode-btn { flex: 1; padding: 12px; font-weight: bold; border-radius: 8px; border: 1px solid #d2d2d7; background: white; cursor: pointer; transition: all 0.2s; }
+        .mode-btn.active[data-mode="class"] { background: #ff3b30; color: white; border-color: #ff3b30; }
+        .mode-btn.active[data-mode="actor"] { background: #34c759; color: white; border-color: #34c759; }
+        
+        .board-panel { background: #f5f5f7; padding: 14px; border-radius: 8px; font-size: 13px; font-family: monospace; border: 1px solid #e5e5ea; margin-bottom: 16px; }
+        .board-row { margin-bottom: 10px; }
+        .board-row:last-child { margin-bottom: 0; }
+        .array-label { font-weight: bold; color: #86868b; margin-bottom: 4px; display: block; }
+        .array-box { background: #e5e5ea; padding: 8px; border-radius: 6px; font-weight: bold; min-height: 16px; font-size: 14px; word-break: break-all; color: #1d1d1f; }
+        .array-box.highlight-purple { background: #f2f2f7; color: #5856d6; border: 1px dashed #5856d6; }
+        .array-box.highlight-red { background: #fff2f2; color: #ff3b30; border: 1px solid #ff3b30; }
+        .array-box.highlight-green { background: #f2fbf4; color: #34c759; border: 1px solid #34c759; }
+
+        .canvas-area { position: relative; height: 150px; background: #1c1c1e; border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+        
+        .actor-gate { position: absolute; left: 240px; top: 10px; width: 6px; height: 130px; background: #34c759; border-radius: 3px; display: none; box-shadow: 0 0 12px rgba(52,199,89,0.8); z-index: 10; }
+        .gate-label { position: absolute; left: 215px; top: 124px; color: #34c759; font-size: 10px; font-weight: bold; display: none; font-family: monospace; }
+        
+        .target-box { position: absolute; right: 20px; top: 35px; width: 90px; height: 80px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; color: white; font-size: 12px; text-align: center; }
+        .target-box.class-style { background: #ff3b30; box-shadow: 0 0 20px rgba(255,59,48,0.3); }
+        .target-box.actor-style { background: #34c759; box-shadow: 0 0 20px rgba(52,199,89,0.3); }
+        .target-box .count { font-size: 26px; font-family: monospace; margin-top: 2px; }
+        
+        .thread-particle { position: absolute; width: 62px; height: 22px; border-radius: 6px; background: #0071e3; color: white; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,113,227,0.4); font-family: monospace; z-index: 5; box-sizing: border-box; }
+        .thread-particle.collision { background: #ff9500; box-shadow: 0 0 12px #ff9500; border: 1px solid #ff3b30; }
+        
+        .action-btn { width: 100%; background: #1d1d1f; color: white; border: none; padding: 14px; font-size: 15px; font-weight: 600; border-radius: 8px; cursor: pointer; }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>동시성 환경 무작위 버그 시뮬레이터</h3>
+    <div class="subtitle">일반 클래스의 컨커런시 결함(순서파괴, 유실) 실시간 추적</div>
+    
+    <div class="mode-select">
+        <button class="mode-btn active" data-mode="class">일반 Class (예측 불가 버그 발생)</button>
+        <button class="mode-btn" data-mode="actor">Swift Actor (순차 정렬 방어)</button>
+    </div>
+    
+    <div class="board-panel">
+        <div class="board-row">
+            <span class="array-label">📋 의도했던 원본 배열 순서 (초기 상태)</span>
+            <div class="array-box highlight-purple">[ apple, google, kakao, naver, harold ]</div>
+        </div>
+        <div class="board-row">
+            <span class="array-label" id="resultLabel">⏳ 데이터를 담는 중...</span>
+            <div class="array-box" id="arrayBox">[]</div>
+        </div>
+    </div>
+    
+    <div class="canvas-area" id="canvasArea">
+        <div class="actor-gate" id="actorGate"></div>
+        <div class="gate-label" id="gateLabel">Serial Queue</div>
+        <div class="target-box class-style" id="targetBox">
+            <span id="targetTitle">Class 값</span>
+            <div class="count" id="countVal">0</div>
+        </div>
+    </div>
+    
+    <button class="action-btn" id="startBtn">동시 요청 5개 일제히 발사!</button>
+</div>
+
+<script>
+    const names = ["apple", "google", "kakao", "naver", "harold"];
+    
+    const canvas = document.getElementById('canvasArea');
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const actorGate = document.getElementById('actorGate');
+    const gateLabel = document.getElementById('gateLabel');
+    const targetBox = document.getElementById('targetBox');
+    const targetTitle = document.getElementById('targetTitle');
+    const countVal = document.getElementById('countVal');
+    const arrayBox = document.getElementById('arrayBox');
+    const resultLabel = document.getElementById('resultLabel');
+    const startBtn = document.getElementById('startBtn');
+    
+    let currentMode = 'class';
+    let resultUsers = [];
+    
+    modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (startBtn.disabled) return;
+            modeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentMode = btn.getAttribute('data-mode');
+            
+            resetContainer();
+            if (currentMode === 'class') {
+                actorGate.style.display = 'none';
+                gateLabel.style.display = 'none';
+                targetBox.className = "target-box class-style";
+                targetTitle.innerText = "Class 값";
+            } else {
+                actorGate.style.display = 'block';
+                gateLabel.style.display = 'block';
+                targetBox.className = "target-box actor-style";
+                targetTitle.innerText = "Actor 값";
+            }
+        });
+    });
+
+    function resetContainer() {
+        countVal.innerText = "0";
+        arrayBox.innerText = "[]";
+        arrayBox.className = "array-box";
+        resultLabel.innerText = "⏳ 데이터를 담는 중...";
+        resultLabel.style.color = "#86868b";
+        resultUsers = [];
+    }
+
+    startBtn.addEventListener('click', () => {
+        startBtn.disabled = true;
+        resetContainer();
+        
+        let finishedCount = 0;
+        let actorQueueIndex = 0;
+        
+        // 0: 순서 꼬임 발생 / 1, 2: 데이터 유실 발생 (유실 시 순서도 자연스럽게 무너짐)
+        const bugType = Math.floor(Math.random() * 3);
+
+        const getDelays = () => {
+            if (currentMode === 'class') {
+                if (bugType === 0) return [300, 150, 500, 200, 400]; // 순서 뒤틀림
+                if (bugType === 1) return [200, 200, 400, 400, 500]; // 타이밍 중첩으로 인한 유실
+                return [350, 150, 150, 500, 500]; // 타이밍 중첩으로 인한 유실 2
+            }
+            return [100, 150, 200, 250, 300]; // Actor는 보장된 직렬 대기열 순서
+        };
+
+        const delays = getDelays();
+
+        names.forEach((name, i) => {
+            setTimeout(() => {
+                createParticle(name, i, delays[i]);
+            }, Math.random() * 30); 
+        });
+
+        function createParticle(name, index, customDelay) {
+            const p = document.createElement('div');
+            p.className = 'thread-particle';
+            p.innerText = name;
+            p.style.left = '10px';
+            p.style.top = (index * 24 + 15) + 'px';
+            canvas.appendChild(p);
+
+            const startTime = performance.now();
+            const duration = customDelay;
+            
+            const targetX = currentMode === 'class' ? 420 : 180;
+            const startY = parseFloat(p.style.top);
+            const targetY = 65; 
+
+            function animate(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const curX = 10 + (targetX - 10) * progress;
+                const curY = startY + (targetY - startY) * progress;
+                
+                p.style.left = curX + 'px';
+                p.style.top = curY + 'px';
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    if (currentMode === 'class') {
+                        let isLost = false;
+                        if (bugType === 1 && (index === 1 || index === 3)) isLost = true;
+                        if (bugType === 2 && (index === 2 || index === 4)) isLost = true;
+                        
+                        if (isLost) {
+                            p.classList.add('collision');
+                            p.innerText = "💥 유실";
+                        } else {
+                            resultUsers.push(name);
+                            countVal.innerText = resultUsers.length;
+                            arrayBox.innerText = `[ ${resultUsers.join(', ')} ]`;
+                        }
+                        
+                        setTimeout(() => p.remove(), 400);
+                        checkEnd(bugType);
+                    } else {
+                        const myOrder = actorQueueIndex++;
+                        p.style.left = (175 - (myOrder * 12)) + 'px';
+                        p.style.top = '65px';
+                        p.style.backgroundColor = '#34c759';
+                        p.style.boxShadow = '0 2px 6px rgba(52,199,89,0.4)';
+                        
+                        setTimeout(() => {
+                            p.style.transition = 'all 0.15s linear';
+                            p.style.left = '420px';
+                            
+                            setTimeout(() => {
+                                resultUsers.push(name);
+                                countVal.innerText = resultUsers.length;
+                                arrayBox.innerText = `[ ${resultUsers.join(', ')} ]`;
+                                p.remove();
+                                checkEnd();
+                            }, 150);
+                        }, myOrder * 200); 
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function checkEnd(finalBugType) {
+            finishedCount++;
+            if (finishedCount === 5) {
+                setTimeout(() => {
+                    startBtn.disabled = false;
+                    if (currentMode === 'class') {
+                        arrayBox.classList.add('highlight-red');
+                        if (finalBugType === 0) {
+                            resultLabel.innerText = "⚠️ 순서가 뒤섞였습니다.";
+                        } else {
+                            resultLabel.innerText = "💥 데이터 유실이 발생했습니다.";
+                        }
+                        resultLabel.style.color = "#ff3b30";
+                    } else {
+                        resultLabel.innerText = "✅ 결과: Serial Queue가 순서 꼬임과 데이터 유실을 모두 방어함!";
+                        resultLabel.style.color = "#34c759";
+                        arrayBox.classList.add('highlight-green');
+                    }
+                }, 400);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

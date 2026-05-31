@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Swift Concurrency Await Suspension Simulator</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f5f5f7; padding: 15px; color: #1d1d1f; display: flex; flex-direction: column; align-items: center; }
+        .container { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 550px; width: 100%; box-sizing: border-box; }
+        h3 { text-align: center; margin-top: 0; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 13px; color: #86868b; margin-bottom: 20px; }
+        
+        /* 스레드와 컨텍스트 구역 */
+        .system-grid { display: flex; gap: 12px; margin-bottom: 16px; position: relative; }
+        .zone { flex: 1; min-height: 140px; background: #1c1c1e; border-radius: 10px; padding: 12px; color: #fff; box-sizing: border-box; position: relative; border: 1px solid #3a3a3c; }
+        .zone-title { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
+        #bgZone { border-top: 3px solid #5856d6; }
+        #mainZone { border-top: 3px solid #ff3b30; }
+
+        /* 물리적 일꾼: Thread 스레드 라인 */
+        .thread-worker { position: absolute; bottom: 10px; left: 12px; font-size: 11px; font-weight: bold; background: #3a3a3c; padding: 4px 8px; border-radius: 4px; color: #aeaeb2; font-family: monospace; transition: all 0.3s ease; }
+        .thread-worker.active-main { background: #ff3b30; color: #fff; transform: translateX(0); }
+        
+        /* 움직이는 Task 패킷 */
+        .task-node { position: absolute; width: 110px; height: 32px; background: #0071e3; color: white; border-radius: 6px; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; font-family: monospace; box-shadow: 0 4px 8px rgba(0,113,227,0.3); transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .task-node.suspended { background: #ff9500; box-shadow: 0 4px 8px rgba(255,149,0,0.3); border: 1px dashed #fff; }
+        .task-node.main-context { background: #ff3b30; box-shadow: 0 4px 8px rgba(255,59,48,0.3); }
+
+        /* 코드 하이라이터 패널 */
+        .code-panel { background: #2c2c2e; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 12px; color: #fff; margin-bottom: 16px; border: 1px solid #3a3a3c; line-height: 1.5; }
+        .code-line { padding: 2px 6px; border-radius: 4px; transition: background 0.2s; }
+        .code-line.active { background: #0071e3; color: #fff; font-weight: bold; }
+        .code-line.active-suspend { background: #ff9500; color: #fff; font-weight: bold; }
+        
+        .action-btn { width: 100%; background: #1d1d1f; color: white; border: none; padding: 14px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>await 실행 컨텍스트 및 Suspension 시뮬레이터</h3>
+    <div class="subtitle">await names를 만났을 때 Task의 일시 중단 및 컨텍스트 스위칭</div>
+    
+    <div class="code-panel">
+        <div class="code-line" id="line1">nonisolated func fetchBefore() async {</div>
+        <div class="code-line" id="line2">&nbsp;&nbsp;&nbsp;&nbsp;// 1. 백그라운드 연산 중...</div>
+        <div class="code-line" id="line3">&nbsp;&nbsp;&nbsp;&nbsp;let fetchedNames = await names </div>
+        <div class="code-line" id="line4">&nbsp;&nbsp;&nbsp;&nbsp;// 2. MainActor 컨텍스트 탈출 후 복귀</div>
+        <div class="code-line" id="line5">}</div>
+    </div>
+
+    <div class="system-grid">
+        <div class="zone" id="bgZone">
+            <div class="zone-title">⚙️ nonisolated Context (Background)</div>
+            <div class="thread-worker" id="bgWorker">🧵 Thread 4 (BG 일꾼)</div>
+        </div>
+        
+        <div class="zone" id="mainZone">
+            <div class="zone-title">📱 @MainActor Context (Main Thread)</div>
+            <div class="thread-worker" id="mainWorker" style="background:#ff3b30; color:#fff;">🧵 Thread 1 (UI 메인 일꾼)</div>
+        </div>
+
+        <div class="task-node" id="taskNode" style="left: 20px; top: 55px; display:none;">Task [fetch]</div>
+    </div>
+    
+    <button class="action-btn" id="runBtn">await 흐름 시뮬레이션 시작</button>
+</div>
+
+<script>
+    const runBtn = document.getElementById('runBtn');
+    const taskNode = document.getElementById('taskNode');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
+    const line4 = document.getElementById('line4');
+    const bgWorker = document.getElementById('bgWorker');
+    const mainWorker = document.getElementById('mainWorker');
+
+    function clearHighlight() {
+        line1.className = "code-line";
+        line2.className = "code-line";
+        line3.className = "code-line";
+        line4.className = "code-line";
+    }
+
+    runBtn.addEventListener('click', () => {
+        runBtn.disabled = true;
+        clearHighlight();
+        
+        // 초기화 위치: nonisolated 백그라운드 구역 내부
+        taskNode.style.display = 'flex';
+        taskNode.className = 'task-node';
+        taskNode.innerText = "Task (실행 중)";
+        taskNode.style.left = '20px';
+        taskNode.style.top = '55px';
+        
+        // 1단계: nonisolated 진입 및 백그라운드 실행
+        setTimeout(() => {
+            line2.className = "code-line active";
+            taskNode.innerText = "Task (BG 연산)";
+            bgWorker.style.backgroundColor = "#5856d6";
+            bgWorker.style.color = "#fff";
+        }, 200);
+
+        // 2단계: await 문턱에 도달 (Suspension Point 발동)
+        setTimeout(() => {
+            line2.className = "code-line";
+            line3.className = "code-line active-suspend";
+            
+            // Task 일시 중단 상태 적용: 주황색 북마크 상태로 변신하며 허공에 붕 뜸 (스레드 양보 연출)
+            taskNode.classList.add('suspended');
+            taskNode.innerText = "⏳ Await 일시중단";
+            taskNode.style.left = '160px'; // 중앙 중립 지대로 이동
+            taskNode.style.top = '15px';
+            
+            // 🧵 중요: Task가 멈춰있는(Suspension) 동안 Background 스레드는 즉시 해방되어 자유로워짐!
+            bgWorker.style.backgroundColor = "#3a3a3c";
+            bgWorker.style.color = "#aeaeb2";
+        }, 1200);
+
+        // 3단계: MainActor 자리가 비어서 해당 컨텍스트로 전환 (Context Switching)
+        setTimeout(() => {
+            taskNode.className = "task-node main-context";
+            taskNode.innerText = "names 읽는 중";
+            // MainActor 구역으로 진입
+            taskNode.style.left = '300px';
+            taskNode.style.top = '55px';
+            
+            // 메인 스레드 일꾼이 이 Task를 할당받아 처리 시작
+            mainWorker.style.boxShadow = "0 0 12px #ff3b30";
+        }, 2500);
+
+        // 4단계: MainActor에서 값을 성공적으로 읽어온 후 다시 원래 nonisolated Context로 복귀
+        setTimeout(() => {
+            mainWorker.style.boxShadow = "none";
+            clearHighlight();
+            line4.className = "code-line active";
+            
+            taskNode.className = "task-node";
+            taskNode.innerText = "Task (잔여 실행)";
+            // 다시 백그라운드로 전환
+            taskNode.style.left = '20px';
+            taskNode.style.top = '90px';
+            
+            bgWorker.style.backgroundColor = "#5856d6";
+            bgWorker.style.color = "#fff";
+        }, 3800);
+
+        // 종료 처리
+        setTimeout(() => {
+            clearHighlight();
+            taskNode.style.display = 'none';
+            bgWorker.style.backgroundColor = "#3a3a3c";
+            bgWorker.style.color = "#aeaeb2";
+            runBtn.disabled = false;
+        }, 4800);
+    });
+</script>
+
+</body>
+</html>

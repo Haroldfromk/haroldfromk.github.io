@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>MainActor Nonisolated Simulator</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f5f5f7; padding: 15px; color: #1d1d1f; display: flex; flex-direction: column; align-items: center; }
+        .container { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 550px; width: 100%; box-sizing: border-box; }
+        h3 { text-align: center; margin-top: 0; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 13px; color: #86868b; margin-bottom: 20px; }
+        
+        /* 1, 2번 환경 설정 탭 (누르는 즉시 실행되지 않고 상태만 바뀜) */
+        .mode-select { display: flex; gap: 10px; margin-bottom: 16px; }
+        .mode-btn { flex: 1; padding: 12px; font-weight: bold; border-radius: 8px; border: 1px solid #d2d2d7; background: white; cursor: pointer; transition: all 0.2s; font-size: 13px; }
+        .mode-btn.active[data-mode="isolated"] { background: #ff3b30; color: white; border-color: #ff3b30; }
+        .mode-btn.active[data-mode="nonisolated"] { background: #5856d6; color: white; border-color: #5856d6; }
+        
+        /* 📱 가상 iOS 앱 화면 */
+        .phone-mockup { background: #1c1c1e; border-radius: 14px; padding: 16px; color: white; margin-bottom: 16px; position: relative; }
+        .phone-header { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #86868b; margin-bottom: 14px; font-family: monospace; }
+        
+        /* 독립 조작 컴포넌트 (테마 스위치) */
+        .app-ui-box { background: #2c2c2e; border-radius: 10px; padding: 14px; margin-bottom: 12px; border: 1px solid #3a3a3c; transition: background 0.2s; }
+        .app-ui-box.light-theme { background: #fff; color: #1d1d1f; border-color: #d2d2d7; }
+        .app-row { display: flex; justify-content: space-between; align-items: center; }
+        .app-title { font-size: 14px; font-weight: bold; }
+        
+        /* 토글 스위치 */
+        .toggle-switch { width: 50px; height: 28px; background: #48484a; border-radius: 14px; position: relative; cursor: pointer; transition: background 0.2s; }
+        .toggle-switch.on { background: #34c759; }
+        .toggle-handle { width: 24px; height: 24px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: left 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .toggle-switch.on .toggle-handle { left: 24px; }
+        
+        /* 유저가 직접 트리거할 네트워크 실행 버튼 */
+        .api-trigger-btn { width: 100%; background: #0071e3; color: white; border: none; padding: 12px; font-size: 13px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,113,227,0.3); }
+        .api-trigger-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+        /* 결과 데이터 리스트 뷰 */
+        .result-list-view { background: #2c2c2e; border-radius: 10px; padding: 14px; min-height: 60px; border: 1px solid #3a3a3c; font-size: 13px; }
+        .user-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; background: #3a3a3c; padding: 6px 10px; border-radius: 6px; animation: fadeIn 0.3s ease-in; color: #fff; }
+        .user-item:last-child { margin-bottom: 0; }
+        .loading-text { color: #86868b; font-size: 12px; font-family: monospace; text-align: center; display: none; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        .thread-log { background: #f5f5f7; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 12px; min-height: 52px; border: 1px dashed #d2d2d7; color: #3a3a3c; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>@MainActor 스레드 차단 시뮬레이터</h3>
+    <div class="subtitle">모드를 먼저 선택한 후, 아래 [네트워크 호출 시작]을 눌러 테스트하세요.</div>
+    
+    <div class="mode-select">
+        <button class="mode-btn active" data-mode="isolated">1. nonisolated 없음 (UI 차단 환경)</button>
+        <button class="mode-btn" data-mode="nonisolated">2. nonisolated 적용 (UI 독립 환경)</button>
+    </div>
+    
+    <div class="phone-mockup">
+        <div class="phone-header">
+            <span>📱 GitExplorer - FavoritesView</span>
+            <span id="networkStatus" style="color: #34c759;">● Ready</span>
+        </div>
+        
+        <div class="app-ui-box" id="uiComponent">
+            <div class="app-row">
+                <div>
+                    <div class="app-title" id="uiTitle">독립 UI: 컴포넌트 테마 변경</div>
+                    <div style="font-size: 11px; color: #86868b; margin-top: 2px;">로딩 중 스위치가 즉시 반응하는지 테스트하세요.</div>
+                </div>
+                <div class="toggle-switch" id="toggleSwitch">
+                    <div class="toggle-handle"></div>
+                </div>
+            </div>
+        </div>
+
+        <button class="api-trigger-btn" id="apiTriggerBtn">⚡️ asyncFetchFavoriteDataBefore() 호출 시작</button>
+
+        <div class="result-list-view" id="listView">
+            <div class="loading-text" id="loadingText">⏳ 데이터를 가져오는 중... (Main 스레드 감시 중)</div>
+            <div id="listContent" style="color: #aeaeb2; text-align: center; font-size: 12px; padding: 10px 0;">[ 대기 중 - 위 호출 버튼을 누르세요 ]</div>
+        </div>
+    </div>
+    
+    <div class="thread-log" id="threadLog">
+        로그: 대기 중... 상단 모드를 선택하고 앱 안의 파란색 호출 버튼을 누르세요.
+    </div>
+</div>
+
+<script>
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const apiTriggerBtn = document.getElementById('apiTriggerBtn');
+    const uiComponent = document.getElementById('uiComponent');
+    const uiTitle = document.getElementById('uiTitle');
+    const toggleSwitch = document.getElementById('toggleSwitch');
+    const listView = document.getElementById('listView');
+    const loadingText = document.getElementById('loadingText');
+    const listContent = document.getElementById('listContent');
+    const networkStatus = document.getElementById('networkStatus');
+    const threadLog = document.getElementById('threadLog');
+
+    let currentMode = 'isolated';
+    let isDark = true;
+    let isFrozen = false;
+
+    // 상단 탭 전환 로직 (절대 자동 실행 안 됨)
+    modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (apiTriggerBtn.disabled) return;
+            modeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentMode = btn.getAttribute('data-mode');
+            
+            resetView();
+            if (currentMode === 'isolated') {
+                threadLog.innerText = "로그: [nonisolated 없음] 환경이 설정되었습니다. 아래 호출 버튼을 누르면 UI 루프가 임시 정지됩니다.";
+            } else {
+                threadLog.innerText = "로그: [nonisolated 적용] 환경이 설정되었습니다. 아래 호출 버튼을 눌러도 UI는 자유롭게 가동됩니다.";
+            }
+        });
+    });
+
+    function resetView() {
+        listContent.style.display = 'block';
+        listContent.style.textAlign = 'center';
+        listContent.style.color = '#aeaeb2';
+        listContent.innerText = "[ 대기 중 - 위 호출 버튼을 누르세요 ]";
+        loadingText.style.display = 'none';
+        networkStatus.innerText = "● Ready";
+        networkStatus.style.color = "#34c759";
+    }
+
+    // 독립 UI 조작 토글
+    toggleSwitch.addEventListener('click', () => {
+        if (isFrozen) return; // isolated 모드 시 메인스레드 마비 효과 흉내
+        
+        isDark = !isDark;
+        if (isDark) {
+            toggleSwitch.classList.remove('on');
+            uiComponent.classList.remove('light-theme');
+            uiTitle.style.color = '#fff';
+        } else {
+            toggleSwitch.classList.add('on');
+            uiComponent.classList.add('light-theme');
+            uiTitle.style.color = '#1d1d1f';
+        }
+    });
+
+    // 파란색 호출 버튼을 눌러야만 비로소 시뮬레이션 시작!
+    apiTriggerBtn.addEventListener('click', () => {
+        apiTriggerBtn.disabled = true;
+        modeBtns.forEach(b => b.disabled = true);
+        listContent.style.display = 'none';
+        loadingText.style.display = 'block';
+
+        if (currentMode === 'isolated') {
+            // 1. 차단 모드 동작
+            isFrozen = true;
+            networkStatus.innerText = "● FETCHING (MainActor 차단)";
+            networkStatus.style.color = "#ff3b30";
+            threadLog.innerHTML = "↳ [Thread 1: Main] 🛑 네트워크 연산이 메인 스레드를 붙잡았습니다! 지금 빨리 위 테마 변경 스위치를 눌러보세요.";
+
+            setTimeout(() => {
+                isFrozen = false;
+                networkStatus.innerText = "● Ready";
+                networkStatus.style.color = "#34c759";
+                loadingText.style.display = 'none';
+                
+                listContent.style.display = 'block';
+                listContent.style.textAlign = 'left';
+                listContent.innerHTML = `
+                    <div class="user-item">🐱 apple (MainActor 통과)</div>
+                    <div class="user-item">🐱 google (MainActor 통과)</div>
+                `;
+                
+                threadLog.innerHTML += "<br>🎉 [Thread 1: Main] 완료! 메인 스레드가 풀려나며 결과 화면이 정상 갱신되었습니다.";
+                apiTriggerBtn.disabled = false;
+                modeBtns.forEach(b => b.disabled = false);
+            }, 2500); // 유저가 연타해 볼 수 있게 시간을 2.5초로 살짝 증가
+
+        } else {
+            // 2. 분리 모드 동작
+            isFrozen = false;
+            networkStatus.innerText = "● FETCHING (Background 분리)";
+            networkStatus.style.color = "#5856d6";
+            threadLog.innerHTML = "↳ [Thread 4: Background] ⚙️ 백그라운드 스레드 가동 중. 네트워크가 도는 동안에도 위 테마 스위치는 독립 가동됩니다.";
+
+            setTimeout(() => {
+                networkStatus.innerText = "● Ready";
+                networkStatus.style.color = "#34c759";
+                loadingText.style.display = 'none';
+                
+                listContent.style.display = 'block';
+                listContent.style.textAlign = 'left';
+                listContent.innerHTML = `
+                    <div class="user-item">🐱 apple (Background 수신)</div>
+                    <div class="user-item">🐱 google (Background 수신)</div>
+                `;
+                
+                threadLog.innerHTML += "<br>↳ [Thread 1: Main] 🎉 수집 완료. 백그라운드 수신 결과를 메인 UI에 안전하게 렌더링 완료!";
+                apiTriggerBtn.disabled = false;
+                modeBtns.forEach(b => b.disabled = false);
+            }, 2500);
+        }
+    });
+</script>
+
+</body>
+</html>
