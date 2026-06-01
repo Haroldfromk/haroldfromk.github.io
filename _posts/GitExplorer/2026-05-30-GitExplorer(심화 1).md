@@ -1299,13 +1299,13 @@ final class ProfileViewModel {
 
 여긴 위에서 설명한대로 하면되기에 크게 어려운 부분이 없다.
 
-Class에서는 `@Observable @MainActor`를 추가하고 `ObservableObject` 프로토콜을 삭제 해주고 내부에서는 `@Published,`삭제, ~~`.receive(on:)`, 삭제~~ 그리고 `@ObservationIgnored`를 추가해주면 된다.
+Class에서는 `@Observable @MainActor`를 추가하고 `ObservableObject` 프로토콜을 삭제 해주고 내부에서는 `@Published,`삭제, ~~`.receive(on:)`삭제~~ 그리고 `@ObservationIgnored`를 추가해주면 된다.
 
 이게 전부이다.
 
 ---
 
-이떄 ProfileView 에서 에러가 발생하는데
+이때 ProfileView 에서 에러가 발생하는데
 
 ```swift
 struct ProfileView: View {
@@ -1419,7 +1419,7 @@ final class SearchViewModel {
 
 우선 Wrapper 부분은 바로 위에서도 언급했으니 패스하고
 
-여기도 기존에 searchText가 `@Pulbished` Wrapper를 통해 Publisher 역할을 대신 했으나 이젠 그게 가능하지 않기에
+여기도 기존에 searchText가 `@Published` Wrapper를 통해 Publisher 역할을 대신 했으나 이젠 그게 가능하지 않기에
 
 ```swift
 @ObservationIgnored var searchSubject = PassthroughSubject<String, Never>()
