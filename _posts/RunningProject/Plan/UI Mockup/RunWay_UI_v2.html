@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RunWay — UI Mockup v2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:       #0B0E14;
+            --panel:    #161A22;
+            --panel2:   #1E2430;
+            --border:   #252D3A;
+            --green:    #64FFDA;
+            --green2:   #00C896;
+            --amber:    #FFRB20;
+            --amber:    #FFB020;
+            --red:      #FF453A;
+            --blue:     #0A84FF;
+            --muted:    #88949E;
+            --text:     #E6EDF3;
+            --white:    #FFFFFF;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 48px 24px;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto 64px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--green);
+            letter-spacing: 4px;
+            text-shadow: 0 0 30px rgba(100,255,218,0.3);
+        }
+
+        .page-tagline {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 2px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        .page-meta {
+            text-align: right;
+            font-size: 10px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        /* ===== SECTION HEADER ===== */
+        .section-header {
+            max-width: 1400px;
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ===== SCREENS GRID ===== */
+        .screens-row {
+            max-width: 1400px;
+            margin: 0 auto 80px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: flex-start;
+        }
+
+        .screen-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .screen-tag {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        /* ===== IPHONE FRAME ===== */
+        .iphone {
+            width: 320px;
+            height: 693px;
+            background: #000;
+            border-radius: 50px;
+            position: relative;
+            box-shadow:
+                0 0 0 1.5px #2a2a2a,
+                0 0 0 3px #111,
+                0 32px 64px rgba(0,0,0,0.7),
+                0 0 40px rgba(100,255,218,0.04);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .iphone-di {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 34px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 100;
+        }
+
+        .iphone-screen {
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        /* Status bar */
+        .sb {
+            height: 50px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 22px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            position: relative;
+            z-index: 10;
+        }
+
+        .sb-time { color: var(--white); font-size: 15px; font-weight: 600; }
+        .sb-icons { color: var(--white); font-size: 12px; }
+
+        /* Tab bar */
+        .tabbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 78px;
+            background: rgba(22,26,34,0.96);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 8px 18px;
+            backdrop-filter: blur(20px);
+        }
+
+        .tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .tab-icon { font-size: 20px; }
+        .tab-label { font-size: 9px; color: var(--muted); }
+        .tab.active .tab-label { color: var(--green); }
+
+        /* ===== DESIGN SYSTEM PANEL ===== */
+        .ds-grid {
+            max-width: 1400px;
+            margin: 0 auto 80px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .ds-card {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .ds-label {
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .color-swatches {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .swatch-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .swatch-info { font-size: 10px; }
+        .swatch-name { color: var(--text); font-weight: 500; }
+        .swatch-hex { color: var(--muted); font-family: monospace; }
+
+        /* Icons grid */
+        .icons-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .icon-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 4px;
+            background: var(--panel2);
+            border-radius: 8px;
+        }
+
+        .icon-svg { width: 24px; height: 24px; }
+        .icon-name { font-size: 7px; color: var(--muted); text-align: center; }
+
+        /* ===== SCREEN CONTENT STYLES ===== */
+
+        /* --- HOME / FLIGHT DECK --- */
+        .fd-header {
+            padding: 12px 16px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .fd-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--green);
+            letter-spacing: 2px;
+        }
+
+        .fd-subtitle { font-size: 8px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+
+        .fd-body {
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            height: calc(100% - 50px - 78px - 60px);
+            overflow: hidden;
+        }
+
+        .fd-mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(100,255,218,0.1);
+            border: 1px solid rgba(100,255,218,0.25);
+            border-radius: 20px;
+            font-size: 9px;
+            color: var(--green);
+            letter-spacing: 1px;
+        }
+
+        .fd-target-pace {
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+        }
+
+        .fd-pace-label { font-size: 8px; color: var(--muted); letter-spacing: 1px; margin-bottom: 2px; }
+
+        .fd-pace-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .fd-pace-unit { font-size: 10px; color: var(--muted); }
+
+        .fd-last-flight {
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+        }
+
+        .fd-lf-label { font-size: 8px; color: var(--muted); margin-bottom: 6px; }
+
+        .fd-lf-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fd-lf-dist {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .fd-lf-stats {
+            display: flex;
+            gap: 8px;
+        }
+
+        .fd-stat { text-align: center; }
+        .fd-stat-val { font-size: 11px; font-weight: 600; color: var(--text); }
+        .fd-stat-label { font-size: 7px; color: var(--muted); }
+
+        .fd-preflight-btn {
+            background: var(--green);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0B0E14;
+            letter-spacing: 2px;
+        }
+
+        /* --- PRE-FLIGHT CHECK --- */
+        .pfc-header {
+            padding: 12px 16px 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pfc-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 2px;
+        }
+
+        .pfc-body {
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .pfc-item {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--border);
+        }
+
+        .pfc-left { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+        .pfc-icon { font-size: 14px; }
+
+        .pfc-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .pfc-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+        .cleared-btn {
+            margin: 8px 14px 0;
+            background: var(--green);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0B0E14;
+            letter-spacing: 1px;
+        }
+
+        /* --- TAKEOFF SEQUENCE --- */
+        .tof-screen {
+            height: 100%;
+            background: #0B0E14;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tof-header {
+            padding: 12px 16px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tof-back { font-size: 14px; color: var(--muted); }
+
+        .tof-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 2px;
+        }
+
+        .tof-countdown {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tof-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 120px;
+            font-weight: 900;
+            color: var(--green);
+            text-shadow: 0 0 60px rgba(100,255,218,0.5);
+            line-height: 1;
+        }
+
+        .tof-ghost {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 64px;
+            font-weight: 900;
+            color: rgba(100,255,218,0.15);
+            line-height: 1;
+        }
+
+        .tof-throttle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 12px 14px;
+        }
+
+        .tof-gauge {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .tof-g-label { font-size: 8px; color: var(--muted); letter-spacing: 1px; }
+
+        .tof-g-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .tof-cancel {
+            margin: 0 14px 14px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 1px;
+        }
+
+        /* --- PFD --- */
+        .pfd-screen {
+            height: 100%;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pfd-topbar {
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            background: var(--panel);
+        }
+
+        .pfd-rec {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 9px;
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .pfd-recdot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--red);
+            animation: blink 1s infinite;
+        }
+
+        .pfd-timer {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .pfd-close { font-size: 14px; color: var(--muted); }
+
+        /* Speed/Alt tapes */
+        .pfd-tapes {
+            display: flex;
+            height: 130px;
+            gap: 0;
+            position: relative;
+        }
+
+        .pfd-tape {
+            width: 52px;
+            background: rgba(22,26,34,0.9);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 4px 4px 4px 0;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .pfd-tape.right {
+            border-right: none;
+            border-left: 1px solid var(--border);
+            align-items: flex-start;
+            padding: 4px 0 4px 4px;
+        }
+
+        .pfd-tape-label { font-size: 7px; color: var(--muted); letter-spacing: 1px; align-self: center; }
+
+        .pfd-tape-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            background: var(--panel2);
+            padding: 3px 5px;
+            border-radius: 4px;
+            align-self: center;
+            border: 1px solid var(--green);
+        }
+
+        .pfd-tape-tick {
+            font-size: 8px;
+            color: var(--muted);
+            align-self: center;
+        }
+
+        /* ADI - Attitude */
+        .pfd-adi {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Primary metrics row */
+        .pfd-metrics {
+            display: flex;
+            gap: 4px;
+            padding: 4px 8px;
+        }
+
+        .pfd-m {
+            flex: 1;
+            background: var(--panel);
+            border-radius: 8px;
+            padding: 6px 4px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .pfd-m-label { font-size: 6px; color: var(--muted); letter-spacing: 1px; }
+        .pfd-m-val { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700; margin-top: 1px; }
+        .pfd-m-unit { font-size: 7px; color: var(--muted); }
+
+        /* N1 Gauges */
+        .pfd-gauges {
+            display: flex;
+            gap: 6px;
+            padding: 4px 8px;
+        }
+
+        .pfd-gauge {
+            flex: 1;
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 8px 6px 6px;
+            border: 1px solid var(--border);
+        }
+
+        .pfd-g-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .pfd-g-label { font-size: 7px; color: var(--muted); }
+        .pfd-g-val { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 700; }
+
+        .pfd-arc {
+            width: 100%;
+            height: 52px;
+        }
+
+        .pfd-g-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 6px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* Target & GPWS */
+        .pfd-target {
+            margin: 0 8px 4px;
+            background: rgba(255,176,32,0.08);
+            border: 1px solid rgba(255,176,32,0.25);
+            border-radius: 8px;
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pfd-t-left { display: flex; align-items: center; gap: 5px; font-size: 9px; color: var(--muted); }
+        .pfd-t-right { display: flex; align-items: center; gap: 8px; }
+        .pfd-t-pace { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700; color: var(--amber); }
+        .pfd-t-dev { font-size: 9px; color: var(--muted); }
+
+        .pfd-gpws {
+            margin: 0 8px 4px;
+            background: rgba(100,255,218,0.06);
+            border: 1px solid rgba(100,255,218,0.2);
+            border-radius: 8px;
+            padding: 7px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .pfd-gpws-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+        .pfd-gpws-text { font-family: 'Orbitron', sans-serif; font-size: 9px; color: var(--green); letter-spacing: 2px; }
+
+        .pfd-touchdown {
+            margin: 0 8px;
+            background: var(--red);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 2px;
+        }
+
+        /* --- GPWS WARNING --- */
+        .gpws-screen {
+            height: 100%;
+            background: #130506;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gpws-alert-bar {
+            background: var(--red);
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .gpws-alert-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 2px;
+        }
+
+        .gpws-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 0 20px;
+        }
+
+        .gpws-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 30px;
+            font-weight: 900;
+            color: var(--red);
+            text-align: center;
+            line-height: 1.2;
+            text-shadow: 0 0 30px rgba(255,69,58,0.6);
+        }
+
+        .gpws-rate {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--red);
+        }
+
+        .gpws-rate-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+        .gpws-pull {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--amber);
+            letter-spacing: 3px;
+            padding: 8px 20px;
+            border: 2px solid var(--amber);
+            border-radius: 8px;
+        }
+
+        .gpws-gauges {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .gpws-g {
+            flex: 1;
+            background: rgba(22,26,34,0.8);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgba(255,69,58,0.3);
+        }
+
+        .gpws-g-label { font-size: 8px; color: var(--muted); }
+        .gpws-g-val { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; color: var(--red); margin-top: 2px; }
+        .gpws-g-unit { font-size: 9px; color: var(--red); }
+
+        /* striped warning at bottom */
+        .gpws-stripe {
+            height: 16px;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--red) 0px,
+                var(--red) 8px,
+                #1a0305 8px,
+                #1a0305 16px
+            );
+        }
+
+        /* --- MINIMUMS --- */
+        .min-screen {
+            height: 100%;
+            background: #0E0C00;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .min-bar {
+            background: var(--amber);
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .min-bar-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            color: #0E0C00;
+            letter-spacing: 2px;
+        }
+
+        .min-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 20px;
+        }
+
+        .min-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--amber);
+            text-shadow: 0 0 30px rgba(255,176,32,0.5);
+            letter-spacing: 3px;
+        }
+
+        .min-info {
+            width: 100%;
+            background: rgba(22,26,34,0.8);
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(255,176,32,0.3);
+        }
+
+        .min-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 11px;
+        }
+
+        .min-row:last-child { border-bottom: none; }
+        .min-row-label { color: var(--muted); }
+        .min-row-val { font-weight: 600; color: var(--text); }
+
+        .min-dnb {
+            background: rgba(255,176,32,0.1);
+            border: 1px solid rgba(255,176,32,0.4);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 9px;
+            color: var(--amber);
+            letter-spacing: 1px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .min-gauges {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        /* --- TOUCHDOWN --- */
+        .td-screen {
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .td-runway {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .td-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--green);
+            letter-spacing: 4px;
+            text-shadow: 0 0 30px rgba(100,255,218,0.5);
+            margin-top: 12px;
+        }
+
+        .td-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .td-stat { text-align: center; }
+        .td-stat-label { font-size: 8px; color: var(--muted); }
+        .td-stat-val { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); margin-top: 2px; }
+
+        /* --- FLIGHT SUMMARY --- */
+        .fs-screen {
+            height: 100%;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fs-header {
+            padding: 12px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .fs-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 2px;
+        }
+
+        .fs-mission {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .fs-badge {
+            padding: 4px 10px;
+            background: rgba(100,255,218,0.1);
+            border: 1px solid rgba(100,255,218,0.25);
+            border-radius: 20px;
+            font-size: 9px;
+            color: var(--green);
+            letter-spacing: 1px;
+        }
+
+        .fs-great {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--green);
+            text-align: center;
+            padding: 8px 14px 0;
+        }
+
+        .fs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            padding: 8px 14px;
+        }
+
+        .fs-box {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .fs-box-label { font-size: 7px; color: var(--muted); letter-spacing: 1px; margin-bottom: 2px; }
+        .fs-box-val { font-family: 'Orbitron', sans-serif; font-size: 17px; font-weight: 700; }
+        .fs-box-unit { font-size: 8px; color: var(--muted); }
+
+        .fs-save {
+            margin: 4px 14px 0;
+            background: var(--green);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0B0E14;
+            letter-spacing: 2px;
+        }
+
+        /* --- LOGBOOK --- */
+        .lb-screen {
+            height: 100%;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lb-header {
+            padding: 12px 16px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .lb-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 2px;
+        }
+
+        .lb-filter {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .lb-tab {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--muted);
+            background: var(--panel2);
+        }
+
+        .lb-tab.active {
+            background: rgba(100,255,218,0.1);
+            color: var(--green);
+            border: 1px solid rgba(100,255,218,0.2);
+        }
+
+        .lb-list {
+            padding: 8px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .lb-item {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .lb-item-left { display: flex; flex-direction: column; gap: 2px; }
+        .lb-item-date { font-size: 8px; color: var(--muted); }
+        .lb-item-mode { font-size: 10px; font-weight: 600; color: var(--text); }
+        .lb-item-type { font-size: 8px; color: var(--green); }
+
+        .lb-item-right { text-align: right; }
+        .lb-item-dist { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); }
+        .lb-item-pace { font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-header">
+    <div>
+        <div class="page-logo">RUNWAY ✈</div>
+        <div class="page-tagline">Turn Every Run Into A Flight</div>
+    </div>
+    <div class="page-meta">
+        <div>RunWay v1.0</div>
+        <div>Concept: A320 PFD + ECAM</div>
+        <div style="color:#64FFDA;">UI Mockup v2.0</div>
+    </div>
+</div>
+
+<!-- ===== SECTION 1: DESIGN SYSTEM ===== -->
+<div class="section-header">
+    <span class="section-num">00</span>
+    <span class="section-title">Design System</span>
+    <div class="section-line"></div>
+</div>
+
+<div class="ds-grid">
+    <!-- Colors -->
+    <div class="ds-card">
+        <div class="ds-label">Color Palette</div>
+        <div class="color-swatches">
+            <div class="swatch-row">
+                <div class="swatch" style="background:#0B0E14;border:1px solid #252D3A;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Aviation Dark</div>
+                    <div class="swatch-hex">#0B0E14</div>
+                </div>
+            </div>
+            <div class="swatch-row">
+                <div class="swatch" style="background:#64FFDA;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Avionics Green</div>
+                    <div class="swatch-hex">#64FFDA</div>
+                </div>
+            </div>
+            <div class="swatch-row">
+                <div class="swatch" style="background:#FFB020;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Warning Amber</div>
+                    <div class="swatch-hex">#FFB020</div>
+                </div>
+            </div>
+            <div class="swatch-row">
+                <div class="swatch" style="background:#FF453A;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Alert Red</div>
+                    <div class="swatch-hex">#FF453A</div>
+                </div>
+            </div>
+            <div class="swatch-row">
+                <div class="swatch" style="background:#161A22;border:1px solid #252D3A;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Panel Gray</div>
+                    <div class="swatch-hex">#161A22</div>
+                </div>
+            </div>
+            <div class="swatch-row">
+                <div class="swatch" style="background:#E6EDF3;"></div>
+                <div class="swatch-info">
+                    <div class="swatch-name">Text Primary</div>
+                    <div class="swatch-hex">#E6EDF3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Typography -->
+    <div class="ds-card">
+        <div class="ds-label">Typography</div>
+        <div style="margin-bottom:16px;">
+            <div style="font-size:9px;color:var(--muted);margin-bottom:6px;">DISPLAY — Orbitron</div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--green);">5′30″</div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-top:4px;">MISSION FLIGHT</div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;">GLIDE PATH</div>
+        </div>
+        <div>
+            <div style="font-size:9px;color:var(--muted);margin-bottom:6px;">BODY — Inter / SF Pro</div>
+            <div style="font-size:15px;font-weight:600;color:var(--text);">Cleared for Take-off</div>
+            <div style="font-size:13px;font-weight:400;color:var(--muted);margin-top:3px;">Pre-flight check complete</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px;">GPS Signal · Heart Rate · Battery</div>
+        </div>
+    </div>
+
+    <!-- Icons -->
+    <div class="ds-card">
+        <div class="ds-label">Icons (SF Symbols + Custom)</div>
+        <div class="icons-grid">
+            <!-- SVG icons as simple shapes -->
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L3 12h4v8h10v-8h4L12 2z" stroke="#64FFDA" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+                <span class="icon-name">takeoff</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="#64FFDA" stroke-width="1.5"/>
+                    <path d="M8 12h8M12 8v8" stroke="#64FFDA" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="icon-name">target</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#64FFDA" stroke-width="1.5"/>
+                    <path d="M12 7v5l3 3" stroke="#64FFDA" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="icon-name">timer</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 12h18M12 3l9 9-9 9" stroke="#FFB020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="icon-name">gpws</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#64FFDA" stroke-width="1.5"/>
+                    <path d="M12 6v6l4 2" stroke="#64FFDA" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="icon-name">logbook</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 7H4C2.89543 7 2 7.89543 2 9V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V9C22 7.89543 21.1046 7 20 7Z" stroke="#64FFDA" stroke-width="1.5"/>
+                    <path d="M16 3H8L6 7h12l-2-4z" stroke="#64FFDA" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+                <span class="icon-name">gear</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#64FFDA" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="#64FFDA" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+                <span class="icon-name">profile</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#FF453A" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M12 8v4M12 16h.01" stroke="#FF453A" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="icon-name">warning</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12h14M5 12l4-4M5 12l4 4" stroke="#64FFDA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="icon-name">back</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 16.5a3.5 3.5 0 01-7 0V5a2.5 2.5 0 015 0v11" stroke="#64FFDA" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="7.5" cy="16.5" r="3.5" stroke="#64FFDA" stroke-width="1.5"/>
+                    <path d="M11 5H3" stroke="#64FFDA" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="icon-name">cadence</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#FF453A" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+                <span class="icon-name">heartrate</span>
+            </div>
+            <div class="icon-cell">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2v20M2 12h20" stroke="#64FFDA" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="12" cy="12" r="4" stroke="#64FFDA" stroke-width="1.5"/>
+                </svg>
+                <span class="icon-name">crosshair</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SECTION 2: iOS SCREENS ===== -->
+<div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">iOS Screens</span>
+    <div class="section-line"></div>
+</div>
+
+<div class="screens-row">
+
+    <!-- 01 HOME / FLIGHT DECK -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb">
+                    <span class="sb-time">9:41</span>
+                    <span class="sb-icons">▶ ⬛ 🔋</span>
+                </div>
+                <div class="fd-header">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                            <div class="fd-title">FLIGHT DECK</div>
+                        </div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="3" stroke="#88949E" stroke-width="1.5"/>
+                            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="#88949E" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="fd-mode-badge" style="margin-top:6px;">
+                        <span>✈</span> MISSION FLIGHT <span style="color:var(--muted);">▾</span>
+                    </div>
+                </div>
+                <div class="fd-body">
+                    <div class="fd-target-pace">
+                        <div class="fd-pace-label">TARGET PACE</div>
+                        <div style="display:flex;align-items:baseline;gap:4px;">
+                            <span class="fd-pace-val">5′30″</span>
+                            <span class="fd-pace-unit">/km</span>
+                        </div>
+                    </div>
+                    <div class="fd-last-flight">
+                        <div class="fd-lf-label">LAST FLIGHT — 2024.05.24</div>
+                        <div class="fd-lf-row">
+                            <div>
+                                <span class="fd-lf-dist">8.42</span>
+                                <span style="font-size:10px;color:var(--muted);"> km</span>
+                            </div>
+                            <div class="fd-lf-stats">
+                                <div class="fd-stat">
+                                    <div class="fd-stat-val">48:12</div>
+                                    <div class="fd-stat-label">TIME</div>
+                                </div>
+                                <div class="fd-stat">
+                                    <div class="fd-stat-val">5′42″</div>
+                                    <div class="fd-stat-label">PACE</div>
+                                </div>
+                                <div class="fd-stat">
+                                    <div class="fd-stat-val" style="color:#FF453A;">153</div>
+                                    <div class="fd-stat-label">HR</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fd-preflight-btn">PRE FLIGHT CHECK</div>
+                </div>
+                <!-- Tab Bar -->
+                <div class="tabbar">
+                    <div class="tab active">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 12L12 4l9 8v8a1 1 0 01-1 1H5a1 1 0 01-1-1v-8z" stroke="#64FFDA" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="tab-label" style="color:var(--green);">Deck</span>
+                    </div>
+                    <div class="tab">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="3" width="18" height="18" rx="2" stroke="#88949E" stroke-width="1.5"/>
+                            <path d="M8 8h8M8 12h8M8 16h5" stroke="#88949E" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <span class="tab-label">Logbook</span>
+                    </div>
+                    <div class="tab">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L3 12h4v8h10v-8h4L12 2z" stroke="#88949E" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="tab-label">Aircraft</span>
+                    </div>
+                    <div class="tab">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="8" r="4" stroke="#88949E" stroke-width="1.5"/>
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#88949E" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <span class="tab-label">Profile</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-tag">01 Home / Flight Deck</div>
+    </div>
+
+    <!-- 02 PRE-FLIGHT CHECK -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb">
+                    <span class="sb-time">9:41</span>
+                    <span class="sb-icons">▶ ⬛ 🔋</span>
+                </div>
+                <div class="pfc-header">
+                    <div class="pfc-title">PRE-FLIGHT CHECK</div>
+                </div>
+                <div class="pfc-body">
+                    <div class="pfc-item">
+                        <div class="pfc-left">
+                            <span class="pfc-icon">📡</span>
+                            <span>GPS SIGNAL</span>
+                        </div>
+                        <div class="pfc-status">
+                            <div class="pfc-dot" style="background:var(--green);"></div>
+                            <span style="color:var(--green);">STRONG</span>
+                        </div>
+                    </div>
+                    <div class="pfc-item">
+                        <div class="pfc-left">
+                            <span class="pfc-icon">❤️</span>
+                            <span>HEART RATE</span>
+                        </div>
+                        <div class="pfc-status">
+                            <div class="pfc-dot" style="background:var(--green);"></div>
+                            <span style="color:var(--green);">CONNECTED</span>
+                        </div>
+                    </div>
+                    <div class="pfc-item">
+                        <div class="pfc-left">
+                            <span class="pfc-icon">⚡</span>
+                            <span>CADENCE SENSOR</span>
+                        </div>
+                        <div class="pfc-status">
+                            <div class="pfc-dot" style="background:var(--green);"></div>
+                            <span style="color:var(--green);">CONNECTED</span>
+                        </div>
+                    </div>
+                    <div class="pfc-item">
+                        <div class="pfc-left">
+                            <span class="pfc-icon">🔋</span>
+                            <span>BATTERY</span>
+                        </div>
+                        <div class="pfc-status">
+                            <div class="pfc-dot" style="background:var(--green);"></div>
+                            <span style="color:var(--green);">87%</span>
+                        </div>
+                    </div>
+                    <div class="pfc-item">
+                        <div class="pfc-left">
+                            <span class="pfc-icon">🌤</span>
+                            <span>WEATHER</span>
+                        </div>
+                        <div class="pfc-status">
+                            <div class="pfc-dot" style="background:var(--green);"></div>
+                            <span style="color:var(--green);">GOOD</span>
+                        </div>
+                    </div>
+                    <div class="pfc-item">
+                        <div class="pfc-left">
+                            <span class="pfc-icon">⚙️</span>
+                            <span>AIRCRAFT SYSTEMS</span>
+                        </div>
+                        <div class="pfc-status">
+                            <div class="pfc-dot" style="background:var(--green);"></div>
+                            <span style="color:var(--green);">NOMINAL</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cleared-btn">CLEARED FOR TAKEOFF</div>
+            </div>
+        </div>
+        <div class="screen-tag">02 Pre-Flight Check</div>
+    </div>
+
+    <!-- 03 TAKEOFF SEQUENCE -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb">
+                    <span class="sb-time">9:41</span>
+                    <span class="sb-icons">🔋</span>
+                </div>
+                <div class="tof-screen">
+                    <div class="tof-header">
+                        <span class="tof-back">←</span>
+                        <span class="tof-title">TAKEOFF</span>
+                    </div>
+                    <div class="tof-countdown">
+                        <div style="position:relative;">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:110px;font-weight:900;color:rgba(100,255,218,0.12);position:absolute;top:10px;left:20px;line-height:1;">2</div>
+                            <div class="tof-num">3</div>
+                        </div>
+                    </div>
+                    <div class="tof-throttle">
+                        <div class="tof-gauge">
+                            <div class="tof-g-label">THROTTLE</div>
+                            <div class="tof-g-val" style="color:var(--green);">100%</div>
+                        </div>
+                        <div class="tof-gauge">
+                            <div class="tof-g-label">SPEED</div>
+                            <div class="tof-g-val" style="color:var(--amber);">READY</div>
+                        </div>
+                    </div>
+                    <div class="tof-cancel">HOLD TO CANCEL</div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-tag">03 Takeoff Sequence</div>
+    </div>
+
+    <!-- 04 PFD -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb" style="height:42px;">
+                    <span class="sb-time">9:41</span>
+                    <span style="font-size:9px;color:var(--amber);font-weight:600;">MODE A</span>
+                    <span class="sb-icons">🔋</span>
+                </div>
+                <div class="pfd-screen">
+                    <div class="pfd-topbar">
+                        <div class="pfd-rec">
+                            <div class="pfd-recdot"></div>
+                            REC
+                        </div>
+                        <div class="pfd-timer">18:22</div>
+                        <div class="pfd-close">✕</div>
+                    </div>
+
+                    <!-- Speed + ADI + Alt tapes -->
+                    <div class="pfd-tapes">
+                        <!-- Speed tape -->
+                        <div class="pfd-tape">
+                            <div class="pfd-tape-label">SPD</div>
+                            <div class="pfd-tape-tick">6'00</div>
+                            <div class="pfd-tape-tick">5'45</div>
+                            <div class="pfd-tape-val" style="color:var(--green);">5'32</div>
+                            <div class="pfd-tape-tick">5'15</div>
+                            <div class="pfd-tape-tick">5'00</div>
+                            <div style="font-size:7px;color:var(--muted);align-self:center;margin-top:2px;">AVG 5'28</div>
+                        </div>
+
+                        <!-- ADI Center -->
+                        <div class="pfd-adi" style="position:relative;overflow:hidden;">
+                            <svg width="100%" height="100%" viewBox="0 0 216 130" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <linearGradient id="skyG2" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#0a3a5c"/>
+                                        <stop offset="100%" stop-color="#0055aa"/>
+                                    </linearGradient>
+                                    <linearGradient id="gndG2" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#3a2010"/>
+                                        <stop offset="100%" stop-color="#1a0e06"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="216" height="65" fill="url(#skyG2)"/>
+                                <rect y="65" width="216" height="65" fill="url(#gndG2)"/>
+                                <line x1="0" y1="65" x2="216" y2="65" stroke="#64FFDA" stroke-width="1.5" opacity="0.7"/>
+                                <!-- pitch lines -->
+                                <line x1="60" y1="48" x2="156" y2="48" stroke="white" stroke-width="0.8" opacity="0.25"/>
+                                <line x1="72" y1="82" x2="144" y2="82" stroke="white" stroke-width="0.8" opacity="0.25"/>
+                                <!-- airplane symbol -->
+                                <path d="M93 65 L108 59 L123 65 L108 68 Z" fill="none" stroke="#FFB020" stroke-width="1.8"/>
+                                <line x1="108" y1="44" x2="108" y2="86" stroke="#FFB020" stroke-width="1" opacity="0.5"/>
+                                <!-- GLIDE PATH label -->
+                                <rect x="130" y="108" width="82" height="16" rx="3" fill="rgba(100,255,218,0.12)" stroke="rgba(100,255,218,0.3)" stroke-width="0.8"/>
+                                <text x="171" y="119" fill="#64FFDA" font-family="Inter" font-size="7" font-weight="600" text-anchor="middle">GLIDE PATH -1.2%</text>
+                                <!-- heading tape -->
+                                <rect width="216" height="18" fill="rgba(0,0,0,0.55)"/>
+                                <text x="108" y="12" fill="#FFB020" font-family="Orbitron,sans-serif" font-size="9" font-weight="700" text-anchor="middle">N</text>
+                                <text x="36" y="12" fill="#88949E" font-family="Orbitron,sans-serif" font-size="7" text-anchor="middle">270</text>
+                                <text x="180" y="12" fill="#88949E" font-family="Orbitron,sans-serif" font-size="7" text-anchor="middle">90</text>
+                            </svg>
+                        </div>
+
+                        <!-- Alt tape -->
+                        <div class="pfd-tape right">
+                            <div class="pfd-tape-label">ALT</div>
+                            <div class="pfd-tape-tick">100</div>
+                            <div class="pfd-tape-tick">80</div>
+                            <div class="pfd-tape-val" style="color:var(--green);">42</div>
+                            <div class="pfd-tape-tick">20</div>
+                            <div class="pfd-tape-tick">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Dist + Time -->
+                    <div class="pfd-metrics">
+                        <div class="pfd-m">
+                            <div class="pfd-m-label">DIST</div>
+                            <div class="pfd-m-val" style="color:var(--green);font-size:18px;">3.21</div>
+                            <div class="pfd-m-unit">km</div>
+                        </div>
+                        <div class="pfd-m">
+                            <div class="pfd-m-label">TIME</div>
+                            <div class="pfd-m-val" style="color:var(--text);font-size:18px;">18:22</div>
+                            <div class="pfd-m-unit">min</div>
+                        </div>
+                    </div>
+
+                    <!-- N1% Gauges -->
+                    <div class="pfd-gauges">
+                        <div class="pfd-gauge">
+                            <div class="pfd-g-header">
+                                <span class="pfd-g-label">HR N1%</span>
+                                <span class="pfd-g-val" style="color:#FF453A;">84%</span>
+                            </div>
+                            <svg class="pfd-arc" viewBox="0 0 90 50">
+                                <path d="M8 46 Q8 8 45 8 Q82 8 82 46" fill="none" stroke="#252D3A" stroke-width="7" stroke-linecap="round"/>
+                                <path d="M8 46 Q8 8 45 8 Q82 8 82 46" fill="none" stroke="#FF453A" stroke-width="7" stroke-linecap="round" stroke-dasharray="110" stroke-dashoffset="18"/>
+                                <text x="45" y="42" fill="#FF453A" font-family="Orbitron,sans-serif" font-size="13" font-weight="700" text-anchor="middle">84</text>
+                            </svg>
+                            <div class="pfd-g-scale"><span>Z1</span><span>Z4</span></div>
+                        </div>
+                        <div class="pfd-gauge">
+                            <div class="pfd-g-header">
+                                <span class="pfd-g-label">CAD N1%</span>
+                                <span class="pfd-g-val" style="color:var(--green);">91%</span>
+                            </div>
+                            <svg class="pfd-arc" viewBox="0 0 90 50">
+                                <path d="M8 46 Q8 8 45 8 Q82 8 82 46" fill="none" stroke="#252D3A" stroke-width="7" stroke-linecap="round"/>
+                                <path d="M8 46 Q8 8 45 8 Q82 8 82 46" fill="none" stroke="#64FFDA" stroke-width="7" stroke-linecap="round" stroke-dasharray="110" stroke-dashoffset="10"/>
+                                <text x="45" y="42" fill="#64FFDA" font-family="Orbitron,sans-serif" font-size="13" font-weight="700" text-anchor="middle">91</text>
+                            </svg>
+                            <div class="pfd-g-scale"><span>Z1</span><span>Z4</span></div>
+                        </div>
+                    </div>
+
+                    <div class="pfd-target">
+                        <div class="pfd-t-left">🎯 TARGET</div>
+                        <div class="pfd-t-right">
+                            <span class="pfd-t-pace">5′30″</span>
+                            <span class="pfd-t-dev">±10s</span>
+                        </div>
+                    </div>
+
+                    <div class="pfd-gpws">
+                        <div class="pfd-gpws-dot"></div>
+                        <span class="pfd-gpws-text">GLIDE PATH</span>
+                    </div>
+
+                    <div class="pfd-touchdown">TOUCHDOWN ■</div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-tag">04 PFD — Primary Flight Display</div>
+    </div>
+
+    <!-- 05 GPWS WARNING -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb" style="background:#130506;">
+                    <span class="sb-time">9:41</span>
+                    <span class="sb-icons">🔋</span>
+                </div>
+                <div class="gpws-screen">
+                    <div class="gpws-alert-bar">
+                        <span style="font-size:14px;">⚠️</span>
+                        <span class="gpws-alert-text">SINK WARNING</span>
+                    </div>
+                    <div class="gpws-main">
+                        <div class="gpws-title">SINK RATE<br>TOO HIGH</div>
+                        <div style="text-align:center;">
+                            <div class="gpws-rate-label">SINK RATE</div>
+                            <div class="gpws-rate">-3.2 m/s</div>
+                        </div>
+                        <div class="gpws-pull">PULL UP</div>
+                        <div class="gpws-gauges">
+                            <div class="gpws-g">
+                                <div class="gpws-g-label">HR N1%</div>
+                                <div class="gpws-g-val">87%</div>
+                                <div class="gpws-g-unit">ZONE 4</div>
+                            </div>
+                            <div class="gpws-g">
+                                <div class="gpws-g-label">CAD N1%</div>
+                                <div class="gpws-g-val">92%</div>
+                                <div class="gpws-g-unit">ZONE 4</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gpws-stripe"></div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-tag">05 GPWS Warning</div>
+    </div>
+
+    <!-- 06 MINIMUMS -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb" style="background:#0E0C00;">
+                    <span class="sb-time">9:41</span>
+                    <span class="sb-icons">🔋</span>
+                </div>
+                <div class="min-screen">
+                    <div class="min-bar">
+                        <span style="font-size:14px;">🏁</span>
+                        <span class="min-bar-text">MINIMUMS</span>
+                    </div>
+                    <div class="min-main">
+                        <div class="min-title">MINIMUMS</div>
+                        <div class="min-info">
+                            <div class="min-row">
+                                <span class="min-row-label">DECISION HEIGHT</span>
+                                <span class="min-row-val" style="color:var(--amber);">30 m</span>
+                            </div>
+                            <div class="min-row">
+                                <span class="min-row-label">SINK RATE</span>
+                                <span class="min-row-val">-1.5 m/s</span>
+                            </div>
+                            <div class="min-row">
+                                <span class="min-row-label">GLIDE PATH</span>
+                                <span class="min-row-val">-1.8 %</span>
+                            </div>
+                        </div>
+                        <div class="min-dnb">⛔ DO NOT DESCEND BELOW</div>
+                        <div class="min-gauges">
+                            <div class="gpws-g" style="border-color:rgba(255,176,32,0.3);background:rgba(22,26,34,0.8);">
+                                <div class="gpws-g-label">HR N1%</div>
+                                <div class="gpws-g-val" style="color:var(--amber);">83%</div>
+                                <div class="gpws-g-unit" style="color:var(--amber);">ZONE 4</div>
+                            </div>
+                            <div class="gpws-g" style="border-color:rgba(255,176,32,0.3);background:rgba(22,26,34,0.8);">
+                                <div class="gpws-g-label">CAD N1%</div>
+                                <div class="gpws-g-val" style="color:var(--amber);">90%</div>
+                                <div class="gpws-g-unit" style="color:var(--amber);">ZONE 4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-tag">06 MINIMUMS</div>
+    </div>
+
+    <!-- 07 TOUCHDOWN -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb" style="background:#000;">
+                    <span class="sb-time" style="color:#fff;">9:41</span>
+                    <span class="sb-icons">🔋</span>
+                </div>
+                <div class="td-screen">
+                    <!-- Runway SVG -->
+                    <div class="td-runway">
+                        <svg width="100%" height="200" viewBox="0 0 320 200">
+                            <defs>
+                                <linearGradient id="rwGrad" x1="0.5" y1="0" x2="0.5" y2="1">
+                                    <stop offset="0%" stop-color="#000"/>
+                                    <stop offset="100%" stop-color="#0a1a0a"/>
+                                </linearGradient>
+                                <linearGradient id="lightGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#64FFDA" stop-opacity="0.8"/>
+                                    <stop offset="100%" stop-color="#64FFDA" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="320" height="200" fill="url(#rwGrad)"/>
+                            <!-- runway lights left -->
+                            <line x1="80" y1="0" x2="40" y2="200" stroke="rgba(100,255,218,0.3)" stroke-width="1"/>
+                            <!-- runway lights right -->
+                            <line x1="240" y1="0" x2="280" y2="200" stroke="rgba(100,255,218,0.3)" stroke-width="1"/>
+                            <!-- center dashes -->
+                            <rect x="154" y="20" width="12" height="24" rx="2" fill="rgba(255,255,255,0.6)"/>
+                            <rect x="154" y="60" width="12" height="24" rx="2" fill="rgba(255,255,255,0.4)"/>
+                            <rect x="154" y="100" width="12" height="24" rx="2" fill="rgba(255,255,255,0.25)"/>
+                            <rect x="154" y="140" width="12" height="24" rx="2" fill="rgba(255,255,255,0.15)"/>
+                            <!-- approach lights -->
+                            <circle cx="80" cy="10" r="3" fill="#64FFDA" opacity="0.8"/>
+                            <circle cx="240" cy="10" r="3" fill="#64FFDA" opacity="0.8"/>
+                            <circle cx="90" cy="40" r="2.5" fill="#64FFDA" opacity="0.6"/>
+                            <circle cx="230" cy="40" r="2.5" fill="#64FFDA" opacity="0.6"/>
+                            <circle cx="100" cy="70" r="2" fill="#64FFDA" opacity="0.4"/>
+                            <circle cx="220" cy="70" r="2" fill="#64FFDA" opacity="0.4"/>
+                            <!-- aircraft -->
+                            <path d="M155 90 L160 82 L165 90 L160 93 Z" fill="none" stroke="#64FFDA" stroke-width="1.5"/>
+                            <path d="M148 90 L155 88 L165 88 L172 90" fill="none" stroke="#64FFDA" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <div class="td-title">TOUCHDOWN</div>
+                    <div class="td-stats">
+                        <div class="td-stat">
+                            <div class="td-stat-label">TIME</div>
+                            <div class="td-stat-val">48:12</div>
+                        </div>
+                        <div class="td-stat">
+                            <div class="td-stat-label">DISTANCE</div>
+                            <div class="td-stat-val">8.42</div>
+                        </div>
+                        <div class="td-stat">
+                            <div class="td-stat-label">AVG PACE</div>
+                            <div class="td-stat-val" style="color:var(--green);">5′42″</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-tag">07 Touchdown</div>
+    </div>
+
+    <!-- 08 FLIGHT SUMMARY -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb">
+                    <span class="sb-time">9:41</span>
+                    <span class="sb-icons">🔋</span>
+                </div>
+                <div class="fs-screen">
+                    <div class="fs-header">
+                        <div class="fs-title">FLIGHT SUMMARY</div>
+                        <div class="fs-mission">
+                            <span class="fs-badge">✓ MISSION COMPLETE</span>
+                        </div>
+                    </div>
+                    <div class="fs-great">🛬 GREAT FLIGHT! New Best!</div>
+                    <div class="fs-grid">
+                        <div class="fs-box">
+                            <div class="fs-box-label">DISTANCE</div>
+                            <div class="fs-box-val" style="color:var(--green);">8.42<span class="fs-box-unit"> km</span></div>
+                        </div>
+                        <div class="fs-box">
+                            <div class="fs-box-label">TIME</div>
+                            <div class="fs-box-val" style="color:var(--text);">48:12</div>
+                        </div>
+                        <div class="fs-box">
+                            <div class="fs-box-label">AVG PACE</div>
+                            <div class="fs-box-val" style="color:var(--amber);">5′42″</div>
+                        </div>
+                        <div class="fs-box">
+                            <div class="fs-box-label">AVG HR</div>
+                            <div class="fs-box-val" style="color:#FF453A;">153<span class="fs-box-unit"> bpm</span></div>
+                        </div>
+                        <div class="fs-box" style="grid-column:1/-1;">
+                            <div class="fs-box-label">CADENCE</div>
+                            <div class="fs-box-val" style="color:var(--green);">172<span class="fs-box-unit"> spm</span></div>
+                        </div>
+                    </div>
+                    <div class="fs-save">SAVE TO LOGBOOK</div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-tag">08 Flight Summary</div>
+    </div>
+
+    <!-- 09 LOGBOOK -->
+    <div class="screen-wrap">
+        <div class="iphone">
+            <div class="iphone-di"></div>
+            <div class="iphone-screen">
+                <div class="sb">
+                    <span class="sb-time">9:41</span>
+                    <span class="sb-icons">🔋</span>
+                </div>
+                <div class="lb-screen">
+                    <div class="lb-header">
+                        <div class="lb-title">LOGBOOK</div>
+                        <div class="lb-filter">
+                            <div class="lb-tab active">ALL</div>
+                            <div class="lb-tab">MISSION</div>
+                            <div class="lb-tab">FREE</div>
+                        </div>
+                    </div>
+                    <div class="lb-list">
+                        <div class="lb-item">
+                            <div class="lb-item-left">
+                                <div class="lb-item-date">2024.05.24</div>
+                                <div class="lb-item-mode">MISSION FLIGHT</div>
+                                <div class="lb-item-type">● TARGET HIT</div>
+                            </div>
+                            <div class="lb-item-right">
+                                <div class="lb-item-dist">8.42 km</div>
+                                <div class="lb-item-pace">5′42″/km</div>
+                            </div>
+                        </div>
+                        <div class="lb-item">
+                            <div class="lb-item-left">
+                                <div class="lb-item-date">2024.05.21</div>
+                                <div class="lb-item-mode">MISSION FLIGHT</div>
+                                <div class="lb-item-type" style="color:var(--muted);">● COMPLETED</div>
+                            </div>
+                            <div class="lb-item-right">
+                                <div class="lb-item-dist">6.21 km</div>
+                                <div class="lb-item-pace">5′55″/km</div>
+                            </div>
+                        </div>
+                        <div class="lb-item">
+                            <div class="lb-item-left">
+                                <div class="lb-item-date">2024.05.18</div>
+                                <div class="lb-item-mode">FREE FLIGHT</div>
+                                <div class="lb-item-type" style="color:var(--muted);">● VFR</div>
+                            </div>
+                            <div class="lb-item-right">
+                                <div class="lb-item-dist">5.02 km</div>
+                                <div class="lb-item-pace">6′02″/km</div>
+                            </div>
+                        </div>
+                        <div class="lb-item">
+                            <div class="lb-item-left">
+                                <div class="lb-item-date">2024.05.15</div>
+                                <div class="lb-item-mode">MISSION FLIGHT</div>
+                                <div class="lb-item-type" style="color:var(--muted);">● COMPLETED</div>
+                            </div>
+                            <div class="lb-item-right">
+                                <div class="lb-item-dist">7.31 km</div>
+                                <div class="lb-item-pace">5′48″/km</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tab Bar -->
+                <div class="tabbar">
+                    <div class="tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8v8a1 1 0 01-1 1H5a1 1 0 01-1-1v-8z" stroke="#88949E" stroke-width="1.5" stroke-linejoin="round"/></svg><span class="tab-label">Deck</span></div>
+                    <div class="tab active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#64FFDA" stroke-width="1.5"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#64FFDA" stroke-width="1.5" stroke-linecap="round"/></svg><span class="tab-label" style="color:var(--green);">Logbook</span></div>
+                    <div class="tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 12h4v8h10v-8h4L12 2z" stroke="#88949E" stroke-width="1.5" stroke-linejoin="round"/></svg><span class="tab-label">Aircraft</span></div>
+                    <div class="tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#88949E" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#88949E" stroke-width="1.5" stroke-linecap="round"/></svg><span class="tab-label">Profile</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-tag">09 Logbook</div>
+    </div>
+
+</div>
+
+<!-- ===== SECTION 3: DYNAMIC ISLAND ===== -->
+<div class="section-header">
+    <span class="section-num">10</span>
+    <span class="section-title">Dynamic Island — Live Activity</span>
+    <div class="section-line"></div>
+</div>
+
+<div style="max-width:1400px;margin:0 auto 80px;display:flex;flex-direction:column;gap:32px;max-width:500px;">
+
+    <!-- DI Compact -->
+    <div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;">COMPACT — 백그라운드 러닝</div>
+        <div style="background:#000;border-radius:16px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;width:280px;box-shadow:0 0 0 1px #1a1a1a;">
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1s infinite;"></div>
+                <span style="font-family:'Orbitron',sans-serif;font-size:11px;color:var(--red);">18:22</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:2px;">
+                <span style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--green);">5′32″</span>
+                <span style="font-size:8px;color:var(--muted);">PACE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DI Expanded -->
+    <div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;">EXPANDED — 탭해서 펼침</div>
+        <div style="background:#000;border-radius:26px;padding:14px 16px;width:360px;box-shadow:0 0 0 1px #1a1a1a,0 8px 32px rgba(0,0,0,0.8);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="display:flex;align-items:center;gap:6px;background:#0d0d0d;padding:5px 10px;border-radius:12px;">
+                    <div style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1s infinite;"></div>
+                    <span style="font-family:'Orbitron',sans-serif;font-size:9px;color:var(--red);">REC</span>
+                    <span style="font-family:'Orbitron',sans-serif;font-size:10px;color:var(--muted);">18:22</span>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:7px;color:var(--muted);">MODE A</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:10px;color:var(--amber);">TARGET 5′30″</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;">
+                <div style="flex:1;background:#0d1520;border-radius:10px;padding:7px;text-align:center;border:1px solid #1a2a3a;">
+                    <div style="font-size:7px;color:var(--muted);">PACE</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--green);">5′32″</div>
+                </div>
+                <div style="flex:1;background:#0d1520;border-radius:10px;padding:7px;text-align:center;border:1px solid #1a2a3a;">
+                    <div style="font-size:7px;color:var(--muted);">DIST</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--text);">3.21</div>
+                    <div style="font-size:7px;color:var(--muted);">km</div>
+                </div>
+                <div style="flex:1;background:#0d1520;border-radius:10px;padding:7px;text-align:center;border:1px solid #1a2a3a;">
+                    <div style="font-size:7px;color:var(--muted);">DELTA</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--green);">-2s</div>
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:8px;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:8px;color:#FF453A;width:42px;">♥ 156</span>
+                    <div style="flex:1;height:4px;background:#1a2a3a;border-radius:2px;overflow:hidden;"><div style="width:72%;height:100%;background:#FF453A;border-radius:2px;"></div></div>
+                    <span style="font-size:7px;color:var(--muted);width:20px;text-align:right;">180</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:8px;color:var(--green);width:42px;">⚡ 172</span>
+                    <div style="flex:1;height:4px;background:#1a2a3a;border-radius:2px;overflow:hidden;"><div style="width:82%;height:100%;background:var(--green);border-radius:2px;"></div></div>
+                    <span style="font-size:7px;color:var(--muted);width:20px;text-align:right;">200</span>
+                </div>
+            </div>
+            <div style="background:#0a1a0a;border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:5px;border:1px solid rgba(100,255,218,0.2);">
+                <div style="width:5px;height:5px;border-radius:50%;background:var(--green);"></div>
+                <span style="font-family:'Orbitron',sans-serif;font-size:9px;color:var(--green);letter-spacing:1px;">GLIDE PATH — ON TARGET</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DI GPWS -->
+    <div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;">GPWS WARNING — SINK RATE</div>
+        <div style="background:#0a0003;border-radius:26px;padding:14px 16px;width:360px;border:1px solid rgba(255,69,58,0.3);box-shadow:0 0 0 1px #1a1a1a,0 8px 32px rgba(255,69,58,0.12);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:18px;animation:blink 0.5s infinite;">⚠️</span>
+                    <div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:#FF453A;letter-spacing:1px;">SINK RATE</div>
+                        <div style="font-size:8px;color:var(--muted);">PACE TOO SLOW</div>
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:12px;color:#FF453A;">+0:12s</div>
+                    <div style="font-size:7px;color:var(--muted);">over target</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;">
+                <div style="flex:1;background:#1a0a0d;border-radius:10px;padding:8px;text-align:center;border:1px solid rgba(255,69,58,0.3);">
+                    <div style="font-size:7px;color:var(--muted);">CURRENT</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:#FF453A;">5′42″</div>
+                </div>
+                <div style="flex:1;background:#0d1520;border-radius:10px;padding:8px;text-align:center;border:1px solid #1a2a3a;">
+                    <div style="font-size:7px;color:var(--muted);">TARGET</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--amber);">5′30″</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DI MINIMUMS -->
+    <div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;">MINIMUMS — 목표 500m 전</div>
+        <div style="background:#0a0c00;border-radius:26px;padding:14px 16px;width:360px;border:1px solid rgba(255,176,32,0.3);box-shadow:0 0 0 1px #1a1a1a,0 8px 32px rgba(255,176,32,0.08);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:18px;">🏁</span>
+                    <div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--amber);">MINIMUMS</div>
+                        <div style="font-size:8px;color:var(--muted);">500m TO TARGET</div>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;">
+                <div style="flex:1;background:#0d1520;border-radius:10px;padding:7px;text-align:center;border:1px solid #1a2a3a;">
+                    <div style="font-size:7px;color:var(--muted);">REMAINING</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--amber);">0.5 km</div>
+                </div>
+                <div style="flex:1;background:#0d1520;border-radius:10px;padding:7px;text-align:center;border:1px solid #1a2a3a;">
+                    <div style="font-size:7px;color:var(--muted);">AVG PACE</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--green);">5′27″</div>
+                </div>
+                <div style="flex:1;background:#0d1520;border-radius:10px;padding:7px;text-align:center;border:1px solid #1a2a3a;">
+                    <div style="font-size:7px;color:var(--muted);">ETA</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--text);">2:43</div>
+                </div>
+            </div>
+            <div style="height:4px;background:#1a2a3a;border-radius:2px;overflow:hidden;">
+                <div style="width:95%;height:100%;background:linear-gradient(to right,var(--green),var(--amber));border-radius:2px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DI Touchdown -->
+    <div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;">TOUCHDOWN — 완료</div>
+        <div style="background:#030d05;border-radius:16px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;width:300px;border:1px solid rgba(100,255,218,0.2);box-shadow:0 0 0 1px #1a1a1a;">
+            <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:14px;">✈️</span>
+                <span style="font-family:'Orbitron',sans-serif;font-size:11px;color:var(--green);">LANDED</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:2px;">
+                <span style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--text);">8.42</span>
+                <span style="font-size:8px;color:var(--muted);">km</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== SECTION 4: APPLE WATCH ===== -->
+<div class="section-header">
+    <span class="section-num">11</span>
+    <span class="section-title">Apple Watch</span>
+    <div class="section-line"></div>
+</div>
+
+<div style="max-width:1400px;margin:0 auto 80px;display:flex;flex-wrap:wrap;gap:32px;">
+
+    <!-- Watch frame styles -->
+    <style>
+        .watch {
+            width: 176px;
+            height: 214px;
+            background: #000;
+            border-radius: 44px;
+            position: relative;
+            box-shadow: 0 0 0 2px #1a1a1a, 0 0 0 5px #0d0d0d, 0 16px 32px rgba(0,0,0,0.7);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .watch-crown {
+            position: absolute; right: -6px; top: 72px;
+            width: 6px; height: 44px;
+            background: linear-gradient(to right, #2a2a2a, #1a1a1a);
+            border-radius: 0 4px 4px 0;
+        }
+        .watch-btn {
+            position: absolute; right: -5px; top: 130px;
+            width: 5px; height: 26px;
+            background: linear-gradient(to right, #2a2a2a, #1a1a1a);
+            border-radius: 0 3px 3px 0;
+        }
+        .watch-inner {
+            position: absolute; inset: 0;
+            border-radius: 44px; overflow: hidden;
+            background: #080c12; padding: 12px 10px;
+        }
+        .watch-tag {
+            font-size: 9px; color: var(--muted);
+            letter-spacing: 1px; text-align: center;
+            margin-top: 10px;
+        }
+        .watch-wrap { display: flex; flex-direction: column; align-items: center; }
+    </style>
+
+    <!-- W1: Lock -->
+    <div class="watch-wrap">
+        <div class="watch">
+            <div class="watch-crown"></div>
+            <div class="watch-btn"></div>
+            <div class="watch-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;">
+                <span style="font-size:32px;">✈️</span>
+                <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--green);letter-spacing:3px;">RUNWAY</div>
+                <div style="font-size:8px;color:var(--muted);letter-spacing:1px;">TAP TO START</div>
+            </div>
+        </div>
+        <div class="watch-tag">Lock Screen</div>
+    </div>
+
+    <!-- W2: Pre-flight -->
+    <div class="watch-wrap">
+        <div class="watch">
+            <div class="watch-crown"></div>
+            <div class="watch-btn"></div>
+            <div class="watch-inner" style="display:flex;flex-direction:column;gap:5px;">
+                <div style="font-family:'Orbitron',sans-serif;font-size:9px;color:var(--green);letter-spacing:1px;text-align:center;margin-bottom:2px;">PRE-FLIGHT</div>
+                <div style="background:#1E2430;border-radius:7px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:10px;">📡</span>
+                    <span style="font-size:9px;color:var(--green);font-weight:600;">STRONG</span>
+                </div>
+                <div style="background:#1E2430;border-radius:7px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:10px;">❤️</span>
+                    <span style="font-family:'Orbitron',sans-serif;font-size:14px;color:#FF453A;font-weight:700;">72</span>
+                </div>
+                <div style="background:#1E2430;border-radius:7px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:10px;">🔋</span>
+                    <span style="font-size:9px;color:var(--green);font-weight:600;">87%</span>
+                </div>
+                <div style="background:rgba(100,255,218,0.1);border:1px solid rgba(100,255,218,0.3);border-radius:7px;padding:4px;text-align:center;">
+                    <span style="font-family:'Orbitron',sans-serif;font-size:8px;color:var(--green);">READY</span>
+                </div>
+            </div>
+        </div>
+        <div class="watch-tag">Pre-flight</div>
+    </div>
+
+    <!-- W3: Countdown -->
+    <div class="watch-wrap">
+        <div class="watch">
+            <div class="watch-crown"></div>
+            <div class="watch-btn"></div>
+            <div class="watch-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;">
+                <div style="font-family:'Orbitron',sans-serif;font-size:80px;font-weight:900;color:var(--green);text-shadow:0 0 30px rgba(100,255,218,0.5);line-height:1;">3</div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:11px;color:var(--amber);letter-spacing:3px;">ROTATE!</div>
+                <div style="display:flex;gap:5px;margin-top:4px;">
+                    <div style="width:5px;height:5px;border-radius:50%;background:var(--muted);"></div>
+                    <div style="width:5px;height:5px;border-radius:50%;background:var(--muted);"></div>
+                    <div style="width:5px;height:5px;border-radius:50%;background:var(--amber);"></div>
+                </div>
+            </div>
+        </div>
+        <div class="watch-tag">Countdown</div>
+    </div>
+
+    <!-- W4: Active -->
+    <div class="watch-wrap">
+        <div class="watch">
+            <div class="watch-crown"></div>
+            <div class="watch-btn"></div>
+            <div class="watch-inner" style="display:flex;flex-direction:column;gap:4px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div style="display:flex;align-items:center;gap:3px;">
+                        <div style="width:5px;height:5px;border-radius:50%;background:#FF453A;animation:blink 1s infinite;"></div>
+                        <span style="font-size:8px;color:#FF453A;font-weight:600;">REC</span>
+                    </div>
+                    <span style="font-family:'Orbitron',sans-serif;font-size:10px;color:var(--muted);">18:22</span>
+                </div>
+                <div style="display:flex;gap:3px;">
+                    <div style="flex:1;background:#1E2430;border-radius:7px;padding:5px;text-align:center;">
+                        <div style="font-size:6px;color:var(--muted);">PACE</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--green);">5′32</div>
+                    </div>
+                    <div style="flex:1;background:#1E2430;border-radius:7px;padding:5px;text-align:center;">
+                        <div style="font-size:6px;color:var(--muted);">DIST</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--text);">3.2</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:3px;">
+                    <div style="flex:1;background:#1E2430;border-radius:7px;padding:4px;text-align:center;">
+                        <div style="font-size:6px;color:#FF453A;">HR N1%</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:#FF453A;">84%</div>
+                    </div>
+                    <div style="flex:1;background:#1E2430;border-radius:7px;padding:4px;text-align:center;">
+                        <div style="font-size:6px;color:var(--green);">CAD N1%</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--green);">91%</div>
+                    </div>
+                </div>
+                <div style="background:rgba(255,176,32,0.1);border:1px solid rgba(255,176,32,0.3);border-radius:7px;padding:4px;text-align:center;">
+                    <div style="font-size:6px;color:var(--amber);">TARGET 5′30″ ±10s</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:9px;color:var(--green);">● GLIDE PATH</div>
+                </div>
+            </div>
+        </div>
+        <div class="watch-tag">Active Flight</div>
+    </div>
+
+    <!-- W5: GPWS -->
+    <div class="watch-wrap">
+        <div class="watch">
+            <div class="watch-crown"></div>
+            <div class="watch-btn"></div>
+            <div class="watch-inner" style="background:rgba(255,69,58,0.05);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+                <div style="font-size:32px;animation:blink 0.5s infinite;">⚠️</div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#FF453A;text-shadow:0 0 12px rgba(255,69,58,0.5);">SINK RATE</div>
+                <div style="font-size:8px;color:var(--muted);">PACE TOO SLOW</div>
+                <div style="font-size:8px;color:var(--muted);">ACCELERATE</div>
+            </div>
+        </div>
+        <div class="watch-tag">GPWS Warning</div>
+    </div>
+
+    <!-- W6: Complete -->
+    <div class="watch-wrap">
+        <div class="watch">
+            <div class="watch-crown"></div>
+            <div class="watch-btn"></div>
+            <div class="watch-inner" style="display:flex;flex-direction:column;gap:4px;">
+                <div style="text-align:center;">
+                    <span style="font-size:22px;">✈️</span>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:9px;color:var(--green);letter-spacing:2px;">COMPLETE</div>
+                </div>
+                <div style="display:flex;gap:3px;">
+                    <div style="flex:1;background:#1E2430;border-radius:7px;padding:5px;text-align:center;">
+                        <div style="font-size:6px;color:var(--muted);">TIME</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--text);">48:12</div>
+                    </div>
+                    <div style="flex:1;background:#1E2430;border-radius:7px;padding:5px;text-align:center;">
+                        <div style="font-size:6px;color:var(--muted);">DIST</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--green);">8.42</div>
+                    </div>
+                </div>
+                <div style="background:#1E2430;border-radius:7px;padding:5px;text-align:center;">
+                    <div style="font-size:6px;color:var(--muted);">AVG PACE</div>
+                    <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--amber);">5′42″</div>
+                </div>
+                <div style="background:rgba(100,255,218,0.1);border:1px solid rgba(100,255,218,0.25);border-radius:7px;padding:4px;text-align:center;">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:8px;color:var(--green);">SAVE TO LOGBOOK</div>
+                </div>
+            </div>
+        </div>
+        <div class="watch-tag">Flight Complete</div>
+    </div>
+
+</div>
+
+</body>
+</html>

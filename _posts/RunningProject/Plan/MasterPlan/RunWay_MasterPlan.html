@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RunWay — Master Plan v2.2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080c12;
+            --panel: #0e1520;
+            --panel2: #141e2d;
+            --border: #1e2d40;
+            --cyan: #00d4ff;
+            --green: #00ff88;
+            --orange: #ff8c00;
+            --red: #ff2d55;
+            --yellow: #ffd60a;
+            --muted: #4a6375;
+            --text: #e8f4ff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 48px 24px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--cyan);
+            text-shadow: 0 0 24px rgba(0,212,255,0.4);
+            letter-spacing: 4px;
+        }
+
+        .header .subtitle {
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 3px;
+            margin-top: 6px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 3px 10px;
+            background: rgba(0,212,255,0.08);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 20px;
+            font-size: 9px;
+            color: var(--cyan);
+            letter-spacing: 1px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--cyan);
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Vision */
+        .vision-box {
+            background: var(--panel);
+            border-radius: 14px;
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+        }
+
+        .vision-text {
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .values {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .value-chip {
+            padding: 4px 10px;
+            background: rgba(0,212,255,0.08);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 20px;
+            font-size: 9px;
+            color: var(--cyan);
+        }
+
+        /* Mode Cards */
+        .modes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .mode-card {
+            background: var(--panel);
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .mode-card.takeoff { border-top: 3px solid var(--cyan); }
+        .mode-card.mission { border-top: 3px solid var(--orange); }
+        .mode-card.free { border-top: 3px solid var(--green); }
+
+        .mode-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .mode-title.cyan { color: var(--cyan); }
+        .mode-title.orange { color: var(--orange); }
+        .mode-title.green { color: var(--green); }
+
+        .mode-item {
+            font-size: 10px;
+            color: var(--muted);
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(30,45,64,0.4);
+            line-height: 1.4;
+        }
+
+        .mode-item:last-child { border-bottom: none; }
+
+        .highlight { color: var(--text); }
+
+        /* Tech Stack Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--panel);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--panel2);
+            padding: 10px 16px;
+            text-align: left;
+            font-size: 8px;
+            color: var(--muted);
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 10px 16px;
+            font-size: 11px;
+            border-bottom: 1px solid rgba(30,45,64,0.4);
+            vertical-align: middle;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(0,212,255,0.02); }
+
+        .tech-name {
+            font-weight: 600;
+            color: var(--cyan);
+        }
+
+        /* Roadmap */
+        .roadmap {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .week-card {
+            background: var(--panel);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .week-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--panel2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .week-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .week-badge.w1 { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+        .week-badge.w2 { background: rgba(255,140,0,0.1); color: var(--orange); border: 1px solid rgba(255,140,0,0.2); }
+        .week-badge.w3 { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.2); }
+        .week-badge.w4 { background: rgba(255,214,10,0.1); color: var(--yellow); border: 1px solid rgba(255,214,10,0.2); }
+        .week-badge.w5 { background: rgba(255,45,85,0.1); color: var(--red); border: 1px solid rgba(255,45,85,0.2); }
+
+        .week-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .week-body {
+            padding: 12px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .week-item {
+            font-size: 10px;
+            color: var(--muted);
+            padding: 4px 10px;
+            background: var(--panel2);
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        /* Post MVP */
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .post-card {
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .post-phase {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .post-title {
+            font-size: 11px;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .post-desc {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* Conclusion */
+        .conclusion {
+            background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(0,255,136,0.05));
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(0,212,255,0.2);
+            text-align: center;
+        }
+
+        .conclusion-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--cyan);
+            text-shadow: 0 0 20px rgba(0,212,255,0.4);
+            margin-bottom: 10px;
+        }
+
+        .conclusion-text {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .conclusion-cta {
+            margin-top: 14px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--green);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>✈ RUNWAY</h1>
+    <div class="subtitle">THE AVIATOR'S RUNNING TRACKER</div>
+    <div class="version-badge">Master Plan v2.2</div>
+</div>
+
+<!-- Vision -->
+<div class="section">
+    <div class="section-title">🎯 프로젝트 비전</div>
+    <div class="vision-box">
+        <div class="vision-text">"Ex-항공정비사의 시각으로 설계한 정밀 운항 기반 러닝 솔루션"</div>
+        <div class="values">
+            <span class="value-chip">데이터 무결성 (Data Integrity)</span>
+            <span class="value-chip">정밀한 RPM 관리 (Cadence)</span>
+            <span class="value-chip">이륙 시퀀스 경험 (Take-off UX)</span>
+        </div>
+    </div>
+</div>
+
+<!-- Flight Modes -->
+<div class="section">
+    <div class="section-title">✈️ 핵심 비행 모드</div>
+    <div class="modes-grid">
+        <div class="mode-card takeoff">
+            <div class="mode-title cyan">🛫 TAKE-OFF SEQUENCE</div>
+            <div class="mode-item"><span class="highlight">1.</span> Pre-flight Check — GPS/심박/가속도 확인</div>
+            <div class="mode-item"><span class="highlight">2.</span> Thrust Set — Haptic 엔진 가동</div>
+            <div class="mode-item"><span class="highlight">3.</span> Rotation — 카운트다운 후 ROTATE!</div>
+            <div class="mode-item">햅틱 강도: 3→약 / 2→중 / 1→강 / R→최강</div>
+        </div>
+        <div class="mode-card mission">
+            <div class="mode-title orange">✈️ MODE A — MISSION FLIGHT</div>
+            <div class="mode-item">목표 페이스 + 허용 오차 설정</div>
+            <div class="mode-item"><span class="highlight">SINK RATE</span> — 페이스 너무 느림</div>
+            <div class="mode-item"><span class="highlight">OVERSPEED</span> — 페이스 너무 빠름</div>
+            <div class="mode-item"><span class="highlight">GLIDE PATH</span> — 목표 복귀</div>
+            <div class="mode-item"><span class="highlight">MINIMUMS</span> — 목표 500m 전</div>
+        </div>
+        <div class="mode-card free">
+            <div class="mode-title green">✈️ MODE B — FREE FLIGHT</div>
+            <div class="mode-item">기록 없는 자유 러닝</div>
+            <div class="mode-item">HUD 스타일 미니멀 UI</div>
+            <div class="mode-item">수동 Touchdown 종료</div>
+        </div>
+    </div>
+</div>
+
+<!-- Tech Stack -->
+<div class="section">
+    <div class="section-title">⚙️ 기술 스택</div>
+    <table>
+        <thead>
+            <tr>
+                <th>구분</th>
+                <th>기술</th>
+                <th>목적</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span style="color:var(--muted);">Platform</span></td>
+                <td><span class="tech-name">iOS & watchOS</span></td>
+                <td style="color:var(--muted);font-size:10px;">iOS: FMC 역할 / watchOS: Avionics</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">UI</span></td>
+                <td><span class="tech-name">SwiftUI</span></td>
+                <td style="color:var(--muted);font-size:10px;">전체 화면 구성</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">상태관리</span></td>
+                <td><span class="tech-name">@Observable + @MainActor</span></td>
+                <td style="color:var(--muted);font-size:10px;">Swift 6 Concurrency</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">Storage</span></td>
+                <td><span class="tech-name">SwiftData</span></td>
+                <td style="color:var(--muted);font-size:10px;">러닝 기록 로컬 저장</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">Biometrics</span></td>
+                <td><span class="tech-name">HealthKit</span></td>
+                <td style="color:var(--muted);font-size:10px;">심박수 · 칼로리 · 케이던스</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">Location</span></td>
+                <td><span class="tech-name">CoreLocation</span></td>
+                <td style="color:var(--muted);font-size:10px;">GPS 위치 및 거리 측정</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">Motion</span></td>
+                <td><span class="tech-name">CoreMotion</span></td>
+                <td style="color:var(--muted);font-size:10px;">Attitude Indicator 연동</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">Analysis</span></td>
+                <td><span class="tech-name">Swift Charts</span></td>
+                <td style="color:var(--muted);font-size:10px;">페이스/심박수 시각화</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">Reactive</span></td>
+                <td><span class="tech-name">Combine / AsyncStream</span></td>
+                <td style="color:var(--muted);font-size:10px;">센서 데이터 스트림 처리</td>
+            </tr>
+            <tr>
+                <td><span style="color:var(--muted);">Watch</span></td>
+                <td><span class="tech-name">WatchConnectivity</span></td>
+                <td style="color:var(--muted);font-size:10px;">iPhone ↔ Watch 연동</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Roadmap -->
+<div class="section">
+    <div class="section-title">🗺️ 5주 로드맵</div>
+    <div class="roadmap">
+        <div class="week-card">
+            <div class="week-header">
+                <span class="week-badge w1">Week 1</span>
+                <span class="week-title">Engine Installation</span>
+            </div>
+            <div class="week-body">
+                <span class="week-item">HealthKit — 심박/케이던스</span>
+                <span class="week-item">CoreLocation — GPS</span>
+                <span class="week-item">SwiftData 모델 설계</span>
+                <span class="week-item">MVVM + DI 구조</span>
+                <span class="week-item">AsyncStream 연결</span>
+            </div>
+        </div>
+        <div class="week-card">
+            <div class="week-header">
+                <span class="week-badge w2">Week 2</span>
+                <span class="week-title">Cockpit & Take-off</span>
+            </div>
+            <div class="week-body">
+                <span class="week-item">UI 목업 기반 SwiftUI 구현</span>
+                <span class="week-item">PFD 계기판</span>
+                <span class="week-item">CoreMotion Attitude Indicator</span>
+                <span class="week-item">Rotate 이륙 시퀀스</span>
+                <span class="week-item">Dynamic Island 5가지 상태</span>
+                <span class="week-item">7일 페이스 미니 차트</span>
+            </div>
+        </div>
+        <div class="week-card">
+            <div class="week-header">
+                <span class="week-badge w3">Week 3</span>
+                <span class="week-title">Avionics</span>
+            </div>
+            <div class="week-body">
+                <span class="week-item">Watch 단독 앱</span>
+                <span class="week-item">WatchConnectivity</span>
+                <span class="week-item">GPWS 경고 시스템</span>
+                <span class="week-item">SINK RATE / OVERSPEED / GLIDE PATH</span>
+            </div>
+        </div>
+        <div class="week-card">
+            <div class="week-header">
+                <span class="week-badge w4">Week 4</span>
+                <span class="week-title">Analysis & Stability</span>
+            </div>
+            <div class="week-body">
+                <span class="week-item">케이던스/페이스/심박수 오버레이 차트</span>
+                <span class="week-item">실기기 안정화 테스트</span>
+                <span class="week-item">데이터 유실 점검</span>
+            </div>
+        </div>
+        <div class="week-card">
+            <div class="week-header">
+                <span class="week-badge w5">Week 5</span>
+                <span class="week-title">Release</span>
+            </div>
+            <div class="week-body">
+                <span class="week-item">App Store 심사 제출</span>
+                <span class="week-item">포트폴리오 포스팅</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Post MVP -->
+<div class="section">
+    <div class="section-title">🚀 차후 확장 계획</div>
+    <div class="post-grid">
+        <div class="post-card">
+            <div class="post-phase">Phase 2</div>
+            <div class="post-title">Global Air Race</div>
+            <div class="post-desc">비동기 랭킹 시스템 (Firebase)</div>
+        </div>
+        <div class="post-card">
+            <div class="post-phase">Phase 3</div>
+            <div class="post-title">Auto-Pilot</div>
+            <div class="post-desc">AI 기반 맞춤형 페이스 가이드</div>
+        </div>
+        <div class="post-card">
+            <div class="post-phase">Phase 4</div>
+            <div class="post-title">Fleet Management</div>
+            <div class="post-desc">러닝화별 마모도 및 교체 주기 관리</div>
+        </div>
+    </div>
+</div>
+
+<!-- Conclusion -->
+<div class="conclusion">
+    <div class="conclusion-title">✈ CLEARED FOR TAKE-OFF</div>
+    <div class="conclusion-text">
+        이 프로젝트는 단순한 러닝 앱이 아닙니다.<br>
+        엔진 RPM(케이던스)까지 정밀하게 관리하는 Ex-항공정비사의 철학이 담긴 전문 운항 솔루션입니다.
+    </div>
+    <div class="conclusion-cta">🛫 "ROTATE"와 함께 비행을 시작하세요.</div>
+</div>
+
+</body>
+</html>
