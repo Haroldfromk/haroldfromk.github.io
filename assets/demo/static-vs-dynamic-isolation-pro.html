@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Concurrency: 정적 격리 vs 동적 격리 실증기 Pro</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #e2e8f0;
+            --primary-color: #007aff;
+            --danger-color: #ff3b30;
+            --success-color: #34c759;
+            --dark-bg: #1a202c;
+            --hl-err: rgba(255, 59, 48, 0.25);
+            --hl-ok: rgba(52, 199, 89, 0.25);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 26px; text-align: center; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: #718096; margin-bottom: 30px; font-size: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .card.static-zone { border-top: 6px solid var(--primary-color); }
+        .card.dynamic-zone { border-top: 6px solid #ff9500; }
+        
+        .badge {
+            align-self: flex-start;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .badge-static { background-color: #ebf8ff; color: var(--primary-color); }
+        .badge-dynamic { background-color: #fffaf0; color: #dd6b20; }
+
+        /* 가상 IDE 코드 조작창 */
+        .code-window {
+            background-color: var(--dark-bg);
+            color: #d4d4d4;
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            min-height: 140px;
+        }
+        .code-line { display: block; padding: 0 6px; border-radius: 4px; transition: all 0.2s; white-space: pre; }
+        .line-error { background-color: var(--hl-err) !important; color: #ff8882 !important; }
+        .line-success { background-color: var(--hl-ok) !important; color: #a3e2ab !important; }
+        
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+        .comment { color: #8b949e; }
+
+        /* 가상 기기 패널 */
+        .device-panel {
+            background: #edf2f7;
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            height: 90px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 10px;
+        }
+        .device-crash {
+            background-color: #1a202c !important;
+            color: var(--danger-color) !important;
+            border-color: var(--danger-color) !important;
+            animation: shake 0.15s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .console {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+            padding: 15px;
+            border-radius: 8px;
+            height: 140px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        
+        .alert-box {
+            border-left: 4px solid var(--success-color);
+            background: #f0fff4;
+            color: #276749;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: bold;
+            display: none;
+        }
+        .alert-box.danger-style {
+            border-left-color: var(--danger-color);
+            background: #fff5f5;
+            color: #c53030;
+        }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn {
+            flex: 1;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
+        .btn-static-err { background: #4a5568; }
+        .btn-static-ok { background: var(--success-color); }
+        .btn-dynamic-run { background: #ff9500; }
+    </style>
+</head>
+<body>
+
+    <h1>정적 격리(Static) vs 동적 격리(Dynamic) 대조 시뮬레이터</h1>
+    <div class="sub-title">레거시 알림(Notification) UI 업데이트 함수를 두 가지 방식으로 보호할 때 발생하는 컴파일러와 런타임의 동작 차이</div>
+
+    <div class="grid">
+        <div class="card static-zone">
+            <span class="badge badge-static">정적 격리 (Static Isolation)</span>
+            <h2>컴파일 타임 안전 규칙 강제</h2>
+            <p style="font-size:13px; color:#4a5568; margin:0 0 10px 0;">`@MainActor` 속성을 보고 컴파일러가 위반 코드를 빌드 시점에 적발한다.</p>
+            
+            <div class="code-window" id="static-code">
+                </div>
+
+            <div class="device-panel" id="static-device">
+                <div id="static-device-status" style="color:#718096; font-size:14px;">Xcode 빌드 검증 전</div>
+                <div id="static-device-ui" style="font-size:18px; margin-top:5px; display:none;">👤 프로필 화면 갱신 성공</div>
+            </div>
+
+            <div class="console" id="static-console">> 분석 준비 완료.</div>
+            <div class="alert-box" id="static-alert">
+                🛡️ 정적 격리 강제 안전성 확인:<br>
+                컴파일러가 동기 호출 라인을 에러로 정확히 차단했습니다. 가이드에 따라 개발자가 동기 클로저 내부를 비동기 컨텍스트인 'Task { @MainActor in ... }' 구문으로 안전하게 래핑 및 격리하여 빌드를 성공시켰습니다.
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-static-err" id="btn-static-err">1. 동기 호출 시도 (차단)</button>
+                <button class="btn btn-static-ok" id="btn-static-ok" disabled>2. Task 비동기 수정 (성공)</button>
+            </div>
+        </div>
+
+        <div class="card dynamic-zone">
+            <span class="badge badge-dynamic">동적 격리 (Dynamic Isolation)</span>
+            <h2>런타임 개발자 명시적 보증</h2>
+            <p style="font-size:13px; color:#4a5568; margin:0 0 10px 0;">`assumeIsolated`로 컴파일 검사를 생략시킨다. 검증 실패 시 앱은 즉사한다.</p>
+            
+            <div class="code-window" id="dynamic-code">
+                <span class="code-line" id="d-l1"><span class="keyword">@MainActor</span> <span class="keyword">func</span> updateProfileUI() { ... }</span>
+                <span class="code-line" id="d-l2"></span>
+                <span class="code-line" id="d-l3"><span class="comment">// 백그라운드 알림 수신 스케줄러 영역</span></span>
+                <span class="code-line" id="d-l4">NotificationCenter.default.addObserver(self) { _ <span class="keyword">in</span></span>
+                <span class="code-line" id="d-l5">    <span class="type">MainActor</span>.assumeIsolated {</span>
+                <span class="code-line" id="d-l6">        <span class="keyword">self</span>.updateProfileUI() <span class="comment">// 무검사 통과 라인</span></span>
+                <span class="code-line" id="d-l7">    }</span>
+                <span class="code-line" id="d-l8">}</span>
+            </div>
+
+            <div class="device-panel" id="dynamic-device">
+                <div id="dynamic-device-status" style="color:#718096; font-size:14px;">가상 유저 기기 대기 중</div>
+                <div id="dynamic-device-ui" style="font-size:18px; margin-top:5px; display:none; color:var(--success-color);">📱 앱 정상 구동 중</div>
+            </div>
+
+            <div class="console" id="dynamic-console">> 레거시 우회 코드 분석 대기 중.</div>
+            <div class="alert-box" id="dynamic-alert">
+                💥 동적 격리 오류, 유저 기기 폭발!<br>
+                컴파일러는 개발자의 보증을 믿고 통과시켰으나, 알림 노티가 백그라운드 스레드에서 터지자 `assumeIsolated` 계약이 즉시 파기되며 앱 프로세스가 런타임에 강제 종료되었습니다.
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-dynamic-run" id="btn-dynamic">assumeIsolated 우회 빌드 및 실행</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 정적 격리 초기 코드 상태 템플릿 관리 정의
+        const staticOriginalCode = `
+            <span class="code-line" id="s-l1"><span class="keyword">@MainActor</span> <span class="keyword">func</span> updateProfileUI() { ... }</span>
+            <span class="code-line" id="s-l2"></span>
+            <span class="code-line" id="s-l3"><span class="comment">// 백그라운드 알림 수신 스케줄러 영역</span></span>
+            <span class="code-line" id="s-l4">NotificationCenter.default.addObserver(self) { _ <span class="keyword">in</span></span>
+            <span class="code-line" id="s-l5">    <span class="keyword">self</span>.updateProfileUI() <span class="comment">// 동기 호출 시도</span></span>
+            <span class="code-line" id="s-l6">}</span>
+        `;
+        
+        // 정적 격리 코드창 컨테이너 렌더링 초기화
+        const staticCodeWindow = document.getElementById('static-code');
+        staticCodeWindow.innerHTML = staticOriginalCode;
+
+        // --- 1. 정적 격리 구현체 ---
+        document.getElementById('btn-static-err').addEventListener('click', () => {
+            const consoleEl = document.getElementById('static-console');
+            const statusEl = document.getElementById('static-device-status');
+            const uiEl = document.getElementById('static-device-ui');
+            const okBtn = document.getElementById('btn-static-ok');
+            const alertEl = document.getElementById('static-alert');
+            const deviceBox = document.getElementById('static-device');
+            
+            // 🌟 다시 눌렀을 때를 대비해 코드 구조를 무조건 원본 초기 템플릿으로 원복 롤백
+            staticCodeWindow.innerHTML = staticOriginalCode;
+            
+            const targetLine = document.getElementById('s-l5');
+            
+            alertEl.style.display = "none";
+            uiEl.style.display = "none";
+            statusEl.style.display = "block";
+            statusEl.innerText = "컴파일 에러 발생";
+            statusEl.style.color = "#ff3b30";
+            deviceBox.style.borderColor = "#cbd5e0";
+            
+            targetLine.className = "code-line line-error";
+
+            consoleEl.innerHTML = "> swiftc NotificationHandler.swift -strict-concurrency=complete<br>";
+            consoleEl.innerHTML += "> 분석: 동기 클로저 내부에서 메인 액터 격리 함수 'updateProfileUI()' 참조 검출.<br>";
+            
+            setTimeout(() => {
+                consoleEl.innerHTML += "<br><span style='color:#ff3b30; font-weight:bold;'>NotificationHandler.swift:5:14: error: call to main actor-isolated context in a synchronous nonisolated context</span><br>";
+                consoleEl.innerHTML += "> [차단 완료] 위험 코드를 컴파일러가 원천 거부했습니다. 빌드가 취소됩니다.<br>";
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                okBtn.disabled = false;
+            }, 600);
+        });
+
+        document.getElementById('btn-static-ok').addEventListener('click', () => {
+            const consoleEl = document.getElementById('static-console');
+            const statusEl = document.getElementById('static-device-status');
+            const uiEl = document.getElementById('static-device-ui');
+            const alertEl = document.getElementById('static-alert');
+            const deviceBox = document.getElementById('static-device');
+
+            statusEl.innerText = "빌드 성공 & 안전 구동";
+            statusEl.style.color = "#34c759";
+            
+            // Task 격리 래핑 코드로 유기적 변형 후 라인 석세스 하이라이트 부여
+            staticCodeWindow.innerHTML = `
+                <span class="code-line"><span class="keyword">@MainActor</span> <span class="keyword">func</span> updateProfileUI() { ... }</span>
+                <span class="code-line"></span>
+                <span class="code-line"><span class="comment">// 백그라운드 알림 수신 스케줄러 영역</span></span>
+                <span class="code-line">NotificationCenter.default.addObserver(self) { _ <span class="keyword">in</span></span>
+                <span class="code-line line-success">    <span class="type">Task</span> { <span class="keyword">@MainActor</span> <span class="keyword">in</span></span>
+                <span class="code-line line-success">        <span class="keyword">self</span>.updateProfileUI() <span class="comment">// 메인 비동기 영역 격리 안착</span></span>
+                <span class="code-line line-success">    }</span>
+                <span class="code-line">}</span>
+            `;
+
+            consoleEl.innerHTML += "<br>> [수정 반영 완료] 동기 구역 내부를 'Task { @MainActor in }'으로 안전하게 캡슐화 확인.<br>";
+            consoleEl.innerHTML += "> 컴파일러 정적 안전성 검사 통과.<br>";
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+
+            setTimeout(() => {
+                statusEl.style.display = "none";
+                uiEl.style.display = "block";
+                uiEl.style.color = "var(--success-color)";
+                deviceBox.style.borderColor = "var(--success-color)";
+                
+                consoleEl.innerHTML += "<br><span style='color:#34c759; font-weight:bold;'>[성공] 실행 컨텍스트 정적 안전 마이그레이션이 완료되었습니다.</span><br>";
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                alertEl.style.display = "block";
+            }, 800);
+        });
+
+        // --- 2. 동적 격리 구현체 ---
+        document.getElementById('btn-dynamic').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-dynamic');
+            const consoleEl = document.getElementById('dynamic-console');
+            const statusEl = document.getElementById('dynamic-device-status');
+            const uiEl = document.getElementById('dynamic-device-ui');
+            const alertEl = document.getElementById('dynamic-alert');
+            const deviceBox = document.getElementById('dynamic-device');
+            const dLine5 = document.getElementById('d-l5');
+            const dLine6 = document.getElementById('d-l6');
+            const dLine7 = document.getElementById('d-l7');
+
+            btn.disabled = true;
+            alertEl.style.display = "none";
+            deviceBox.className = "device-panel";
+            uiEl.style.display = "none";
+            statusEl.style.display = "block";
+            
+            dLine5.className = "code-line";
+            dLine6.className = "code-line";
+            dLine7.className = "code-line";
+            
+            statusEl.innerText = "컴파일 통과 (우회 빌드)";
+            statusEl.style.color = "var(--success-color)";
+            
+            dLine5.classList.add('line-success');
+            dLine6.classList.add('line-success');
+            dLine7.classList.add('line-success');
+            
+            consoleEl.innerHTML = "> swiftc LegacyHandler.swift -strict-concurrency=complete<br>";
+            consoleEl.innerHTML += "> 분석: assumeIsolated 단락 식별 완료.<br>";
+            consoleEl.innerHTML += "> [정적 생략] 개발자가 런타임 검증을 대리 보증하므로 정적 에러를 생략하고 빌드를 패스합니다.<br>";
+
+            await new Promise(r => setTimeout(r, 1200));
+
+            statusEl.style.display = "none";
+            uiEl.style.display = "block";
+            consoleEl.innerHTML += "<br>> 앱 실행 완료. 유저가 알림 설정 탭에 진입하여 대기 중...<br>";
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+
+            await new Promise(r => setTimeout(r, 1500));
+            
+            consoleEl.innerHTML += "<br><span style='color:#ff9500;'>⚡ [이벤트 포착] 시스템 알림이 메인 스레드가 아닌 'Background Thread #3'에서 전송됨!</span><br>";
+            consoleEl.innerHTML += "> assumeIsolated 내부 동적 스레드 아이디 대조 검증 가동...<br>";
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+
+            await new Promise(r => setTimeout(r, 1000));
+
+            dLine5.className = "code-line line-error";
+            dLine6.className = "code-line line-error";
+            dLine7.className = "code-line line-error";
+            
+            uiEl.style.display = "none";
+            deviceBox.className = "device-panel device-crash";
+            
+            consoleEl.innerHTML += "<br><span style='color:var(--danger-color); font-weight:bold;'>❌ [RUNTIME FATAL ERROR] Incorrect actor isolation: expected MainActor context, but evaluated on 'Background Thread #3'</span><br>";
+            consoleEl.innerHTML += "> 사유: 개발자의 런타임 가정이 깨졌습니다. 강제 크래시 프로세스 브레이크 종료.<br>";
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+            
+            alertEl.style.display = "block";
+            btn.disabled = false;
+        });
+    </script>
+
+</body>
+</html>

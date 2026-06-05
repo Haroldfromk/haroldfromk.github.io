@@ -1,4 +1,4 @@
-# [Project] RunWay: The Aviator's Running Tracker (Master Plan v2.6)
+# [Project] RunWay: The Aviator's Running Tracker (Master Plan v2.7)
 
 ## 0. 프로젝트 비전
 "Ex-항공정비사의 시각으로 설계한 정밀 운항 기반 러닝 솔루션"
@@ -59,17 +59,28 @@ enum RunMode { case modeA, case modeB }
 struct Flight {
     var id = UUID()
     let mode: RunMode
-    let distance: Double    // km
-    let time: Int           // seconds
-    let pace: Double        // min/km
-    let heartRate: Int      // bpm
-    let cadence: Int        // spm
-    let fuel: Int           // kcal
+    let distance: Double    // km (HealthKit distanceWalkingRunning → m → km 변환)
+    let time: Int           // seconds (HKWorkout 으로 관리 예정)
+    let pace: Double        // min/km (HealthKit runningSpeed → m/s → min/km 변환)
+    let heartRate: Int      // bpm (HealthKit heartRate 직접 매핑)
+    let cadence: Int        // spm (HealthKit stepCount → 분당 걸음 수 변환)
+    let fuel: Int           // kcal (HealthKit activeEnergyBurned 직접 매핑)
     let date: Date
     // GPS 좌표 배열 → SwiftData 저장 → MapPolyline 경로 표시
     // 왕복/반복 구간은 겹쳐서 그리는 방식
 }
 ```
+
+### HealthKit 타입 → Flight 모델 매핑
+| HealthKit 타입 | Flight 모델 필드 | 변환 |
+|------|------|------|
+| `heartRate` | `heartRate` | 직접 매핑 |
+| `stepCount` | `cadence` | 분당 걸음 수로 변환 |
+| `activeEnergyBurned` | `fuel` | 직접 매핑 |
+| `distanceWalkingRunning` | `distance` | m → km 변환 |
+| `runningSpeed` | `pace` | m/s → min/km 변환 |
+| `runningGroundContactTime` | - | 추후 활용 |
+| `runningStrideLength` | - | 추후 활용 |
 
 ### ModeA — Mission Flight 설정
 ```swift
@@ -114,21 +125,17 @@ CoreMotion
 ### RunningCenter Actor 설계
 ```swift
 actor RunningCenter {
-    // 내부 Processor
     private var gpsProcessor: GPSProcessor
     private var heartRateProcessor: HeartRateProcessor
     private var cadenceProcessor: CadenceProcessor
     private var gpwsProcessor: GPWSProcessor
 
-    // FlightPhase 상태 관리
     private(set) var phase: FlightPhase = .preflight
 
-    // 센서 데이터 진입점
     func processLocation(_ location: CLLocation) async { ... }
     func processHeartRate(_ bpm: Int) async { ... }
     func processCadence(_ spm: Int) async { ... }
 
-    // ViewModel로 전달
     func flightDataStream() -> AsyncStream<FlightData> { ... }
 }
 ```
@@ -176,21 +183,6 @@ enum FlightPhase {
 }
 ```
 
-### RunningCenter가 상태 관리
-```swift
-actor RunningCenter {
-    private(set) var phase: FlightPhase = .preflight
-
-    // approach 진입 시 GPWS 자동 트리거
-    private func updatePhase(_ newPhase: FlightPhase) {
-        phase = newPhase
-        if newPhase == .approach {
-            gpwsProcessor.trigger(.minimums)
-        }
-    }
-}
-```
-
 ### 상태 전환 흐름
 ```text
 앱 진입 → preflight
@@ -198,28 +190,6 @@ ROTATE 시작 → takeoff
 러닝 시작 → cruise
 목표 거리 50m 전 → approach (MINIMUMS 자동 트리거)
 러닝 종료 → touchdown
-```
-
-### 활용
-```swift
-// Dynamic Island
-switch phase {
-case .preflight: ...
-case .takeoff: ...
-case .cruise: ...
-case .approach: ...  // MINIMUMS 표시
-case .touchdown: ...
-}
-
-// Watch UI
-watchView.update(for: phase)
-
-// PFD
-switch phase {
-case .cruise: showNormalPFD()
-case .approach: showMinimumsAlert()
-case .touchdown: navigateToSummary()
-}
 ```
 
 ### 면접 포인트
@@ -269,16 +239,17 @@ case .touchdown: navigateToSummary()
 ### [Week 1] Engine Installation
 - SwiftData 모델 설계 (Flight, ModeA) ✅
 - UI Mock 전체 화면 구현 ✅
-- RunningCenter Actor 미니 프로젝트 → 실제 적용 예정
+- CoreLocation 서비스 구현 ✅
+- HealthKit 서비스 구현 ✅ (MockData 포함)
+- DI + 데이터 흐름 (RunViewModel) → Day5 진행 중
 
 ### [Week 2] Cockpit & Take-off
 - RunningCenter Actor 구현
 - FlightPhase 상태 머신 연동
-- CoreLocation 서비스 연동
-- HealthKit 서비스 연동
 - AsyncStream → ViewModel 연결
 - PFD 실시간 데이터 표시
 - GPWS 로직 실제 연동
+- MockUI → 실제 데이터 연결 + UI 보완
 - 온보딩 뷰 (Aircraft 모델 연동)
 
 ### [Week 3] Avionics

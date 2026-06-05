@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Concurrency: 스레드 호핑 비용 시뮬레이터 Pro (v6)</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #e2e8f0;
+            --primary-color: #007aff;
+            --danger-color: #ff3b30;
+            --success-color: #34c759;
+            --warning-color: #ff9500;
+            --dark-bg: #1a202c;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 26px; text-align: center; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: #718096; margin-bottom: 30px; font-size: 15px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            min-height: 640px;
+        }
+        .card.plan-a { border-top: 6px solid var(--danger-color); }
+        .card.plan-b { border-top: 6px solid var(--success-color); }
+
+        .code-window {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+
+        .stage-split-container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        /* 스레드 파이프라인 레일 스테이지 */
+        .hopping-stage {
+            background: #edf2f7;
+            border: 1px solid #cbd5e0;
+            border-radius: 10px;
+            height: 160px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        .thread-boundary-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 0;
+            border-top: 2px dashed #a0aec0;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .boundary-label {
+            position: absolute;
+            top: 50%;
+            left: 42%; /* 패킷이 우측 끝으로 이동함에 따라 균형감을 위해 약간 좌측 조율 */
+            transform: translate(-50%, -50%);
+            font-size: 9px;
+            color: #4a5568;
+            background: #edf2f7;
+            padding: 2px 6px;
+            font-weight: bold;
+            border-radius: 4px;
+            z-index: 2;
+            white-space: nowrap;
+        }
+
+        .thread-rail {
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 10.5px;
+            font-weight: bold;
+            color: #4a5568;
+            background: white;
+            border: 1px dashed #cbd5e0;
+            position: relative;
+            z-index: 3;
+        }
+        .rail-main { border-left: 4px solid var(--primary-color); }
+        .rail-bg { border-left: 4px solid #4a5568; }
+
+        /* 🌟 레이아웃 개편: 패킷 가로 위치를 우측 끝 레인(78%)으로 강제 고정하여 글자 가림 원천 해결 */
+        .packet-node {
+            position: absolute;
+            left: 76%; 
+            width: 52px;
+            height: 22px;
+            background: var(--warning-color);
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            z-index: 10;
+            top: 15px;
+        }
+        .packet-moving { animation: bounce-vertical-wide 0.3s infinite alternate ease-in-out; }
+        
+        @keyframes bounce-vertical-wide {
+            0% { top: 15px; background: var(--primary-color); }
+            100% { top: 123px; background: var(--danger-color); }
+        }
+
+        /* 우측 실시간 이미지 그리드 가상 UI 레이아웃 */
+        .virtual-phone-ui {
+            background: #1a202c;
+            border-radius: 10px;
+            height: 160px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .phone-header {
+            font-size: 10px;
+            color: #718096;
+            text-align: center;
+            border-bottom: 1px solid #2d3748;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            flex: 1;
+            overflow: hidden;
+        }
+        .photo-slot {
+            background: #2d3748;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: rgba(255,255,255,0.15);
+            transition: all 0.2s ease-out;
+            position: relative;
+        }
+        .photo-slot.loaded {
+            color: white !important;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+            animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .metrics-box {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12.5px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .progress-bar-bg { background: #cbd5e0; border-radius: 9999px; height: 8px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; }
+        .fill-a { background: var(--danger-color); }
+        .fill-b { background: var(--success-color); }
+
+        .alert-box {
+            border-left: 4px solid var(--danger-color);
+            background: #fff5f5;
+            color: #c53030;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: auto;
+            font-size: 13px;
+            font-weight: bold;
+            display: none;
+        }
+        .alert-box.success-style { border-left-color: var(--success-color); background: #f0fff4; color: #276749; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn {
+            width: 100%;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
+        .btn-a-color { background: var(--danger-color); }
+        .btn-b-color { background: var(--success-color); }
+    </style>
+</head>
+<body>
+
+    <h1>7장: 스레드 호핑(Context Switching) 오버헤드 측정기</h1>
+    <div class="sub-title">백그라운드로 작업을 이탈시킨 후 다시 메인 액터로 복귀하는 연산이 유발하는 실제 성능 지표 대조</div>
+
+    <div class="grid">
+        <div class="card plan-a">
+            <span class="badge" style="background-color: #fff5f5; color: var(--danger-color);">A플랜 (무분별한 비동기 분리)</span>
+            <h2>무지성 백그라운드 스케줄링</h2>
+            <p style="font-size:13px; color:#4a5568; margin:0 0 10px 0;">가벼운 문자열 포맷 연산 1,000번을 매번 독립된 백그라운드 태스크로 이탈 및 복귀시킨다.</p>
+            
+            <div class="code-window">
+<span class="keyword">for</span> _ <span class="keyword">in</span> <span class="type">1...1000</span> {
+    <span class="type">Task.detached</span> {
+        <span class="keyword">let</span> res = <span class="keyword">self</span>.formatString()
+        <span class="keyword">await</span> <span class="type">MainActor.run</span> { <span class="keyword">self</span>.uiArray.append(res) }
+    }
+}
+            </div>
+
+            <div class="stage-split-container">
+                <div class="hopping-stage">
+                    <div class="thread-rail rail-main">Main 스레드 권역</div>
+                    <div class="thread-boundary-line"></div>
+                    <div class="boundary-label">스레드 경계선</div>
+                    <div class="packet-node" id="packet-a">📦 Data</div>
+                    <div class="thread-rail rail-bg">Background 권역</div>
+                </div>
+                <div class="virtual-phone-ui">
+                    <div class="phone-header">📱 갤러리 로드 (A플랜 · 순서 무효)</div>
+                    <div class="photo-grid" id="photo-grid-a"></div>
+                </div>
+            </div>
+
+            <div class="metrics-box">
+                <div class="metric-row"><span>진행률:</span> <span id="progress-text-a">0 / 1,000</span></div>
+                <div class="progress-bar-bg" style="margin-bottom:10px;">
+                    <div class="progress-bar-fill fill-a" id="bar-a"></div>
+                </div>
+                <div class="metric-row"><span>물리 스레드 스위칭 횟수:</span> <span id="hop-count-a" style="color:var(--danger-color);">0회</span></div>
+                <div class="metric-row"><span>총 실행 소요 시간:</span> <span id="time-a">-</span></div>
+            </div>
+
+            <div class="alert-box" id="alert-a">
+                💥 호핑 오버헤드 오염 확정:<br>
+                단순 연산을 백그라운드로 밀어냈지만 스레드 경계를 왕복하는 컨텍스트 스위칭이 총 2,000회 누적되면서, 시스템 통행료(오버헤드)가 본체 연산 비용을 압도해 연산 속도가 수백 배 저하되었습니다.
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-a-color" id="btn-run-a">백그라운드로 밀어냈으니 이게 더 빠르겠죠?</button>
+            </div>
+        </div>
+
+        <div class="card plan-b">
+            <span class="badge" style="background-color: #f0fff4; color: var(--success-color);">B플랜 (동기 직행 처리)</span>
+            <h2>정적 격리 내부 다이렉트 연산</h2>
+            <p style="font-size:13px; color:#4a5568; margin:0 0 10px 0;">메인 액터 컨텍스트에 락(Lock)이 없는 것을 확인하고, 불필요한 이탈 없이 그 자리에서 1,000번 동기 실행한다.</p>
+            
+            <div class="code-window">
+<span class="keyword">for</span> _ <span class="keyword">in</span> <span class="type">1...1000</span> {
+    <span class="keyword">let</span> res = <span class="keyword">self</span>.formatString() 
+    <span class="keyword">self</span>.uiArray.append(res)
+}
+            </div>
+
+            <div class="stage-split-container">
+                <div class="hopping-stage">
+                    <div class="thread-rail rail-main">Main Thread 권역 (제자리 연산)</div>
+                    <div class="thread-boundary-line" style="opacity: 0.1;"></div>
+                    <div class="boundary-label" style="opacity: 0.1;">스레드 경계선</div>
+                    <div class="packet-node" id="packet-b" style="background:var(--success-color); left: 76%;">⚡ Direct</div>
+                    <div class="thread-rail rail-bg" style="opacity: 0.1; background: none;">Background (경로 차단)</div>
+                </div>
+                <div class="virtual-phone-ui">
+                    <div class="phone-header">📱 갤러리 로드 (B플랜 · 동기 정렬)</div>
+                    <div class="photo-grid" id="photo-grid-b"></div>
+                </div>
+            </div>
+
+            <div class="metrics-box">
+                <div class="metric-row"><span>진행률:</span> <span id="progress-text-b">0 / 1,000</span></div>
+                <div class="progress-bar-bg" style="margin-bottom:10px;">
+                    <div class="progress-bar-fill fill-b" id="bar-b"></div>
+                </div>
+                <div class="metric-row"><span>물리 스레드 스위칭 횟수:</span> <span id="hop-count-b" style="color:var(--success-color);">0회</span></div>
+                <div class="metric-row"><span>총 실행 소요 시간:</span> <span id="time-b">-</span></div>
+            </div>
+
+            <div class="alert-box success-style" id="alert-b">
+                🛡️ 정적 격리 직행 성공:<br>
+                불필요한 스레드 스위칭을 단 1회도 유발하지 않고 메인 액터 내부에서 일괄 동기 처리하여 연산을 단 수 밀리초(ms) 만에 완수했습니다. 데이터 레이스 안전성과 성능을 동시에 잡았습니다.
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-b-color" id="btn-run-b">메인 액터 내부 동기 직행</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timerA = null;
+        let timerB = null;
+
+        const blockColors = ["#ef4444", "#f97316", "#f59e0b", "#10b981", "#06b6d4", "#3b82f6", "#6366f1", "#8b5cf6", "#ec4899", "#14b8a6", "#a855f7", "#64748b"];
+
+        function resetA() {
+            if(timerA) { clearInterval(timerA); timerA = null; }
+            document.getElementById('packet-a').classList.remove('packet-moving');
+            document.getElementById('packet-a').style.top = "15px";
+            document.getElementById('progress-text-a').innerText = "0 / 1,000";
+            document.getElementById('bar-a').style.width = "0%";
+            document.getElementById('hop-count-a').innerText = "0회";
+            document.getElementById('time-a').innerText = "-";
+            document.getElementById('alert-a').style.display = "none";
+            
+            const gridA = document.getElementById('photo-grid-a');
+            gridA.innerHTML = '';
+            for(let i=1; i<=12; i++) {
+                gridA.innerHTML += `<div class="photo-slot" id="slot-a-${i}">${i}</div>`;
+            }
+        }
+
+        function resetB() {
+            if(timerB) { clearInterval(timerB); timerB = null; }
+            document.getElementById('packet-b').style.left = "76%";
+            document.getElementById('progress-text-b').innerText = "0 / 1,000";
+            document.getElementById('bar-b').style.width = "0%";
+            document.getElementById('hop-count-b').innerText = "0회";
+            document.getElementById('time-b').innerText = "-";
+            document.getElementById('alert-b').style.display = "none";
+            
+            const gridB = document.getElementById('photo-grid-b');
+            gridB.innerHTML = '';
+            for(let i=1; i<=12; i++) {
+                gridB.innerHTML += `<div class="photo-slot" id="slot-b-${i}">${i}</div>`;
+            }
+        }
+
+        // --- A플랜 가동 로직 ---
+        document.getElementById('btn-run-a').addEventListener('click', () => {
+            resetA();
+            
+            const btn = document.getElementById('btn-run-a');
+            const progressText = document.getElementById('progress-text-a');
+            const bar = document.getElementById('bar-a');
+            const hopCount = document.getElementById('hop-count-a');
+            const timeEl = document.getElementById('time-a');
+            const alertEl = document.getElementById('alert-a');
+            const packet = document.getElementById('packet-a');
+
+            btn.disabled = true;
+            packet.classList.add('packet-moving');
+
+            let loopCount = 0;
+            let currentHop = 0;
+            const startTime = performance.now();
+
+            let imageSlots = Array.from({length: 12}, (_, i) => i + 1);
+            imageSlots.sort(() => Math.random() - 0.5);
+
+            timerA = setInterval(() => {
+                loopCount += 25; 
+                currentHop += 50; 
+                
+                if (loopCount > 1000) loopCount = 1000;
+                if (currentHop > 2000) currentHop = 2000;
+
+                progressText.innerText = loopCount.toLocaleString() + " / 1,000";
+                bar.style.width = (loopCount / 10) + "%";
+                hopCount.innerText = currentHop.toLocaleString() + "회";
+
+                let activeSlotThreshold = Math.floor((loopCount / 1000) * 12);
+                for(let k=0; k<activeSlotThreshold; k++) {
+                    const slotNum = imageSlots[k];
+                    const slotEl = document.getElementById(`slot-a-${slotNum}`);
+                    if(slotEl && !slotEl.classList.contains('loaded')) {
+                        slotEl.classList.add('loaded');
+                        slotEl.style.backgroundColor = blockColors[slotNum-1];
+                    }
+                }
+
+                if (loopCount >= 1000) {
+                    clearInterval(timerA);
+                    timerA = null;
+                    packet.classList.remove('packet-moving');
+                    packet.style.top = "15px";
+
+                    const endTime = performance.now();
+                    const simulatedDuration = (endTime - startTime) + 430;
+                    
+                    timeEl.innerText = simulatedDuration.toFixed(1) + " ms";
+                    alertEl.style.display = "block";
+                    btn.disabled = false;
+                }
+            }, 35);
+        });
+
+        // --- B플랜 가동 로직 ---
+        document.getElementById('btn-run-b').addEventListener('click', () => {
+            resetB();
+            
+            const btn = document.getElementById('btn-run-b');
+            const progressText = document.getElementById('progress-text-b');
+            const bar = document.getElementById('bar-b');
+            const hopCount = document.getElementById('hop-count-b');
+            const timeEl = document.getElementById('time-b');
+            const alertEl = document.getElementById('alert-b');
+            const packet = document.getElementById('packet-b');
+
+            btn.disabled = true;
+
+            let shakeLeft = true;
+            let shakeCount = 0;
+            const startTime = performance.now();
+
+            timerB = setInterval(() => {
+                shakeCount++;
+                packet.style.left = shakeLeft ? "74%" : "78%";
+                shakeLeft = !shakeLeft;
+
+                if(shakeCount === 2) {
+                    for(let i=1; i<=12; i++) {
+                        const slotEl = document.getElementById(`slot-b-${i}`);
+                        if(slotEl) {
+                            slotEl.classList.add('loaded');
+                            slotEl.style.backgroundColor = blockColors[i-1];
+                        }
+                    }
+                }
+
+                if(shakeCount >= 6) {
+                    clearInterval(timerB);
+                    timerB = null;
+                    packet.style.left = "76%";
+
+                    const endTime = performance.now();
+                    const actualDuration = (endTime - startTime) + 0.65; 
+
+                    progressText.innerText = "1,000 / 1,000";
+                    bar.style.width = "100%";
+                    hopCount.innerText = "0회";
+                    timeEl.innerText = actualDuration.toFixed(2) + " ms";
+                    
+                    alertEl.style.display = "block";
+                    btn.disabled = false;
+                }
+            }, 40);
+        });
+
+        resetA();
+        resetB();
+    </script>
+
+</body>
+</html>

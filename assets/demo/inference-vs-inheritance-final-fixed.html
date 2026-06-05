@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Concurrency: 격리 추론 및 상속 실증기</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #e2e8f0;
+            --primary-color: #007aff;
+            --danger-color: #ff3b30;
+            --success-color: #34c759;
+            --warning-color: #ff9500;
+            --dark-bg: #1a202c;
+            --hl-class: rgba(0, 122, 255, 0.25);
+            --hl-err: rgba(255, 59, 48, 0.25);
+            --hl-ok: rgba(52, 199, 89, 0.25);
+            --hl-warn: rgba(255, 149, 0, 0.25);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 26px; text-align: center; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: #718096; margin-bottom: 30px; font-size: 15px; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .tab-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active { background: var(--primary-color); color: white; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .code-window {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            min-height: 160px;
+        }
+        .code-line { display: block; padding: 0 6px; border-radius: 4px; transition: all 0.2s; white-space: pre; }
+        .line-class { background-color: var(--hl-class) !important; color: #79c0ff !important; }
+        .line-error { background-color: var(--hl-err) !important; color: #ff8882 !important; }
+        .line-success { background-color: var(--hl-ok) !important; color: #a3e2ab !important; }
+        .line-warning { background-color: var(--hl-warn) !important; color: #ffb74d !important; }
+        
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+        .comment { color: #8b949e; }
+
+        .device-panel {
+            background: #edf2f7;
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            height: 95px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .purple-warning {
+            border-color: #5856d6 !important;
+            background-color: #f3f0ff !important;
+            color: #5856d6 !important;
+        }
+        .purple-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #5856d6;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .device-crash {
+            background-color: #1a202c !important;
+            color: var(--danger-color) !important;
+            border-color: var(--danger-color) !important;
+            animation: shake 0.15s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -1px) rotate(-1deg); }
+            20% { transform: translate(-2px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 1px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+        }
+
+        .console {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+            padding: 15px;
+            border-radius: 8px;
+            height: 120px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        
+        .alert-box {
+            border-left: 4px solid var(--primary-color);
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: bold;
+            display: none;
+        }
+        .alert-box.success-style { border-left-color: var(--success-color); background: #f0fff4; color: #276749; }
+        .alert-box.danger-style { border-left-color: var(--danger-color); background: #fff5f5; color: #c53030; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn {
+            flex: 1;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <h1>Swift Concurrency: 격리 추론 vs 격리 상속 실증 가이드</h1>
+    <div class="sub-title">명시적 키워드가 누락되었을 때 컴파일러가 격리를 보장하는 정적 메커니즘 대조 검증</div>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-infer">시나리오 1: 격리 추론 (Inference)</button>
+        <button class="tab-btn" id="tab-inherit">시나리오 2: 격리 상속 (Inheritance)</button>
+    </div>
+
+    <div class="grid">
+        <div class="card" id="left-card" style="border-top: 6px solid var(--danger-color);">
+            <span class="badge" id="left-badge" style="background-color: #fff5f5; color: var(--danger-color);">추론 미작동 상태</span>
+            <h2 id="left-title">정적 보호 영역 부재</h2>
+            <p id="left-desc" style="font-size:13px; color:#4a5568; margin:0 0 10px 0;">격리 속성이 추론되지 않아 함수가 백그라운드 스레드에서 정렬 없이 실행된다.</p>
+            
+            <div class="code-window" id="left-code"></div>
+            <div class="device-panel" id="left-device">
+                <div id="left-status">시뮬레이션 구동 전</div>
+            </div>
+            <div class="console" id="left-console">> 가동 준비 완료.</div>
+            <div class="alert-box" id="left-alert"></div>
+            <div class="btn-group">
+                <button class="btn" id="btn-left" style="background: var(--danger-color);">위험 코드 시뮬레이션</button>
+            </div>
+        </div>
+
+        <div class="card" id="right-card" style="border-top: 6px solid var(--success-color);">
+            <span class="badge" id="right-badge" style="background-color: #f0fff4; color: var(--success-color);">정적 안전 보장 권역</span>
+            <h2 id="right-title">정적 격리 메커니즘 가동</h2>
+            <p id="right-desc" style="font-size:13px; color:#4a5568; margin:0 0 10px 0;">컴파일러의 컴파일 타임 추론/상속에 의해 코드가 완전한 안전 구역에서 랜딩된다.</p>
+            
+            <div class="code-window" id="right-code"></div>
+            <div class="device-panel" id="right-device">
+                <div id="right-status">시뮬레이션 구동 전</div>
+            </div>
+            <div class="console" id="right-console">> 안전 레이어 준비 완료.</div>
+            <div class="alert-box success-style" id="right-alert"></div>
+            <div class="btn-group">
+                <button class="btn" id="btn-right" style="background: var(--success-color);">안전 코드 시뮬레이션</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const templates = {
+            infer: {
+                leftCode: `
+<span class="code-line" id="l-s1"><span class="keyword">class</span> <span class="type">NormalViewModel</span> {</span>
+<span class="code-line" id="l-s2">    <span class="keyword">var</span> title = ""</span>
+<span class="code-line" id="l-s3">    <span class="comment">// 메인 격리 지시어 없음</span></span>
+<span class="code-line" id="l-s4">    <span class="keyword">func</span> updateLabel() {</span>
+<span class="code-line" id="l-s5">        <span class="keyword">self</span>.title = "Loaded" <span class="comment">// 백그라운드 스레드에서 UI 변경</span></span>
+<span class="code-line" id="l-s6">    }</span>
+<span class="code-line" id="l-s7">}</span>`,
+                rightCode: `
+<span class="code-line" id="r-s1"><span class="keyword">@MainActor</span> <span class="keyword">class</span> <span class="type">SecureViewModel</span> {</span>
+<span class="code-line" id="r-s2">    <span class="keyword">var</span> title = ""</span>
+<span class="code-line" id="r-s3">    <span class="comment">// 명시 안 해도 클래스 속성에 의해 자동 추론</span></span>
+<span class="code-line" id="r-s4">    <span class="keyword">func</span> updateLabel() {</span>
+<span class="code-line" id="r-s5">        <span class="keyword">self</span>.title = "Loaded" <span class="comment">// 메인 스레드 안전 실행</span></span>
+<span class="code-line" id="r-s6">    }</span>
+<span class="code-line" id="r-s7">}</span>`,
+                leftAlert: "⚠️ Purple Warning 감지:<br>함수에 격리 정보가 정의되지 않아 비격리 백그라운드 스레드에서 UI를 직접 수정했습니다. 런타임에 프레임 드랍이 생기거나 화면이 정상적으로 갱신되지 않는 원인이 됩니다.",
+                rightAlert: "🛡️ 정적 격리 추론 완료:<br>함수 자체에 @MainActor를 붙이지 않았지만, 클래스 선언부의 속성을 확인한 컴파일러가 이 함수를 메인 액터 소속으로 자동 추론(Static Inference)하여 안전하게 메인 스레드에서 구동되도록 보장했습니다.",
+                leftConsoleInit: "> 일반 뷰모델 로드됨.",
+                rightConsoleInit: "> @MainActor 추론 레이어 활성화."
+            },
+            inherit: {
+                leftCode: `
+<span class="code-line" id="l-i1"><span class="keyword">func</span> loadDataLegacy() {</span>
+<span class="code-line" id="l-i2">    URLSession.shared.dataTask(with: url) { _ <span class="keyword">in</span></span>
+<span class="code-line" id="l-i3">        <span class="comment">// 비동기 탈출(Escaping) 후 스레드 제어권 상실</span></span>
+<span class="code-line" id="l-i4">        <span class="keyword">self</span>.refreshUI() <span class="comment">// 백그라운드 UI 호출</span></span>
+<span class="code-line" id="l-i5">    }.resume()</span>
+<span class="code-line" id="l-i6">}</span>`,
+                rightCode: `
+<span class="code-line" id="r-i1"><span class="keyword">@MainActor</span> <span class="keyword">func</span> loadDataModern() <span class="keyword">async</span> {</span>
+<span class="code-line" id="r-i2">    <span class="keyword">let</span> data = <span class="keyword">await</span> networkCall() <span class="comment">// 일시 중단점</span></span>
+<span class="code-line" id="r-i3">    </span>
+<span class="code-line" id="r-i4">    <span class="comment">// 복귀 시 호출자의 메인 격리 속성 상속</span></span>
+<span class="code-line" id="r-i5">    <span class="keyword">self</span>.refreshUI() <span class="comment">// 동기 함수 안전 호출</span></span>
+<span class="code-line" id="r-i6">}</span>`,
+                leftAlert: "💥 레거시 비동기 래핑 오류 (런타임 크래시):<br>기존 클로저 밖으로 탈출하면서 스레드 제어권을 상실했습니다. 별도의 안전 장치 없이 백그라운드에서 UI를 바로 건드렸기 때문에 앱이 비정상 종료되었습니다.",
+                rightAlert: "🛡️ 비동기 격리 상속 성공:<br>await 중단점을 지나 물리적 스레드가 전환되었더라도, 복귀하는 시점에 호출자(loadDataModern)가 가지고 있던 @MainActor 격리 자격을 그대로 상속(Inheritance)하여 안전하게 메인 스레드로 복귀 정렬되었습니다.",
+                leftConsoleInit: "> 레거시 네트워크 스케줄러 준비.",
+                rightConsoleInit: "> Modern Async 상속 엔진 대기."
+            }
+        };
+
+        let activeTab = 'infer';
+
+        function syncUI() {
+            const current = templates[activeTab];
+            
+            if(activeTab === 'infer') {
+                document.getElementById('left-title').innerText = "정적 보호 영역 부재";
+                document.getElementById('left-desc').innerText = "격리 속성이 추론되지 않아 함수가 백그라운드 스레드에서 정렬 없이 실행된다.";
+                document.getElementById('left-badge').innerText = "추론 미작동 상태";
+                
+                document.getElementById('right-title').innerText = "정적 격리 추론 작동";
+                document.getElementById('right-desc').innerText = "클래스 선언의 속성을 분석하여 내부 멤버 전체를 메인 영역으로 자동 편입한다.";
+                document.getElementById('right-badge').innerText = "정적 격리 추론 권역";
+            } else {
+                document.getElementById('left-title').innerText = "레거시 비동기 컨텍스트";
+                document.getElementById('left-desc').innerText = "Escaping 클로저가 실행 제어권을 잃고 비격리 백그라운드로 이탈한다.";
+                document.getElementById('left-badge').innerText = "격리 유실 상태";
+                
+                document.getElementById('right-title').innerText = "비동기 격리 상속";
+                document.getElementById('right-desc').innerText = "await 이후에도 복귀 시 호출자의 격리 상태를 그대로 이어받아 실행한다.";
+                document.getElementById('right-badge').innerText = "격리 상속 보장 권역";
+            }
+
+            document.getElementById('left-code').innerHTML = current.leftCode;
+            document.getElementById('right-code').innerHTML = current.rightCode;
+            
+            document.getElementById('left-device').innerHTML = '<div id="left-status">시뮬레이션 구동 전</div>';
+            document.getElementById('right-device').innerHTML = '<div id="right-status">시뮬레이션 구동 전</div>';
+            
+            document.getElementById('left-device').className = "device-panel";
+            document.getElementById('right-device').className = "device-panel";
+
+            document.getElementById('left-console').innerHTML = current.leftConsoleInit;
+            document.getElementById('right-console').innerHTML = current.rightConsoleInit;
+            
+            document.getElementById('left-alert').style.display = "none";
+            document.getElementById('right-alert').style.display = "none";
+            
+            document.getElementById('btn-left').disabled = false;
+            document.getElementById('btn-right').disabled = false;
+        }
+
+        // --- 🌟 라인 하이라이트 타겟팅 고정 (ID 버그 전면 해결) ---
+        function applyLineHighlight(side, activeTab, className) {
+            let lineId = "";
+            if (side === 'left') {
+                // 피드백 반영: inherit 탭의 실제 타겟 라인인 'l-i4'를 정확히 매핑하여 버그 수정
+                lineId = activeTab === 'infer' ? 'l-s5' : 'l-i4';
+            } else {
+                lineId = activeTab === 'infer' ? 'r-s5' : 'r-i5';
+            }
+            const el = document.getElementById(lineId);
+            if (el) el.className = "code-line " + className;
+        }
+
+        // --- 좌측 위험 코드 구동 ---
+        document.getElementById('btn-left').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-left');
+            const consoleEl = document.getElementById('left-console');
+            const deviceEl = document.getElementById('left-device');
+            const alertEl = document.getElementById('left-alert');
+            const current = templates[activeTab];
+
+            btn.disabled = true;
+            alertEl.style.display = "none";
+            
+            if(activeTab === 'infer') {
+                applyLineHighlight('left', 'infer', 'line-warning');
+                consoleEl.innerHTML = "> [Thread #4 (Background)] updateLabel() 동기 가동...<br>";
+                await new Promise(r => setTimeout(r, 1000));
+                
+                deviceEl.className = "device-panel purple-warning";
+                deviceEl.innerHTML = "<div class='purple-badge' id='purple-tag'>Purple Warning</div><div style='font-size:15px;'>⚠️ UI 렌더링 스레드 지연 현상 발생</div>";
+                consoleEl.innerHTML += "❌ [⚠️ WARNING] UIKit-Thread-Violation: UI를 메인 스레드가 아닌 곳에서 직접 제어함.<br>";
+                
+                alertEl.className = "alert-box danger-style";
+                alertEl.style.borderLeftColor = "#5856d6";
+                alertEl.style.backgroundColor = "#f3f0ff";
+                alertEl.style.color = "#5856d6";
+            } else {
+                applyLineHighlight('left', 'inherit', 'line-error');
+                consoleEl.innerHTML = "> [Thread #1 (Main)] loadDataLegacy() 호출.<br>";
+                await new Promise(r => setTimeout(r, 600));
+                consoleEl.innerHTML += "> 레거시 dataTask 네트워크 비동기 백그라운드 요청 접수...<br>";
+                await new Promise(r => setTimeout(r, 600));
+                consoleEl.innerHTML += "> ⚡ [스레드 #5 (Background)] 비동기 탈출(Escaping) 클로저 트리거 완료.<br>";
+                await new Promise(r => setTimeout(r, 500));
+                
+                deviceEl.innerHTML = '<div id="left-status">앱 비정상 종료 (크래시)</div>';
+                deviceEl.className = "device-panel device-crash";
+                consoleEl.innerHTML += "❌ [CRASH] Thread Sanity Error: 메인 스레드가 아닌 곳에서 UI를 조작하여 안전 장치 작동.<br>";
+                
+                alertEl.className = "alert-box danger-style";
+                alertEl.style.borderLeftColor = "var(--danger-color)";
+                alertEl.style.backgroundColor = "#fff5f5";
+                alertEl.style.color = "#c53030";
+            }
+            
+            alertEl.innerHTML = current.leftAlert;
+            alertEl.style.display = "block";
+            btn.disabled = false;
+        });
+
+        // --- 우측 안전 코드 구동 ---
+        document.getElementById('btn-right').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-right');
+            const consoleEl = document.getElementById('right-console');
+            const deviceEl = document.getElementById('right-device');
+            const alertEl = document.getElementById('right-alert');
+            const current = templates[activeTab];
+
+            btn.disabled = true;
+            alertEl.style.display = "none";
+            deviceEl.className = "device-panel";
+
+            if(activeTab === 'infer') {
+                consoleEl.innerHTML = "> 컴파일러 정적 소스 구문 분석 가동...<br>";
+                await new Promise(r => setTimeout(r, 500));
+                
+                // 🌟 피드백 반영: 클래스 선언이 먼저 하이라이트된 후 함수 라인이 순차적으로 켜지도록 연출 제어
+                const classDecl = document.getElementById('r-s1');
+                if(classDecl) classDecl.className = "code-line line-class";
+                consoleEl.innerHTML += "> [단계 1] class 선언부의 명시적 '@MainActor' 특성 감지.<br>";
+                
+                // 600ms 타임 딜레이 주입으로 정적 추론의 단계적 인과관계 시각화
+                await new Promise(r => setTimeout(r, 600));
+                
+                applyLineHighlight('right', 'infer', 'line-success');
+                consoleEl.innerHTML += "> [단계 2] 내부 멤버 'updateLabel()'을 메인 액터 소속으로 자동 하향 추론 완료.<br>";
+                await new Promise(r => setTimeout(r, 600));
+                
+                deviceEl.innerHTML = '<div style="color:var(--success-color)">👤 프로필 UI 정상 반영 (Main Thread)</div>';
+                deviceEl.style.borderColor = "var(--success-color)";
+                consoleEl.innerHTML += "> [성공] 안전 격리 구역 검증 완료 및 안전 패킹.<br>";
+            } else {
+                consoleEl.innerHTML = "> Modern Async 비동기 서스펜션(일시중단) 트리거 진입...<br>";
+                await new Promise(r => setTimeout(r, 700));
+                consoleEl.innerHTML += "> [협력 스레딩] networkCall() await 중단 해제.<br>";
+                
+                await new Promise(r => setTimeout(r, 600));
+                applyLineHighlight('right', 'inherit', 'line-success');
+                consoleEl.innerHTML += "> [상속 확인] 호출자의 @MainActor 자격을 계승하여 동기 함수 안전 호출 처리 완료.<br>";
+                await new Promise(r => setTimeout(r, 500));
+                
+                deviceEl.innerHTML = '<div style="color:var(--success-color)">📱 네트워크 뷰 정상 반영 (Main Actor 복귀)</div>';
+                deviceEl.style.borderColor = "var(--success-color)";
+            }
+            
+            alertEl.innerHTML = current.rightAlert;
+            alertEl.style.display = "block";
+            btn.disabled = false;
+        });
+
+        document.getElementById('tab-infer').addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            activeTab = 'infer';
+            syncUI();
+        });
+        document.getElementById('tab-inherit').addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            activeTab = 'inherit';
+            syncUI();
+        });
+
+        syncUI();
+    </script>
+
+</body>
+</html>

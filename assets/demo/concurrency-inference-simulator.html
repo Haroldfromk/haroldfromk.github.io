@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Concurrency: 격리 추론 & 상속 시뮬레이터 Pro</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #e2e8f0;
+            --primary-color: #007aff;
+            --dark-bg: #1e1e1e;
+            --hl-class: rgba(0, 122, 255, 0.18);
+            --hl-func: rgba(52, 199, 89, 0.18);
+            --hl-inher: rgba(255, 149, 0, 0.22);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 24px; text-align: center; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: #718096; margin-bottom: 25px; font-size: 14px; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .tab-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active { background: var(--primary-color); color: white; }
+
+        .grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .code-window {
+            background-color: var(--dark-bg);
+            color: #d4d4d4;
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.7;
+            position: relative;
+            overflow-x: auto;
+        }
+        .code-line { display: block; border-radius: 4px; padding: 0 5px; transition: background 0.2s; }
+        
+        .hl-class-decl { background-color: var(--hl-class); color: #4fc3f7 !important; }
+        .hl-func-decl { background-color: var(--hl-func); color: #81c784 !important; }
+        .hl-inheritance-path { background-color: var(--hl-inher); color: #ffb74d !important; }
+
+        .debugger-window { display: flex; flex-direction: column; height: 100%; }
+        
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .play-btn {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .play-btn:hover { background: #2d3748; }
+        .play-btn.playing { background: #e53e3e; }
+
+        .step-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .step-item {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #cbd5e0;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .step-item:hover { transform: translateX(3px); background: #f1f3f5; }
+        .step-item.active {
+            border-left-color: var(--primary-color);
+            background: #edf2f7;
+            font-weight: bold;
+        }
+
+        .analysis-box {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            min-height: 110px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+        .comment { color: #8b949e; }
+    </style>
+</head>
+<body>
+
+    <h1>Swift Concurrency 격리 추론 vs 상속 검증기</h1>
+    <div class="sub-title">컴파일 타임에 결정되는 정적 격리(Static Isolation)의 분석 경로를 시각적으로 체득한다.</div>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-infer">시나리오 1: 정적 격리 추론 (Inference)</button>
+        <button class="tab-btn" id="tab-inherit">시나리오 2: 비동기 격리 상속 (Inheritance)</button>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3 style="margin-top:0; font-size:15px; color:#4a5568;">💻 Xcode 가상 컴파일 분석 창</h3>
+            <div class="code-window" id="code-area"></div>
+        </div>
+
+        <div class="card debugger-window">
+            <div class="header-row">
+                <h3 style="margin:0; font-size:15px; color:#4a5568;">⚙️ 컴파일러 정적 추론 단계</h3>
+                <button class="play-btn" id="btn-play">▶ 자동 재생</button>
+            </div>
+            <div class="step-list" id="step-area"></div>
+            
+            <h3 style="font-size:14px; color:#4a5568; margin-bottom:8px;">🧐 컴파일러 분석 리포트</h3>
+            <div class="analysis-box" id="analysis-text"></div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            infer: {
+                code: [
+                    `<span class="code-line" id="line1"><span class="keyword">@MainActor</span></span>`,
+                    `<span class="code-line" id="line2"><span class="keyword">class</span> <span class="type">ProfileViewModel</span> {</span>`,
+                    `<span class="code-line" id="line3">    <span class="keyword">var</span> name: <span class="type">String</span> = ""</span>`,
+                    `<span class="code-line" id="line4"></span>`,
+                    `<span class="code-line" id="line5">    <span class="comment">// 개발자가 별도의 격리 키워드를 명시하지 않은 상태</span></span>`,
+                    `<span class="code-line" id="line6">    <span class="keyword">func</span> updateProfile(newName: <span class="type">String</span>) {</span>`,
+                    `<span class="code-line" id="line7">        <span class="keyword">self</span>.name = newName</span>`,
+                    `<span class="code-line" id="line8">    }</span>`,
+                    `<span class="code-line" id="line9">}</span>`
+                ],
+                steps: [
+                    { title: "1단계: @MainActor 속성 감지", lines: [1, 2], text: "컴파일러가 'ProfileViewModel' 클래스 선언 상단에 명시된 '@MainActor' 글로벌 액터 어노테이션을 파싱한다. 타입 전체가 메인 격리 영역으로 예약된다." },
+                    { title: "2단계: 내부 멤버 분석", lines: [5, 6, 7, 8], text: "내부의 'updateProfile' 함수를 검사한다. 명시적인 'nonisolated' 키워드가 부재함을 확인한다." },
+                    { title: "3단계: 정적 추론(Inference) 완료", lines: [6], text: "<b>[추론 결과]</b> 클래스 전체가 @MainActor에 격리되어 있으므로, 내부 함수인 'updateProfile' 역시 자동으로 메인 액터 컨텍스트에 포함된다고 정적 추론(Static Inference)한다. 런타임 검사 오버헤드는 없다." }
+                ]
+            },
+            inherit: {
+                code: [
+                    `<span class="code-line" id="line1"><span class="keyword">@MainActor</span></span>`,
+                    `<span class="code-line" id="line2"><span class="keyword">class</span> <span class="type">MyViewController</span> {</span>`,
+                    `<span class="code-line" id="line3">    <span class="keyword">func</span> updateUI() { <span class="comment">/* 메인 스레드 전용 UI 코드 */</span> }</span>`,
+                    `<span class="code-line" id="line4"></span>`,
+                    `<span class="code-line" id="line5">    <span class="keyword">func</span> loadData() <span class="keyword">async</span> {</span>`,
+                    `<span class="code-line" id="line6">        <span class="keyword">let</span> result = <span class="keyword">await</span> networkCall() <span class="comment">// 대기 및 일시중단점</span></span>`,
+                    `<span class="code-line" id="line7">        </span>`,
+                    `<span class="code-line" id="line8">        <span class="comment">// 중단점 해제 후 동기 함수 호출</span></span>`,
+                    `<span class="code-line" id="line9">        <span class="keyword">self</span>.updateUI() </span>`,
+                    `<span class="code-line" id="line10">    }</span>`,
+                    `<span class="code-line" id="line11">}</span>`
+                ],
+                steps: [
+                    { title: "1단계: 호출자 격리 상태 파악", lines: [5], text: "함수 'loadData()'는 정적 추론에 의해 @MainActor 소속으로 정의되어 실행을 시작한다." },
+                    { title: "2단계: await 서스펜션 포인트 통과", lines: [6], text: "await 대기 지점에서 태스크가 일시 중단(Suspension)된다. 이때 비동기 처리를 위해 <b>물리적 스레드는 자유롭게 변경(Thread Hopping)될 수 있으나, 해당 태스크의 메인 격리 영역(Isolation Context) 자격은 복귀 전까지 차단된 채 시스템에 의해 안전하게 보존</b>된다." },
+                    { title: "3단계: 격리 상속(Inheritance) 발동", lines: [6, 9], text: "<b>[상속 결과]</b> 비동기 작업 종료 후 태스크가 깨어날 때, 기존의 메인 액터 격리 자격을 그대로 <b>상속(Inheritance)</b>하여 복귀한다. 덕분에 스레드가 바뀐 상태였더라도 안전하게 메인 액터 위로 돌아오므로, 동기 함수 'updateUI()'를 안전하게 다이렉트 호출할 수 있다." }
+                ]
+            }
+        };
+
+        let currentScenario = 'infer';
+        let currentStep = 0;
+        let playInterval = null;
+
+        function renderScenario(type) {
+            stopAutoPlay();
+            currentScenario = type;
+            currentStep = 0;
+            
+            document.getElementById('code-area').innerHTML = data[type].code.join('');
+            
+            const stepArea = document.getElementById('step-area');
+            stepArea.innerHTML = '';
+            data[type].steps.forEach((step, idx) => {
+                const item = document.createElement('div');
+                item.className = 'step-item';
+                item.innerText = step.title;
+                item.onclick = () => { stopAutoPlay(); selectStep(idx); };
+                stepArea.appendChild(item);
+            });
+            
+            selectStep(0);
+        }
+
+        function selectStep(stepIdx) {
+            currentStep = stepIdx;
+            const lines = document.querySelectorAll('.code-line');
+            lines.forEach(l => l.className = 'code-line');
+            
+            const steps = document.querySelectorAll('.step-item');
+            steps.forEach(s => s.classList.remove('active'));
+            
+            if(steps[stepIdx]) steps[stepIdx].classList.add('active');
+            const targetStep = data[currentScenario].steps[stepIdx];
+            
+            document.getElementById('analysis-text').innerHTML = targetStep.text;
+            
+            let hlClass = 'hl-class-decl';
+            if (stepIdx === 1) hlClass = 'hl-func-decl';
+            if (stepIdx === 2) hlClass = currentScenario === 'infer' ? 'hl-func-decl' : 'hl-inheritance-path';
+
+            targetStep.lines.forEach(lineNum => {
+                const lineEl = document.getElementById('line' + lineNum);
+                if (lineEl) lineEl.classList.add(hlClass);
+            });
+        }
+
+        // 자동 재생 로직
+        function toggleAutoPlay() {
+            const btn = document.getElementById('btn-play');
+            if (playInterval) {
+                stopAutoPlay();
+            } else {
+                btn.innerText = "■ 정지";
+                btn.classList.add('playing');
+                playInterval = setInterval(() => {
+                    currentStep = (currentStep + 1) % data[currentScenario].steps.length;
+                    selectStep(currentStep);
+                }, 1600);
+            }
+        }
+
+        function stopAutoPlay() {
+            const btn = document.getElementById('btn-play');
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+            }
+            btn.innerText = "▶ 자동 재생";
+            btn.classList.remove('playing');
+        }
+
+        document.getElementById('btn-play').addEventListener('click', toggleAutoPlay);
+
+        document.getElementById('tab-infer').addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            renderScenario('infer');
+        });
+
+        document.getElementById('tab-inherit').addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            renderScenario('inherit');
+        });
+
+        renderScenario('infer');
+    </script>
+
+</body>
+</html>

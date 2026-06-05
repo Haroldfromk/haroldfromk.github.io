@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Concurrency 실증: ATM 동시 인출 시뮬레이터</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #e2e8f0;
+            --primary-color: #007aff;
+            --danger-color: #ff3b30;
+            --success-color: #34c759;
+            --dark-bg: #1a202c;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 26px; text-align: center; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: #718096; margin-bottom: 30px; font-size: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .card.gcd { border-top: 6px solid var(--danger-color); }
+        .card.swift6 { border-top: 6px solid var(--success-color); }
+        
+        .badge {
+            align-self: flex-start;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .badge-gcd { background-color: #fff5f5; color: var(--danger-color); }
+        .badge-swift6 { background-color: #f0fff4; color: var(--success-color); }
+
+        /* 은행 잔고 디스플레이 존 */
+        .balance-container {
+            background: #edf2f7;
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .balance-title { font-size: 13px; font-weight: bold; color: #4a5568; margin-bottom: 5px; }
+        .balance-amount { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+        
+        .status-panel {
+            background: #f7fafc;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        .status-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+
+        .console {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+            padding: 15px;
+            border-radius: 8px;
+            height: 150px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        
+        .alert-box {
+            border-left: 4px solid #ff9500;
+            background: #fffaf0;
+            color: #dd6b20;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .solution-box {
+            border: 1px dashed var(--success-color);
+            background: #f0fff4;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 13px;
+            display: none;
+        }
+        .solution-box pre {
+            margin: 8px 0 0 0;
+            background: #2d3748;
+            color: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn {
+            flex: 1;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
+        .btn-danger { background: var(--danger-color); }
+        .btn-swift-build { background: #4a5568; }
+        .btn-swift-run { background: var(--success-color); }
+    </style>
+</head>
+<body>
+
+    <h1>ATM 뱅킹 계정 동시성 제어 시뮬레이션</h1>
+    <div class="sub-title">시작 잔고 1,000,000원 상태에서 100개의 스레드가 동시에 각 10,000원씩 인출을 시도하는 시나리오</div>
+
+    <div class="grid">
+        <div class="card gcd">
+            <span class="badge badge-gcd">기존 GCD (비동기 병렬 처리)</span>
+            <h2>공유 계정 잔고에 동시 인출 처리</h2>
+            <p style="font-size:13px; color:#4a5568; margin:0 0 10px 0;">락(Lock) 없이 100개의 ATM 트랜잭션이 메모리 장부의 동일 잔고 상태를 동시에 수정한다.</p>
+            
+            <div class="balance-container" id="gcd-balance-box">
+                <div class="balance-title">계좌 현재 잔고 (시작: 1,000,000원)</div>
+                <div class="balance-amount" id="gcd-balance-text" style="color: var(--text-color);">1,000,000원</div>
+            </div>
+
+            <div class="status-panel">
+                <div class="status-row"><span>요청된 총 인출 시도:</span> <span>100회 (총 1,000,000원)</span></div>
+                <div class="status-row"><span>정상 처리되어야 할 최종 잔고:</span> <strong>0원</strong></div>
+            </div>
+
+            <div class="console" id="gcd-console">> ATM 네트워크 가동 준비 완료.</div>
+            <div class="alert-box" id="gcd-alert">
+                💥 데이터 레이스로 인한 계정 장부 파괴!<br>
+                스레드들이 이전 잔고 값을 동시에 읽고 덮어쓰면서 연산 충돌이 발생했습니다. 인출은 정상 접수되었다고 뜨지만, 실제 잔고 장부는 마이너스가 되거나 돈이 증발하는 치명적인 오염 상태로 끝납니다.
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-danger" id="btn-gcd">동시 인출 시작 (GCD 비동기 무제한)</button>
+            </div>
+        </div>
+
+        <div class="card swift6">
+            <span class="badge badge-swift6">Swift 6 (동시성 보장 권역)</span>
+            <h2>컴파일 타임 안전 보장 및 실행 결과</h2>
+            <p style="font-size:13px; color:#4a5568; margin:0 0 10px 0;">위험한 동시 수정 코드는 컴파일러가 차단하고, Actor로 수정한 안전한 뱅킹 연산의 흐름을 확인한다.</p>
+            
+            <div class="balance-container" id="swift6-balance-box">
+                <div class="balance-title">계좌 현재 잔고 (시작: 1,000,000원)</div>
+                <div class="balance-amount" id="swift6-balance-text" style="color: var(--text-color);">1,000,000원</div>
+                <div id="swift6-map-text" style="text-align:center; color:#ff3b30; font-size:13px; font-weight:bold; padding:20px; z-index:5; display:none; background: rgba(237, 242, 247, 0.98); position:absolute; width:100%; height:100%; top:0; left:0; align-items:center; justify-content:center;">
+                    🛡️ 빌드가 차단되어 비안전 코드가 실행되지 않음
+                </div>
+            </div>
+
+            <div class="status-panel">
+                <div class="status-row"><span>컴파일러 빌드 상태:</span> <strong id="swift6-status" style="color:#718096;">대기 중</strong></div>
+                <div class="status-row"><span>트랜잭션 안전 보장 상태:</span> <strong id="swift6-safety-text">-</strong></div>
+            </div>
+
+            <div class="console" id="swift6-console">> 원본 뱅킹 코드를 검사하거나 수정한 Actor 모델을 구동할 수 있다.</div>
+            
+            <div class="solution-box" id="swift6-solution">
+                <span style="color:var(--success-color); font-weight:bold;">💡 데이터 레이스 해결책: Actor 계좌 격리</span>
+                <p style="margin:5px 0 0 0; font-size:12px; color:#4a5568;">은행 계좌 인스턴스를 `actor`로 선언하여, 전 세계 ATM에서 들어오는 인출 요청을 큐(Queue)를 통해 한 번에 하나씩 안전하게 상호 배제 처리한다.</p>
+                <pre><code>actor BankAccount {
+    private var balance = 1000000
+    func withdraw(_ amount: Int) {
+        balance -= amount // 데이터 레이스 원천 불가
+    }
+}</code></pre>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-swift-build" id="btn-swift6-build">1. 원본 코드 빌드 (차단 확인)</button>
+                <button class="btn btn-swift-run" id="btn-swift6-run" disabled>2. Actor 수정 코드 실행</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const totalRequests = 100;
+        const withdrawAmount = 10000;
+
+        // --- 1. GCD 세계 로직 ---
+        document.getElementById('btn-gcd').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-gcd');
+            const consoleEl = document.getElementById('gcd-console');
+            const balanceText = document.getElementById('gcd-balance-text');
+            const alertEl = document.getElementById('gcd-alert');
+            const balanceBox = document.getElementById('gcd-balance-box');
+            
+            btn.disabled = true;
+            alertEl.style.display = "none";
+            balanceBox.style.borderColor = "#cbd5e0";
+            balanceText.style.color = "var(--text-color)";
+            
+            consoleEl.innerHTML = "> 공유 계좌 인스턴스 로드 완료. (시작 잔고: 1,000,000원)<br>";
+            consoleEl.innerHTML += "> [ATM 스레드 100개] 동시 접근 인출 트랜잭션 폭발...<br>";
+
+            let currentBalance = 1000000;
+            
+            for(let i = 1; i <= totalRequests; i++) {
+                await new Promise(r => setTimeout(r, 10));
+                
+                // 데이터 레이스 모사: 여러 스레드가 똑같은 이전 잔고 값을 읽고 연산하여 덮어쓰는 오류 구현
+                if (i > 10 && i < 90 && Math.random() > 0.45) {
+                    // 쓰기 유실 발생: 잔고 차감 연산이 경합 도중 공중 분해됨
+                    consoleEl.innerHTML += "<span style='color:var(--danger-color);'>⚡ [경합 발생] 스레드 #" + i + "와 #" + (i-1) + "가 동시에 동일 잔고를 덮어씀 (데이터 유실)</span><br>";
+                } else {
+                    currentBalance -= withdrawAmount;
+                }
+                
+                balanceText.innerText = currentBalance.toLocaleString() + "원";
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                
+                if (i % 20 === 0 && i < totalRequests) {
+                    consoleEl.innerHTML += "> 대량 인출 요청 병렬 처리 중... (" + i + "/100 완료)<br>";
+                }
+            }
+
+            consoleEl.innerHTML += "<br><span style='color:#ff9500; font-weight:bold;'>[완료] 100개의 ATM 인출 루프가 종료되었습니다.</span><br>";
+            consoleEl.innerHTML += "> 시스템상 크래시는 나지 않았으나, 동시성 장부 꼬임으로 인한 오염 결과를 확인합니다.<br>";
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+
+            await new Promise(r => setTimeout(r, 800));
+
+            balanceBox.style.borderColor = "var(--danger-color)";
+            balanceText.style.color = "var(--danger-color)";
+            
+            consoleEl.innerHTML += "<span style='color:var(--danger-color); font-weight:bold;'>[오염 확정] 최종 장부 잔고가 0원이 아닌 " + currentBalance.toLocaleString() + "원으로 기록됨! 은행 자산 오염 발생.</span><br>";
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+            alertEl.style.display = "block";
+            btn.disabled = false;
+        });
+
+        // --- 2. Swift 6 세계 로직 ---
+        
+        // 2-1. 원본 코드 빌드 (차단)
+        document.getElementById('btn-swift6-build').addEventListener('click', () => {
+            const statusEl = document.getElementById('swift6-status');
+            const consoleEl = document.getElementById('swift6-console');
+            const mapText = document.getElementById('swift6-map-text');
+            const solutionEl = document.getElementById('swift6-solution');
+            const runBtn = document.getElementById('btn-swift6-run');
+            const safetyText = document.getElementById('swift6-safety-text');
+            const balanceText = document.getElementById('swift6-balance-text');
+
+            solutionEl.style.display = "none";
+            mapText.style.display = "none";
+            balanceText.innerText = "1,000,000원";
+            balanceText.style.color = "var(--text-color)";
+            statusEl.innerText = "정적 안전성 파싱 중...";
+            statusEl.style.color = "#2c3e50";
+            safetyText.innerText = "검사 중";
+            safetyText.style.color = "#718096";
+            
+            consoleEl.innerHTML = "> swiftc BankSystem.swift -strict-concurrency=complete<br>";
+
+            setTimeout(() => {
+                consoleEl.innerHTML += "> 구조 분석: 공유 참조 타입 내부 가변 프로퍼티 'balance' 식별.<br>";
+                consoleEl.innerHTML += "> 위험성 검증: 다중 스레드 콘텍스트에서 무제한 차감 수정(Mutation) 위험 발견.<br>";
+            }, 500);
+
+            setTimeout(() => {
+                statusEl.innerText = "컴파일 에러 (빌드 실패)";
+                statusEl.style.color = "var(--danger-color)";
+                safetyText.innerText = "위험 차단 완료";
+                safetyText.style.color = "var(--danger-color)";
+                
+                consoleEl.innerHTML += "<br><span style='color:var(--danger-color); font-weight:bold;'>BankSystem.swift:8:17: error: data race detected: mutation of shared property 'balance' from concurrent execution contexts</span><br>";
+                consoleEl.innerHTML += "    self.balance -= amount<br>";
+                consoleEl.innerHTML += "    ^~~~~~~~~~~~~~~~~~~~~<br>";
+                consoleEl.innerHTML += "> 결론: 데이터 장부가 파괴될 수 있는 위험 코드가 포함되어 실행 파일 생성을 완전히 거부함.<br>";
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                
+                mapText.style.display = "flex";
+                solutionEl.style.display = "block";
+                runBtn.disabled = false;
+            }, 1200);
+        });
+
+        // 2-2. Actor 수정 코드 실행
+        document.getElementById('btn-swift6-run').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-swift6-run');
+            const statusEl = document.getElementById('swift6-status');
+            const consoleEl = document.getElementById('swift6-console');
+            const mapText = document.getElementById('swift6-map-text');
+            const safetyText = document.getElementById('swift6-safety-text');
+            const balanceText = document.getElementById('swift6-balance-text');
+            const balanceBox = document.getElementById('swift6-balance-box');
+            
+            btn.disabled = true;
+            mapText.style.display = "none";
+            balanceBox.style.borderColor = "#cbd5e0";
+            balanceText.style.color = "var(--text-color)";
+            
+            statusEl.innerText = "빌드 성공 & 트랜잭션 안전 실행";
+            statusEl.style.color = "var(--success-color)";
+            safetyText.innerText = "Actor 동기화 보장";
+            safetyText.style.color = "var(--success-color)";
+            
+            consoleEl.innerHTML = "<br>> [수정 반영] BankAccount actor 모델 안전 컴파일 완료.<br>";
+            consoleEl.innerHTML += "> Actor Serial Queue 활성화: 모든 스레드의 withdraw 요청이 순차 줄서기로 처리됨.<br>";
+
+            let currentBalance = 1000000;
+            
+            for(let i = 1; i <= totalRequests; i++) {
+                await new Promise(r => setTimeout(r, 15));
+                
+                // Actor가 순차적으로 처리하므로 경합이나 유실이 절대 일어나지 않음
+                currentBalance -= withdrawAmount;
+                balanceText.innerText = currentBalance.toLocaleString() + "원";
+                
+                if (i % 10 === 0) {
+                    consoleEl.innerHTML += "> [Actor 수신] " + i + "번째 ATM 요청 진입 -> 대기열 정렬 후 정상 차감 완료.<br>";
+                    consoleEl.scrollTop = consoleEl.scrollHeight;
+                }
+            }
+
+            balanceBox.style.borderColor = "var(--success-color)";
+            balanceText.style.color = "var(--success-color)";
+            consoleEl.innerHTML += "<br><span style='color:var(--success-color); font-weight:bold;'>[성공] 100개의 대량 동시 요청을 완벽히 동기화 처리하여 정확히 잔고 0원으로 마감되었습니다.</span><br>";
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+            btn.disabled = false;
+        });
+    </script>
+
+</body>
+</html>

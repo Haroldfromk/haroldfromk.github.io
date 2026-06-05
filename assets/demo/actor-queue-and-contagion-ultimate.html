@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Concurrency: Actor 실증 시뮬레이터 Ultimate (Final)</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #e2e8f0;
+            --primary-color: #007aff;
+            --danger-color: #ff3b30;
+            --success-color: #34c759;
+            --warning-color: #ff9500;
+            --dark-bg: #1a202c;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 26px; text-align: center; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: #718096; margin-bottom: 20px; font-size: 15px; }
+        
+        .core-definition {
+            background: #f0fff4;
+            border: 1px solid #c6f6d5;
+            color: #22543d;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .tab-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active { background: var(--primary-color); color: white; }
+
+        .grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 30px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            min-height: 550px;
+        }
+
+        .stage-container {
+            background: #edf2f7;
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            height: 250px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        .stage-zone-bg {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 31%;
+            display: flex;
+            justify-content: center;
+            padding-top: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #718096;
+            text-transform: uppercase;
+            border-radius: 8px;
+            margin: 8px;
+        }
+        .zone-wait-bg { left: 0; background: rgba(255,255,255,0.6); border: 1px dashed #cbd5e0; }
+        .zone-actor-bg { left: 33%; background: rgba(49, 130, 206, 0.08); border: 2px solid #3182ce; width: 30%; }
+        .zone-exit-bg { right: 0; background: rgba(52, 199, 89, 0.08); border: 1px dashed #34c759; }
+
+        .actor-core-box {
+            position: absolute;
+            top: 85px;
+            left: 36%;
+            width: 25%;
+            height: 85px;
+            background: #3182ce;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            z-index: 2;
+        }
+        .task-node {
+            position: absolute;
+            width: 22%;
+            height: 30px;
+            background: #4a5568;
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .contagion-split-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .contagion-panel {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .panel-header { font-size: 12px; font-weight: bold; margin-bottom: 15px; padding: 2px 8px; border-radius: 4px; }
+        
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+        .tree-node {
+            width: 92%;
+            padding: 10px 5px;
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 11.5px;
+            transition: all 0.3s ease;
+        }
+        .arrow-down { width: 2px; height: 12px; background: #cbd5e0; transition: all 0.3s; }
+        
+        .node-my-alert {
+            border-color: var(--danger-color) !important;
+            background-color: #fff5f5 !important;
+            color: var(--danger-color) !important;
+            animation: pulse-border 1.5s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(255, 59, 48, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
+        .xcode-warning {
+            background: #ff3b30;
+            color: white;
+            font-size: 10px;
+            padding: 5px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-weight: normal;
+            text-align: left;
+            line-height: 1.3;
+            display: none;
+        }
+
+        .console {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+            padding: 15px;
+            border-radius: 8px;
+            height: 150px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .alert-box {
+            border-left: 4px solid var(--primary-color);
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .btn-group { display: flex; gap: 10px; margin-top: auto; padding-top: 15px; }
+        .btn {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <h1>4장: Swift Actor 보호 권역 및 격리 전염성 실증</h1>
+    <div class="core-definition">
+        💡 액터 하나를 도입하면, 그 액터와 데이터를 주고받는 모든 타입이 Sendable 증명을 요구받는다.
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-btn-queue">시나리오 1: 액터 직렬 큐 (상호 배제)</button>
+        <button class="tab-btn" id="tab-btn-contagion">시나리오 2: 격리 전염성 (Contagion)</button>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2 id="stage-title">액터 시동 제어 스테이지</h2>
+            <p id="stage-desc" style="font-size:13px; color:#4a5568; margin:0 0 15px 0;"></p>
+            
+            <div id="view-queue" style="display: block;">
+                <div class="stage-container" id="main-stage">
+                    <div class="stage-zone-bg zone-wait-bg">1. 대기열 (Queue)</div>
+                    <div class="stage-zone-bg zone-actor-bg">2. 액터 내부 (Lock)</div>
+                    <div class="stage-zone-bg zone-exit-bg">3. 처리 완료 (Exit)</div>
+
+                    <div class="actor-core-box" id="actor-node">
+                        <span>🔒 Actor</span>
+                        <div id="actor-status" style="font-size:10px; margin-top:5px; font-weight:normal; background:rgba(0,0,0,0.2); padding:2px 6px; border-radius:4px;">대기 중</div>
+                    </div>
+                    <div id="task-injector"></div>
+                </div>
+            </div>
+
+            <div id="view-contagion" style="display: none;">
+                <div class="contagion-split-view">
+                    <div class="contagion-panel" id="panel-before">
+                        <div class="panel-header" style="background:#e2e8f0; color:#4a5568;">git pull 이전 (로컬 빌드 성공)</div>
+                        <div class="tree-container">
+                            <div class="tree-node" style="border-color:#4a5568; color:#718096;">DataStore<br><small>(일반 Class 상태)</small></div>
+                            <div class="arrow-down"></div>
+                            <div class="tree-node" style="border-color:#007aff; background:#ebf8ff; color:#007aff;">NetworkLayer<br><small>(내가 짠 코드 · 에러 없음)</small></div>
+                            <div class="arrow-down"></div>
+                            <div class="tree-node" style="border-color:#007aff; background:#ebf8ff; color:#007aff;">UserInterface<br><small>(내가 짠 코드 · 에러 없음)</small></div>
+                        </div>
+                    </div>
+                    <div class="contagion-panel" id="panel-after">
+                        <div class="panel-header" id="after-header-tag" style="background:#edf2f7; color:#4a5568;">팀 리포지토리 동기화 전</div>
+                        <div class="tree-container">
+                            <div class="tree-node" id="node-store">
+                                DataStore<br><small>(Class 상태)</small>
+                            </div>
+                            <div class="arrow-down" id="a1"></div>
+                            <div class="tree-node" id="node-net">
+                                NetworkLayer<br><small>(내 코드)</small>
+                                <div class="xcode-warning" id="warn-net">❌ error: Non-sendable type 'UserRecord' passed across actor boundary; static compilation failed.</div>
+                            </div>
+                            <div class="arrow-down" id="a2"></div>
+                            <div class="tree-node" id="node-vm">
+                                UserInterface<br><small>(내 코드)</small>
+                                <div class="xcode-warning" id="warn-vm">❌ error: MainActor-isolated viewmodel cannot accept non-sendable entity streams from mutated repository.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" id="btn-action">동시 접근 시뮬레이션 시작</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>컴파일러 추적 콘솔</h2>
+            <div class="console" id="console-box">> 시스템 대기 중.</div>
+            <h2>인과관계 정밀 분석 리포트</h2>
+            <div class="alert-box" id="report-box">
+                시뮬레이션을 시작하면 동시성 보호 장치의 작동 인과관계가 실시간으로 출력됩니다.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'queue';
+        let simulationTimeline = []; 
+        const consoleEl = document.getElementById('console-box');
+        const reportEl = document.getElementById('report-box');
+        const btnAction = document.getElementById('btn-action');
+
+        const waitLeft = "5%";
+        const actorLeft = "37.5%";
+        const exitLeft = "72%";
+        const baseTopPositions = [45, 85, 125, 165, 205];
+
+        function syncUI() {
+            simulationTimeline.forEach(clearTimeout);
+            simulationTimeline = [];
+
+            if (currentMode === 'queue') {
+                document.getElementById('stage-title').innerText = "액터 직렬화 연산 제어";
+                document.getElementById('stage-desc').innerText = "공유 공간에 들어온 태스크들이 분할된 구역(대기 ➔ 연산 ➔ 퇴출)을 거치며 정렬되는 흐름.";
+                document.getElementById('view-queue').style.display = "block";
+                document.getElementById('view-contagion').style.display = "none";
+                btnAction.innerText = "동시 접근 시뮬레이션 시작";
+                btnAction.style.background = "var(--primary-color)";
+                consoleEl.innerHTML = "> 액터 동기 장치 가동 대기.";
+                reportEl.innerText = "5개의 태스크가 하나의 공유 변수를 수정하려고 시도할 때, 액터 내부의 Serial Queue가 어떻게 상호 배제를 달성하는지 확인하세요.";
+                
+                const injector = document.getElementById('task-injector');
+                injector.innerHTML = '';
+                for(let i=1; i<=5; i++) {
+                    injector.innerHTML += `<div class="task-node" id="t${i}" style="top: ${baseTopPositions[i-1]}px; left: ${waitLeft}; background: #4a5568; transition: none;">Task ${i}</div>`;
+                }
+
+                document.getElementById('actor-node').style.background = "#3182ce";
+                document.getElementById('actor-status').innerText = "대기 중";
+            } else {
+                document.getElementById('stage-title').innerText = "격리 전염성(Contagion) 나비효과 증명";
+                document.getElementById('stage-desc').innerText = "하위 원천 코드가 수정되었을 때, 내 도메인 코드들이 어떻게 연쇄적으로 무너지는지 관측하는 스토리 스플릿 대조 환경.";
+                document.getElementById('view-queue').style.display = "none";
+                document.getElementById('view-contagion').style.display = "block";
+                btnAction.innerText = "팀원 커밋 원격 동기화 (git pull)";
+                btnAction.style.background = "var(--warning-color)";
+                consoleEl.innerHTML = "> 내 작업 공간 상태: 정상 수립 완료. 현재 로컬 빌드 성공 상태 (에러 0개)";
+                reportEl.innerText = "왼쪽 카드는 내가 작성한 완벽한 코드입니다. 버튼을 눌러 팀원이 올린 'DataStore 액터 전환 커밋'을 동기화(git pull)해 보세요.";
+                
+                const store = document.getElementById('node-store');
+                const net = document.getElementById('node-net');
+                const vm = document.getElementById('node-vm');
+                const a1 = document.getElementById('a1');
+                const a2 = document.getElementById('a2');
+                const rightHeader = document.getElementById('after-header-tag');
+                const panelAfter = document.getElementById('panel-after');
+
+                rightHeader.innerText = "팀 리포지토리 동기화 전";
+                rightHeader.style.background = "#edf2f7";
+                rightHeader.style.color = "#4a5568";
+                panelAfter.style.backgroundColor = "#f8f9fa";
+
+                store.className = "tree-node";
+                store.style.borderStyle = "dashed";
+                store.style.borderColor = "#cbd5e0";
+                store.style.backgroundColor = "white";
+                store.style.color = "var(--text-color)";
+                store.innerHTML = "DataStore<br><small style='font-weight:normal;'>(Class 상태)</small>";
+                
+                net.className = "tree-node";
+                vm.className = "tree-node";
+                document.getElementById('warn-net').style.display = "none";
+                document.getElementById('warn-vm').style.display = "none";
+                a1.style.background = "#cbd5e0";
+                a2.style.background = "#cbd5e0";
+            }
+            btnAction.disabled = false;
+        }
+
+        function runQueueSimulation() {
+            btnAction.disabled = true;
+            syncUI();
+            btnAction.disabled = true; 
+
+            setTimeout(() => {
+                const actorNode = document.getElementById('actor-node');
+                const actorStatus = document.getElementById('actor-status');
+                
+                consoleEl.innerHTML = "> [Task 1~5] 공유 공간 진입 트랜잭션 동시 커밋 발견.<br>";
+                reportEl.innerHTML = "<b>[공간 분할 큐 대기]</b> 액터 영역 외부의 Serial Queue 대기선에 순서대로 정렬됩니다.";
+                
+                for(let i=1; i<=5; i++) {
+                    const node = document.getElementById('t'+i);
+                    if(node) {
+                        node.style.transition = "all 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
+                        node.style.background = "var(--warning-color)";
+                    }
+                }
+
+                let currentDelay = 400;
+
+                for(let i=1; i<=5; i++) {
+                    const taskIdx = i;
+                    
+                    let t1 = setTimeout(() => {
+                        const t = document.getElementById('t'+taskIdx);
+                        if(!t) return;
+                        consoleEl.innerHTML += "> [호출] Task " + taskIdx + "가 액터 잠금(Lock)을 획득하고 내부로 진입합니다.<br>";
+                        consoleEl.scrollTop = consoleEl.scrollHeight;
+                        
+                        actorNode.style.background = "var(--warning-color)";
+                        actorStatus.innerText = "Task " + taskIdx + " 연산 중";
+                        
+                        t.style.left = actorLeft;
+                        t.style.top = "110px";
+                        t.style.background = "var(--primary-color)";
+                    }, currentDelay);
+                    simulationTimeline.push(t1);
+                    currentDelay += 900;
+
+                    let t2 = setTimeout(() => {
+                        const t = document.getElementById('t'+taskIdx);
+                        if(!t) return;
+                        consoleEl.innerHTML += "<span style='color:var(--success-color);'>✓ Task " + taskIdx + " 연산 완료 -> 안전하게 탈출 및 세션 해제.</span><br>";
+                        consoleEl.scrollTop = consoleEl.scrollHeight;
+                        
+                        t.style.left = exitLeft;
+                        t.style.top = baseTopPositions[taskIdx-1] + "px";
+                        t.style.background = "var(--success-color)";
+                        
+                        if(taskIdx === 5) {
+                            actorNode.style.background = "var(--success-color)";
+                            actorStatus.innerText = "모두 완료 (안전)";
+                            reportEl.innerHTML = "<b>[직렬 처리 완수]</b> 모든 비동기 태스크가 공간적으로 격리된 상태에서 순차 연산 제어를 받아 마감되었습니다.";
+                            btnAction.disabled = false;
+                        }
+                    }, currentDelay);
+                    simulationTimeline.push(t2);
+                    currentDelay += 300;
+                }
+            }, 50); 
+        }
+
+        function runContagionSimulation() {
+            btnAction.disabled = true;
+            syncUI();
+            btnAction.disabled = true;
+
+            setTimeout(() => {
+                const store = document.getElementById('node-store');
+                const net = document.getElementById('node-net');
+                const vm = document.getElementById('node-vm');
+                const a1 = document.getElementById('a1');
+                const a2 = document.getElementById('a2');
+                const rightHeader = document.getElementById('after-header-tag');
+                const panelAfter = document.getElementById('panel-after');
+                
+                consoleEl.innerHTML = "> git pull origin main<br>";
+                consoleEl.innerHTML += "> Fast-forward | 수정한 파일: DataStore.swift (팀원 커밋)<br>";
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                
+                store.style.borderStyle = "solid";
+                store.style.borderColor = "var(--success-color)";
+                store.style.backgroundColor = "var(--success-color)";
+                store.style.color = "white";
+                store.innerHTML = "🛡️ DataStore (팀원이 actor로 변경)";
+                
+                rightHeader.innerText = "⚠️ 경고: 원격 소스 동기화 후 빌드 실패!";
+                rightHeader.style.background = "var(--danger-color)";
+                rightHeader.style.color = "white";
+                panelAfter.style.backgroundColor = "#fff5f5";
+
+                let t1 = setTimeout(() => {
+                    a1.style.background = "var(--danger-color)";
+                    net.className = "tree-node node-my-alert";
+                    document.getElementById('warn-net').style.display = "block";
+                    consoleEl.innerHTML += "<br><span style='color:var(--danger-color); font-weight:bold;'>❌ [Xcode Error] NetworkLayer.swift:34:12: 'UserRecord'를 액터 경계 밖으로 무단 전송할 수 없습니다.</span><br>";
+                    consoleEl.scrollTop = consoleEl.scrollHeight;
+                }, 1000);
+                simulationTimeline.push(t1);
+                
+                let t2 = setTimeout(() => {
+                    a2.style.background = "var(--danger-color)";
+                    vm.className = "tree-node node-my-alert";
+                    document.getElementById('warn-vm').style.display = "block";
+                    
+                    consoleEl.innerHTML += "<span style='color:var(--danger-color); font-weight:bold;'>❌ [Xcode Error] UserInterface.swift:78:21: 메인 액터 격리 뷰모델이 오염된 비격리 스트림 수신 거부.</span><br>";
+                    consoleEl.innerHTML += "<br><span style='color:#ff9500; font-weight:bold;'>📊 [영향도 요약]<br>• 변경한 파일: DataStore.swift (1개)<br>• 내 코드 중 영향받은 파일: NetworkLayer.swift, ViewModel.swift (2개)</span><br>";
+                    consoleEl.scrollTop = consoleEl.scrollHeight;
+
+                    reportEl.innerHTML = "<b>💥 격리 전염성의 공포:</b> 나는 코드를 단 한 줄도 수정하지 않았지만 하위 인프라 파일이 actor로 선언되는 순간, 상위 아키텍처 전체에 에러 폭탄이 떨어집니다.";
+                    btnAction.disabled = false;
+                }, 2200);
+                simulationTimeline.push(t2);
+            }, 50);
+        }
+
+        btnAction.addEventListener('click', () => {
+            if (currentMode === 'queue') runQueueSimulation();
+            else runContagionSimulation();
+        });
+
+        document.getElementById('tab-btn-queue').addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentMode = 'queue';
+            syncUI();
+        });
+        document.getElementById('tab-btn-contagion').addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentMode = 'contagion';
+            syncUI();
+        });
+
+        syncUI();
+    </script>
+
+</body>
+</html>
