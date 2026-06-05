@@ -9,7 +9,7 @@ toc: true
 toc_sticky: true
 ---
 
-# Swift Concurrency & 격리(Isolation) 핵심 개념 정리
+## Swift Concurrency & 격리(Isolation) 핵심 개념 정리
 
 > Matt Massicotte의 강연을 바탕으로 정리한 Swift Concurrency 가이드.  
 > 단순한 문법 습득을 넘어, **왜** 이렇게 설계되었는지를 이해하는 것을 목표로 한다.
