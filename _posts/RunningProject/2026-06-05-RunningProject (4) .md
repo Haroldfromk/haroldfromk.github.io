@@ -76,6 +76,26 @@ Button { runViewModel.stop() }
 
 ---
 
+#### 문제 해결
+
+`MapTestView`에서 `runViewModel.start()`를 호출해도 로그에 아무것도 출력되지 않는 문제가 발생했다.
+
+원인은 객체가 서로 달랐기 때문이다. `MapTestView`에 `@State private var locationService`가 따로 선언되어 있어서 `runViewModel` 내부의 `locationService`와 전혀 다른 인스턴스였다. 버튼은 `runViewModel.start()`를 호출하지만 로그는 `MapTestView`의 `locationService.logs`를 보고 있으니 당연히 출력이 안 되는 구조였다.
+
+해결 방법은 `MapTestView`의 `@State private var locationService`를 제거하고, `RunViewModel`에서 `locationService`의 프로퍼티를 노출하여 하나의 인스턴스만 사용하도록 수정했다.
+
+```swift
+// RunViewModel에 추가
+var latitude: Double { locationService.latitude }
+var longitude: Double { locationService.longitude }
+var accuracy: Double { locationService.accuracy }
+var logs: [String] { locationService.logs }
+```
+
+이렇게 하면 View는 `runViewModel`만 바라보고, 서비스 인스턴스도 하나로 통일된다.
+
+---
+
 ### HealthKitService 기능 연결
 
 `LocationService`와 달리 `HealthKitService`는 지금 단계에서 View에 직접 노출할 실시간 데이터가 없다.
