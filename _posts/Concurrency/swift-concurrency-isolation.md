@@ -1,7 +1,7 @@
 ---
 title: Swift Concurrency & 격리(Isolation) 핵심 개념 정리
 writer: Harold
-date: 2026-06-05 08:25
+date: 2026-06-05 08:25 +0800
 categories: [Concurrency]
 tags: [Swift, Concurrency, Isolation, Actor, Sendable, MainActor, DataRace, Swift6]
 
