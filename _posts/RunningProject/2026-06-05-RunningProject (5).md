@@ -652,3 +652,7 @@ View에서는 이렇게 호출한다.
 
 Before: `init` → 내가 직접 생성한 `Task` → stream 소비
 After: `RunWayApp.$main` → SwiftUI `.task` → `MainActor` 격리 컨텍스트 → stream 소비
+
+<img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/49eb78a6-be4c-46ae-93f1-bfa809bdf09a" />
+
+스트림이 무한 증식하던 문제부터 시작해서 Sendable 에러를 거쳐 최종 구조까지 오는 과정을 한눈에 정리하면 위 만화와 같다.
