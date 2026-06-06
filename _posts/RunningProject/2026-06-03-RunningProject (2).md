@@ -244,7 +244,7 @@ Target -> Info에서 추가를 하면되는데, `LocationTemporaryUsageDescripti
 
 그리고 빌드를 하면 갑자기 중복에러가 발생해서 보니 Info.plist 파일이 자동으로 생성이 되어 있었다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/f501b095-d163-4c62-9572-c6d0a440913d" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/f501b095-d163-4c62-9572-c6d0a440913d.png" />
 
 그래서 이렇게 info.plist 목록을 제거해주어 에러를 해결했다.
 
@@ -252,7 +252,7 @@ Target -> Info에서 추가를 하면되는데, `LocationTemporaryUsageDescripti
 
 하지만 재시도를 해도 자꾸 저기서 팅겨서 그냥 새롭게 생성된 info.plist에 custom을 하기로 결정.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/501040b7-be28-40b1-85ce-b3f9f9d7f2d1" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/501040b7-be28-40b1-85ce-b3f9f9d7f2d1.png" />
 
 이렇게 설정을하고 info.plist에 `Privacy - Location Temporary Usage Description Dictionary`를 추가해준다.
 
@@ -284,7 +284,7 @@ After
 </plist>
 ```
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/c92eb159-7d69-4e1d-8de0-ab636fd52848" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/c92eb159-7d69-4e1d-8de0-ab636fd52848.png" />
 
 그럼 이렇게 추가된걸 알 수 있다.
 
@@ -302,7 +302,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {}
 
 하지만 6부터는 class에 대해서 별도의 언급이 없는이상 `MainActor`가 암묵적으로 사용되어서 이런 위치관련기능또한 MainThread에서 실행된다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/45b6d0c6-fc4e-4046-97a6-89bd7bd1f7d3" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/45b6d0c6-fc4e-4046-97a6-89bd7bd1f7d3.png" />
 
 물론. `@preconcurrency`쓰면 되긴하지만, 어차피 위에서도 바꿔서 해보기로 결정했기에 해당 attribute는 그냥 언급만하고 쓰지는 않는다.
 
@@ -339,7 +339,7 @@ func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:
 
 실행을하니 info.plist 관련 에러가 발생 그래서 기본적인 세팅을 직접 해준다
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/4b05e327-a62f-4e6e-8a62-4415a93f7299" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/4b05e327-a62f-4e6e-8a62-4415a93f7299.png" />
 
 이렇게하고 빌드시 아래와 에러가 발생하면
 
@@ -349,7 +349,7 @@ Multiple commands produce '/Users/dongik/Library/Developer/Xcode/DerivedData/Run
 
 타겟을 지워주자.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/66d51583-d450-4daa-a52e-b2add42c0945" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/66d51583-d450-4daa-a52e-b2add42c0945.png" />
 
 그리고 아래와 같이 작성
 
@@ -405,7 +405,7 @@ Multiple commands produce '/Users/dongik/Library/Developer/Xcode/DerivedData/Run
 
 그리고 반드시
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/0d5fffe3-27b4-47b9-8c21-9503cecf267f" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/0d5fffe3-27b4-47b9-8c21-9503cecf267f.png" />
 
 Generate를 No로 해준다. 위에서도 하긴 했는데 다시한번 강조...
 
@@ -413,12 +413,12 @@ Generate를 No로 해준다. 위에서도 하긴 했는데 다시한번 강조..
 
 시뮬레이터에서 info.plist 설정이 제대로 된것을 확인
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/b25f0768-90a8-4b0d-8899-17ace3f5e7f6" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/b25f0768-90a8-4b0d-8899-17ace3f5e7f6.png" />
 
 그래서 실기기 테스트 결과 이렇게 잘 되는걸 알 수 있다.
 (위치와 좌표는 일부러 블러처리)
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/d0a9aacf-4ddf-4767-ae2a-0c671bf80f44" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/d0a9aacf-4ddf-4767-ae2a-0c671bf80f44.png" />
 
 ---
 
@@ -474,11 +474,11 @@ func startTracking() {
 
 Target으로 가서
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/fbca788b-001e-45a2-bbcc-09d19ef4355d" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/fbca788b-001e-45a2-bbcc-09d19ef4355d.png" />
 
 이렇게 추가를 해주고
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/5b4c7217-9246-47ec-b324-2cd828002f61" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/5b4c7217-9246-47ec-b324-2cd828002f61.png" />
 
 location에 체크를 해준다.
 
@@ -566,7 +566,7 @@ private func addLog(_ message: String) {
 
 일단은 시뮬레이터에서는 작동이 된다.
 
-<img width="472" height="986" alt="Image" src="https://github.com/user-attachments/assets/0921446d-ee77-4f6b-9694-6e3bbe8ed3f2" />{: width="50%" height="50%"}
+<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/0921446d-ee77-4f6b-9694-6e3bbe8ed3f2.png" />{: width="50%" height="50%"}
 
 ---
 

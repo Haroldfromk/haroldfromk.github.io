@@ -189,7 +189,7 @@ private(set) var totalDistance: Double = 0
 
 캡쳐를 하려고 다시 실행하다가 갑자기 아래 사진과 같은 에러가 발생
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/64cc1538-b7f9-4a6e-8b94-b10b805749f1" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/64cc1538-b7f9-4a6e-8b94-b10b805749f1.png" />
 
 잘되다가 왜 이러는지 모르지만 무튼 위의 info.plist가 있어서 충돌난것,
 
@@ -197,7 +197,7 @@ private(set) var totalDistance: Double = 0
 
 다시 돌아와서 거리계산이 현재 0으로 나오는걸 알 수 있다.
 
-<img width="472" height="986" alt="Image" src="https://github.com/user-attachments/assets/a5564b8f-5418-4fc3-a57d-d77a1c633878" />{: width="50%" height="50%"}
+<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/a5564b8f-5418-4fc3-a57d-d77a1c633878.png" />{: width="50%" height="50%"}
 
 이건 현재 주소가 바뀔때마다 값이 들어가게끔 되어야하는 구조인데 LocationService의 currentLocation은 업데이트가 되고 있는데, 업데이트가 되어도 그 값이 actor의 `processLocation`로 전해지지 않는 것이 가장 큰 문제이다.
 
@@ -276,7 +276,7 @@ init() {
 
 `MapTestView`에서도 `@State private var distance`를 제거하고 `runViewModel.distance`로 교체한다.
 
-<img width="472" height="986" alt="Image" src="https://github.com/user-attachments/assets/953cbd7f-7d7d-47af-af4e-3d63169f4785" />{: width="50%" height="50%"}
+<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/953cbd7f-7d7d-47af-af4e-3d63169f4785.png" />{: width="50%" height="50%"}
 
 우리가 원하는대로 잘 되는걸 알 수 있다.
 
@@ -402,7 +402,7 @@ func streamFlightData(_ location: CLLocation) -> AsyncStream<FlightData> {
 
 사용 방법은 Command + I 를 누르면 아래와 같이 창이 뜬다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/e671fec2-e78e-4dc3-bf07-7f0126bd4310" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/e671fec2-e78e-4dc3-bf07-7f0126bd4310.png" />
 
 거기서 선택 후 녹화를 하면 자연스레 빌드가 되며 시뮬레이터가 뜨는데, 이때 우리가 테스트할 기능을 사용하면된다.
 
@@ -410,9 +410,9 @@ func streamFlightData(_ location: CLLocation) -> AsyncStream<FlightData> {
 
 스트림 뿐만아니라 Task도 생성이 되면서 호출이 된 것
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/6229fec6-1c6a-49e1-bbe6-cf052a08e9e6" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/6229fec6-1c6a-49e1-bbe6-cf052a08e9e6.png" />
 
-<img width="800" height="614" alt="Image" src="https://github.com/user-attachments/assets/08f2aba2-9539-4f31-8d2a-3a4dc47f3c2a" />
+<img width="800" height="614" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/08f2aba2-9539-4f31-8d2a-3a4dc47f3c2a.png" />
 
 이는 Combine의 `sink`와 비교하면 더 명확하게 이해할 수 있다.
 
@@ -472,7 +472,7 @@ Actor-isolated property 'continuation' can not be mutated from a Sendable closur
 
 [onTermination Docs](https://developer.apple.com/documentation/swift/asyncstream/continuation/ontermination){:target="_blank"}에는 잘 나와있다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/0fa7b084-ccf7-4021-b4d7-4c1f293973b7" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/0fa7b084-ccf7-4021-b4d7-4c1f293973b7.png" />
 
 ---
 
@@ -568,7 +568,7 @@ private func clearContinuation() {
 
 위의 내용 이해륻 돕기위한 만화도 첨부한다.
 
-<img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/77d180c5-6a3b-4704-8c38-03dcec529ca2" />
+<img width="1536" height="1024" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/77d180c5-6a3b-4704-8c38-03dcec529ca2.png" />
 
 ---
 
@@ -596,7 +596,7 @@ init() {
 
 실제로 로그를 찍어보면 스트림이 두 번 생성되는 것을 확인할 수 있었다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/be9b9764-cda4-4138-8c5d-5eb0f606229c" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/be9b9764-cda4-4138-8c5d-5eb0f606229c.png" />
 
 ```text
 스트림 생성
@@ -640,7 +640,7 @@ View에서는 이렇게 호출한다.
 
 수정 후 Swift Concurrency Instrument에서는 Task Continuation이 `RunWayApp.$main` 아래에 연결되는 것을 확인할 수 있었다. 이 프로젝트는 Swift 6 환경에서 Default Actor Isolation을 `MainActor`로 설정하고 있기 때문이다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/7c154faa-2f49-4e08-9ae7-273714d79b30" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/7c154faa-2f49-4e08-9ae7-273714d79b30.png" />
 
 정리하면:
 
@@ -653,6 +653,6 @@ View에서는 이렇게 호출한다.
 Before: `init` → 내가 직접 생성한 `Task` → stream 소비
 After: `RunWayApp.$main` → SwiftUI `.task` → `MainActor` 격리 컨텍스트 → stream 소비
 
-<img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/49eb78a6-be4c-46ae-93f1-bfa809bdf09a" />
+<img width="1536" height="1024" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/49eb78a6-be4c-46ae-93f1-bfa809bdf09a.png" />
 
 스트림이 무한 증식하던 문제부터 시작해서 Sendable 에러를 거쳐 최종 구조까지 오는 과정을 한눈에 정리하면 위 만화와 같다.

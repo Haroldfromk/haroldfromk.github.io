@@ -52,7 +52,7 @@ List View의 Modifier로 `navigationTitle`을 추가해주면 된다.
 - 하나의 `NavigationStack` 안에는 여러 화면(List, Detail 등)이 있을 수 있다.
 - 각각의 화면은 서로 **다른 제목(navigationTitle)** 을 가질 수 있다.
 
-![Image](https://github.com/user-attachments/assets/d9263418-9461-471d-b9d6-8f4ef7d7a864){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-27-JPApexPredators-2/d9263418-9461-471d-b9d6-8f4ef7d7a864.png){: width="50%" height="50%"} 
 
 이렇게 Navigation Title이 생긴다.
 
@@ -82,7 +82,7 @@ struct ContentView: View {
 }
 ```
 
-![Image](https://github.com/user-attachments/assets/0abd0e6a-7e79-43b7-a6f8-987d4156a876){: width="50%" height="50%"} 그러면 이렇게 `>` 가 생긴다.
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-27-JPApexPredators-2/0abd0e6a-7e79-43b7-a6f8-987d4156a876.png){: width="50%" height="50%"} 그러면 이렇게 `>` 가 생긴다.
 
 
 이제 `NavigationLink { }` 여기에 있는 Curly Brace 안에는 어떤게 들어가느냐
@@ -99,7 +99,7 @@ NavigationLink {
 }
 ```
 
-![Image](https://github.com/user-attachments/assets/a9343eea-d16a-4cd7-a77d-d0856b0adf04){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-27-JPApexPredators-2/a9343eea-d16a-4cd7-a77d-d0856b0adf04.png){: width="50%" height="50%"} 
 
 실행하면 위와 같다.
 
@@ -120,7 +120,7 @@ UIKit이었다면 UISearchBarDelegate를 통해서 구현해야하지만 swiftui
 이렇게 해주면 된다.
 아래 autocorrectionDisabled는 자동완성 금지.
 
-![Image](https://github.com/user-attachments/assets/256ef977-bf1e-46ac-856f-a105eb19f368){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-27-JPApexPredators-2/256ef977-bf1e-46ac-856f-a105eb19f368.png){: width="50%" height="50%"} 
 
 하지만 아직 작동은 되지않는다.
 
@@ -150,15 +150,15 @@ var body: some View {
 
 고차함수인 filter를 사용하고 searchText와 일치하는 단어만 리턴하기 위해서 `localizedCaseInsensitiveContains`를 사용해주었다.
 
-![Image](https://github.com/user-attachments/assets/20ffc44e-e14b-4ae7-83d3-81d84b567965)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-27-JPApexPredators-2/20ffc44e-e14b-4ae7-83d3-81d84b567965.png)
 
 boolean을 return하지만 애초에 filter 함수 역시도 
 
-![Image](https://github.com/user-attachments/assets/96f6f2c1-6ae9-4f87-a8fe-f71ecb8358f4)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-27-JPApexPredators-2/96f6f2c1-6ae9-4f87-a8fe-f71ecb8358f4.png)
 
 isIncluded가 true인 것만 리턴하기에 둘은 천생연분
 
-![Image](https://github.com/user-attachments/assets/fd436505-263a-4da4-8fda-cea4e0ad0478){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-27-JPApexPredators-2/fd436505-263a-4da4-8fda-cea4e0ad0478.png){: width="50%" height="50%"} 
 
 그럼 이렇게 필터링 된 값만 보이게 된다.
 

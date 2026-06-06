@@ -126,7 +126,7 @@ class UserApi {
 
 Firebase정보를 담고있는 plist file에 다음과 같이 추가해준다.
 
-![CleanShot 2024-05-20 at 00 11 28@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/98545eed-0512-4f8d-be3e-d0e5cebaab05)
+![CleanShot 2024-05-20 at 00 11 28@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-4/98545eed-0512-4f8d-be3e-d0e5cebaab05)
 
 ```swift
 let REF_USER = "users"
@@ -259,7 +259,7 @@ func signUp(onSuccess: @escaping() -> Void, onError: @escaping (_ errorMessage: 
 
 실행하면 등록되는 동안 로딩 애니메이션이 작동
 
-![May-20-2024 00-28-19](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/533cbe9d-134d-4ce9-a3d4-46cd622eadc5){: width="50%" height="50%"} 
+![May-20-2024 00-28-19](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-4/533cbe9d-134d-4ce9-a3d4-46cd622eadc5){: width="50%" height="50%"} 
 
 잘된다. 저 애니메이션이 끝난다는건 firebase와의 통신이 완료되어 유저 졍보 등록이 되었다는걸 의미.
 

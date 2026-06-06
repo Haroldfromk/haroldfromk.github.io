@@ -36,11 +36,11 @@ Khanlou라는 분이 제안을 한 글이다. 시간이 되면 읽어보자.
 
 - without children
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/DN3oBd2Wqd.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-19-Deep-Dive-Coordinator-Pattern/DN3oBd2Wqd.png)
 
 - with children
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/UmcCFLrudt.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-19-Deep-Dive-Coordinator-Pattern/UmcCFLrudt.png)
 
 - 보면 각각의 VC가 서로를 알 필요가 없다.
 - 모든건 Coordinator가 관리한다.
@@ -71,13 +71,13 @@ class MainCoordinator : Coordinator {
 
 ## 6. Main interface 지우기
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/r8kkgF8IB0.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-19-Deep-Dive-Coordinator-Pattern/r8kkgF8IB0.png)
 
 해당 영상을 보다보면 Main interface의 Main을 지우는데 버전이 바뀌었으므로
 
 위의 사진대로 하면 된다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/FLOTTscPnU.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-19-Deep-Dive-Coordinator-Pattern/FLOTTscPnU.png)
 
 그리고 info.plist에서 해당 부분을 지워준다.
 
@@ -274,7 +274,7 @@ class MainCoordinator : Coordinator {
 
 ### 7. 작동 테스트
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/LjryMVB9fk.gif)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-19-Deep-Dive-Coordinator-Pattern/LjryMVB9fk.gif)
 
 ## 7. 복기
 

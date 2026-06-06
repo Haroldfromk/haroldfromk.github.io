@@ -20,8 +20,8 @@ toc_sticky: true
 
 ## 2. UI 구성
 
-![simulator_screenshot_9D17A48D-40B8-46DE-9C33-3936E1974EBF](https://github.com/user-attachments/assets/6a59843e-d040-44a8-aa38-1d5bfb009c3e){: width="50%" height="50%"}
-![simulator_screenshot_52C45360-10CA-4E02-BF6B-2824E0EEBA80](https://github.com/user-attachments/assets/3c1fcf8e-d624-40da-9d12-2441e1482a0d){: width="50%" height="50%"} 
+![simulator_screenshot_9D17A48D-40B8-46DE-9C33-3936E1974EBF](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-19-Final-Remind1/6a59843e-d040-44a8-aa38-1d5bfb009c3e.png){: width="50%" height="50%"}
+![simulator_screenshot_52C45360-10CA-4E02-BF6B-2824E0EEBA80](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-19-Final-Remind1/3c1fcf8e-d624-40da-9d12-2441e1482a0d.png){: width="50%" height="50%"} 
 
 
 ### 2-1. 지도 화면 UI 구조
@@ -31,7 +31,7 @@ toc_sticky: true
 
 ### 2-2. 계층 구조
 
-![CleanShot 2024-11-19 at 13 24 49](https://github.com/user-attachments/assets/e1143d0c-59fd-4d38-a028-3485a65769eb){: width="50%" height="50%"} 
+![CleanShot 2024-11-19 at 13 24 49](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-19-Final-Remind1/e1143d0c-59fd-4d38-a028-3485a65769eb.png){: width="50%" height="50%"} 
 
 - **MapViewController**
   - `View`

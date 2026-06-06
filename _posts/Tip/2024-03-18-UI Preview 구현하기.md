@@ -9,7 +9,7 @@ toc: true
 toc_sticky: true
 ---
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/MkhICqNpSu.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-18-UI-Preview-구현하기/MkhICqNpSu.png)
 
 이젠 Command + R 을 할 필요가 없다.
 <https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode> 참고

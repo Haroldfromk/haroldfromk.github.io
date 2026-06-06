@@ -16,9 +16,9 @@ toc_sticky: true
 UIDesgin
 
 
-![simulator_screenshot_2BBB5E1E-D293-4244-84AA-DB8320854B62](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/c1e780e3-0e45-4cc7-b912-dc18b0e3a663){: width="50%" height="50%"} 
-![simulator_screenshot_079E0A6B-E3AD-4CDC-8D02-84A771CDAF12](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/73d81b69-2fa8-4ffc-bc23-39858a63a3e0){: width="50%" height="50%"} 
-![simulator_screenshot_63ECCB97-72C8-4933-A1C4-49AA46F52567](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/8b362d24-6df5-47c7-b9be-cecf6afc5889){: width="50%" height="50%"}
+![simulator_screenshot_2BBB5E1E-D293-4244-84AA-DB8320854B62](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-1/c1e780e3-0e45-4cc7-b912-dc18b0e3a663){: width="50%" height="50%"} 
+![simulator_screenshot_079E0A6B-E3AD-4CDC-8D02-84A771CDAF12](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-1/73d81b69-2fa8-4ffc-bc23-39858a63a3e0){: width="50%" height="50%"} 
+![simulator_screenshot_63ECCB97-72C8-4933-A1C4-49AA46F52567](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-1/8b362d24-6df5-47c7-b9be-cecf6afc5889){: width="50%" height="50%"}
 
 
 사진으로 대체한다.
@@ -41,7 +41,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 이렇게 해서 backButton을 설정 해준다.
 
 
-![May-19-2024 20-39-42](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/2b622b41-5a43-4666-8775-a43af1e45431){: width="50%" height="50%"} 
+![May-19-2024 20-39-42](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-1/2b622b41-5a43-4666-8775-a43af1e45431){: width="50%" height="50%"} 
 
 ## Sign In VC 설정
 
@@ -96,7 +96,7 @@ sign up 버튼을 클릭하여 회원가입을 하기 위해
     }
 ```
 
-![CleanShot 2024-05-19 at 21 58 39@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/17f20960-6fc2-4577-beb5-db6a3bd95461)
+![CleanShot 2024-05-19 at 21 58 39@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-1/17f20960-6fc2-4577-beb5-db6a3bd95461)
 
 현재는 Firebase 에서 로그인 방식을 email / password로 해둔상태이다.
 
@@ -108,7 +108,7 @@ Optional("test1@gmail.com")
 
 이 출력되고,
 
-![CleanShot 2024-05-19 at 22 00 13@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/3dcbea40-25f9-43cf-88b8-421da00641b9)
+![CleanShot 2024-05-19 at 22 00 13@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-1/3dcbea40-25f9-43cf-88b8-421da00641b9)
 
 이렇게 Firebase, Auth에도 등록이 된걸 알 수 있다.
 
@@ -142,7 +142,7 @@ dict라는 dictionary를 만드는데 uid, email, profileImageUrl, status의 정
 
 users라는 table에서, 또 거기서 유저의 uid table을 만들고 거기에 유져의 데이터가 담기는 방식이다.
 
-![CleanShot 2024-05-19 at 22 09 50@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/477b5c2b-9fbf-4919-9cde-89b74a10ef94)
+![CleanShot 2024-05-19 at 22 09 50@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-1/477b5c2b-9fbf-4919-9cde-89b74a10ef94)
 
 그러면 이렇게 정보가 담기게 된다.
 

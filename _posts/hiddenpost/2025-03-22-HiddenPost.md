@@ -22,11 +22,11 @@ toc_sticky: true
 
 이후 Developer 사이트에 들어가서
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/3d8514b8-f92c-4aaf-989f-f0afef49361f" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-22-HiddenPost/3d8514b8-f92c-4aaf-989f-f0afef49361f.png" />
 
 인증서 (영문)을 들어가서
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/f38da1eb-0396-49fc-b85d-ae884815d090" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-22-HiddenPost/f38da1eb-0396-49fc-b85d-ae884815d090.png" />
 
 이렇게 해주면 된다.
 

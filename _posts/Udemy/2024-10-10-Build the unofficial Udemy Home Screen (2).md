@@ -14,7 +14,7 @@ toc_sticky: true
 이 파일은 View에 있지만, SwiftUI를 import 해주었다.
 
 > `import SwiftUI`를 하게되면 UIkit 을 별도로 import를 해야하나?
->> ![CleanShot 2024-10-10 at 15 17 54](https://github.com/user-attachments/assets/7acd140a-bd2a-45a2-af05-8cc0ce1aaa35){: width="50%" height="50%"} 
+>> ![CleanShot 2024-10-10 at 15 17 54](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-10-Build-the-unofficial-Udemy-Home-Screen-2/7acd140a-bd2a-45a2-af05-8cc0ce1aaa35.png){: width="50%" height="50%"} 
 >>> 이렇게 Definition을 보게되면 SwiftUI안에 UIKit을 이미 import한게 내장이 되어있다는걸 알 수 있다. 즉 import를 할 필요가 없다.
 
 [Swift Style Guide](https://google.github.io/swift/){:target="_blank"}에 코드 컨벤션 관련한 내용이 있으니 한번 확인해보자.
@@ -48,7 +48,7 @@ final class MainBannerCollectionViewCell: UICollectionViewCell {
 
 [참고글](https://ios-development.tistory.com/1157){:target="_blank"}도 읽어보면 좋을듯.
 
-![CleanShot 2024-10-10 at 15 39 31](https://github.com/user-attachments/assets/37defc65-cb00-464a-b9ed-af19806e1e3c)
+![CleanShot 2024-10-10 at 15 39 31](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-10-Build-the-unofficial-Udemy-Home-Screen-2/37defc65-cb00-464a-b9ed-af19806e1e3c.png)
 
 간단하게 정의를 하면 UIKit에서 SwiftUI View를 사요하고 싶을때 쓴다고 보면 될듯.
 
@@ -223,7 +223,7 @@ override func viewDidLoad() {
 
 caption에 대한 내용이 없다.
 
-![simulator_screenshot_0A1B9930-0CD0-4D9C-8659-C797004B4D52](https://github.com/user-attachments/assets/f060db93-12ac-410c-96d9-41b233f17a8b){: width="50%" height="50%"} 
+![simulator_screenshot_0A1B9930-0CD0-4D9C-8659-C797004B4D52](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-10-Build-the-unofficial-Udemy-Home-Screen-2/f060db93-12ac-410c-96d9-41b233f17a8b.png){: width="50%" height="50%"} 
 
 역산을 하며 올라가던중 MainBannerView에 caption이 없음을 인지했다.
 
@@ -267,6 +267,6 @@ MainBannerView의 Vstack에서 caption에 대한 부분이 아예 없었다. 빼
 
 수정을 하고나니 제대로 나온다.
 
-![simulator_screenshot_08B39584-6A5B-4AEE-86C8-4B154794FCC9](https://github.com/user-attachments/assets/e227cda5-4144-45d7-a307-f96464b97733){: width="50%" height="50%"} 
+![simulator_screenshot_08B39584-6A5B-4AEE-86C8-4B154794FCC9](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-10-Build-the-unofficial-Udemy-Home-Screen-2/e227cda5-4144-45d7-a307-f96464b97733.png){: width="50%" height="50%"} 
 
 그러면 제일 상단의 메인 배너 쪽이 완성이 된다!

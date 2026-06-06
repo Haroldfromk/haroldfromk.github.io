@@ -18,7 +18,7 @@ toc_sticky: true
 
 위키에서는 의존성 주입을 다음과 같의 정의한다.
 
-![CleanShot 2024-11-18 at 08 45 42](https://github.com/user-attachments/assets/ecc1d75e-efab-4b47-978f-2b2135863813)
+![CleanShot 2024-11-18 at 08 45 42](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-18-Deep-Dive-Dependency-Injection/ecc1d75e-efab-4b47-978f-2b2135863813.png)
 
 내용이 길어 이미지로 한다.
 
@@ -42,7 +42,7 @@ toc_sticky: true
 
 사실 의존성주입은 여태 우리가 어떤 class를 만들고 내부에 변수를 만들때 사용을 해왔다. (왜냐 그렇게 하지않으면 에러가 발생했으니까)
 
-![CleanShot 2024-11-18 at 10 47 15](https://github.com/user-attachments/assets/52e648fc-5f54-46b5-9d13-0d8ef2ee49df)
+![CleanShot 2024-11-18 at 10 47 15](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-18-Deep-Dive-Dependency-Injection/52e648fc-5f54-46b5-9d13-0d8ef2ee49df.png)
 
 #### 1-2-1. 의존성 주입을 하지않은 경우
 

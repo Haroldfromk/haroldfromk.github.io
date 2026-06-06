@@ -74,7 +74,7 @@ func getAllTodos(url: URL, completion: @escaping (Result<[Todo], NetworkError>) 
 }
 ```
 
-![CleanShot 2024-12-02 at 16 18 46](https://github.com/user-attachments/assets/2912bcb3-42b8-47d9-9819-2695a3a71fd0)
+![CleanShot 2024-12-02 at 16 18 46](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-02-Async_await-fin/2912bcb3-42b8-47d9-9819-2695a3a71fd0.png)
 
 이건 이전글에서도 언급했던 내용이긴 한데,
 >UI 업데이트는 반드시 Main Thread에서 이루어져야 한다.
@@ -99,7 +99,7 @@ var body: some View {
 
 List에서 적용하는 데이터가
 
-![CleanShot 2024-12-02 at 16 21 16](https://github.com/user-attachments/assets/c8d6d298-b044-4b28-b41e-6126d442807e)
+![CleanShot 2024-12-02 at 16 21 16](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-02-Async_await-fin/c8d6d298-b044-4b28-b41e-6126d442807e.png)
 
 바로 VM의 todos이기 때문,
 
@@ -159,13 +159,13 @@ class TodoListViewModel: ObservableObject {
 
 이렇게 하고 실행했지만?
 
-![CleanShot 2024-12-02 at 16 18 46](https://github.com/user-attachments/assets/2912bcb3-42b8-47d9-9819-2695a3a71fd0)
+![CleanShot 2024-12-02 at 16 18 46](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-02-Async_await-fin/2912bcb3-42b8-47d9-9819-2695a3a71fd0.png)
 
 아직도 발생하는 같은에러?
 
 뭐가 문제일까??
 
-![CleanShot 2024-12-02 at 16 44 02](https://github.com/user-attachments/assets/54bf96af-f035-4df4-a350-79b1c0b2bcb4)
+![CleanShot 2024-12-02 at 16 44 02](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-02-Async_await-fin/54bf96af-f035-4df4-a350-79b1c0b2bcb4.png)
 
 분명 이렇게 단일(싱글톤) actor로, 그 **실행기(executor)** 가 Main Dispatch Queue와 동일하다라고 되어있는데,
 
@@ -213,13 +213,13 @@ func getAllTodos(url: URL, completion: @escaping (Result<[Todo], NetworkError>) 
 
 `MainActor.run`을 사용하는 것이다.
 
-![CleanShot 2024-12-02 at 17 31 00](https://github.com/user-attachments/assets/37cc46f6-921c-44a3-944c-74a9ad24c4e0)
+![CleanShot 2024-12-02 at 17 31 00](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-02-Async_await-fin/37cc46f6-921c-44a3-944c-74a9ad24c4e0.png)
 
 그랬더니 갑자기 뜨는 async?
 
 run 함수를 보면 이렇게 async 가 있는걸 알 수 있다.
 
-![CleanShot 2024-12-02 at 17 31 18](https://github.com/user-attachments/assets/0599e0d7-922a-4e01-8a21-538f8553ac4c)
+![CleanShot 2024-12-02 at 17 31 18](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-02-Async_await-fin/0599e0d7-922a-4e01-8a21-538f8553ac4c.png)
 
 즉 해당 함수는 Task가 필요.
 
@@ -244,7 +244,7 @@ func getAllTodos(url: URL, completion: @MainActor @escaping (Result<[Todo], Netw
 
 이렇게 콜백하는 쪽에 `@MainActor`를 달수도있다.
 
-![CleanShot 2024-12-02 at 17 36 25](https://github.com/user-attachments/assets/b430cea9-1c0f-4731-b36f-dde24815c084)
+![CleanShot 2024-12-02 at 17 36 25](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-02-Async_await-fin/b430cea9-1c0f-4731-b36f-dde24815c084.png)
 
 그랬더니 completion에서 다음과같이 뜬다.
 
@@ -388,7 +388,7 @@ Task.detached {
     self.todos = todos.map(TodoViewModel.init)
 }
 ```
-![CleanShot 2024-12-02 at 18 25 41](https://github.com/user-attachments/assets/6fedfb80-e39d-492a-bd82-9038e451ac37)
+![CleanShot 2024-12-02 at 18 25 41](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-02-Async_await-fin/6fedfb80-e39d-492a-bd82-9038e451ac37.png)
 
 사용하려하니 에러가 뜬다.
 

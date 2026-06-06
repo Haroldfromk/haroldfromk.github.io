@@ -218,7 +218,7 @@ while let animal = animalIterator.next() {
 
 이렇게 배열에서 `makeIterator`를 통해서
 
-![CleanShot 2024-11-29 at 19 09 35](https://github.com/user-attachments/assets/23fae15f-c01f-4ac5-b040-ea6ef6ed0533)
+![CleanShot 2024-11-29 at 19 09 35](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-9/23fae15f-c01f-4ac5-b040-ea6ef6ed0533.png)
 
 순차적으로 접근이 가능하게 해주었다.
 
@@ -234,7 +234,7 @@ while let animal = animalIterator.next() {
 
 다시 돌아와서
 
-![CleanShot 2024-11-29 at 19 12 05](https://github.com/user-attachments/assets/586c58cb-b674-4b43-a742-cd02c942b7f6)
+![CleanShot 2024-11-29 at 19 12 05](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-9/586c58cb-b674-4b43-a742-cd02c942b7f6.png)
 
 `next`를 통해서 하나씩 순차적으로 접근을 하기 시작한다.
 
@@ -449,7 +449,7 @@ Task {
             - makeIterator를 통해 한줄씩 슬라이싱 되는 line은 기본적으로 String.SubSequence 타입을 가진다.
             - [Docs](https://developer.apple.com/documentation/swift/string/subsequence){:target="_blank"}
             - 사용하지 않으면 아래와 같은 에러발생
-            ![CleanShot 2024-11-29 at 20 47 18](https://github.com/user-attachments/assets/42820363-3b17-4163-9e8e-67d08265179f)
+            ![CleanShot 2024-11-29 at 20 47 18](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-9/42820363-3b17-4163-9e8e-67d08265179f.png)
     - next 함수를 만들었다 정확하게는 커스터마이징 해주었다.
         - 해당 함수에서는 순차적으로 계속 접근을 하면서 마지막 줄이 되었을때 nil을 반환하면서 행동이 종료된다.
         - return String(lines.removeFirst())
@@ -546,7 +546,7 @@ Task {
 
 for에 try await를 통해 작성을 한다.
 
-![CleanShot 2024-12-01 at 23 41 28](https://github.com/user-attachments/assets/994ee247-0052-4049-94b3-dd517bdebca5)
+![CleanShot 2024-12-01 at 23 41 28](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-9/994ee247-0052-4049-94b3-dd517bdebca5.png)
 
 이때 URL에는 lines라는 메서드가 있다.
 

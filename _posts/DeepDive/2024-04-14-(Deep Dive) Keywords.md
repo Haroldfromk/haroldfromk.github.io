@@ -45,7 +45,7 @@ var computedValue = {
     }
 ```
 
-![CleanShot 2024-04-14 at 13 12 14@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/12751c32-4cd6-4bb3-849e-010c95c61357)
+![CleanShot 2024-04-14 at 13 12 14@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-14-Deep-Dive-Keywords/12751c32-4cd6-4bb3-849e-010c95c61357)
 
 메모리에 할당이 되어있는걸 볼 수 있다.
 
@@ -59,7 +59,7 @@ var computedValue = {
     }
 ```
 
-![CleanShot 2024-04-14 at 13 14 58@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/d7195075-fa65-413b-b973-ad1167b654e4)
+![CleanShot 2024-04-14 at 13 14 58@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-14-Deep-Dive-Keywords/d7195075-fa65-413b-b973-ad1167b654e4)
 
 lazy var로 선언한 lazyComputedValue는 nil이라 아직 할당이 되어 있지 않는다.
 
@@ -70,7 +70,7 @@ print(computedValue())
 print(lazyComputedValue())
 ```
 
-![CleanShot 2024-04-14 at 13 21 50@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/6fe104c7-d762-4aed-8685-a861b09914e3)
+![CleanShot 2024-04-14 at 13 21 50@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-14-Deep-Dive-Keywords/6fe104c7-d762-4aed-8685-a861b09914e3)
 
 메모리에 할당이 되었다.
 
@@ -116,7 +116,7 @@ Student Class가 Person을 상속 받았으나! name앞에 final로 선언이 �
 
 그리고 normalPerson이라는 class가 Student class를 상속 받으려고 했지만, Student는 final class이기에 상속이 되지 않는다.
 
-![CleanShot 2024-04-14 at 14 13 51@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/71ec620f-b239-41c7-80dc-eeddd9cdca73)
+![CleanShot 2024-04-14 at 14 13 51@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-14-Deep-Dive-Keywords/71ec620f-b239-41c7-80dc-eeddd9cdca73)
 
 이렇게 뭔가 상속을 할때, 해당 함수, 변수등이 상속시 하위 클래스에서 사용하지 못하게 할때 final을 사용한다.
 

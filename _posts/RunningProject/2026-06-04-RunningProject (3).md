@@ -20,7 +20,7 @@ published: true
 
 ### 1. HealthKit 추가하기
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/ce308205-c25a-4232-8c7c-ef3529b514bf" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-04-RunningProject-3/ce308205-c25a-4232-8c7c-ef3529b514bf.png" />
 
 이렇게 추가를 해준다.
 
@@ -39,7 +39,7 @@ published: true
 
 그리고 러닝시에 심박수 데이터가 실시간으로 필요하므로
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/82f05738-9131-408e-94bc-ce4e51dfc778" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-04-RunningProject-3/82f05738-9131-408e-94bc-ce4e51dfc778.png" />
 
 여기에 체크를 해주었다.
 
@@ -357,7 +357,7 @@ func addSimulatorData() async {
 
 이렇게 해준다. 생각해보니 request 하지않아서 같이 겸사겸사 해준다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/500053af-4faf-4f84-81a0-a9362944784c" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-04-RunningProject-3/500053af-4faf-4f84-81a0-a9362944784c.png" />
 
 하지만 
 ```swift
@@ -388,7 +388,7 @@ try await store.requestAuthorization(toShare: healthTypes as! Set<HKSampleType>,
 
 이제 데이터가 잘 들어간걸 확인 할 수 있다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/f66198a1-be98-4842-b1da-b675d935530a" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-04-RunningProject-3/f66198a1-be98-4842-b1da-b675d935530a.png" />
 
 이제 확인했으니 onAppear 부분은 삭제.
 

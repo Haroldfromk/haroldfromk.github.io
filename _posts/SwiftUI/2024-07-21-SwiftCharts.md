@@ -57,6 +57,6 @@ SectorMark는 Pie Chart / Donut Chart이다.
 - innerRadius: .ratio(0.25)는 섹터의 안쪽 반지름을 설정하여 도넛 형태를 만든다.
 - angularInset: 1은 각 섹터 사이의 간격을 조절한다.
 
-![CleanShot 2024-09-10 at 02 08 01@2x](https://github.com/user-attachments/assets/8503b71a-8199-4f0a-8d35-f82dc744f68c){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 02 08 01@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-21-SwiftCharts/8503b71a-8199-4f0a-8d35-f82dc744f68c.png){: width="50%" height="50%"}
 
 이렇게 차트가 나온다.

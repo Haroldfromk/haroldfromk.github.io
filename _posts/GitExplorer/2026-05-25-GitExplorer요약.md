@@ -16,7 +16,7 @@ published: false
 * **네트워크 레이스 컨디션 해결:** [코드 1] `URLSession.dataTaskPublisher`를 통해 GitHub API 통신 부를 구현할 때, 비동기 데이터 충돌(이전 요청이 뒤늦게 도착해 화면을 덮어쓰는 현상)을 막기 위해 상위 스트림을 최신 네트워크 요청 퍼블리셔로 교체해 주는 `flatMap` 혹은 `switchToLatest` 스트림 스위칭 구조의 기틀을 마련함.
 * **참고 사이트:** [GitHub Discussion](https://github.com/pointfreeco/swift-composable-architecture/discussions/1093), [GitHub Docs](https://docs.github.com/en/rest/search/search?apiVersion=2026-03-10#search-users), [Auth Docs](https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10), [이전글](https://haroldfromk.github.io/posts/10%EC%A3%BC%EC%B0%A8-%EA%B3%BC%EC%A0%9C-(10)/)
 * **시각 자료:**
-  <img src="https://github.com/user-attachments/assets/5405ccd3-926b-402c-9afd-ec26a808a47a" alt="Postman API 테스트 결과" />
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/5405ccd3-926b-402c-9afd-ec26a808a47a.png" alt="Postman API 테스트 결과" />
 
 #### GitExplorer (2) — 프로필 상세 화면 및 다중 API 통합
 * **핵심 로직 및 흐름:** 유저 상세 정보 화면 진입 시, 반응형 화면 상태(Status) 관리와 독립적인 3개의 API 요청을 동시에 출발시켜 하나의 통합 모델로 조립하는 흐름임.
@@ -26,10 +26,10 @@ published: false
 * **StateObject 매개변수 초기화 제약:** 외부에서 주입된 유저 객체로 뷰모델을 초기화할 때 `Property initializers run before self is available` 에러 및 `@StateObject` 미설치 접근 경고가 발생하여, 무리한 `init` 연동 대신 `onAppear` 시점에 바인딩 및 초기 조회를 수행하도록 조율함.
 * **참고 사이트:** [참고글1](https://sarunw.com/posts/how-to-initialize-stateobject-with-parameters-in-swiftui/), [참고글2](https://www.swiftwithvincent.com/blog/bad-practice-creating-a-stateobject-wrapper), [StateObject Docs](https://developer.apple.com/documentation/swiftui/stateobject)
 * **시각 자료:**
-  <img src="https://github.com/user-attachments/assets/ea988caa-f3a0-4aa3-9835-04a6a46a2a29" alt="초기 아바타 뷰" />
-  <img src="https://github.com/user-attachments/assets/bf3e8d18-5566-4696-814f-198daaa455fc" alt=" handleEvents 로딩 상태 흐름" />
-  <img src="https://github.com/user-attachments/assets/fcf3426d-ef8a-4237-a0ca-c76c756733b3" alt="상태별 UI 분기 결과" />
-  <img src="https://github.com/user-attachments/assets/ce590d96-0325-4dde-9ac3-8f90b69f72d4" alt="세그먼트 탭 레이아웃" />
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/ea988caa-f3a0-4aa3-9835-04a6a46a2a29.png" alt="초기 아바타 뷰" />
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/bf3e8d18-5566-4696-814f-198daaa455fc.png" alt=" handleEvents 로딩 상태 흐름" />
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/fcf3426d-ef8a-4237-a0ca-c76c756733b3.png" alt="상태별 UI 분기 결과" />
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/ce590d96-0325-4dde-9ac3-8f90b69f72d4.png" alt="세그먼트 탭 레이아웃" />
 
 #### GitExplorer (3) — 즐겨찾기 스트림 관리 및 영속성 레이어 구축
 * **핵심 로직 및 흐름:** 물리적인 터치 버튼 이벤트를 순간적인 신호 스트림(Subject)으로 치환하여 로컬 저장소 데이터와 유기적으로 누적·결합하는 동기화 메커니즘임.
@@ -38,9 +38,9 @@ published: false
 * **시행착오와 해결:** SwiftUI `.onDelete` 가 전달하는 `IndexSet` 구조를 파악함. 다중 삭제 대응이 가능한 특징이 있으나 단일 스와이프 삭제 상황에서는 최적화를 위해 `if let index = indexSet.first` 문맥으로 핸들링함. 뷰모델 인스턴스가 뷰마다 독립적으로 생성되어 즐겨찾기 추가/삭제 시 화면 간 실시간 동기화가 깨지는 현상이 생겼으나, 임시로 `onAppear` 시점에 `UserDefaults` 데이터를 강제 갱신하는 리로드 함수를 붙여 화면 단위의 유실을 방지함.
 * **참고 사이트:** [Medium](https://medium.com/@nsuneelkumar98/swiftui-data-persistence-userdefaults-vs-appstorage-a66c41666d15), [이전글1](https://haroldfromk.github.io/posts/Final-(8)/), [이전글2](https://haroldfromk.github.io/posts/Final-(17)/), [이전글3](https://haroldfromk.github.io/posts/Todoey-(2)/)
 * **시각 자료:**
-  <img src="https://github.com/user-attachments/assets/4940eee5-5304-405d-b638-bd0ffd2b69ce" alt="UserDefaults vs AppStorage 요약" />
-  <img src="https://github.com/user-attachments/assets/6963a6f5-4b72-40ca-846e-fb4e20d196c4" alt="즐겨찾기 토글 별 렌더링" />
-  <img src="https://github.com/user-attachments/assets/ef38a113-feb5-44ba-a2b1-095b8f433818" alt="즐겨찾기 목록 뷰" />
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/4940eee5-5304-405d-b638-bd0ffd2b69ce.png" alt="UserDefaults vs AppStorage 요약" />
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/6963a6f5-4b72-40ca-846e-fb4e20d196c4.png" alt="즐겨찾기 토글 별 렌더링" />
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/ef38a113-feb5-44ba-a2b1-095b8f433818.png" alt="즐겨찾기 목록 뷰" />
 
 #### GitExplorer (4) — 백그라운드 자동 갱신 및 비동기 동시성 브릿지
 * **핵심 로직 및 흐름:** 타이머 기반의 백그라운드 스케줄러 스트림을 열어 주기적으로 데이터를 리프레시하고, 고성능 연타 방지 댐을 구축하며, 기존 Combine 코드를 최신 `async/await` 동시성 문법과 상호 호환시키는 가교(Bridge) 작업임.
@@ -54,15 +54,15 @@ published: false
 * **핵심 로직 및 흐름:** 즐겨찾기 유저 삭제 시 UI가 즉각적으로 동기화되지 않는 결함과, 디스크 저장 배열(`names`)과 화면 렌더링 배열(`users`)의 인덱스 불일치로 인해 엉뚱한 데이터가 삭제되는 레이스 컨디션을 정밀하게 교정함.
 * **1. UI 변경 결함 제어:** 즐겨찾기 목록에서 특정 항목을 제거(Swipe Delete 등)했을 때 로컬 DB만 수정되고 화면 렌더링에 즉각 반영되지 않던 문제를 발견함. `removeSubject` 파이프라인 내부의 `sink` 클로저 연쇄 반응 끝단에 갱신 메서드를 강제 수행하도록 결합하여 해결함.
 * **시각 자료 1:**
-  <img width="302" height="630" alt="UI 업데이트 미반영 결함" src="https://github.com/user-attachments/assets/d1cc8e2d-ea8b-46f0-9082-9d01a4c07b38" />
+  <img width="302" height="630" alt="UI 업데이트 미반영 결함" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/d1cc8e2d-ea8b-46f0-9082-9d01a4c07b38.png" />
 
 * **2. 비동기 응답 속도에 따른 인덱스 뒤틀림(삭제 꼬임) 규명:** `UserDefaults`의 원본 ID 순서(`names`)와 `Publishers.MergeMany` 기반의 네트워크 응답 도착 순서(`users`)가 비동기 레이스 컨디션에 의해 서로 다르게 배치되는 인과관계를 찾아냄. 이 상태에서 특정 행(Row)의 인덱스로 삭제를 시도하면 샌드박스 내부 배열과 화면 뷰의 매핑 기준이 달라 사용자가 선택하지 않은 다른 유저가 파괴되는 심각한 오작동이 유발됨.
 * **시각 자료 2:**
-  <img width="302" height="630" alt="배열 순서 뒤틀림 결함" src="https://github.com/user-attachments/assets/936e92d5-850f-4025-a2ba-6f6d3969bd2c" />
+  <img width="302" height="630" alt="배열 순서 뒤틀림 결함" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/936e92d5-850f-4025-a2ba-6f6d3969bd2c.png" />
 
 * **3. 순차적 비동기 처리(`async/await`) 우회 및 동시성 컨텍스트 매핑:** [코드 4] 순서 보장이 불가능한 Combine 스트림 구조 대신, 반복문을 순차적으로 순회하며 호출 순서를 완벽히 제어하는 `for-in` 기반의 `async/await` 메서드로 전환함. 뷰 계층 역시 `.task` 모디파이어를 장착하여 동시성 수명 주기를 제어함.
 * **4. 동시성 컨텍스트 스위칭 에러 해결:** `removeSubject` 스트림 수신부 내부에서 비동기 메서드를 직접 호출할 때 `Cannot pass function of type @concurrent (String) async -> Void to parameter expecting synchronous function type` 컴파일 에러가 발생함. 동기식 클로저 영역 내부에서 비동기 작업을 안전하게 격리·수행할 수 있도록 최신 동시성 도구인 `Task { ... }` 블록으로 래핑하여 인과 흐름을 완성함.
 * **시각 자료 3:**
-  <img width="302" height="630" alt="MergeMany 재호출에 따른 데이터 혼선" src="https://github.com/user-attachments/assets/18c2b794-0067-4909-ad40-6ecfec11fb7a" />
+  <img width="302" height="630" alt="MergeMany 재호출에 따른 데이터 혼선" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/18c2b794-0067-4909-ad40-6ecfec11fb7a.png" />
 * **시각 자료 4:**
-  <img width="302" height="630" alt="최종 HotFix 적용 후 정상 작동" src="https://github.com/user-attachments/assets/d5738a64-21b8-4a5a-baf5-b2a598d3abb7" />
+  <img width="302" height="630" alt="최종 HotFix 적용 후 정상 작동" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-25-GitExplorer요약/d5738a64-21b8-4a5a-baf5-b2a598d3abb7.png" />

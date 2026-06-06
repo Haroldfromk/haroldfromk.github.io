@@ -148,7 +148,7 @@ override func viewDidLoad() {
     }
 ```
 
-![simulator_screenshot_4B9C6779-047E-46B7-A7D4-4E492092CF65](https://github.com/user-attachments/assets/0441a316-f534-4333-8661-30535d5d4fcd){: width="50%" height="50%"} 
+![simulator_screenshot_4B9C6779-047E-46B7-A7D4-4E492092CF65](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-10-Build-the-unofficial-Udemy-Home-Screen-3/0441a316-f534-4333-8661-30535d5d4fcd.png){: width="50%" height="50%"} 
 
 이렇게 추가가 된걸 알 수 있다.
 
@@ -170,11 +170,11 @@ func configure(text: String, highlightedText: String?) {
     }
 ```
 
-![simulator_screenshot_EA60613C-8A46-4513-9445-0FFD72D59623](https://github.com/user-attachments/assets/59bd9f04-74d8-458d-bbff-65b91328b5a5){: width="50%" height="50%"} 
+![simulator_screenshot_EA60613C-8A46-4513-9445-0FFD72D59623](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-10-Build-the-unofficial-Udemy-Home-Screen-3/59bd9f04-74d8-458d-bbff-65b91328b5a5.png){: width="50%" height="50%"} 
 
 확인 완료.
 
-![Oct-10-2024 20-42-49](https://github.com/user-attachments/assets/25286ca8-08fd-4496-aed6-2a3f67a913ea){: width="50%" height="50%"}
+![Oct-10-2024 20-42-49](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-10-Build-the-unofficial-Udemy-Home-Screen-3/25286ca8-08fd-4496-aed6-2a3f67a913ea.png){: width="50%" height="50%"}
 
 실제로 영역 안에서 클릭을 해보면 되는부분이 있고 안되는 부분이 있다.
 
@@ -300,7 +300,7 @@ private func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
     }
 ```
 
-![simulator_screenshot_71891A42-3AF7-46AA-8169-722D1CBCF5A6](https://github.com/user-attachments/assets/d3b583b9-7610-44ee-87ee-611736b906bc){: width="50%" height="50%"} 
+![simulator_screenshot_71891A42-3AF7-46AA-8169-722D1CBCF5A6](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-10-Build-the-unofficial-Udemy-Home-Screen-3/d3b583b9-7610-44ee-87ee-611736b906bc.png){: width="50%" height="50%"} 
 
 레이블의 범위가 줄어들었음을 알 수 있다.
 

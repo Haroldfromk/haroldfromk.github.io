@@ -64,7 +64,7 @@ struct Output {
 튜플 type으로 3개를 리턴 하는 이유?
 
 
-![CleanShot 2024-05-01 at 16 22 35@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/f58b714e-6286-4f88-bc75-1f2a5e087b8c){: width="50%" height="50%"}
+![CleanShot 2024-05-01 at 16 22 35@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-4/f58b714e-6286-4f88-bc75-1f2a5e087b8c){: width="50%" height="50%"}
 
 이렇게 3개의 값을 리턴하기 위해. 한번에 3개를 리턴함.
 
@@ -243,7 +243,7 @@ public extension UITextField {
 
 실행하면
 
-![May-01-2024 16-49-42](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/a2b60e54-5742-4f80-bb89-cefb97d0cabe){: width="50%" height="50%"}
+![May-01-2024 16-49-42](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-4/a2b60e54-5742-4f80-bb89-cefb97d0cabe){: width="50%" height="50%"}
 
 바로 반응이 된다.
 

@@ -88,7 +88,7 @@ withAnimation {
 
 이렇게 해주면 된다.
 
-![Image](https://github.com/user-attachments/assets/9c6730fb-a7dd-4e15-af64-b6f5acb9287d){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-02-JPApexPredators-3/9c6730fb-a7dd-4e15-af64-b6f5acb9287d.png){: width="50%" height="50%"} 
 
 잘 되는걸 확인할 수 있다.
 
@@ -123,7 +123,7 @@ label: {
 }
 ```
 
-![Image](https://github.com/user-attachments/assets/809906c7-dd6b-4364-8ebf-b623d216325b){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-02-JPApexPredators-3/809906c7-dd6b-4364-8ebf-b623d216325b.png){: width="50%" height="50%"} 
 
 Toolbar를 보면 통통 튀듯 이펙트가 있는걸 알 수 있다.
 
@@ -227,7 +227,7 @@ enum APType: String, Decodable, CaseIterable, Identifiable { // added
 
 이건 이전에 언급을 한적이 있기에 패스...
 
-![Image](https://github.com/user-attachments/assets/feea1256-262d-4d52-9f33-98c428acfb2b){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-02-JPApexPredators-3/feea1256-262d-4d52-9f33-98c428acfb2b.png){: width="50%" height="50%"} 
 
 그럼 이렇게 만들어지지만 아직 작동하지는 않는다
 
@@ -267,7 +267,7 @@ func filter(by type: APType) {
 
 하지만 아직 완전히 해결한건 아니다.
 
-![Image](https://github.com/user-attachments/assets/f6cc341b-661b-41c5-bcf5-5eaf3047fa37){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-02-JPApexPredators-3/f6cc341b-661b-41c5-bcf5-5eaf3047fa37.png){: width="50%" height="50%"} 
 
 필터링이 단 1회성에서 끝나게 된다.
 
@@ -310,7 +310,7 @@ func filter(by type: APType) {
 }
 ```
 
-![Image](https://github.com/user-attachments/assets/29447653-df2d-455f-9e72-5cba5cdb40ac){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-02-JPApexPredators-3/29447653-df2d-455f-9e72-5cba5cdb40ac.png){: width="50%" height="50%"} 
 
 이제는 문제없이 작동이 된다.
 

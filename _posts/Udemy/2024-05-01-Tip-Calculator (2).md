@@ -24,13 +24,13 @@ Unable to simultaneously satisfy constraints.
 
 이런식으로 Auto Layout에 대한 워닝이 발생한다.
 
-![CleanShot 2024-05-01 at 10 02 17@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/e04e5b2f-35ac-4678-83ed-7daa3c427cb8)
+![CleanShot 2024-05-01 at 10 02 17@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-2/e04e5b2f-35ac-4678-83ed-7daa3c427cb8)
 
 에러가 발생하는 이유는 Vertical StackView 때문인데
 
 여기안에 UIView를 하나 더 추가를 해줘야한다.
 
-![CleanShot 2024-05-01 at 10 03 00@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/a747974b-a82f-4530-bb53-3966e9e85794)
+![CleanShot 2024-05-01 at 10 03 00@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-2/a747974b-a82f-4530-bb53-3966e9e85794)
 
 설명이 이해가 안가서 나중에 다시 알아봐야할거같다.
 
@@ -159,7 +159,7 @@ struct LabelFactory {
 }
 ```
 
-![simulator_screenshot_BB4540C1-DF33-46C7-83FA-6D08A67DB033](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/a0de7409-f6d2-45c4-9444-4fe1bba73020){: width="50%" height="50%"}
+![simulator_screenshot_BB4540C1-DF33-46C7-83FA-6D08A67DB033](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-2/a0de7409-f6d2-45c4-9444-4fe1bba73020){: width="50%" height="50%"}
 
 완성.
 
@@ -184,9 +184,9 @@ private lazy var hStackView: UIStackView = {
 
 이렇게 가운데에 UIView 를 끼워주고 3분할을 정확하게 해주었다는 것.
 
-![simulator_screenshot_69CF9F22-965E-491B-90EC-8EC1C43E553A](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/29095007-0b6d-4549-8b74-05c48b1988df){: width="50%" height="50%"}
+![simulator_screenshot_69CF9F22-965E-491B-90EC-8EC1C43E553A](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-2/29095007-0b6d-4549-8b74-05c48b1988df){: width="50%" height="50%"}
 
-![CleanShot 2024-05-01 at 10 59 47@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/feb8d05c-ff66-403c-b274-10c523d7875e){: width="50%" height="50%"}
+![CleanShot 2024-05-01 at 10 59 47@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-2/feb8d05c-ff66-403c-b274-10c523d7875e){: width="50%" height="50%"}
 
 또 하나 배웠다.
 
@@ -228,7 +228,7 @@ hStackView
 ```
 높이 0짜리를 하나 사이에 끼워 넣어주면서 패딩이 자연스럽게 된다.
 
-![simulator_screenshot_FF2FC5AC-684D-454E-A371-834A53EBFE20](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/eec15818-bee9-4f7b-90af-7950d315b67e){: width="50%" height="50%"}
+![simulator_screenshot_FF2FC5AC-684D-454E-A371-834A53EBFE20](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-2/eec15818-bee9-4f7b-90af-7950d315b67e){: width="50%" height="50%"}
 
 완성
 
@@ -340,6 +340,6 @@ private lazy var hStackView: UIStackView = {
 
 뭔가 Code로 UIdesign 하는것에 신세계를 경험하게 된다.
 
-![simulator_screenshot_605D83F7-908C-4CEF-8302-1EC090B130DC](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/b4ddef92-0079-4c18-ac47-60fb062d64ee)
+![simulator_screenshot_605D83F7-908C-4CEF-8302-1EC090B130DC](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-2/b4ddef92-0079-4c18-ac47-60fb062d64ee)
 
 너무 길어지니 파트2는 여기까지

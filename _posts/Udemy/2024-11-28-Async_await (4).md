@@ -15,7 +15,7 @@ toc_sticky: true
 
 구현할 매커니즘에 대해 간략하게 표현하면 다음과 같다
 
-![example31 drawio](https://github.com/user-attachments/assets/f77abd16-7c52-4365-9e35-6d56f5d437e3)
+![example31 drawio](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-4/f77abd16-7c52-4365-9e35-6d56f5d437e3.png)
 
 ### Webservice 구현
 
@@ -124,7 +124,7 @@ struct ContentView: View {
 
 이렇게 ViewModel로 적용을 하다보면
 
-![CleanShot 2024-11-28 at 13 38 48](https://github.com/user-attachments/assets/e43b54e2-366e-4a8d-8a5f-e2b24d60571e)
+![CleanShot 2024-11-28 at 13 38 48](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-4/e43b54e2-366e-4a8d-8a5f-e2b24d60571e.png)
 
 List에서 위와 같은 에러가 발생한다.
 
@@ -159,12 +159,12 @@ struct CurrentDateViewModel: Identifiable {
 이렇게 id를 적으면
 
 아래와 같이 뜨는데,
-![CleanShot 2024-11-28 at 13 43 31](https://github.com/user-attachments/assets/5f2f26c8-d0f7-47e0-a71b-fce16ef3f60e)
+![CleanShot 2024-11-28 at 13 43 31](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-4/5f2f26c8-d0f7-47e0-a71b-fce16ef3f60e.png)
 
 보통은 식별을 id로 하기에 id를 해주자.
 
 그리고 이런 KeyPath를 사용할때는 `\` Backslash를 사용한다.
-![CleanShot 2024-11-28 at 13 43 01](https://github.com/user-attachments/assets/8d21a120-bc41-4ebe-b2d7-3e095714e701)
+![CleanShot 2024-11-28 at 13 43 01](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-4/8d21a120-bc41-4ebe-b2d7-3e095714e701.png)
 
 그리고 id를 해주면 된다.
 
@@ -188,7 +188,7 @@ struct CurrentDateViewModel: Identifiable {
 
 그리고 task있는곳에도 똑같이 try를 적고나니 
 
-![CleanShot 2024-11-28 at 13 56 37](https://github.com/user-attachments/assets/08ce1cd4-135e-4dc9-a81d-18fac79e65b3)
+![CleanShot 2024-11-28 at 13 56 37](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-4/08ce1cd4-135e-4dc9-a81d-18fac79e65b3.png)
 
 이런에러가 발생
 

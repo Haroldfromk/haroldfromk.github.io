@@ -222,7 +222,7 @@ cancellables.removeAll()   // 전체 취소
 
 사진으로 간단하게 정리를 해봤다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/be303eb7-72d9-4c2e-9191-bccc350465aa" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine4/be303eb7-72d9-4c2e-9191-bccc350465aa.png" />
 
 이건 시뮬레이터
 
@@ -296,6 +296,6 @@ VStack {
 빠른 결과를위해 `service.streamFighters(interval: 0.5)`
 0.5초로 바꿔둔다.
 
-<img width="288" height="598" alt="Image" src="https://github.com/user-attachments/assets/77e8b45d-e3a4-465b-9430-70f6fe65ddec" />{: width="50%" height="50%"}
+<img width="288" height="598" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine4/77e8b45d-e3a4-465b-9430-70f6fe65ddec.png" />{: width="50%" height="50%"}
 
 중간에 끊었지만 아마 전부 가져오면 구독이 끊기면서 멈췄을것이다.

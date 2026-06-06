@@ -75,7 +75,7 @@ func validateFields() {
     }
 ```
 
-![May-19-2024 23-15-08](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/e18f43b6-f4b9-48e0-b70d-1e83b7089deb){: width="50%" height="50%"} 
+![May-19-2024 23-15-08](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-3/e18f43b6-f4b9-48e0-b70d-1e83b7089deb){: width="50%" height="50%"} 
 
 실행하니 아주 괜찮다.
 
@@ -123,11 +123,11 @@ DB를 리셋시키고 테스트를 해보자.
 
 그전에 비밀번호를 보이지 않게 하기위해
 
-![CleanShot 2024-05-19 at 23 21 06@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/3c621d41-56f1-4638-bd71-2b731d09f5f2)
+![CleanShot 2024-05-19 at 23 21 06@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-3/3c621d41-56f1-4638-bd71-2b731d09f5f2)
 
 여기 부분을 체크해주자.
 
-![May-19-2024 23-23-31](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/270adc78-87f4-4180-be87-c248922bbf19){: width="50%" height="50%"} 
+![May-19-2024 23-23-31](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-3/270adc78-87f4-4180-be87-c248922bbf19){: width="50%" height="50%"} 
 
 아직 이후 액션이 없어서 저기서 멍때리지만
 

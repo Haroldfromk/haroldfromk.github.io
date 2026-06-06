@@ -184,7 +184,7 @@ service.fetchGitData(requestType: .follower(requestUser.avatarUrl))
 
 실행해보기 위해 일부러 `requestUser.login` 대신 `requestUser.avatarUrl`을 전달해보았다.
 
-<img width="430" height="874" alt="Image" src="https://github.com/user-attachments/assets/a0e49bab-3a62-4d4d-b4e6-d885c35a5dff" />
+<img width="430" height="874" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-01-GitExplorer심화-2/a0e49bab-3a62-4d4d-b4e6-d885c35a5dff.png" />
 
 분명 에러가 발생했는데도 화면은 정상적으로 표시된다.
 
@@ -215,7 +215,7 @@ typeMismatch(Swift.Array<Any>, Swift.DecodingError.Context(codingPath: [], debug
 
 그래서 다음 단계에서는 에러 스트림을 통합하는 구조로 변경해보려고 한다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/58c1c494-d059-498e-af72-040460a84e2d" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-01-GitExplorer심화-2/58c1c494-d059-498e-af72-040460a84e2d.png" />
 
 현재 상황을 대변해주는 만화를 만들어 봤다...
 

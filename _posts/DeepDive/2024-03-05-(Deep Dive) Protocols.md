@@ -62,7 +62,7 @@ class Eagle : Bird { // 상속을 하였다.
 
 독수리는 Bird가 가지고있는 기능을 모두 사용 할 수 있다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/UvNEOCF2Cu.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/UvNEOCF2Cu.png)
 
 그리고 조류를 상속받는 펭귄도 만들어보자
 
@@ -78,7 +78,7 @@ class Penguin : Bird {
 
 그런데 상식적으로 펭귄은 날 수 없는데? fly 함수를 사용 할 수 있다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/sTrlx5jAG1.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/sTrlx5jAG1.png)
 
 이것은 말이 안된다.
 
@@ -96,7 +96,7 @@ struct FlyingMuseum {
 
 그리고 다음과 같이 작성하였다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/FJAUuiZShV.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/FJAUuiZShV.png)
 
 조류박물관이라는 구조체를 만들었고 거기에 flyingDemo라는 함수를 만들었는데 매개변수의 타입을 조류로 하였고 호출을 하면 fly를 하게끔 하였다.
 
@@ -114,7 +114,7 @@ class Airplane : Bird {
 
 비행기도 일단 조류로 넣었다(?) 근데 조류와 달리 엔진을 사용해서 하늘을 비행하니 함수를 오버라이드하여 재정의 해주었다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/LsXz88TqUl.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/LsXz88TqUl.png)
 
 이렇게 클래스와 구조체를 사용해서 조류에대해 표현을 해봤는데, 상속을 받으면 그 해당기능을 다 사용가능하다.
 
@@ -140,7 +140,7 @@ protocol CanFly {
 
 이 때 프로토콜에는 함수의 body내역은 적지 않는다!
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/eQxraPOnMC.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/eQxraPOnMC.png)
 
 이런식으로 에러가 뜬다.
 
@@ -163,7 +163,7 @@ class Bird {
 
 Canfly 프로토콜을 사용했는데 fly 함수가 없어서 에러가 발생한다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/fG6aIJ0149.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/fG6aIJ0149.png)
 
 그래서 fly함수를 새로 만들어 준다!
 
@@ -206,7 +206,7 @@ struct Airplane : CanFly {
 
 그리고 박물관 역시 바꿔준다. 왜냐 Bird 클래스엔 더이상 fly가 없기 때문이다!
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/2pnnjv3dr3.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/2pnnjv3dr3.png)
 
 ```swift
 struct FlyingMuseum {
@@ -216,7 +216,7 @@ struct FlyingMuseum {
 }
 ```
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/AORWXYtf6O.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/AORWXYtf6O.png)
 
 myEagle, myPlane은 Canfly 프로토콜을 가지고 있고
 
@@ -225,7 +225,7 @@ myEagle, myPlane은 Canfly 프로토콜을 가지고 있고
 펭귄으로 하면 어떻게 될까?
 
 이렇게 Canfly가 없다고 나온다.
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/Rmv1Pc93CZ.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/Rmv1Pc93CZ.png)
 
 이제 더이상 펭귄은 날수가 없다...
 
@@ -233,7 +233,7 @@ myEagle, myPlane은 Canfly 프로토콜을 가지고 있고
 
 처음에는 이렇게 모두 날 수 있었다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/i23THm705h.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/i23THm705h.png)
 
 그러다보니 날수 없는 조류도 fly라는 기능을 가질 수 있었다.
 
@@ -241,7 +241,7 @@ myEagle, myPlane은 Canfly 프로토콜을 가지고 있고
 
 분류를 하게 된것이다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/o8Dsz1dBFG.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Deep-Dive-Protocols/o8Dsz1dBFG.png)
 
 프로토콜을 새로 비유를 하여 해보았다.
 

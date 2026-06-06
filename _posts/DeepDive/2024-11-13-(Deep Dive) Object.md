@@ -18,7 +18,7 @@ toc_sticky: true
 
 우선 둘의 공통점은 `ObservableObject` 프로토콜을 따른다는 것이다.
 
-![CleanShot 2024-11-13 at 20 19 22](https://github.com/user-attachments/assets/091ee2ab-5133-45cf-a7da-048cf6d7050b)
+![CleanShot 2024-11-13 at 20 19 22](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-13-Deep-Dive-Object/091ee2ab-5133-45cf-a7da-048cf6d7050b.png)
 
 그리고 지금 아래 코드를 보면 viewModel에 대해 Wrapper를 다르게 했는데 이렇게 해도 실행 결과는 같다.
 
@@ -47,9 +47,9 @@ struct CounterView: View {
 }
 ```
 
-![Nov-13-2024 20-16-04](https://github.com/user-attachments/assets/ce25c987-0198-4532-b44c-e6088dd24fcb)
+![Nov-13-2024 20-16-04](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-13-Deep-Dive-Object/ce25c987-0198-4532-b44c-e6088dd24fcb.png)
 
-![CleanShot 2024-11-13 at 20 16 37](https://github.com/user-attachments/assets/2c761575-33f9-4755-9e52-32ce168d3915)
+![CleanShot 2024-11-13 at 20 16 37](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-13-Deep-Dive-Object/2c761575-33f9-4755-9e52-32ce168d3915.png)
 
 그러면 차이를 줘보도록 하자
 
@@ -91,13 +91,13 @@ struct CounterView: View {
 }
 ```
 
-![Nov-13-2024 20-29-30](https://github.com/user-attachments/assets/36bdb0d2-77f9-4e72-b656-f4d8af6f9c3b)
+![Nov-13-2024 20-29-30](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-13-Deep-Dive-Object/36bdb0d2-77f9-4e72-b656-f4d8af6f9c3b.png)
 
 카운트만 눌렀을때는 숫자가 증가하지만
 
 랜덤을 누르는순간 카운트가 초기화가 되어버린다.
 
-![CleanShot 2024-11-13 at 20 45 12](https://github.com/user-attachments/assets/d136f912-1822-4c30-91fb-acf9edf51a40)
+![CleanShot 2024-11-13 at 20 45 12](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-13-Deep-Dive-Object/d136f912-1822-4c30-91fb-acf9edf51a40.png)
 
 ```text
 <SwiftUI.CGDrawingView: 0x101390ed0; frame = (160.333 462.333; 81.6667 20.3333); anchorPoint = (0, 0); opaque = NO; autoresizesSubviews = NO; layer = <_TtC7SwiftUIP33_65A81BD07F0108B0485D2E15DE104A7514CGDrawingLayer: 0x600002635b60>>
@@ -105,7 +105,7 @@ struct CounterView: View {
 
 이제 랜덤을 누르면 어떻게 되는지 확인하자
 
-![CleanShot 2024-11-13 at 20 47 13](https://github.com/user-attachments/assets/a3b75e0e-cd60-45ca-88cc-25afb74c49eb)
+![CleanShot 2024-11-13 at 20 47 13](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-13-Deep-Dive-Object/a3b75e0e-cd60-45ca-88cc-25afb74c49eb.png)
 
 ```text
 <SwiftUI.CGDrawingView: 0x101390ed0; frame = (160 462.333; 82 20.3333); anchorPoint = (0, 0); opaque = NO; autoresizesSubviews = NO; layer = <_TtC7SwiftUIP33_65A81BD07F0108B0485D2E15DE104A7514CGDrawingLayer: 0x600002635b60>>
@@ -133,11 +133,11 @@ struct CounterView: View {
 }
 ```
 
-![Nov-13-2024 20-30-30](https://github.com/user-attachments/assets/d02b9d8c-520a-4a28-bf6a-109dc4f35903)
+![Nov-13-2024 20-30-30](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-13-Deep-Dive-Object/d02b9d8c-520a-4a28-bf6a-109dc4f35903.png)
 
 위와 달리 카운트가 증가한상태에서 랜덤을 눌러도 카운트가 유지가 된다.
 
-![CleanShot 2024-11-13 at 20 41 19](https://github.com/user-attachments/assets/4e2ad343-14aa-47e2-82b0-a64d2b69906d)
+![CleanShot 2024-11-13 at 20 41 19](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-13-Deep-Dive-Object/4e2ad343-14aa-47e2-82b0-a64d2b69906d.png)
 
 ```text
 <SwiftUI.CGDrawingView: 0x10130f7d0; frame = (160 462.333; 82 20.3333); anchorPoint = (0, 0); opaque = NO; autoresizesSubviews = NO; layer = <_TtC7SwiftUIP33_65A81BD07F0108B0485D2E15DE104A7514CGDrawingLayer: 0x60000262e100>>

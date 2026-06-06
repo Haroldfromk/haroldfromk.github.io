@@ -299,4 +299,4 @@ Generic parameter 'ID' could not be inferred
 
 무튼 실행하면 잘 되는 걸 알 수 있다.
 
-<img width="288" height="598" alt="Image" src="https://github.com/user-attachments/assets/b32d7b64-b322-4496-9fd0-33b5ddadf9bd" />{: width="50%" height="50%"}
+<img width="288" height="598" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-16-SwiftUI_Combine3/b32d7b64-b322-4496-9fd0-33b5ddadf9bd.png" />{: width="50%" height="50%"}

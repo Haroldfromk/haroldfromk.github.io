@@ -215,7 +215,7 @@ let cancellable = zippedPublisher.sink { value in
 // 4, D, Steven    
 ```
 
-![CleanShot 2024-12-18 at 13 42 25](https://github.com/user-attachments/assets/56967797-6c4e-4bad-9e5e-6b0185b7eb61)
+![CleanShot 2024-12-18 at 13 42 25](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-18-Combine-Remind-1/56967797-6c4e-4bad-9e5e-6b0185b7eb61.png)
 
 Zip은 4까지 있다. 즉 4개의 배열까지 처리가 가능.
 

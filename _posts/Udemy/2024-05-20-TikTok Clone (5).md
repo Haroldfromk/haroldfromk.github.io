@@ -17,7 +17,7 @@ Home, Discover, Add, Inbox, Profile 총 5개이다.
 
 우선 NavController의 Storyboard id를 mainvc, tabbar controller의 Storyboard id를 TabbarVC로 해준다.
 
-![CleanShot 2024-05-20 at 09 51 44@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/915d082a-56f1-4847-bec3-548b06f708c0)
+![CleanShot 2024-05-20 at 09 51 44@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-20-TikTok-Clone-5/915d082a-56f1-4847-bec3-548b06f708c0)
 
 이렇게.
 
@@ -115,7 +115,7 @@ Signup도 마찬가지!
     }
 ```
 
-![May-26-2024 16-13-05](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/d8f36ff9-c40d-4b5d-85f9-e503b0bce401)
+![May-26-2024 16-13-05](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-20-TikTok-Clone-5/d8f36ff9-c40d-4b5d-85f9-e503b0bce401)
 
 
 로그아웃, 로그인 전부 잘된다.

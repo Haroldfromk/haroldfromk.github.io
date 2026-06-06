@@ -99,7 +99,7 @@ struct CalculatorBrain {
 
 그런데 다음과 같이 에러가 발생하였다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/0CIO4tJBW9.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-BMI-Calculator-5/0CIO4tJBW9.png)
 
 구조체에는 let으로 되어있기 때문에, 값이 계속 변하는 특성상 맞지않는것이다.
 
@@ -112,7 +112,7 @@ bmi = BMI(value: <#T##Float#>, advice: <#T##String#>, color: <#T##UIColor#>)
 
 그전에, 
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/vKcKCzXnuZ.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-BMI-Calculator-5/vKcKCzXnuZ.png)
 
 다음 조건을 참고 하여 bmivalue를 분류해보자.
 
@@ -146,7 +146,7 @@ Color Literal을 통해 색상을 고를 수도 있다.
 
 그래서 그냥 외부에 원하는 색을 선택하고 cut & paste로 했다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/8Hr4VRygHr.gif)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-BMI-Calculator-5/8Hr4VRygHr.gif)
 
 ---
 
@@ -198,7 +198,7 @@ override func viewDidLoad() {
 
 그래서 storyboard를 보았다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/iqA9NAw4iy.png) 아니나 다를까 Background인 ImageView가 있어서
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-BMI-Calculator-5/iqA9NAw4iy.png) 아니나 다를까 Background인 ImageView가 있어서
 
 `@IBOutlet weak var background: UIImageView!` 다음과 같이 링크 해주었고.
 
@@ -206,7 +206,7 @@ override func viewDidLoad() {
 
 잘된다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/xPYA53rCWS.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-BMI-Calculator-5/xPYA53rCWS.gif){: width="50%" height="50%"}
 
 강의에서의 차이점이라면 딱하나
 나는 background imageview를 만들었는데

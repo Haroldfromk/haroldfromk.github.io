@@ -25,7 +25,7 @@ toc_sticky: true
 
 하지만 이번에는 Cocoa Touch Class를 선택하여 만든다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/hSm1Fgqf33.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/hSm1Fgqf33.png){: width="50%" height="50%"}
 
 습관이 무섭다고. 막 엔터치지말고 확인하면서 만들자.
 
@@ -34,7 +34,7 @@ toc_sticky: true
 
 아래 밑줄 친 곳에 우리가 naming을 해주면 된다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/4IPtg663rO.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/4IPtg663rO.png){: width="50%" height="50%"}
 
 이렇게 자동으로 만들어준다.
 
@@ -58,23 +58,23 @@ class ResultViewController: UIViewController {
 
 1. 먼저 storyboard로가서 디자인된 storyboard를 클릭
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/TPCGMHATBG.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/TPCGMHATBG.png){: width="50%" height="50%"}
 
 빨갛게 박스한 부분을 클릭
 
 다음과 같이 Inspector Tab에서 네모로 표시한부분을 클릭
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/BqtcUNaBeZ.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/BqtcUNaBeZ.png){: width="50%" height="50%"}
 
 그리고 만들어진 컨트롤러 면을 적어준다. 그러면 링크 끝
 
 2. 왼쪽의 목록에서 viewController 선택
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/mo0LsXjFfr.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/mo0LsXjFfr.png){: width="50%" height="50%"}
 
 이후 inspector tap에서 똑같이 하면 된다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/qFfX4uFrnb.gif)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/qFfX4uFrnb.gif)
 
 그리고 Asistant view를 눌러보면 연결되어있는걸 볼 수 있다.
 
@@ -104,7 +104,7 @@ class ResultViewController: UIViewController {
 
 혹시라도 이름을 변경하고 싶다면?
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/1M8u6bZMSy.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/1M8u6bZMSy.png){: width="50%" height="50%"}
 
 이름을 명명한 부분을 우클릭하고 rename을 클릭해준다.
 
@@ -112,11 +112,11 @@ class ResultViewController: UIViewController {
 
 일반적으로 file의 이름이 그 기능의 전반적인걸 표시하게 하는 경우도 있으니 이름을 변경해보자
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/clGdD0T6LS.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/clGdD0T6LS.png){: width="50%" height="50%"}
 
 viewController → CalculateViewController로 변경.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/Y7THGmOg3i.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/Y7THGmOg3i.png){: width="50%" height="50%"}
 
 변경이 잘 되었다.
 
@@ -132,35 +132,35 @@ viewController → CalculateViewController로 변경.
 
 그리고 IBOutlet, IBAction을 만들듯이 Control을 누른 상태로 드래그 해주자.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/JibNVS3Cd6.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/JibNVS3Cd6.png){: width="50%" height="50%"}
 
 그리고 present modally를 선택해 주었다. (개취)
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/PdiwNBtUAv.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/PdiwNBtUAv.png){: width="50%" height="50%"}
 
 아래처럼 저렇게 해도 상관없다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/Rq9iIC7i2T.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/Rq9iIC7i2T.png){: width="50%" height="50%"}
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/w02Zhpz4qK.gif)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/w02Zhpz4qK.gif)
 
 그 결과
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/8yMe549snL.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/8yMe549snL.png){: width="50%" height="50%"}
 
 세그웨이가 생성되었다.
 
 insector tap을 통해 어떻게 애니메이션을 할지 설정 할 수 있다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/jfqIthdGfW.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/jfqIthdGfW.png){: width="50%" height="50%"}
 
 세그웨이에도 네이밍을 해주자.
 
 identifier에 이름을 정해주면된다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/xaKf77DNSm.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/xaKf77DNSm.png){: width="50%" height="50%"}
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/D4XOEOI71D.gif)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/D4XOEOI71D.gif)
 
 ## Segue를 사용하여 연결하기
 
@@ -168,7 +168,7 @@ identifier에 이름을 정해주면된다.
 
 perfromSegue메서드를 사용할 것이다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/VX52HImh2o.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/VX52HImh2o.png){: width="50%" height="50%"}
 
 
 ```swift
@@ -182,7 +182,7 @@ self.performSegue(withIdentifier: "goToResult", sender: self)
 
 전환이 잘된다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/sCe7ivg5p4.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/sCe7ivg5p4.gif){: width="50%" height="50%"}
 
 하지만 아직 계산값은 넘어가지 않는다.
 
@@ -210,14 +210,14 @@ segue.identifier 가 goToResult일때 세그가 작동하게 하였다.
 destination은 기본적으로 UIViewController 형식이다
 말그대로 도착지를 이야기 하는것이다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/FwmKWYWDdP.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/FwmKWYWDdP.png){: width="50%" height="50%"}
 
 
 그리고 그 도착지의 viewcontroller에 있는 bmiValue를 연결해준다.
 
 그런데 에러가 난다?
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/MVQhOcRVAf.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/MVQhOcRVAf.png){: width="50%" height="50%"}
 
 UIViewController는 bmiValue가 없다고한다.
 
@@ -310,7 +310,7 @@ override func viewDidLoad() {
 
 실행화면
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/ftC3umxHZc.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/ftC3umxHZc.gif){: width="50%" height="50%"}
 
 ## Segue를 다시 전환시키기
 
@@ -326,10 +326,10 @@ dismiss 메서드를 통해 다시 이전 view로 돌아갈 수 있다.
 
 실행화면
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/3Sf88qwORs.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/3Sf88qwORs.gif){: width="50%" height="50%"}
 
 UI를 3D로 볼 수도있다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/AI0AaTq80z.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-3/AI0AaTq80z.png){: width="50%" height="50%"}
 
 3D구현화면은 생략하겠다. 드래그로도 돌려 볼수있으니 나중에 시간 되면 해보는걸 추천한다.

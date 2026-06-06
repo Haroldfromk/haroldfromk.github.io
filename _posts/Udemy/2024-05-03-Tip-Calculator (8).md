@@ -49,9 +49,9 @@ final class tip_calculatorSnapshotTests: XCTestCase {
 
 record를 true하면서 Logoview에 대한 이미지가 생긴다.
 
-![May-03-2024 23-19-53](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/1a12d6a7-73ee-4ca8-a4d2-5e444632e35e)
+![May-03-2024 23-19-53](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-8/1a12d6a7-73ee-4ca8-a4d2-5e444632e35e)
 
-![CleanShot 2024-05-03 at 23 20 44@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/52e68079-6d01-48df-96d5-9b0633f43146){: width="50%" height="50%"}
+![CleanShot 2024-05-03 at 23 20 44@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-8/52e68079-6d01-48df-96d5-9b0633f43146){: width="50%" height="50%"}
 
 이제 이사진을 가지고 비교를 하게된다..
 
@@ -73,11 +73,11 @@ record를 true하면서 Logoview에 대한 이미지가 생긴다.
 
 그리고 테스트를 하면?
 
-![CleanShot 2024-05-03 at 23 24 02@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/26425963-ce89-4c3f-8025-4a2b5e4f526d)
+![CleanShot 2024-05-03 at 23 24 02@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-8/26425963-ce89-4c3f-8025-4a2b5e4f526d)
 
 에러 발생.
 
-![CleanShot 2024-05-03 at 23 24 53@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/e3a2f29b-08b0-475d-a61e-449035cb0f4d)
+![CleanShot 2024-05-03 at 23 24 53@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-8/e3a2f29b-08b0-475d-a61e-449035cb0f4d)
 
 그 경로에 있는 이미지파일을 실행해서 비교해보면?
 
@@ -173,7 +173,7 @@ func testResultViewWithValues() {
     }
 ```
 
-![testResultViewWithValues 1](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/21096e95-2b22-4a26-8c72-6b9b2e86df77){: width="50%" height="50%"}
+![testResultViewWithValues 1](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-8/21096e95-2b22-4a26-8c72-6b9b2e86df77){: width="50%" height="50%"}
 
 이렇게 값이 입력된 view가 생성됨.
 
@@ -203,7 +203,7 @@ textField?.text = "500"
 
 여기서 Extension을 사용하는데 
 
-![testBillInputViewWithValues 1](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/cda6b596-68a6-4a48-bc06-3ee4e3edddb6){: width="50%" height="50%"}
+![testBillInputViewWithValues 1](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-8/cda6b596-68a6-4a48-bc06-3ee4e3edddb6){: width="50%" height="50%"}
 
 이렇게 실제로 입력된것처럼 보인다.
 
@@ -223,7 +223,7 @@ func testTipInputViewWithValues() {
 }
 ```
 
-![testTipInputViewWithValues 1](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/81ace4d0-48be-4bd4-8d18-3de66c2aa5e6){: width="50%" height="50%"}
+![testTipInputViewWithValues 1](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-8/81ace4d0-48be-4bd4-8d18-3de66c2aa5e6){: width="50%" height="50%"}
 
 역시나 선택 된 것처럼 구현이 가능.
 

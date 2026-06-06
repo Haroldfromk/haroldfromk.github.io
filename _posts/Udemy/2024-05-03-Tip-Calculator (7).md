@@ -49,7 +49,7 @@ teardown도 마찬가지.
 
 [출처](https://ios-daniel-yang.tistory.com/63){:target="_blank"}
 
-![CleanShot 2024-05-03 at 22 05 31@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/e95f663d-1148-4257-8858-8965740ad37e)
+![CleanShot 2024-05-03 at 22 05 31@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-7/e95f663d-1148-4257-8858-8965740ad37e)
 
 재생버튼같은걸 누르면 
 
@@ -135,13 +135,13 @@ XCTAssertEqual(result.totalTip, 0)
 
 이기에 위와 같이 했다.
 
-![CleanShot 2024-05-03 at 22 34 40@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/e5feeb54-aba7-4b6b-9999-494cbfc086be)
+![CleanShot 2024-05-03 at 22 34 40@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-7/e5feeb54-aba7-4b6b-9999-494cbfc086be)
 
 테스트 성공
 
 만약에 값을 다르게 주면?
 
-![CleanShot 2024-05-03 at 22 35 29@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/1b3d1b5d-641c-4529-b12b-44ef12057f21)
+![CleanShot 2024-05-03 at 22 35 29@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-7/1b3d1b5d-641c-4529-b12b-44ef12057f21)
 
 이렇게 에러가 발생한다.
 

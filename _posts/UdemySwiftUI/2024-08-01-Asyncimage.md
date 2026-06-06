@@ -32,7 +32,7 @@ struct ContentView: View {
 
 이것이 바로 기본 틀이다.
 
-![CleanShot 2024-10-14 at 01 45 16](https://github.com/user-attachments/assets/ddaeba13-ae3f-4781-8717-2df3cf1ac498){: width="50%" height="50%"} 
+![CleanShot 2024-10-14 at 01 45 16](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-08-01-Asyncimage/ddaeba13-ae3f-4781-8717-2df3cf1ac498.png){: width="50%" height="50%"} 
 
 실행하면 다음과 같다.
 
@@ -72,7 +72,7 @@ var body: some View {
     }
 ```
 
-![Oct-14-2024 01-52-12](https://github.com/user-attachments/assets/313b3046-15f4-4bfa-a13a-39be9a4484cd){: width="50%" height="50%"} 
+![Oct-14-2024 01-52-12](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-08-01-Asyncimage/313b3046-15f4-4bfa-a13a-39be9a4484cd.png){: width="50%" height="50%"} 
 
 ###  4. Extension 사용으로 코드 줄이기
 
@@ -215,4 +215,4 @@ AsyncImage(url: URL(string: imageURL),
 
 따라서 이 transaction은 이미지가 성공적으로 로드되었을 때, 스프링 애니메이션을 적용하는 데 사용된다.
 
-![Oct-14-2024 03-01-08](https://github.com/user-attachments/assets/c658130b-af94-44f6-ad0d-4fd221437d54){: width="50%" height="50%"} 
+![Oct-14-2024 03-01-08](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-08-01-Asyncimage/c658130b-af94-44f6-ad0d-4fd221437d54.png){: width="50%" height="50%"} 

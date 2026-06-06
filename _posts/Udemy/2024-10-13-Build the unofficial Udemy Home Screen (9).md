@@ -209,13 +209,13 @@ uiModel을 적용시켜준다.
 
 [Mocky](https://designer.mocky.io/){:target="_blank"} 를 사용하여, JSON의 내용을 모두 복사한뒤 업로드한다.
 
-![CleanShot 2024-10-13 at 04 23 38](https://github.com/user-attachments/assets/1cdfc8cb-c920-4d01-b716-6d9f00de48da)
+![CleanShot 2024-10-13 at 04 23 38](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-13-Build-the-unofficial-Udemy-Home-Screen-9/1cdfc8cb-c920-4d01-b716-6d9f00de48da.png)
 
 New Mock을 클릭하면 위와같이 나오는데 Response에 내용을 복사하자.
 
 이후 Generate를 하면
 
-![CleanShot 2024-10-13 at 04 24 57](https://github.com/user-attachments/assets/6da53647-42bc-454a-aae2-4433da503ba7)
+![CleanShot 2024-10-13 at 04 24 57](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-13-Build-the-unofficial-Udemy-Home-Screen-9/6da53647-42bc-454a-aae2-4433da503ba7.png)
 
 이렇게 링크가 생성이 된다.
 

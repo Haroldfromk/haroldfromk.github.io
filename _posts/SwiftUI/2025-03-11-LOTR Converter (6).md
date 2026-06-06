@@ -35,7 +35,7 @@ struct SelectCurrency: View {
 
 별도로 추출한 이유는 
 
-![Image](https://github.com/user-attachments/assets/a3dbbfaa-9cc5-434d-a9b4-327338f89e7d){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-11-LOTR-Converter-6/a3dbbfaa-9cc5-434d-a9b4-327338f89e7d.png){: width="50%" height="50%"} 
 
 첫화면을 보면 알듯이 좌,우 currency를 다르게 해서 convert를 하기 때문.
 
@@ -124,7 +124,7 @@ struct ContentView: View {
 
 실행하면
 
-![Image](https://github.com/user-attachments/assets/c46141a2-dbb6-49ad-a46d-26fc62ca8098){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-11-LOTR-Converter-6/c46141a2-dbb6-49ad-a46d-26fc62ca8098.png){: width="50%" height="50%"} 
 
 이렇게 나온다.
 
@@ -223,7 +223,7 @@ TextField("Amount", text: $leftAmount)
     }
 ```
 
-![Image](https://github.com/user-attachments/assets/017d9d65-7b50-4c64-a01d-4e6be9c72f37){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-11-LOTR-Converter-6/017d9d65-7b50-4c64-a01d-4e6be9c72f37.png){: width="50%" height="50%"} 
 
 이렇게 값이 변하는걸 알 수 있다.
 

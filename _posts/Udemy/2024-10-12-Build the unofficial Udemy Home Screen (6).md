@@ -15,7 +15,7 @@ toc_sticky: true
 
 이미지로 대체한다.
 
-![simulator_screenshot_DD1B28D3-090B-4A58-9ABD-DD6E95CB8DA4](https://github.com/user-attachments/assets/8cc82991-9868-43cc-9fd8-62966da400a9){: width="50%" height="50%"} 
+![simulator_screenshot_DD1B28D3-090B-4A58-9ABD-DD6E95CB8DA4](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-6/8cc82991-9868-43cc-9fd8-62966da400a9.png){: width="50%" height="50%"} 
 
 HomeVC에서 내용을 추가, 수정했다.
 
@@ -103,7 +103,7 @@ private func makeFeaturedCourseSection() -> NSCollectionLayoutSection {
 - interItemSpacing은 이 그룹 안에서 각 아이템 간의 간격을 설정하는 속성이다. 여기서는 그룹 안에서의 아이템 간 간격을 지정하고 있다.
 - NSCollectionLayoutSpacing.fixed(10)는 고정된 10 포인트(pixels)의 간격을 의미한다. 즉, 그룹 내에서 각 아이템 사이에 10 포인트의 간격이 들어가게 된다.
 
-![simulator_screenshot_41E71D73-90AA-4A4A-B481-EC907D1AF252](https://github.com/user-attachments/assets/da3ac389-bc34-4a6d-82e2-e0612811ed9f){: width="50%" height="50%"} 
+![simulator_screenshot_41E71D73-90AA-4A4A-B481-EC907D1AF252](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-6/da3ac389-bc34-4a6d-82e2-e0612811ed9f.png){: width="50%" height="50%"} 
 
 완성사진.
 
@@ -154,7 +154,7 @@ struct UdemyBusinessIconView: View {
 
 뭐 크게 언급할 만한 내용은 없어보인다.
 
-![CleanShot 2024-10-12 at 08 08 11](https://github.com/user-attachments/assets/d13b4a91-f95f-44a7-916c-c5d8904c565c){: width="50%" height="50%"} 
+![CleanShot 2024-10-12 at 08 08 11](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-6/d13b4a91-f95f-44a7-916c-c5d8904c565c.png){: width="50%" height="50%"} 
 
 ## UdemyBusinessCollectionViewCell 설정 및 추가
 
@@ -226,7 +226,7 @@ hostingController.rootView.onTap = { [weak self] in
 3. UdemyBusinessView에서 사용자가 셀을 탭하면, SwiftUI 뷰의 onTap이 호출된다. 이 때, UdemyBusinessCollectionViewCell의 onTap 클로저가 트리거된다.
 4. 사용자가 탭했을 때, UdemyBusinessCollectionViewCell에서 설정된 onTap 클로저가 실행되고, 외부에서 설정된 동작(여기서는 print)이 수행된다.
 
-![simulator_screenshot_6FBF352D-7AA2-4A49-AA0E-7307637DDFFE](https://github.com/user-attachments/assets/6a988c13-56de-4b1e-8318-7ca83beba1c2){: width="50%" height="50%"} 
+![simulator_screenshot_6FBF352D-7AA2-4A49-AA0E-7307637DDFFE](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-6/6a988c13-56de-4b1e-8318-7ca83beba1c2.png){: width="50%" height="50%"} 
 
 완성된 화면은 위와 같다.
 
@@ -428,7 +428,7 @@ var onTap: (() -> Void)?
         }
 ```
 
-![Oct-12-2024 18-41-02](https://github.com/user-attachments/assets/f77715a7-1d61-4ac1-9bfe-b73e74035ad7)
+![Oct-12-2024 18-41-02](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-6/f77715a7-1d61-4ac1-9bfe-b73e74035ad7.png)
 
 실행하면 이렇게 print 됨을 알 수 있다.
 

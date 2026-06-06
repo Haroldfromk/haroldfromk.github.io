@@ -107,7 +107,7 @@ extension SignUpViewController: PHPickerViewControllerDelegate {
 
 그리고 dismiss를 하는 이유는 이것도 하나의 VC의 개념이라 dismiss를 통해 해당 vc를 사라지게 해준다.
 
-![May-19-2024 22-27-14](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/ee044dee-c5cb-42d2-ae9e-1e9d0ab69116){: width="50%" height="50%"} 
+![May-19-2024 22-27-14](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-2/ee044dee-c5cb-42d2-ae9e-1e9d0ab69116){: width="50%" height="50%"} 
 
 이렇게 이미지가 뜨는걸 확인할 수 있다.
 
@@ -139,7 +139,7 @@ Firebase Storage를 빌드해주고, 이것도 역시 테스트로 한다.
 
 그리고 Storage 주소를 복하해준다.
 
-![CleanShot 2024-05-19 at 22 33 27@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/5238b871-e5a6-45e8-a47f-8d39f3318df1)
+![CleanShot 2024-05-19 at 22 33 27@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-2/5238b871-e5a6-45e8-a47f-8d39f3318df1)
 
 바로 이녀석.
 
@@ -210,7 +210,7 @@ completionHandler를 통해 이미지를 스토리지에 저장하고 그 url주
 
 콘솔로 이미지 주소가 출력이 되고, 또한 사이트에서도 확인이 된다.
 
-![CleanShot 2024-05-19 at 22 44 06@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/3ea6adcb-f4e6-4a32-a276-25d8101b7ed8)
+![CleanShot 2024-05-19 at 22 44 06@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-2/3ea6adcb-f4e6-4a32-a276-25d8101b7ed8)
 
 이제 이미지를 저장하고 그걸 유저 정보를 가진 database에도 올리기 위해
 
@@ -266,16 +266,16 @@ completionHandler를 통해 이미지를 스토리지에 저장하고 그 url주
 
 다시 이메일 주소를 바꿔서 등록을 해보면?
 
-![CleanShot 2024-05-19 at 22 48 03@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/2fa0deda-e181-488c-8933-61155a3a3475)
+![CleanShot 2024-05-19 at 22 48 03@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-2/2fa0deda-e181-488c-8933-61155a3a3475)
 
 이렇게 database 에도 확인이 되고,
 
-![CleanShot 2024-05-19 at 22 49 12@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/3d9e66de-22e5-4cd3-b1bb-2ac850df0f63)
+![CleanShot 2024-05-19 at 22 49 12@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-2/3d9e66de-22e5-4cd3-b1bb-2ac850df0f63)
 
 auth도 확인 완료,
 
 마지막으로
 
-![CleanShot 2024-05-19 at 22 49 51@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/1ec09546-93a1-4f42-be0d-ed7ad91b94f8)
+![CleanShot 2024-05-19 at 22 49 51@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-2/1ec09546-93a1-4f42-be0d-ed7ad91b94f8)
 
 Storage에서도 확인이 된다.

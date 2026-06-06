@@ -17,13 +17,13 @@ toc_sticky: true
 	- 이 작업은 여러 하위 작업(Child Tasks)을 가질 수 있다.
 	- 하위 작업은 async let 구문을 사용하여 생성되며, 결국 async let은 변수와 같은 역할을 한다.
 	- 이를 통해 이러한 작업이 동시에 실행될 수 있다.
-    ![Untitled Diagram1 drawio](https://github.com/user-attachments/assets/8a1ff092-b7a5-4b9a-a9ea-2cc4e2282250)
+    ![Untitled Diagram1 drawio](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/8a1ff092-b7a5-4b9a-a9ea-2cc4e2282250.png)
 2. **Task Group**
 	- 반면, 동적 데이터가 있고 몇 개의 동시 작업을 실행해야 할지 알 수 없는 상황에서는 Task Group이 더 적합할 수 있다.
 	- Task Group을 사용하면 작업 내에서 여러 그룹을 실행할 수 있으며, 각 그룹은 자체적으로 여러 하위 작업을 실행할 수 있다.
 	- Task Group의 장점 중 하나는 그룹이 Task Group 구문을 사용하면서도 하위 작업은 async 구문을 자유롭게 사용할 수 있다는 것이다.
 	- 이 경우, 여러 그룹을 생성할 수 있고, 각 그룹은 동시에 여러 하위 작업을 실행할 수 있다.
-    ![Untitled Diagram2 drawio](https://github.com/user-attachments/assets/de48de24-96f3-4cf1-bcb2-cccdaee6275c)
+    ![Untitled Diagram2 drawio](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/de48de24-96f3-4cf1-bcb2-cccdaee6275c.png)
 
 ### 1. 시나리오: 랜덤 이미지 앱 (Async let)
 
@@ -96,7 +96,7 @@ struct RandomImageViewModel: Identifiable {
 
 randomImages의 타입을 [RandomImage] 에서 [RandomImageViewModel]로 타입을 변환해주는 작업을 map을 통해서 했다고 보면 된다.
 
-![CleanShot 2024-11-29 at 14 57 52](https://github.com/user-attachments/assets/aef2abf7-7649-4623-a4ee-64717d3928bb)![CleanShot 2024-11-29 at 14 58 10](https://github.com/user-attachments/assets/5fe67578-87ab-4c5d-80ac-1b08d0d363dd)
+![CleanShot 2024-11-29 at 14 57 52](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/aef2abf7-7649-4623-a4ee-64717d3928bb.png)![CleanShot 2024-11-29 at 14 58 10](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/5fe67578-87ab-4c5d-80ac-1b08d0d363dd.png)
 
 그리고 **Main Thread에서 실행**하기 위해 `@MainActor`를 사용해준다.
 
@@ -108,7 +108,7 @@ https://quoteslate.vercel.app/api/quotes/random
 
 이걸로 변경.
 
-![simulator_screenshot_5B031220-7AC4-4AB2-B666-226FF115481E](https://github.com/user-attachments/assets/2c8750e0-9dec-47df-8edc-01f86d5514e0){: width="50%" height="50%"} 
+![simulator_screenshot_5B031220-7AC4-4AB2-B666-226FF115481E](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/2c8750e0-9dec-47df-8edc-01f86d5514e0.png){: width="50%" height="50%"} 
 
 완료.
 
@@ -136,7 +136,7 @@ func getRandomImages(ids: [Int]) async throws -> [RandomImage] {
 
 [이전글](https://haroldfromk.github.io/posts/Async_await-(7)/){:target="_blank"}에서 적용했던 `withThrowingTaskGroup`을 사용하여 코드를 보완해본다.
 
-![CleanShot 2024-11-29 at 15 21 54](https://github.com/user-attachments/assets/5a24cee1-2ad0-45ce-9167-60e230cde168)
+![CleanShot 2024-11-29 at 15 21 54](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/5a24cee1-2ad0-45ce-9167-60e230cde168.png)
 
 async가 deprecated 되었으니 강의와 다르게 addTask를 사용하여 구현한다.
 
@@ -288,7 +288,7 @@ class RandomImageListViewModel: ObservableObject {
 
 즉 
 
-![example4 drawio1](https://github.com/user-attachments/assets/5b71e9ff-9cf0-4286-977f-2a79039300a5)
+![example4 drawio1](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/5b71e9ff-9cf0-4286-977f-2a79039300a5.png)
 
 해당 이미지를 재사용 했는데, 하위 작업이 모두 끝나야 제일 상위의 부모 Task가 끝나는 구조가 바로 현재의 구조이다.
 
@@ -335,11 +335,11 @@ class RandomImageListViewModel: ObservableObject {
 
 **[Before]**
 
-![Nov-29-2024 16-49-21](https://github.com/user-attachments/assets/fb4cbfa5-11e0-43ab-b788-145f6854dc86){: width="50%" height="50%"} 
+![Nov-29-2024 16-49-21](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/fb4cbfa5-11e0-43ab-b788-145f6854dc86.png){: width="50%" height="50%"} 
 
 **[After]**
 
-![Nov-29-2024 16-50-49](https://github.com/user-attachments/assets/6238a7fd-2c97-4e14-b902-439d4fb29ea0){: width="50%" height="50%"} 
+![Nov-29-2024 16-50-49](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/6238a7fd-2c97-4e14-b902-439d4fb29ea0.png){: width="50%" height="50%"} 
 
 일단은 강의와 달리 난 id를 사용하지 않기에 이번에도 배제를 했으나
 
@@ -347,7 +347,7 @@ class RandomImageListViewModel: ObservableObject {
 
 ### 3. 시나리오: 랜덤 이미지 앱 (Unstructured Task)
 
-![CleanShot 2024-11-29 at 16 38 25](https://github.com/user-attachments/assets/fea906e2-c011-4871-a094-fac3d3e9899b){: width="50%" height="50%"} 
+![CleanShot 2024-11-29 at 16 38 25](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/fea906e2-c011-4871-a094-fac3d3e9899b.png){: width="50%" height="50%"} 
 
 현재 이렇게 ui가 구성되어있다.
 
@@ -365,7 +365,7 @@ Refresh 버튼을 누른다고 가정해보자.
 
 그러면 배열에 계속 추가되면서 스크롤이 길어지게 된다.
 
-![Nov-29-2024 16-42-24](https://github.com/user-attachments/assets/03f80c36-eae3-490d-990a-8a9dd139c25c){: width="50%" height="50%"} 
+![Nov-29-2024 16-42-24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/03f80c36-eae3-490d-990a-8a9dd139c25c.png){: width="50%" height="50%"} 
 
 이건 Refresh라고 볼수 없다.
 
@@ -399,6 +399,6 @@ func getRandomImages(ids: [Int]) async {
 
 함수가 호출될때마다 배열을 초기화 해주는 작업을 해주면 된다.
 
-![Nov-29-2024 16-47-55](https://github.com/user-attachments/assets/97e30e16-e99c-4261-9200-4ad1625f1918){: width="50%" height="50%"} 
+![Nov-29-2024 16-47-55](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/97e30e16-e99c-4261-9200-4ad1625f1918.png){: width="50%" height="50%"} 
 
 끝.

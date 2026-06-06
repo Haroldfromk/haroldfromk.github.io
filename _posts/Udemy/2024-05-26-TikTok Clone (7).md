@@ -218,7 +218,7 @@ func handleResetAllVisibilityToIdentity() {
 
 작동 영상.
 
-<video height="400" width="288" src="https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/6f2c2c73-3fbb-426d-86ce-3c28164c7484" controls="">대체텍스트</video>
+<video height="400" width="288" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-7/6f2c2c73-3fbb-426d-86ce-3c28164c7484" controls="">대체텍스트</video>
 
 ## 타이머 생성
 
@@ -304,6 +304,6 @@ func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL,
 
 ```
 
-<video height="400" width="288" src="https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/c362c52e-9953-4df0-b8d3-63d3ce6d27c5" controls="">대체텍스트</video>
+<video height="400" width="288" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-7/c362c52e-9953-4df0-b8d3-63d3ce6d27c5" controls="">대체텍스트</video>
 
 15초 카운트가 끝나면 자동으로 레코딩이 멈추게 된다.

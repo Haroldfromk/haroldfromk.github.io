@@ -86,7 +86,7 @@ private lazy var textField: UITextField = {
     }()
 ```
 
-![simulator_screenshot_049ABB94-21A6-41F3-9F83-6BECAFECAFC4](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/f8abb4ee-fd65-4c29-ba5b-bc0965257a47){: width="50%" height="50%"}
+![simulator_screenshot_049ABB94-21A6-41F3-9F83-6BECAFECAFC4](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-3/f8abb4ee-fd65-4c29-ba5b-bc0965257a47){: width="50%" height="50%"}
 
 이렇게 하면 키보드 위에 Toolbar가 생성이 되고 done버튼이 있다.
 
@@ -262,4 +262,4 @@ func addRoundedCorners(corners: CACornerMask, radius: CGFloat) {
 
 완성
 
-![simulator_screenshot_54B0B130-282F-4A7C-A550-978A26C14E35](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/06d8b7e3-8fec-4901-bce1-3ddae914e0ac){: width="50%" height="50%"}
+![simulator_screenshot_54B0B130-282F-4A7C-A550-978A26C14E35](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-01-Tip-Calculator-3/06d8b7e3-8fec-4901-bce1-3ddae914e0ac){: width="50%" height="50%"}

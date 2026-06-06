@@ -18,7 +18,7 @@ Flutter의 Widget 네이밍 컨벤션에서 아이디어를 얻은 이 방식은
 
 [참고글 (flutter docs)](https://docs.flutter.dev/cookbook/navigation/passing-data){:target="_blank"}
 
-<img width="80%" height="80%" alt="Image" src="https://github.com/user-attachments/assets/bf4fd8f7-2e78-45f6-86a4-d31734139b92" />
+<img width="80%" height="80%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-22-screensvsviews/bf4fd8f7-2e78-45f6-86a4-d31734139b92.png" />
 
 | 구분 | Screen (스크린) | View (뷰) |
 | :--- | :--- | :--- |

@@ -121,7 +121,7 @@ output.updateViewPublisher.sink { [unowned self] result in
         }.store(in: &cancellables)
 ```
 
-![Simulator Screenshot - iPhone 15 Pro - 2024-05-03 at 18 19 20](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/6a9996a4-cefb-49d5-ae79-f40fae933c34){: width="50%" height="50%"}
+![Simulator Screenshot - iPhone 15 Pro - 2024-05-03 at 18 19 20](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-6/6a9996a4-cefb-49d5-ae79-f40fae933c34){: width="50%" height="50%"}
 
 좀 우스꽝스럽게 나왔다.
 
@@ -171,7 +171,7 @@ func configure(amount: Double) { // modified String -> Double
     }
 ```
 
-![simulator_screenshot_92F80971-E271-44C0-A0D4-7B90BE60A1B1](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/c5e30d88-c2f0-4313-89f9-e59b3e55c443){: width="50%" height="50%"}
+![simulator_screenshot_92F80971-E271-44C0-A0D4-7B90BE60A1B1](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-6/c5e30d88-c2f0-4313-89f9-e59b3e55c443){: width="50%" height="50%"}
 
 이젠 잘된다.
 
@@ -179,7 +179,7 @@ func configure(amount: Double) { // modified String -> Double
 
 CombineCocoa를 사용한다.
 
-![CleanShot 2024-05-03 at 18 33 48@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/59504e8c-ca6f-4a68-ad2a-aef432986788)
+![CleanShot 2024-05-03 at 18 33 48@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-6/59504e8c-ca6f-4a68-ad2a-aef432986788)
 
 여기에 tap gesture가 있다.
 
@@ -213,7 +213,7 @@ parameter로 value가 있지만 void이므로 어차피 리턴할게 없다.
 
 제스쳐를 추가한 이유는 키보드가 올라왔을때 키보드를 내리게 하기 위함.
 
-![May-03-2024 19-08-12](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/1169e0a9-d931-4e43-8fcd-2715420349bf){: width="50%" height="50%"}
+![May-03-2024 19-08-12](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-6/1169e0a9-d931-4e43-8fcd-2715420349bf){: width="50%" height="50%"}
 
 ## LogoView를 탭했을 때의 이벤트 추가
 
@@ -230,7 +230,7 @@ parameter로 value가 있지만 void이므로 어차피 리턴할게 없다.
 
 2번 탭했을때 해당 gestureRecognizer가 발생
 
-![May-03-2024 19-11-31](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/b7f3b5d4-5862-4f82-90f9-a3c891be6815){: width="50%" height="50%"}
+![May-03-2024 19-11-31](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-6/b7f3b5d4-5862-4f82-90f9-a3c891be6815){: width="50%" height="50%"}
 
 
 ## GestureTapPublisher를 vm에 전달.
@@ -380,7 +380,7 @@ let resultCalculatorPublisher = input.logoViewTapPublisher.handleEvents(receiveO
 
 를 보고 시도.
 
-![CleanShot 2024-05-03 at 20 05 19@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/8103d020-1dce-4f96-9360-3fcdf4ee4f68)
+![CleanShot 2024-05-03 at 20 05 19@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-6/8103d020-1dce-4f96-9360-3fcdf4ee4f68)
 
 성공.
 
@@ -455,4 +455,4 @@ private func bind() {
 
 완성
 
-![May-03-2024 20-29-11](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/7f9421be-7be2-45fc-8487-c2b678ce0959){: width="50%" height="50%"}
+![May-03-2024 20-29-11](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-6/7f9421be-7be2-45fc-8487-c2b678ce0959){: width="50%" height="50%"}

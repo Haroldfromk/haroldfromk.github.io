@@ -147,7 +147,7 @@ let steps: [(date: Date, count: Double)] = [
 
 `addingTimeInterval`은 초 단위로 날짜를 더하거나 뺀다. 하루는 86400초이므로 `-6 * 86400`은 6일 전을 의미한다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/d21aff4d-146d-4d61-9752-861ea2448898" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-4/d21aff4d-146d-4d61-9752-861ea2448898.png" />
 
 ---
 
@@ -249,7 +249,7 @@ struct StepChartView: View {
 
 하드코딩된 데이터를 제거하고 `runViewModel.stepDateData`를 차트에 연결했다. `.task` modifier로 뷰가 나타날 때 자동으로 fetch가 실행된다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/bbce60f9-5947-4a46-ae5a-8e58c6f5aa5f" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-4/bbce60f9-5947-4a46-ae5a-8e58c6f5aa5f.png" />
 
 이렇게 값을 가져와서 chart에 그려주는걸 알 수 있다.
 

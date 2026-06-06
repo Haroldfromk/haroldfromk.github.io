@@ -432,7 +432,7 @@ class HTTPClient {
 
 지금은 강제로 띄우기 위해 `!movie.isEmpty` 즉 fetch가 정상적으로 이루어 졌을때 바로 breakpoint를 호출하게 했고 사진과 같다.
 
-![Dec-19-2024 11-28-42](https://github.com/user-attachments/assets/54238469-0435-4d67-a5b4-4dbcd0f2d8ab)
+![Dec-19-2024 11-28-42](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-19-Combine-Remind-3/54238469-0435-4d67-a5b4-4dbcd0f2d8ab.png)
 
 [BreakPoint 설정](https://developer.apple.com/documentation/xcode/setting-breakpoints-to-pause-your-running-app){:target="_blank"} 이건 뭐 다알지만 Docs의 링크를 걸어봤다.
 
@@ -458,7 +458,7 @@ let _ = numbers
 
 위의 두 코드는 같은결과를 도출하는데, 간결하게 한것과 약간 풀어쓴것이라고 보면 된다.
 
-![CleanShot 2024-12-19 at 12 12 15](https://github.com/user-attachments/assets/faf4e12a-b7c9-461b-80d9-cc1a6cbdff3b)
+![CleanShot 2024-12-19 at 12 12 15](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-19-Combine-Remind-3/faf4e12a-b7c9-461b-80d9-cc1a6cbdff3b.png)
 
 playground에선 위와같이 에러가 발생.
 

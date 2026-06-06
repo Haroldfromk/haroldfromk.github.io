@@ -9,10 +9,10 @@ toc: true
 toc_sticky: true
 ---
 1. 아래와같이 디자인을 한다
-![](https://velog.velcdn.com/images/haroldfromk/post/49f1b60f-c2ae-4cff-936b-50f98416cf3b/image.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-20-Try-Magic-8-Balls/49f1b60f-c2ae-4cff-936b-50f98416cf3b.png){: width="50%" height="50%"}
 
 2. imageview와, button을 viewcontroller와 연결 시켜준다.
-![](https://velog.velcdn.com/images/haroldfromk/post/41f1a97c-51be-4997-bca5-a34a8deda7e5/image.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-20-Try-Magic-8-Balls/41f1a97c-51be-4997-bca5-a34a8deda7e5.png){: width="50%" height="50%"}
 
 3. 버튼을 눌렀을때 이미지가 변환이되게 코드를 짠다.
 ```swift
@@ -34,4 +34,4 @@ class ViewController: UIViewController {
 
 ```
 4. 작동확인!
-![](https://velog.velcdn.com/images/haroldfromk/post/c33a3c2e-54c1-40b0-bbb2-b9e9eb601d10/image.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-20-Try-Magic-8-Balls/c33a3c2e-54c1-40b0-bbb2-b9e9eb601d10.gif){: width="50%" height="50%"}

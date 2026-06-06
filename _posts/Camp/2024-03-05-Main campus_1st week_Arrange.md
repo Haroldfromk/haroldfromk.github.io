@@ -14,7 +14,7 @@ toc_sticky: true
 과제는 다음과 같다.
 
 ## 1. Lv1
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/ORDasUAc8R.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Main-campus_1st-week_Arrange/ORDasUAc8R.png)
 
 물론 Lv1 ~ Lv4까지 있지만.
 
@@ -50,11 +50,11 @@ class Calculator {
 
 일단은 두수가 Int일때만을 고려하여 계산하였다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/7Hgn6DGZEh.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Main-campus_1st-week_Arrange/7Hgn6DGZEh.png)
 
 ## 2. Lv2
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/hq1WCxj2HJ.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Main-campus_1st-week_Arrange/hq1WCxj2HJ.png)
 
 나머지를 구하게하는 기능을 추가 해보자.
 
@@ -100,11 +100,11 @@ class Calculator {
 
 위의 코드를 추가하였고 결과는 다음과 같다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/CnHth9USVu.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Main-campus_1st-week_Arrange/CnHth9USVu.png)
 
 ## 3. Lv3
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/T9UcVQOqO1.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Main-campus_1st-week_Arrange/T9UcVQOqO1.png)
 
 지금은 각각의 기능이 Class안에 함수로 구현이 되어있는데 이걸이제는 각각의 클래스로 나누어 표현을 해야한다.
 

@@ -38,7 +38,7 @@ b = 7
 print(b)
 ```
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/lfMKcSUjKg.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-15-Deep-Dive-Constants/lfMKcSUjKg.png)
 
 바로 이렇게 에러가 발생하게된다.
 

@@ -70,7 +70,7 @@ struct CalculatorBrain {
 
 CalculateViewController에 다음과 같은 창이 경고가 뜬다, 저번에 Quizzler때도 그랬다. 
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/wtHbR2MYJB.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-02-BMI-Calculator-4/wtHbR2MYJB.png)
 
 리턴을 하지말고 계산만 하게 해볼까? 라는 생각이 들어
 
@@ -209,6 +209,6 @@ override func viewDidLoad() {
 
 viewDidLoad()를 통해 앱이 구동되자마자 getBMIValue를 하게되는데 nil값을 가져오기 때문이다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/QH3W2dwKX2.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-02-BMI-Calculator-4/QH3W2dwKX2.png)
 
 다음 글에서 계속 서술하도록 하겠다.

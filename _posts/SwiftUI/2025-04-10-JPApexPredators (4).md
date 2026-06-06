@@ -13,7 +13,7 @@ toc_sticky: true
 
 지금은 Navigation Link 안에 그냥 Image만 띄워놓은 상태인데 이것 역시도 별도로 관리하는 View 만들어 본다.
 
-![Image](https://github.com/user-attachments/assets/68ec5a42-b912-44bb-a56d-3c8137b7e6ed){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-10-JPApexPredators-4/68ec5a42-b912-44bb-a56d-3c8137b7e6ed.png){: width="50%" height="50%"} 
 
 이렇게 디자인을 해보려고 한다.
 
@@ -80,7 +80,7 @@ struct PredatorDetail: View {
 
 이렇게 디자인을 하다보면
 
-![Image](https://github.com/user-attachments/assets/9d17321e-c567-4cdf-8c78-77cd49a4fbf0){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-10-JPApexPredators-4/9d17321e-c567-4cdf-8c78-77cd49a4fbf0.png){: width="50%" height="50%"} 
 
 위와 같이나오는데, 현재는 16pro를 기준으로 하고있는데, 사람마다 아이폰 기종이 다르다.
 
@@ -120,7 +120,7 @@ Text("Height: \(geo.size.height)")
 
 를 사용하게되면
 
-![Image](https://github.com/user-attachments/assets/080d09c6-5bc1-4551-a29a-09459fb3eef1){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-10-JPApexPredators-4/080d09c6-5bc1-4551-a29a-09459fb3eef1.png){: width="50%" height="50%"} 
 
 이렇게 사이즈를 확인 가능 하다.
 
@@ -139,7 +139,7 @@ Image(predator.image)
     .border(.blue, width: 7)
 ```
 
-![Image](https://github.com/user-attachments/assets/e5228881-a619-417b-85bf-d295fad89805){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-10-JPApexPredators-4/e5228881-a619-417b-85bf-d295fad89805.png){: width="50%" height="50%"} 
 
 이렇게 border를 통해 확인을 해보면 된다.
 
@@ -160,7 +160,7 @@ Image(predator.image)
     .offset(y: 20)
 ```
 
-![Image](https://github.com/user-attachments/assets/e2380090-a3c8-4c94-85dd-bd1712330ca8){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-10-JPApexPredators-4/e2380090-a3c8-4c94-85dd-bd1712330ca8.png){: width="50%" height="50%"} 
 
 이렇게 나온다.
 
@@ -269,7 +269,7 @@ Foreach를 사용하기 위해 Identifiable 를 채택해준다.
 
 이렇게 코드를 완성하고 실행하면
 
-![Image](https://github.com/user-attachments/assets/56c1383a-6c46-4b39-bb7d-36237aa818e8){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-10-JPApexPredators-4/56c1383a-6c46-4b39-bb7d-36237aa818e8.png){: width="50%" height="50%"} 
 
 이런식으로 되는걸 알 수 있다.
 

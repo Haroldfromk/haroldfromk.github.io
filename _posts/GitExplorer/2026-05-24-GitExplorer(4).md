@@ -998,7 +998,7 @@ func refreshData(isRefresh: Bool) {
 
 self!는 self가 nil이면 크래시가 나기 때문에 위험하고, guard let self로 바꾸면 nil일 때 그냥 리턴하기때문.
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/97e4b119-c9fc-4078-b996-79003f1ad644" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/97e4b119-c9fc-4078-b996-79003f1ad644.png" />{: width="50%" height="50%"}
 
 ---
 
@@ -1028,7 +1028,7 @@ struct FavoriteRow: View {
 
 우선 기존의 Row에서 이렇게 ui를 바꾸고 적용하면
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/bc38a33b-ec47-4d5e-84bc-66bf421883b8" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/bc38a33b-ec47-4d5e-84bc-66bf421883b8.png" />{: width="50%" height="50%"}
 
 현재 처음에 userdefault의 배열에서 즐겨찾기 추가한 유져의 아이디만 가져오는 구조로 되어있다.
 
@@ -1090,7 +1090,7 @@ func reloadData() {
 
 단지 취향차이.
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/b4c7d16f-e60c-4ce5-8648-84e23c99d2af" />{: width="50%" height="50%"}<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/c33e7f21-06c1-4250-abec-fd481dfdda4e" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/b4c7d16f-e60c-4ce5-8648-84e23c99d2af.png" />{: width="50%" height="50%"}<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/c33e7f21-06c1-4250-abec-fd481dfdda4e.png" />{: width="50%" height="50%"}
 
 이렇게 잘 되는걸 알 수 있다.
 
@@ -1131,7 +1131,7 @@ if selectedSegment == 0 {
 
 이렇게 Link를 사용해서 연결해주었다.
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/442d9157-5bf6-4c23-aaea-4c0a128c580d" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/442d9157-5bf6-4c23-aaea-4c0a128c580d.png" />{: width="50%" height="50%"}
 
 잘 되는걸 알 수있다.
 
@@ -1145,7 +1145,7 @@ if selectedSegment == 0 {
 
 즐겨찾기의 목록을 삭제하면 UI업데이트가 안되는 문제를 발견했다.
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/d1cc8e2d-ea8b-46f0-9082-9d01a4c07b38" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/d1cc8e2d-ea8b-46f0-9082-9d01a4c07b38.png" />{: width="50%" height="50%"}
 
 ```swift
 removeSubject
@@ -1165,7 +1165,7 @@ removeSubject
 
 현재 삭제를 하면, 다른게 삭제 되는 문제가 있다.
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/936e92d5-850f-4025-a2ba-6f6d3969bd2c" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/936e92d5-850f-4025-a2ba-6f6d3969bd2c.png" />{: width="50%" height="50%"}
 
 이건 UserDefault값을 넣은 배열과, 그걸 통해 GithubUser를 담은 배열값이 서로 달라서 그렇다.
 
@@ -1219,7 +1219,7 @@ task로 바꾸어 적용한다. 위에서 언급했지만 한번더 적는다.
 여기의 `getData()`때문에 결과값이 다시 섞인다.
 이유는 전에도 언급했지만 `MergeMany`를 쓰기때문에 순서가 보장되지 않기 때문이다.
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/18c2b794-0067-4909-ad40-6ecfec11fb7a" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/18c2b794-0067-4909-ad40-6ecfec11fb7a.png" />{: width="50%" height="50%"}
 
 removeSubject에도 비동기 함수가 들어가야하는데 그냥 넣으면 아래와 같이 에러가 발생한다.
 
@@ -1243,7 +1243,7 @@ removeSubject
 
 이렇게 수정해준다.
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/d5738a64-21b8-4a5a-baf5-b2a598d3abb7" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-24-GitExplorer4/d5738a64-21b8-4a5a-baf5-b2a598d3abb7.png" />{: width="50%" height="50%"}
 
 이제는 이상없이 잘 되는걸 알 수 있다.
 

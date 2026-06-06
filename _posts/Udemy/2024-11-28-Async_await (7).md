@@ -310,7 +310,7 @@ getAPR
 
 ### 4. Group Tasks
 
-![example4 drawio](https://github.com/user-attachments/assets/cbabdf25-1bd8-4fbc-b102-6f0e92df746a)
+![example4 drawio](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-7/cbabdf25-1bd8-4fbc-b102-6f0e92df746a.png)
 
 이런식으로 동시에 작업이 실행되게 할 것이다.
 
@@ -320,7 +320,7 @@ getAPR
 
 그리고 코드를 작성하다보니
 
-![CleanShot 2024-11-28 at 19 32 04](https://github.com/user-attachments/assets/e852e528-85eb-4f4e-b54b-91d53625b463)
+![CleanShot 2024-11-28 at 19 32 04](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-7/e852e528-85eb-4f4e-b54b-91d53625b463.png)
 
 `Group.async`에서 값을 처리하려고하니 위와 같은 경고가 뜬다.
 
@@ -389,7 +389,7 @@ async {
 }
 ```
 
-![example4 drawio1](https://github.com/user-attachments/assets/5b71e9ff-9cf0-4286-977f-2a79039300a5)
+![example4 drawio1](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-7/5b71e9ff-9cf0-4286-977f-2a79039300a5.png)
 
 작업은 동시에 시작이 되나, 모든 작업이 끝나야만 출력이 된다.
 

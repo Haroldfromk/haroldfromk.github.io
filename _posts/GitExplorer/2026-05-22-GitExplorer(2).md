@@ -106,7 +106,7 @@ init() {
 
 다만 AvatarImage를 사용하는 AvatarView에서 기존에는 그냥 원에 H 하나만 있었는데
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/ea988caa-f3a0-4aa3-9835-04a6a46a2a29" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/ea988caa-f3a0-4aa3-9835-04a6a46a2a29.png" />
 
 ```swift
 // Before
@@ -203,7 +203,7 @@ enum Status: Equatable {
 
 이걸 `debounce` 다음에 넣으면, 검색어가 통과되는 순간 `.loading` 상태로 바꾸고 이후 파이프라인은 그대로 흘러간다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/bf3e8d18-5566-4696-814f-198daaa455fc" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/bf3e8d18-5566-4696-814f-198daaa455fc.png" />
 
 ---
 
@@ -275,7 +275,7 @@ enum Status: Equatable {
 
 이때 EmptyView()를 사용하는 이유는 아무것도 보이지않게해서 호출의 결과인 list만 보이게 하겠다는 것 
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/fcf3426d-ef8a-4237-a0ca-c76c756733b3" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/fcf3426d-ef8a-4237-a0ca-c76c756733b3.png" />{: width="50%" height="50%"}
 
 실행하면 이렇게 상태에 따라 다르게 나오는걸 알 수 있다.
 
@@ -324,7 +324,7 @@ if selectedSegment == 0 {
 
 이런식으로 segment를 사용해서 해둔상태
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/ce590d96-0325-4dde-9ac3-8f90b69f72d4" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/ce590d96-0325-4dde-9ac3-8f90b69f72d4.png" />
 
 ---
 
@@ -610,7 +610,7 @@ init(user: GithubUser) {
 
 실행하니 모든 결과값을 가져오는걸 확인했다.
 
-<img width="302" height="630" alt="Image" src="https://github.com/user-attachments/assets/0bffe480-d3e1-4a95-96c2-eb7bc7dfa739" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/0bffe480-d3e1-4a95-96c2-eb7bc7dfa739.png" />{: width="50%" height="50%"}
 
 ##### 통합 모델로 만들기
 

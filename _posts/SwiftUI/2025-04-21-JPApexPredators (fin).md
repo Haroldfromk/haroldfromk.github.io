@@ -11,39 +11,39 @@ toc_sticky: true
 
 ## iMessage를 위한 Sticker 만들어보기.
 
-![Image](https://github.com/user-attachments/assets/d68db9d4-24f5-4693-9cce-da83c617f6ec)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/d68db9d4-24f5-4693-9cce-da83c617f6ec.png)
 
 `+` 버튼을 누른다.
 
-![Image](https://github.com/user-attachments/assets/ffe24a21-c3d7-478c-9c44-52cef42de22c)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/ffe24a21-c3d7-478c-9c44-52cef42de22c.png)
 
 그리고 이렇게 sticker라고 검색하면 바로 나온다.
 
-![Image](https://github.com/user-attachments/assets/e370754e-1ae9-4228-8ce4-31134e3e807e)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/e370754e-1ae9-4228-8ce4-31134e3e807e.png)
 
 이름을 정하고 만들면 이렇게 Activate할거냐고 묻는데 그냥 Activate 해주자
 
-![Image](https://github.com/user-attachments/assets/4443c4f1-ff43-4222-a4d2-a7e06c664bb7)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/4443c4f1-ff43-4222-a4d2-a7e06c664bb7.png)
 
 이렇게 새로운 Asset이 추가된걸 알 수 있다.
 
 우선 Appicon이미지를 사이즈에 맞게 배치를 해주고,
 
-![Image](https://github.com/user-attachments/assets/d18c2f58-5335-4478-9e2a-be7bf44e21d8)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/d18c2f58-5335-4478-9e2a-be7bf44e21d8.png)
 
 이후 Sticker들도 드래그하여 추가를 해주자.
 
-![Image](https://github.com/user-attachments/assets/f6fb700e-4ea5-47ab-b443-20c478f373e5)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/f6fb700e-4ea5-47ab-b443-20c478f373e5.png)
 
 물론 Sticker Pack의 이 스티커들은 드래그 하여 순서를 바꿀 수 있다.
 
 이후 앱을 실행할때 주의점
 
-![Image](https://github.com/user-attachments/assets/b43406c2-1f98-4207-8cc3-ba1382715729)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/b43406c2-1f98-4207-8cc3-ba1382715729.png)
 
 현재 Target이 바뀌어 있으므로 다시 앱으로 반드시 바꿔주자.
 
-![Image](https://github.com/user-attachments/assets/8a20c55a-8470-44fb-9f9c-fa5a645485e5){: width="50%" height="50%"}
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/8a20c55a-8470-44fb-9f9c-fa5a645485e5.png){: width="50%" height="50%"}
 
 현재는 시뮬레이터라 전송은 안된다.
 

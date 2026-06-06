@@ -27,7 +27,7 @@ struct ScrollImage: View {
 }
 ```
 
-![CleanShot 2024-09-06 at 14 08 24@2x](https://github.com/user-attachments/assets/e4eb9a65-4419-41fb-9f1f-5966ddd468df){: width="50%" height="50%"}
+![CleanShot 2024-09-06 at 14 08 24@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-19-ScrollView/e4eb9a65-4419-41fb-9f1f-5966ddd468df.png){: width="50%" height="50%"}
 
 scrollTransition의 phase:
 - scrollTransition 클로저 내부에서 phase는 현재 스크롤 상태를 나타내는 객체이다.
@@ -66,7 +66,7 @@ struct Scrolling: View {
 
 ```
 
-![Sep-06-2024 14-09-04](https://github.com/user-attachments/assets/f1e00330-2c97-4c2e-8c3b-954e1a8e28bb){: width="50%" height="50%"}
+![Sep-06-2024 14-09-04](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-19-ScrollView/f1e00330-2c97-4c2e-8c3b-954e1a8e28bb.png){: width="50%" height="50%"}
 
 그리고 ScollImage는 우리가 위에 만들어둔 구조체이다.
 

@@ -183,7 +183,7 @@ async {
 
 이런 상황을 가정하는 이유는 aysync await가 나오기 이전에 만들어진 라이브러리들은 async await를 업데이트 하지 않았다면 사용할 수 없기에 우리가 해당 함수의 모듈만 가져와서 추가로 함수를 만들어서 그 모듈에 적용하면서 새로 만든 함수에 async await를 만들어서 적용을 해야하기 때문
 
-![CleanShot 2024-11-28 at 14 59 17](https://github.com/user-attachments/assets/30ababb7-61ac-4fc2-bc72-93a574a095e2)
+![CleanShot 2024-11-28 at 14 59 17](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-5/30ababb7-61ac-4fc2-bc72-93a574a095e2.png)
 
 자세한건 [Docs](https://developer.apple.com/documentation/swift/withcheckedthrowingcontinuation(isolation:function:_:)){:target="_blank"}참조.
 
@@ -216,7 +216,7 @@ func addReport(data: [String: Any]) async throws {
 
 당시 Firebase를 사용하다보니 Firebase의 함수를 그대로 사용할 수 밖에 없었다.
 
-![CleanShot 2024-11-28 at 15 53 39](https://github.com/user-attachments/assets/9d161883-90eb-41a3-abac-a148bd0b6592)
+![CleanShot 2024-11-28 at 15 53 39](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-5/9d161883-90eb-41a3-abac-a148bd0b6592.png)
 
 하지만 Firebase의 addDocument Method는 Callback 함수였다.
 

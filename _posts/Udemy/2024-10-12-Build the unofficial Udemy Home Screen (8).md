@@ -63,7 +63,7 @@ private func loadJSON() {
 
 그리고 ViewDidLoad에서 해당 함수를 호출한다.
 
-![CleanShot 2024-10-13 at 01 27 27](https://github.com/user-attachments/assets/b8a84258-a743-4c8f-a7c7-d160e95a3d3e){: width="50%" height="50%"} 
+![CleanShot 2024-10-13 at 01 27 27](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/b8a84258-a743-4c8f-a7c7-d160e95a3d3e.png){: width="50%" height="50%"} 
 
 이렇게 실행하니 json파일이 잘 콘솔에 출력이됨을 알 수 있다.
 
@@ -73,7 +73,7 @@ Response를 구성할때는 Top to Bottom으로 진행하는데
 
 JSON의 제일 상위부터 시작한다.
 
-![CleanShot 2024-10-13 at 01 31 43](https://github.com/user-attachments/assets/0a9f1501-75e5-4788-82b4-607197f42dba)
+![CleanShot 2024-10-13 at 01 31 43](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/0a9f1501-75e5-4788-82b4-607197f42dba.png)
 
 즉 status, layouts부터 구성.
 
@@ -90,7 +90,7 @@ struct APIResponse: Decodable {
 
 Layout은 type에 따라 다르므로.
 
-![CleanShot 2024-10-13 at 01 35 47](https://github.com/user-attachments/assets/f6b9bf51-306a-4192-a51d-bd62fb2c3d4e){: width="50%" height="50%"} 
+![CleanShot 2024-10-13 at 01 35 47](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/f6b9bf51-306a-4192-a51d-bd62fb2c3d4e.png){: width="50%" height="50%"} 
 
 enum을 사용해서 구성한다.
 
@@ -109,7 +109,7 @@ enum Layout {
 
 이렇게 앞에 String, MainBanner로 나눈 이유는
 
-![CleanShot 2024-10-13 at 01 39 28](https://github.com/user-attachments/assets/6053b529-550f-48c5-8ba2-2fe840a23d47)
+![CleanShot 2024-10-13 at 01 39 28](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/6053b529-550f-48c5-8ba2-2fe840a23d47.png)
 
 id는 String이고 Value는 MainBanner Struct를 사용해서 구성을 하기 때문에 이렇게 했다.
 
@@ -121,17 +121,17 @@ Course의 경우
 
 이렇게 배열로 감싼건
 
-![CleanShot 2024-10-13 at 02 06 34](https://github.com/user-attachments/assets/1a6db809-b327-4362-a3cb-60dd6ec85a78)
+![CleanShot 2024-10-13 at 02 06 34](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/1a6db809-b327-4362-a3cb-60dd6ec85a78.png)
 
 사진을 전부 표현하기엔 길어서 상단만 했는데 이렇게 배열로 값이 감싸지기 때문.
 
 배열로 감싸지 않은건
 
-![CleanShot 2024-10-13 at 02 07 29](https://github.com/user-attachments/assets/a7279f28-bd53-410c-8ba5-0b991835489c)
+![CleanShot 2024-10-13 at 02 07 29](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/a7279f28-bd53-410c-8ba5-0b991835489c.png)
 
 이렇게 `[`로 시작하지 않는다.
 
-![CleanShot 2024-10-13 at 02 49 34](https://github.com/user-attachments/assets/a71b4cb8-d4ba-47a4-b7b9-f683b53cf6c1)
+![CleanShot 2024-10-13 at 02 49 34](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/a71b4cb8-d4ba-47a4-b7b9-f683b53cf6c1.png)
 
 이렇게 에러가 나기에 에러를 수정하기위해 initializing을 해줘야한다.
 
@@ -233,7 +233,7 @@ init(from decoder: any Decoder) throws {
 
 여기서 
 
-![CleanShot 2024-10-13 at 03 11 10](https://github.com/user-attachments/assets/60432319-24ab-4b0e-8df5-e84da4494081)
+![CleanShot 2024-10-13 at 03 11 10](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/60432319-24ab-4b0e-8df5-e84da4494081.png)
 
 type, id, value만 key로 사용하므로 
 
@@ -269,7 +269,7 @@ struct Categories: Decodable {
 
 title로 해두었는데 json을 가서 확인하면
 
-![CleanShot 2024-10-13 at 03 08 39](https://github.com/user-attachments/assets/1d5e8646-32dc-415e-a3ab-49a745cc0b72)
+![CleanShot 2024-10-13 at 03 08 39](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/1d5e8646-32dc-415e-a3ab-49a745cc0b72.png)
 
 title이 아닌 titles이다.
 

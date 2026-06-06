@@ -97,7 +97,7 @@ numberOfSlices = 12 // numberOfSlices now has a new value which is 12
 
 setter를 사용하는 목적은 연산이나 다양한 코드 내에서 새 값을 사용할 수 있게 하고, 속성이 업데이트되는 정확한 시간에 실행할 수 있게 해준다. 
 
-![CleanShot 2024-05-12 at 21 39 16@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/ba03738a-b062-49c3-86ab-52b1ba8495ea)
+![CleanShot 2024-05-12 at 21 39 16@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-12-Computed-Property/ba03738a-b062-49c3-86ab-52b1ba8495ea)
 
 이때 setter를 설정해두지않은 상태에서 값을 부여하면 error가 발생.
 

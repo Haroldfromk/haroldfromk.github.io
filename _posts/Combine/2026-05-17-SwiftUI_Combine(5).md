@@ -39,7 +39,7 @@ struct FightersResponse: Codable {
 
 그리고 Identifiable을 프로토콜을 채택했지만, id를 만들지 않을경우?
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/bf532e3d-f1f7-4dd5-a905-e51b33ed9175" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine5/bf532e3d-f1f7-4dd5-a905-e51b33ed9175.png" />
 
 바로 이렇게 id가 필요하다고 에러가 뜬다.
 
@@ -275,7 +275,7 @@ NavigationView {
 
 실행하면 이렇게 나온다.
 
-<img width="288" height="598" alt="Image" src="https://github.com/user-attachments/assets/b0032748-620c-41a2-bc25-50db57769b0a" />{: width="50%" height="50%"}
+<img width="288" height="598" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine5/b0032748-620c-41a2-bc25-50db57769b0a.png" />{: width="50%" height="50%"}
 
 ## 마지막으로
 
@@ -288,7 +288,7 @@ NavigationView {
 - **PassthroughSubject** = 새 이벤트만 방출
 - **CurrentValueSubject** = 최신 상태를 보유하고 방출
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/f19725cf-89d0-4c15-823d-4ed4c15a6e9c" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine5/f19725cf-89d0-4c15-823d-4ed4c15a6e9c.png" />
 
 ```html
 <iframe 

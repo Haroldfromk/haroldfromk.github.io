@@ -185,7 +185,7 @@ func loadLocalFile() -> AnyPublisher<String, Error> {
 
 ---
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/6ebae739-61e7-4540-b939-88834913b20c" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-16-SwiftUI_Combine2/6ebae739-61e7-4540-b939-88834913b20c.png" />
 
 사진으로 간단하게 정리.
 
@@ -390,7 +390,7 @@ struct CombineView: View {
 }
 ```
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/6b1ff7ad-0c07-43ee-b051-2314a42c3a31" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-16-SwiftUI_Combine2/6b1ff7ad-0c07-43ee-b051-2314a42c3a31.png" />
 
 이미지 참고.
 

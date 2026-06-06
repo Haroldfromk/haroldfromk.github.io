@@ -29,7 +29,7 @@ Swift를 하다보면 중간에 배우게 되는게 Concurrency 이다.
 
 우리가 어떤 이미지를 다운로드를 한다고 하면, 만약 Main Thread에서 이미지를 다운로드 하게 되면
 
-![Untitled Diagram drawio](https://github.com/user-attachments/assets/de667592-29d4-489f-ba67-c89093a4f48f)
+![Untitled Diagram drawio](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-27-Async_await-1/de667592-29d4-489f-ba67-c89093a4f48f.png)
 
 이런식으로의 작업이 이루어지게 된다.
 
@@ -37,7 +37,7 @@ Swift를 하다보면 중간에 배우게 되는게 Concurrency 이다.
 
 ### 1.2 그렇다면 해결할 수 있는 방법은?
 
-![Untitled Diagram drawio1](https://github.com/user-attachments/assets/7208cad0-0787-4cd4-921d-9e6601526c89)
+![Untitled Diagram drawio1](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-27-Async_await-1/7208cad0-0787-4cd4-921d-9e6601526c89.png)
 
 이런식으로 Network같은 오래걸리는 작업을 Background Thread에서 작업을 실행하게 하는것이다.
 

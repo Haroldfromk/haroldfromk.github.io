@@ -11,7 +11,7 @@ toc_sticky: true
 
 ## modifier 정리 및 추가 문제 수정
 
-![Image](https://github.com/user-attachments/assets/25f1abb8-0284-40a1-b420-5887bcb65ac0){: width="50%" height="50%"} 를 보면 알겠지만 값이 입력된 상태에서 Currency를 바꾸면 값이 변경되지 않는다.
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-15-LOTR-Converter-fin/25f1abb8-0284-40a1-b420-5887bcb65ac0.png){: width="50%" height="50%"} 를 보면 알겠지만 값이 입력된 상태에서 Currency를 바꾸면 값이 변경되지 않는다.
 
 이제 이부분을 보완해본다.
 
@@ -42,7 +42,7 @@ toc_sticky: true
 }
 ```
 
-![Image](https://github.com/user-attachments/assets/374d3fc7-035c-4ebb-8db7-da3a50124163){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-15-LOTR-Converter-fin/374d3fc7-035c-4ebb-8db7-da3a50124163.png){: width="50%" height="50%"} 
 
 이렇게 값이 변하게 된다.
 
@@ -50,7 +50,7 @@ toc_sticky: true
 
 현재는 키보드의 별도 타입이 설정되어있지않아 일반적인 qwerty 키보드가 나오게 되는데 물론 현재 입력받는 값을 String으로 해놔서 에러가 발생하지는 않지만, Numpad만 나오게 고정을 하여 미리 방지를 하도록 하자
 
-![Image](https://github.com/user-attachments/assets/86a32994-977d-4876-82c7-ce87a6a0d8a9){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-15-LOTR-Converter-fin/86a32994-977d-4876-82c7-ce87a6a0d8a9.png){: width="50%" height="50%"} 
 
 현재의 키보드
 
@@ -65,13 +65,13 @@ HStack {
 .keyboardType(.numberPad) // new
 ```
 
-![Image](https://github.com/user-attachments/assets/968375e5-53e8-4482-a827-2f6ca472de82){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-15-LOTR-Converter-fin/968375e5-53e8-4482-a827-2f6ca472de82.png){: width="50%" height="50%"} 
 
 바뀐 키보드
 
 그리고 현재 가로모드에 대해서 별도의 작업을 하지 않았기에, 
 
-![Image](https://github.com/user-attachments/assets/57f79aed-0d35-4902-bb72-b25a711aec03)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-15-LOTR-Converter-fin/57f79aed-0d35-4902-bb72-b25a711aec03.png)
 
 이렇게 체크를 풀어서 세로모드만 유지하도록 한다.
 
@@ -115,7 +115,7 @@ struct CurrencyTip: Tip {
 
 그리고 해당 프로토콜을 채택할 경우 반드시 title이 들어가야한다. 어차피 없으면 에러가 발생하면서 missing을 클릭하면 자동으로 title이 만들어진다.
 
-![Image](https://github.com/user-attachments/assets/7096ed8b-7a54-4d69-b580-d06f35477e38)
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-15-LOTR-Converter-fin/7096ed8b-7a54-4d69-b580-d06f35477e38.png)
 
 위의 사진을 보면 알듯 아래 2개는 Optional이어서 없어도 그만인데, Title의 경우는 반드시 있어야 한다.
 
@@ -209,7 +209,7 @@ TipKit을 사용하기위해 import와 property를 만들어 주었다.
 3. 사용 후 `.invalidate()`로 팁 노출 종료
 
 
-![Image](https://github.com/user-attachments/assets/c9e783c4-6882-4499-9b40-f67644e6b0eb){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-15-LOTR-Converter-fin/c9e783c4-6882-4499-9b40-f67644e6b0eb.png){: width="50%" height="50%"} 
 
 이렇게 Tip이 보이게 된다.
 

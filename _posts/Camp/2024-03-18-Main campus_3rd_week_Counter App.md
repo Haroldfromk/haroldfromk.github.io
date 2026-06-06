@@ -11,7 +11,7 @@ toc_sticky: true
 
 
 ## 문제
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/ezjwKJfUrs.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-18-Main-campus_3rd_week_Counter-App/ezjwKJfUrs.png)
 
 다음과 같이 주어졌다.
 
@@ -29,7 +29,7 @@ up / down 목적에 맞게 + / - 를 해주고 눌렀을때 값만 변하는게 
 
 4. 작동 테스트
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/ghN6lwUsez.gif)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-18-Main-campus_3rd_week_Counter-App/ghN6lwUsez.gif)
 
 잘 된다.
 
@@ -37,17 +37,17 @@ up / down 목적에 맞게 + / - 를 해주고 눌렀을때 값만 변하는게 
 
 1. StackView 지정
 - 우선 3개의 Component를 하나의 Stack View로 지정을 해준다.
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/3brJZZPGCT.png){: width="50%" height="50%"} 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-18-Main-campus_3rd_week_Counter-App/3brJZZPGCT.png){: width="50%" height="50%"} 
 
 2. 정중앙에 오도록 지정
 - 이번엔 정중앙에 깔끔하게 정리하려고 별도의 Constraints(제약)을 주지는 않겠다.
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/pDx22nuiT7.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-18-Main-campus_3rd_week_Counter-App/pDx22nuiT7.png){: width="50%" height="50%"}
 
 3. label 조금 삐뚤다 가운데 정렬만 해주자
-- ![](https://i.esdrop.com/d/f/E8Nib9NqGY/l267proxLw.png){: width="50%" height="50%"}
+- ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-18-Main-campus_3rd_week_Counter-App/l267proxLw.png){: width="50%" height="50%"}
 
 4. 작동 테스트
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/0WnKdUeD4M.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-18-Main-campus_3rd_week_Counter-App/0WnKdUeD4M.png)
 
 잘 된다.
 

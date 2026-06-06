@@ -56,7 +56,7 @@ SeeFood와 동일한 구조로 기본 코드를 구성한다.
 
 카메라 접근 권한 허용을 유져에게 물어봐야 하기에 해당부분을 구현한다.
 
-![CleanShot 2024-04-18 at 10 03 10@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/de8afae8-2bb8-4767-8282-d6155bdc37c0)
+![CleanShot 2024-04-18 at 10 03 10@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/de8afae8-2bb8-4767-8282-d6155bdc37c0)
 
 
 ## CoreML, Vision 사용하여 기능 구현.
@@ -116,7 +116,7 @@ let request = VNCoreMLRequest(model: coremlModel) { (request, error) in
 
 102 종류의 꽃을 분류한다고하니 확인해보자.
 
-![IMG_0025](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/4ed81e1f-7c37-4a7a-8704-608c3fec3d90)
+![IMG_0025](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/4ed81e1f-7c37-4a7a-8704-608c3fec3d90)
 
 애플 개발자 계정은 무료일땐 3개가 최대이다. (실제 폰에서 테스트할때)
 
@@ -163,7 +163,7 @@ let wikipediaURl = "https://en.wikipedia.org/w/api.php"
 
 저기서 flowerName 부분에 label에 있는 꽃의 이름을 입력하면
 
-![CleanShot 2024-04-18 at 14 31 41@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/3f0d994f-254c-430c-ba31-b52e03790c0e)
+![CleanShot 2024-04-18 at 14 31 41@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/3f0d994f-254c-430c-ba31-b52e03790c0e)
 
 이렇게 json 정보를 얻을 수 있다
 
@@ -201,7 +201,7 @@ parameters라는 배열을 통해 위에처럼 주소로 다 안적고 심플하
 
 특이한건 responseJSON을 사용했다는것.
 
-![CleanShot 2024-04-18 at 15 00 18@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/6bfb112f-d450-40f1-983a-ef59499e8de6){: width="50%" height="50%"}
+![CleanShot 2024-04-18 at 15 00 18@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/6bfb112f-d450-40f1-983a-ef59499e8de6){: width="50%" height="50%"}
 
 그러다보니 데이터 타입이 다르다.
 
@@ -209,13 +209,13 @@ parameters라는 배열을 통해 위에처럼 주소로 다 안적고 심플하
 
 기능테스트
 
-![IMG_0026](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/3d1e04ca-c26a-4665-85db-5d9933187ea4)
+![IMG_0026](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/3d1e04ca-c26a-4665-85db-5d9933187ea4)
 
 화면과 콘솔에 출력되는 결과이다.
 
 ## swiftyJSON 사용
 
-![CleanShot 2024-04-18 at 18 11 00@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/97a57ed8-e4f3-4749-a3dd-f238ad37ce95)
+![CleanShot 2024-04-18 at 18 11 00@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/97a57ed8-e4f3-4749-a3dd-f238ad37ce95)
 
 
 ```swift
@@ -248,10 +248,10 @@ let flowerImageURL = flowerJSON["query"]["pages"][pageid]["thumbnail"]["source"]
 self.imageView.sd_setImage(with: URL(string: flowerImageURL))
 ```
 
-![CleanShot 2024-04-18 at 18 49 58@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/614b00fe-f3d9-42f6-9816-64f87e7f8834)
+![CleanShot 2024-04-18 at 18 49 58@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/614b00fe-f3d9-42f6-9816-64f87e7f8834)
 
 이미지에 주소에 대한 파라미터를 바꾸니 경로가 나온다.
 
-![IMG_0027](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/f14a283f-fd5c-46c4-be92-c013394de734)
+![IMG_0027](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/f14a283f-fd5c-46c4-be92-c013394de734)
 
 작동 완료.

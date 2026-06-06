@@ -27,7 +27,7 @@ toc_sticky: true
 
 인스톨을 하려 하니 문제가 발생.
 
-![CleanShot 2024-04-17 at 15 25 34@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/f3c08c6f-a6ae-4d4c-aa55-e56312fe7989)
+![CleanShot 2024-04-17 at 15 25 34@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/f3c08c6f-a6ae-4d4c-aa55-e56312fe7989)
 
 [사이트](https://velog.io/@mystic/%EB%A7%A5%EB%B6%81-Homebrew-python%EC%84%A4%EC%B9%98%EC%8B%9C-pip-%EB%AC%B8%EC%A0%9C)를 참고하여 값을 변경해주었다.
 
@@ -57,7 +57,7 @@ virtualenv 버전도 지정을 해주었다.
 
 `python -m virtualenv venv` 를 실행하니
 
-![CleanShot 2024-04-17 at 16 56 28@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/52f5ebbf-7a9f-4a13-a204-2cc8c556fbd1)
+![CleanShot 2024-04-17 at 16 56 28@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/52f5ebbf-7a9f-4a13-a204-2cc8c556fbd1)
 
 2.7버전으로 뭔가 만들어진 스멜이다. 확인해보자.
 
@@ -127,7 +127,7 @@ python3 명령어를 치고 import coremltools를 하니 먹힌다.
 
 어느부분에서 인식이 된건지 모호하다.
 
-![CleanShot 2024-04-18 at 00 03 46@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/0db8dd15-b1e8-4fe8-b75e-02a1d78a2419)
+![CleanShot 2024-04-18 at 00 03 46@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/0db8dd15-b1e8-4fe8-b75e-02a1d78a2419)
 
 터미널을 4개나 켜면서 확인을 해야했던 작업.
 
@@ -135,7 +135,7 @@ python3 명령어를 치고 import coremltools를 하니 먹힌다.
 
 python 3.9 버전에서 coremltools import 확인.
 
-![CleanShot 2024-04-18 at 00 02 32@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/da30d1a9-8f2f-4c28-9abd-cac63e825c1e)
+![CleanShot 2024-04-18 at 00 02 32@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/da30d1a9-8f2f-4c28-9abd-cac63e825c1e)
 
 vscode에서 python3 version을 3.9로 체인지.
 
@@ -182,14 +182,14 @@ coreml_model.save('FlowerClassifier.mlmodel')
         - 모든 클래스들이 명명된 문서의 파일경로.
         - 여기선 클래스들은 꽃의 이름들.
     - 세번째 : image_input_names (String|[String])
-        - ![CleanShot 2024-04-18 at 01 33 34@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/cb1971ba-73d5-4e66-b897-a5187f3d67b5)
+        - ![CleanShot 2024-04-18 at 01 33 34@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/cb1971ba-73d5-4e66-b897-a5187f3d67b5)
 
 
 문제 발생. 현재 버전에서는 converter에 caffe_model를 다루지 않음.....
 
 실제로 실행할땐 `python3 convert-script.py`를 사용하면 될 것이다.
 
-![CleanShot 2024-04-18 at 01 02 10@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/19e02a6f-0df0-4454-b5e1-81be9d406b63)
+![CleanShot 2024-04-18 at 01 02 10@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/19e02a6f-0df0-4454-b5e1-81be9d406b63)
 
 기껏 설치했더니 현재는 지원하지 않는 버전.
 
@@ -203,21 +203,21 @@ coreml_model.save('FlowerClassifier.mlmodel')
 
 `pip3 install coremltools` 재시도
 
-![CleanShot 2024-04-18 at 01 05 02@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/de058a78-c6fb-4661-a0d1-f079e71db5e2)
+![CleanShot 2024-04-18 at 01 05 02@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/de058a78-c6fb-4661-a0d1-f079e71db5e2)
 
 `pip3 install coremltools==4.0` 버전 다운그레이드 설치
 
-![CleanShot 2024-04-18 at 01 06 00@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/fbea4255-cae7-4753-a3ad-b8e9ca47afce)
+![CleanShot 2024-04-18 at 01 06 00@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/fbea4255-cae7-4753-a3ad-b8e9ca47afce)
 
 완료.
 
 Vscode python interpreter 다시 교체.
 
-![CleanShot 2024-04-18 at 01 07 07@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/6a998d46-4870-4d1a-ae15-16581d5ba749)
+![CleanShot 2024-04-18 at 01 07 07@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/6a998d46-4870-4d1a-ae15-16581d5ba749)
 
 인터프리터가 같은버전으로 2개가 있는데 
 
-![CleanShot 2024-04-18 at 01 07 41@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/1190bc5d-ffa0-4fa3-9e65-78b13421516e)
+![CleanShot 2024-04-18 at 01 07 41@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/1190bc5d-ffa0-4fa3-9e65-78b13421516e)
 
 이렇게 확인해주면 된다.
 
@@ -225,7 +225,7 @@ Vscode python interpreter 다시 교체.
 
 다시 터미널에서 해당 파일 파이썬으로 돌려보면.
 
-![CleanShot 2024-04-18 at 01 12 09@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/768961f4-0f79-4713-9d1d-f58e84710955)
+![CleanShot 2024-04-18 at 01 12 09@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/768961f4-0f79-4713-9d1d-f58e84710955)
 
 에러발생.
 
@@ -245,7 +245,7 @@ coremltools 3.4 버전 설치.
 
 다시 재호출
 
-![CleanShot 2024-04-18 at 01 18 56@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/d0c2fc46-003a-4d39-8b06-4f2572de268c)
+![CleanShot 2024-04-18 at 01 18 56@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/d0c2fc46-003a-4d39-8b06-4f2572de268c)
 
 드디어 성공.
 
@@ -274,7 +274,7 @@ coremltools 설치 이후.
 12. 해당 파일 실행.
 13. 성공.
 
-![CleanShot 2024-04-18 at 01 24 20@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/2e3ac108-ba23-4912-ad1c-8525aab9be91)
+![CleanShot 2024-04-18 at 01 24 20@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-17-WhatFlower-1/2e3ac108-ba23-4912-ad1c-8525aab9be91)
 
 몇시간동안 노력의 결과.
 

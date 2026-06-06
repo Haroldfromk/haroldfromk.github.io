@@ -154,7 +154,7 @@ class NewsArticleListViewModel: ObservableObject {
 
 refresh 버튼을 눌렀을때 재호출을 해야하는데 async를 지원하지 않는 코드 블럭이라면 
 
-![CleanShot 2024-11-28 at 17 39 54](https://github.com/user-attachments/assets/4ce0c551-02e0-4491-b495-3e945e3631b0)
+![CleanShot 2024-11-28 at 17 39 54](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-6/4ce0c551-02e0-4491-b495-3e945e3631b0.png)
 
 ~~그냥 `async { code }`를 만들어 주면 된다.~~
 
@@ -200,7 +200,7 @@ func fetchNews(by sourceId: String, url: URL?, completion: @escaping (Result<[Ne
 
 지금의 조건은 위의 fetchNews의 자세한 코드는 모른다고 가정하고 적용한다.
 
-![CleanShot 2024-11-28 at 17 32 19](https://github.com/user-attachments/assets/f99f03f3-89cc-4c0b-837c-01fa152efcdd)
+![CleanShot 2024-11-28 at 17 32 19](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-6/f99f03f3-89cc-4c0b-837c-01fa152efcdd.png)
 
 우선 fetchNews에 대한 설명을 먼저 확인해본다.
 
@@ -287,7 +287,7 @@ func addReport(data: [String: Any]) async throws {
 
 여기서도 addDocument는 Firebase에서 가져온 하나의 함수이다.
 
-![CleanShot 2024-11-28 at 15 53 39](https://github.com/user-attachments/assets/9d161883-90eb-41a3-abac-a148bd0b6592)
+![CleanShot 2024-11-28 at 15 53 39](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-6/9d161883-90eb-41a3-abac-a148bd0b6592.png)
 
 우리는 addDocument에 대해선 정확히 모르지만 적어도 파라미터로 뭘 받고 어떻게 핸들링이 되는지는 유추 할 수 있다.
 

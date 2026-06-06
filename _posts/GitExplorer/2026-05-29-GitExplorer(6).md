@@ -25,12 +25,12 @@ Target을 추가해서 만들면되는데
 
 이때 주의할것이 WatchOS에도 Widget이 있으므로 주의하자.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/947d3589-86b0-466e-8619-f67b32e9e39a" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/947d3589-86b0-466e-8619-f67b32e9e39a.png" />
 
 Watch용 위젯은 여기선 만들지 않는다.
 (앱용 만들고 시간나면 만들어볼지도?)
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/f14b1a17-fa92-413c-88a6-cf07f1f76f0d" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/f14b1a17-fa92-413c-88a6-cf07f1f76f0d.png" />
 
 지금은 굳이 위젯으로 추가할게 없어서 체크를 하지는 않는다.
 
@@ -44,7 +44,7 @@ Watch용 위젯은 여기선 만들지 않는다.
 
 또 Widget에 필요한 여러 Swift 파일들을 만들때
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/cc0d7559-4189-4779-9700-2bd931db025b" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/cc0d7559-4189-4779-9700-2bd931db025b.png" />
 
 반드시 Target을 확인하도록 하자.
 
@@ -57,7 +57,7 @@ App Group은 [이전글](https://haroldfromk.github.io/posts/Widget-(7)/){:targe
 App Group을 설정하면 공유된 컨테이너를 통해 데이터를 교환할 수 있다.
 즉 지금 설정하는 이유는 `앱과 위젯은 서로 분리된 프로세스로 실행되므로, 기본적으로 동일한 UserDefaults나 파일 시스템을 공유하지 않기 때문`이다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/9ad33ceb-6c18-40c3-befe-10ea34a4da1c" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/9ad33ceb-6c18-40c3-befe-10ea34a4da1c.png" />
 
 사진처럼 추가를 해주면 된다.
 
@@ -97,13 +97,13 @@ extension UserDefaults {
 
 이렇게 작성하고 대신 target을 추가해준다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/81fd8e96-9fb4-4bb3-b3bf-e582f9610f95" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/81fd8e96-9fb4-4bb3-b3bf-e582f9610f95.png" />
 
 추가한 사진은 pass
 
 현재 우리 앱과 위젯, 그리고 App gruop을 사진으로 간단하게 정리하면
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/fe0a8634-3079-4686-80aa-097b6863f8e8" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/fe0a8634-3079-4686-80aa-097b6863f8e8.png" />
 
 그리고 App Group의 이해를 돕기위해 간단하게 시뮬레이션화 하면
 
@@ -418,13 +418,13 @@ struct GitExplorerWidgetBundle: WidgetBundle {
 
 현재 위젯이 안뜨는 문제가 있어서 이걸 해결해보려 한다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/a06c998e-ce77-4cf2-9bbd-c72bc1e6eef1" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/a06c998e-ce77-4cf2-9bbd-c72bc1e6eef1.png" />
 
 별거아니었다.
 
 알고보니
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/9a8b7308-6a43-466d-9363-c1a1b010d8b1" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/9a8b7308-6a43-466d-9363-c1a1b010d8b1.png" />
 
 deploy 버전이 앱과 위젯이 서로 달랐기 때문...
 
@@ -627,7 +627,7 @@ UserCell(user: user, avatarData: index < avatarData.count ? avatarData[index] : 
 
 실행해서 최종 점검을 해본다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/da670072-abec-44af-81ff-7753d0bc7b30" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/da670072-abec-44af-81ff-7753d0bc7b30.png" />
 
 이렇게 뜨는걸로봐선 UserDefaults에서 값을 제대로 가져오지 못한것 같다.
 
@@ -643,7 +643,7 @@ UserCell(user: user, avatarData: index < avatarData.count ? avatarData[index] : 
 
 실행하면 잘 되는 걸 알 수 있다.
 
-<img width="420" height="618" alt="Image" src="https://github.com/user-attachments/assets/befeaeed-4105-4b35-b3c4-af80276b1663" />{: width="50%" height="50%"}
+<img width="420" height="618" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/befeaeed-4105-4b35-b3c4-af80276b1663.png" />{: width="50%" height="50%"}
 
 ---
 

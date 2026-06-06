@@ -11,7 +11,7 @@ toc_sticky: true
 
 SwiftUI의 구성
 
-![CleanShot 2024-09-06 at 13 21 07@2x](https://github.com/user-attachments/assets/337f1c58-33ab-4eac-a024-eb5e3dcf4134)
+![CleanShot 2024-09-06 at 13 21 07@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-19-Symbol-Effects/337f1c58-33ab-4eac-a024-eb5e3dcf4134.png)
 
 파일을 SwiftUI로 설정하여 만들게 되면
 
@@ -121,7 +121,7 @@ struct Symbols: View {
 
 결과는 다음과 같다.
 
-![Sep-06-2024 13-39-29](https://github.com/user-attachments/assets/7303ef72-1d4c-4272-a376-75baf33d2105)
+![Sep-06-2024 13-39-29](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-19-Symbol-Effects/7303ef72-1d4c-4272-a376-75baf33d2105.png)
 
 ---
 

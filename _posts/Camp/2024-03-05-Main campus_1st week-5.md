@@ -10,7 +10,7 @@ toc_sticky: true
 ---
 # Optional
 ## 1. Optional과 nil
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/dhmGpzLOjA.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-05-Main-campus_1st-week-5/dhmGpzLOjA.png)
 ### 1. Optional
 - 값이 없을 수 있는 상황에서 Optional을 사용한다.
 - 옵셔널은 ? 로 나타낸다.

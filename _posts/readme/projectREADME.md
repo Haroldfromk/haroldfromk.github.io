@@ -12,7 +12,7 @@
 
 ## Description
 
-![TPK_poster](https://github.com/user-attachments/assets/54c5ef79-f0ab-4ac1-b1c4-0679b651279d)
+![TPK_poster](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/projectREADME/54c5ef79-f0ab-4ac1-b1c4-0679b651279d.png)
 
 
 ## Developer

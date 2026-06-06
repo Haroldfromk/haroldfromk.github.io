@@ -132,7 +132,7 @@ struct QuoteView: View {
 
 ### 6. Episode 가져오기
 
-![Image](https://github.com/user-attachments/assets/d1474a2d-8099-4a59-b006-1dc656c8e540){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-05-09-BB-Quotes-fin/d1474a2d-8099-4a59-b006-1dc656c8e540.png){: width="50%" height="50%"} 
 
 이렇게 정보를 제공하는걸 만들어 본다.
 
@@ -241,13 +241,13 @@ QuoteView를 FetchView로 이름을 바꿔준다.
 .padding(.horizontal, 30)
 ```
 
-![Image](https://github.com/user-attachments/assets/52dce88f-6a7a-4dc4-8d07-1dd562dd8167){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-05-09-BB-Quotes-fin/52dce88f-6a7a-4dc4-8d07-1dd562dd8167.png){: width="50%" height="50%"} 
 
 이렇게 나누어 준다.
 
 하지만
 
-![Image](https://github.com/user-attachments/assets/58d78bcb-ea89-48b0-86a3-95c1a94af4a1){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-05-09-BB-Quotes-fin/58d78bcb-ea89-48b0-86a3-95c1a94af4a1.png){: width="50%" height="50%"} 
 
 작동하지 않는다.
 
@@ -347,13 +347,13 @@ struct EpisodeView: View {
 }
 ```
 
-![Image](https://github.com/user-attachments/assets/bb481727-91e0-4a8f-94e0-545204f14ade){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-05-09-BB-Quotes-fin/bb481727-91e0-4a8f-94e0-545204f14ade.png){: width="50%" height="50%"} 
 
 그럼 이렇게 나오게 된다.
 
 이제 실행해보면
 
-![Image](https://github.com/user-attachments/assets/d230b4ce-6558-46d5-bfb7-d044ceba639e){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-05-09-BB-Quotes-fin/d230b4ce-6558-46d5-bfb7-d044ceba639e.png){: width="50%" height="50%"} 
 
 잘된다.
 

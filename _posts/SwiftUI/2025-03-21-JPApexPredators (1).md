@@ -73,7 +73,7 @@ class Predators {
 
 ## UI Design
 
-![Image](https://github.com/user-attachments/assets/2c55ceb7-6574-4c76-822d-44c1a7608772){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-21-JPApexPredators-1/2c55ceb7-6574-4c76-822d-44c1a7608772.png){: width="50%" height="50%"} 
 
 위와 같이 만들것이다.
 
@@ -230,6 +230,6 @@ type이 가지고 있는 그 자체의 값(rawValue)를 사용해주면 된다.
 
 그러면 아래와 같이 제대로 나오게 된다.
 
-![Image](https://github.com/user-attachments/assets/f32a6f5f-43ce-4002-9a1e-02c366af965b){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-21-JPApexPredators-1/f32a6f5f-43ce-4002-9a1e-02c366af965b.png){: width="50%" height="50%"} 
 
 물론 마지막에 `.clipShape(.capsule)` 을통해 배경의 shape를 둥글게 깎았으나 그건 패스...

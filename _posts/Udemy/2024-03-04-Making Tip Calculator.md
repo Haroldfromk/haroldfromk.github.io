@@ -9,7 +9,7 @@ toc: true
 toc_sticky: true
 ---
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/e0EkWXfhHW.gif){: width="50%" height="50%"} 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-04-Making-Tip-Calculator/e0EkWXfhHW.gif){: width="50%" height="50%"} 
 
 위와 같이 팁을 계산하는 Tip Calculator 를 만들어 보도록 하자.
 
@@ -17,10 +17,10 @@ toc_sticky: true
 
 ## 1. IBOutlets, IBAction 링크하기
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/fihTObU5im.png){: width="50%" height="50%"} 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-04-Making-Tip-Calculator/fihTObU5im.png){: width="50%" height="50%"} 
 
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/2d1xy0PDVD.png){: width="50%" height="50%"} 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-04-Making-Tip-Calculator/2d1xy0PDVD.png){: width="50%" height="50%"} 
 
 
 이렇게 주어졌기에, 위와 같이 작성을 하자.
@@ -68,7 +68,7 @@ class ViewController: UIViewController {
 
 뷰컨트롤러를 만들때는 코코아터치 클래스로 만드는걸 잊지말자.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/Kxopum1VNo.png){: width="50%" height="50%"} 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-04-Making-Tip-Calculator/Kxopum1VNo.png){: width="50%" height="50%"} 
 
 이렇게 이어주었다.
 
@@ -105,7 +105,7 @@ class ResultsViewController: UIViewController {
 
 각각의 퍼센트가 나오게 기능을 구현해보자.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/RfID8p4s54.gif){: width="50%" height="50%"} 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-04-Making-Tip-Calculator/RfID8p4s54.gif){: width="50%" height="50%"} 
 
 버튼이 선택되는건 **isSelected**로 구현한다.
 
@@ -285,6 +285,6 @@ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
 잘 된다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/aCkrXhEiGc.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-04-Making-Tip-Calculator/aCkrXhEiGc.gif){: width="50%" height="50%"}
 
 혼자 리마인드 해본결과. 세그쪽을 좀 더 리마인드하면 좋을것같다.

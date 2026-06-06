@@ -25,7 +25,7 @@ myOptional = "Harold"
 let text : String = myOptional // Error 발생
 ```
 에러가 발생한다
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/9qc1qLrRQN.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/9qc1qLrRQN.png)
 
 myOptional에는 Data Type이 Optional String이고
 text는 String이기 때문에 안되는 것이다.
@@ -44,7 +44,7 @@ let text : String = myOptional! // ! 를 붙여 Force Unwrapping 해주었다,
 
 myOptional의 값을 "Harold"에서 nil로 변경을 해보자.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/kPjtdF7ozY.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/kPjtdF7ozY.png)
 
 이렇게 에러가 발생하는 것이다.
 
@@ -63,7 +63,7 @@ if optional != nil {
 
 즉 옵셔널이 아니면 unwrapping 하여 그값을 이용한다는 것이다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/yFNcAsblvF.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/yFNcAsblvF.png)
 
 그리고 nil이라면? else를 통해 예외처리를 해준다.
 
@@ -113,7 +113,7 @@ if let safeOptional = optional {
 
 어떤 변수의 값이 nil이 아닐경우 새로운 변수로 담아 if문을 통해 코드를 진행하는 방식이다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/E9rGnVB09a.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/E9rGnVB09a.png)
 
 myOptional의 값을 nil에서 Harold로 변경하였다.
 
@@ -135,7 +135,7 @@ optional ?? defaultvalue
 
 만약 nil이 아닐경우엔 그 값을 사용하고 nil일 경우에는 defaultvalue를 사용한다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/WMAYfEGcaq.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/WMAYfEGcaq.png)
 
 이런식으로 nil일때 ?? 뒤에 있는 그 값이 myOptional에 들어가는 것이다.
 
@@ -158,7 +158,7 @@ if myOptional != nil {
 
 근데 에러가 발생했다.
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/tlYMSykZIx.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/tlYMSykZIx.png)
 
 현재 MyOptional이라는 구조체 안에 property가 옵셔널타입이 아니더라도, 구조체가 옵셔널타입이기때문에 unwrapping하지 않으면 사용할 수 없다. 
 
@@ -166,7 +166,7 @@ if myOptional != nil {
 
 만약 `myOptional = nil` 이라면?
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/N06d3oUAXh.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/N06d3oUAXh.png)
 
 이렇게 에러가 발생하기 때문이다.
 
@@ -200,13 +200,13 @@ myOptional = nil
 print(myOptional?.property)
 ```
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/Sag6geodaV.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/Sag6geodaV.png)
 
 현재 MyOptional 구조체의 property에는 123이 있지만, 우리가 구조체를 nil이라고 값을 부여했기에 property에 엑세스를 해도 이렇게 nil이 출력되는걸 알 수 있다.
 
 반대로 `myOptional = MyOptional()` 로 초기화를 해주어 출력을 하면?
 
-![](https://i.esdrop.com/d/f/E8Nib9NqGY/p41JUMefIl.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-Deep-Dive-Optional/p41JUMefIl.png)
 
 결과값이 optional Int type으로 출력된다.
 

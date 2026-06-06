@@ -9,7 +9,7 @@ toc: true
 toc_sticky: true
 ---
 
-![CleanShot 2024-10-11 at 16 06 11](https://github.com/user-attachments/assets/d18b3da6-e8b7-48d1-8b1c-8869fcc852ab){: width="50%" height="50%"} 
+![CleanShot 2024-10-11 at 16 06 11](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-11-Build-the-unofficial-Udemy-Home-Screen-4/d18b3da6-e8b7-48d1-8b1c-8869fcc852ab.png){: width="50%" height="50%"} 
 
 지금까지 빨간색 테두리로 된 부분을 만들었다.
 
@@ -44,7 +44,7 @@ private func makeMainBannerSection() -> NSCollectionLayoutSection {
 
 return 으로 섹션을 바로 하던걸 인스턴스화 하였고, Insets를 주었다.
 
-![simulator_screenshot_37D87EA5-24B0-4ABF-89FC-8DE3DA83C814](https://github.com/user-attachments/assets/d238be82-223c-4126-9433-35278d50c73c){: width="50%" height="50%"} 
+![simulator_screenshot_37D87EA5-24B0-4ABF-89FC-8DE3DA83C814](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-11-Build-the-unofficial-Udemy-Home-Screen-4/d238be82-223c-4126-9433-35278d50c73c.png){: width="50%" height="50%"} 
 
 그리고 노란색 배경도 지웠다. (이건 서술할 필요가 없을듯해서 생략)
 
@@ -91,7 +91,7 @@ struct CourseView: View {
 
 크게 언급할만한건 없는듯 하다.
 
-![CleanShot 2024-10-11 at 16 37 25](https://github.com/user-attachments/assets/5e4f385e-edbe-46e6-a673-0b68d7e83f31){: width="50%" height="50%"} 
+![CleanShot 2024-10-11 at 16 37 25](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-11-Build-the-unofficial-Udemy-Home-Screen-4/5e4f385e-edbe-46e6-a673-0b68d7e83f31.png){: width="50%" height="50%"} 
 
 이렇게 나온다.
 
@@ -140,7 +140,7 @@ extension String {
 
 이렇게 리뷰쪽에 관한 부분도 만들었다.
 
-![CleanShot 2024-10-11 at 17 02 10](https://github.com/user-attachments/assets/83b775fb-97c1-4944-a03a-b5b7d585e2cb){: width="50%" height="50%"} 
+![CleanShot 2024-10-11 at 17 02 10](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-11-Build-the-unofficial-Udemy-Home-Screen-4/83b775fb-97c1-4944-a03a-b5b7d585e2cb.png){: width="50%" height="50%"} 
 
 
 ## CourseView 마무리
@@ -195,7 +195,7 @@ extension Decimal {
 
 이렇게 CourseView가 완성이 되었다.
 
-![CleanShot 2024-10-11 at 17 11 45](https://github.com/user-attachments/assets/b7fb86a4-dcf6-4417-86f9-963ed7256b6f){: width="50%" height="50%"} 
+![CleanShot 2024-10-11 at 17 11 45](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-11-Build-the-unofficial-Udemy-Home-Screen-4/b7fb86a4-dcf6-4417-86f9-963ed7256b6f.png){: width="50%" height="50%"} 
 
 ## CourseCollectionViewCell 추가하기
 
@@ -387,7 +387,7 @@ override func viewDidLoad() {
 
 하지만 문제가 발생했다.
 
-![simulator_screenshot_90152B8A-AD9E-4DB5-BAFF-28DB32DA8BF6](https://github.com/user-attachments/assets/4f74ea95-20f6-45cc-bee3-48899d768b0f){: width="50%" height="50%"} 
+![simulator_screenshot_90152B8A-AD9E-4DB5-BAFF-28DB32DA8BF6](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-11-Build-the-unofficial-Udemy-Home-Screen-4/4f74ea95-20f6-45cc-bee3-48899d768b0f.png){: width="50%" height="50%"} 
 
 이미지쪽에서 문제가 발생했다.
 
@@ -480,7 +480,7 @@ let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: 
 
 다시 돌아와서 실행을 하면
 
-![Simulator Screenshot - iPhone 16 Pro - 2024-10-12 at 04 35 31](https://github.com/user-attachments/assets/32883010-de3c-4408-bc88-4db361c5c7c0){: width="50%" height="50%"} 
+![Simulator Screenshot - iPhone 16 Pro - 2024-10-12 at 04 35 31](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-11-Build-the-unofficial-Udemy-Home-Screen-4/32883010-de3c-4408-bc88-4db361c5c7c0.png){: width="50%" height="50%"} 
 
 잘 된다.
 

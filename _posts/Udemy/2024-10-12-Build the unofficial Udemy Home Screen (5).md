@@ -135,7 +135,7 @@ Lazy가 붙었는데 우리가 알고있는 그 Lazy가 맞다.
 
 필요로 하기전까지는 메모리에 상주시키지 않는다.
 
-![CleanShot 2024-10-12 at 05 04 08](https://github.com/user-attachments/assets/3dd9fb9e-6cab-4878-9dc5-737a46e1509a){: width="50%" height="50%"} 
+![CleanShot 2024-10-12 at 05 04 08](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-5/3dd9fb9e-6cab-4878-9dc5-737a46e1509a.png){: width="50%" height="50%"} 
 
 이렇게 나온다.
 
@@ -351,7 +351,7 @@ override func viewDidLoad() {
     }
 ```
 
-![simulator_screenshot_91A56CE3-7A6D-49FC-991D-12DD529A4F38](https://github.com/user-attachments/assets/4f238658-1641-47e7-84fa-c8ce3814d0ff){: width="50%" height="50%"} 
+![simulator_screenshot_91A56CE3-7A6D-49FC-991D-12DD529A4F38](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-5/4f238658-1641-47e7-84fa-c8ce3814d0ff.png){: width="50%" height="50%"} 
 
 카테고리 뷰가 너무 붙어있어서 패딩을 준다.
 
@@ -390,7 +390,7 @@ struct CategoriesView: View {
 }
 ```
 
-![simulator_screenshot_EE06826D-5B66-4F4D-84AB-A89BAD8BA994](https://github.com/user-attachments/assets/98b2fc11-5565-4ccb-82b0-791dbcf470ec){: width="50%" height="50%"} 
+![simulator_screenshot_EE06826D-5B66-4F4D-84AB-A89BAD8BA994](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-5/98b2fc11-5565-4ccb-82b0-791dbcf470ec.png){: width="50%" height="50%"} 
 
 완성.
 

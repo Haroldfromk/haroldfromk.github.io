@@ -14,7 +14,7 @@ toc_sticky: true
 
 ## 시작
 
-![CleanShot 2024-04-30 at 16 38 00@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/3bb5beda-a320-49bf-9f4c-231ab8bf3371){: width="50%" height="50%"}
+![CleanShot 2024-04-30 at 16 38 00@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/3bb5beda-a320-49bf-9f4c-231ab8bf3371){: width="50%" height="50%"}
 
 Test를 체크를 해준다.
 
@@ -33,13 +33,13 @@ SPM을 통해 설치를 해주자.
 
 처음에 라이브러리를 추가를 해주면 2,3 번째에서는 간단하게
 
-![CleanShot 2024-04-30 at 16 47 35@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/408ef2e1-e2af-40c9-a608-959d57ea37ab)
+![CleanShot 2024-04-30 at 16 47 35@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/408ef2e1-e2af-40c9-a608-959d57ea37ab)
 
 이렇게 추가가 가능.
 
 그리고 2번에서 추가할때 
 
-![CleanShot 2024-04-30 at 16 49 44@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/acff677b-32d1-4cac-85aa-67904167642d)
+![CleanShot 2024-04-30 at 16 49 44@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/acff677b-32d1-4cac-85aa-67904167642d)
 
 주의! 테스트로 할것.
 
@@ -47,7 +47,7 @@ SPM을 통해 설치를 해주자.
 
 스토리보드를 지워준다.
 
-![CleanShot 2024-04-30 at 17 11 50@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/720b6da7-42fb-4eeb-9924-0098e8bf4ec0)
+![CleanShot 2024-04-30 at 17 11 50@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/720b6da7-42fb-4eeb-9924-0098e8bf4ec0)
 
 그리고 네모로 표시한부분도 삭제 해준다.
 
@@ -88,7 +88,7 @@ guard let windowScene = (scene as? UIWindowScene) else { return }
 
 그래도 안된다면?
 
-![CleanShot 2024-04-30 at 17 10 12@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/79f97991-0bbf-46d0-9595-aedca34aeff2)
+![CleanShot 2024-04-30 at 17 10 12@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/79f97991-0bbf-46d0-9595-aedca34aeff2)
 
 이걸 확인해보자.
 
@@ -142,11 +142,11 @@ private lazy var vStackView: UIStackView = {
 
 ## Build Settings 재 수정
 
-![simulator_screenshot_D639E5E1-56D6-4625-959F-1C3FA12FBB21](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/8bcac74c-6957-452b-ae17-9f66a0d83989){: width="50%" height="50%"}
+![simulator_screenshot_D639E5E1-56D6-4625-959F-1C3FA12FBB21](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/8bcac74c-6957-452b-ae17-9f66a0d83989){: width="50%" height="50%"}
 
 현재 SafeArea쪽도 그렇고 위와 아래쪽이 예전 폰으로 보이는듯한 느낌이 들어서 우리가 보는것 처럼 확대를 해보려 한다.
 
-![CleanShot 2024-04-30 at 20 23 58@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/8b454419-728c-4bcd-ac67-3afc0186b1bf)
+![CleanShot 2024-04-30 at 20 23 58@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/8b454419-728c-4bcd-ac67-3afc0186b1bf)
 
 이부분을 아까 잘못지워서 생긴 문제였다.
 

@@ -344,7 +344,7 @@ curl --request GET \
 
 Postman 어플로 테스트를 해서 확인을 해보니
 
-;<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/5405ccd3-926b-402c-9afd-ec26a808a47a" />
+;<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-21-GitExplorer1/5405ccd3-926b-402c-9afd-ec26a808a47a.png" />
 
 첫번째를 보면 결과가 출력이 되는걸로봐서 토큰도 적요이 잘 되는것을 알 수 있다.
 
@@ -551,7 +551,7 @@ func fetchGitUser(user: String) -> AnyPublisher<[GithubUser], Error> {
 | 문제 | `promise` 미호출 → Void 타입 불일치 에러 | - |
 | `Future` 용도 | 콜백 기반 코드를 Publisher로 감쌀 때 | 이미 Publisher인 경우엔 불필요 |
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/4b6a5b60-27ac-42b2-9776-d41bf6dc8b59" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-21-GitExplorer1/4b6a5b60-27ac-42b2-9776-d41bf6dc8b59.png" />
 
 ---
 
@@ -710,7 +710,7 @@ AnyPublisher<[GithubUser], Error>
 
 그래서 Combine에서는 이런 복잡한 내부 타입 노출을 숨기기 위해 `eraseToAnyPublisher()`를 자주 사용한다.
 
-<img width="50%" height="50%" alt="Image" src="https://github.com/user-attachments/assets/bd5a97fe-7b44-41c7-8f74-224e0444eac4" />
+<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-21-GitExplorer1/bd5a97fe-7b44-41c7-8f74-224e0444eac4.png" />
 
 이제 그러면 요청을 강제취소하는 부분만 추가하면 될것같다.
 

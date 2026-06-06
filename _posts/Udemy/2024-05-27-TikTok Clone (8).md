@@ -41,13 +41,13 @@ func stopRecording() {
     }
 ```
 
-<video height="400" width="288" src="https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/37514f37-0ef7-4291-9f49-45209c18d30a" controls="">대체텍스트</video>
+<video height="400" width="288" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-27-TikTok-Clone-8/37514f37-0ef7-4291-9f49-45209c18d30a" controls="">대체텍스트</video>
 
 그리고 stopRecording에 새로 추가를 했는데
 
 저건 멈추면
 
-![CleanShot 2024-05-27 at 22 36 34@2x](https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/6de47b61-3c4d-47f0-9f29-d2b6aa79f6df){: width="50%" height="50%"}
+![CleanShot 2024-05-27 at 22 36 34@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-27-TikTok-Clone-8/6de47b61-3c4d-47f0-9f29-d2b6aa79f6df){: width="50%" height="50%"}
 
 이렇게 보인다.
 
@@ -142,7 +142,7 @@ newVideoDuration를 통해 현재까지 녹화된 전체 시간을 담는다.
 
 countDownSec 에는 남는 시간을 계산 한다.
 
-<video height="400" width="288" src="https://github.com/Haroldfromk/haroldfromk.github.io/assets/97341336/6c76c8dc-7a37-4c62-9411-655ed47ee0f6" controls="">대체텍스트</video>
+<video height="400" width="288" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-27-TikTok-Clone-8/6c76c8dc-7a37-4c62-9411-655ed47ee0f6" controls="">대체텍스트</video>
 
 discard를 하게되면 다시 리셋이 되는걸 볼 수 있다.
 
