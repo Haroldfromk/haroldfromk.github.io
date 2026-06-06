@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Concurrency: Sendable 클로저 Actor 격리 위반 실증기 v13</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #a0aec0;
+            --actor-color: #007aff;
+            --sendable-color: #f97316;
+            --danger-color: #ff3b30;
+            --success-color: #34c759;
+            --dark-bg: #1a202c;
+            --hl-err: rgba(255, 59, 48, 0.15);
+            --hl-ok: rgba(52, 199, 89, 0.15);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 25px; text-align: center; margin-bottom: 5px; color: var(--text-color); }
+        .sub-title { text-align: center; color: #718096; margin-bottom: 25px; font-size: 14px; }
+        .core-definition {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #c53030;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; }
+        @media (max-width: 950px) { .grid { grid-template-columns: 1fr; } }
+        .card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+        .stage-container {
+            background: #edf2f7;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            height: 320px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .center-isolation-wall {
+            position: absolute;
+            top: 0; bottom: 0; left: 50%;
+            width: 0;
+            border-left: 3px dashed var(--border-color);
+            transform: translateX(-50%);
+            z-index: 5;
+            transition: all 0.3s;
+        }
+        .center-isolation-wall.wall-activated {
+            border-left-style: solid;
+            border-left-color: var(--danger-color);
+            box-shadow: 0 0 10px var(--danger-color);
+        }
+        .boundary-label {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 9.5px;
+            color: #4a5568;
+            background: #edf2f7;
+            padding: 2px 8px;
+            font-weight: bold;
+            border-radius: 4px;
+            z-index: 6;
+            white-space: nowrap;
+        }
+        .zone {
+            position: absolute;
+            top: 15px; bottom: 15px;
+            width: 45%;
+            border-radius: 8px;
+            padding: 12px 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .zone-title { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .zone-actor { left: 15px; border: 2px solid var(--actor-color); background: rgba(0,122,255,0.02); }
+        .zone-actor.shield-alert { border-color: var(--danger-color); background: rgba(255,59,48,0.06); }
+        .zone-actor .zone-title { color: var(--actor-color); }
+        .zone-sendable { right: 15px; border: 2px solid var(--sendable-color); background: rgba(249,115,22,0.02); justify-content: space-between; }
+        .zone-sendable .zone-title { color: var(--sendable-color); }
+        .multi-thread-rails { display: flex; width: 100%; justify-content: space-between; flex: 1; margin-top: 5px; }
+        .thread-track {
+            width: 22%;
+            background: rgba(255,255,255,0.7);
+            border: 1px dashed rgba(249,115,22,0.3);
+            border-radius: 4px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            font-size: 8.5px;
+            font-weight: bold;
+            color: #718096;
+            padding-bottom: 4px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+        .thread-track.active-track { background: rgba(249,115,22,0.15); border-color: var(--sendable-color); color: var(--sendable-color); }
+        .property-node {
+            width: 95%; padding: 8px;
+            background: white; border: 1px solid #cbd5e0;
+            border-radius: 6px; font-size: 11px;
+            font-family: monospace; text-align: center;
+            margin-top: 5px; box-sizing: border-box;
+            color: #2c3e50; z-index: 10;
+            transition: all 0.3s;
+        }
+        .property-node.isolated { border-left: 4px solid var(--actor-color); }
+        .serial-queue-lane {
+            width: 95%; padding: 6px;
+            background: white; border: 2px dashed var(--success-color);
+            border-radius: 6px; margin-top: auto;
+            font-size: 10px; text-align: center;
+            font-weight: bold; color: #276749;
+            z-index: 10; display: none;
+        }
+        .packet-capsule {
+            position: absolute;
+            width: 115px; height: 26px;
+            color: white; font-size: 10px; font-weight: bold;
+            border-radius: 4px;
+            display: none;
+            align-items: center; justify-content: center;
+            z-index: 40;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            left: 62%; top: 110px;
+        }
+        .packet-capsule.err-style { background: var(--danger-color); }
+        .packet-capsule.ok-style { background: var(--actor-color); }
+        .shake-target { animation: shake-node 0.15s infinite; }
+        @keyframes shake-node {
+            0% { transform: translate(2px, 1px); }
+            50% { transform: translate(-2px, -1px); }
+            100% { transform: translate(1px, 2px); }
+        }
+        .code-window {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            min-height: 220px;
+            white-space: pre;
+        }
+        .code-line { display: block; padding: 0 4px; border-radius: 3px; }
+        .line-error { background-color: var(--hl-err) !important; color: #ff8882 !important; }
+        .line-success { background-color: var(--hl-ok) !important; color: #a3e2ab !important; }
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+        .comment { color: #8b949e; }
+        .console {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            font-family: monospace;
+            padding: 12px; border-radius: 8px;
+            height: 110px; overflow-y: auto; font-size: 12px;
+        }
+        .alert-box {
+            border-left: 4px solid var(--danger-color);
+            background: #fff5f5; color: #c53030;
+            padding: 12px; border-radius: 4px;
+            margin-top: 15px; font-size: 12.5px;
+            font-weight: bold; display: none;
+        }
+        .alert-box.success-style { border-left-color: var(--success-color); background: #f0fff4; color: #276749; }
+        .btn-group { display: flex; gap: 12px; margin-top: auto; padding-top: 15px; }
+        .btn {
+            flex: 1; color: white; border: none;
+            padding: 13px; font-size: 13px; font-weight: bold;
+            border-radius: 8px; cursor: pointer; transition: all 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background: #cbd5e0; color: #718096; cursor: not-allowed; }
+        .btn-prob { background: var(--sendable-color); }
+        .btn-sol { background: var(--actor-color); }
+        h2 { font-size: 16px; margin: 0 0 10px 0; }
+    </style>
+</head>
+<body>
+
+<h1>Sendable 클로저 vs Actor 격리 장벽 검증기</h1>
+<div class="sub-title">RunningCenter Actor의 격리 공간을 @Sendable 경계가 침범할 때의 컴파일러 차단성 실증</div>
+
+<div class="core-definition">
+    ⚠️ @Sendable 클로저는 실행 스레드가 보장되지 않으므로, 액터 내부의 가변 프로퍼티를 동기적으로 직접 수정할 수 없습니다.
+</div>
+
+<div class="grid">
+    <div class="card">
+        <h2>메모리 격리 도메인 스테이지</h2>
+        <p style="font-size:12.5px; color:#718096; margin:0 0 10px 0;">클로저의 무작위 멀티 스레드 점프 상태와 액터의 순차 진입 큐 대조.</p>
+
+        <div class="stage-container" id="stage-box">
+            <div class="center-isolation-wall" id="wall-id"></div>
+            <div class="boundary-label" id="wall-lbl-id" style="display:none;">🔒 정적 격리 장벽</div>
+            <div class="packet-capsule" id="packet-node">가변 데이터</div>
+
+            <div class="zone zone-actor" id="actor-zone-id">
+                <span class="zone-title">🔒 RunningCenter (Actor)</span>
+                <div class="property-node isolated" id="continuation-node">
+                    <small style="color:var(--actor-color); font-weight:bold;">isolated property</small><br>
+                    <b>var continuation</b>
+                </div>
+                <div class="property-node" id="method-node" style="display:none; color:#276749; border-color:var(--success-color); font-weight:bold;">
+                    <small style="color:var(--success-color);">isolated function</small><br>
+                    clearContinuation()
+                </div>
+                <div class="serial-queue-lane" id="queue-lane-id">
+                    ✓ await: 내 차례까지 순차 대기
+                </div>
+            </div>
+
+            <div class="zone zone-sendable">
+                <span class="zone-title">🌐 onTermination (@Sendable)</span>
+                <div class="multi-thread-rails">
+                    <div class="thread-track" id="th-1">Th A</div>
+                    <div class="thread-track" id="th-2">Th B</div>
+                    <div class="thread-track" id="th-3">Th C</div>
+                    <div class="thread-track" id="th-4">Th D</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-window" id="code-box-id"></div>
+
+        <div class="btn-group">
+            <button class="btn btn-prob" id="btn-problem">1. 문제 상황 확인</button>
+            <button class="btn btn-sol" id="btn-solution">2. 해결 방법 (Task 격리 도약)</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Xcode 빌드 콘솔</h2>
+        <div class="console" id="console-box">> 가동 준비 완료. 시나리오 버튼을 선택하십시오.</div>
+        <h2 style="margin-top:15px;">분석 리포트</h2>
+        <div class="alert-box" id="report-box"></div>
+    </div>
+</div>
+
+<script>
+const kw = (s) => `<span class="keyword">${s}</span>`;
+const ty = (s) => `<span class="type">${s}</span>`;
+const cm = (s) => `<span class="comment">${s}</span>`;
+const err = (s) => `<span class="code-line line-error">${s}</span>`;
+const ok = (s) => `<span class="code-line line-success">${s}</span>`;
+
+// 초기 화면: 문제가 있는 코드 (clearContinuation 없음, 직접 접근 코드)
+const CODE_INIT = `${kw('actor')} ${ty('RunningCenter')} {
+    ${kw('private var')} continuation: ${ty('AsyncStream')}&lt;${ty('FlightData')}&gt;.${ty('Continuation')}?
+
+    ${kw('func')} streamFlightData() -&gt; ${ty('AsyncStream')}&lt;${ty('FlightData')}&gt; {
+        ${ty('AsyncStream')} { continuation ${kw('in')}
+            ${kw('self')}.continuation = continuation
+            continuation.onTermination = { [${kw('weak self')}] _ ${kw('in')}
+                ${kw('self')}?.continuation = ${kw('nil')}
+            }
+        }
+    }
+}`;
+
+// 1번 버튼: 문제 줄 하이라이트
+const CODE_PROB = `${kw('actor')} ${ty('RunningCenter')} {
+    ${kw('private var')} continuation: ${ty('AsyncStream')}&lt;${ty('FlightData')}&gt;.${ty('Continuation')}?
+
+    ${kw('func')} streamFlightData() -&gt; ${ty('AsyncStream')}&lt;${ty('FlightData')}&gt; {
+        ${ty('AsyncStream')} { continuation ${kw('in')}
+            ${kw('self')}.continuation = continuation
+            continuation.onTermination = { [${kw('weak self')}] _ ${kw('in')}
+${err(`                ${kw('self')}?.continuation = ${kw('nil')}`)}
+                ${cm('// ❌ Actor 격리 장벽 위반: @Sendable 클로저에서 직접 접근 불가')}
+            }
+        }
+    }
+}`;
+
+// 2번 버튼: 해결 코드 + clearContinuation 등장
+const CODE_SOL = `${kw('actor')} ${ty('RunningCenter')} {
+    ${kw('private var')} continuation: ${ty('AsyncStream')}&lt;${ty('FlightData')}&gt;.${ty('Continuation')}?
+
+    ${kw('func')} streamFlightData() -&gt; ${ty('AsyncStream')}&lt;${ty('FlightData')}&gt; {
+        ${ty('AsyncStream')} { continuation ${kw('in')}
+            ${kw('self')}.continuation = continuation
+            continuation.onTermination = { [${kw('weak self')}] _ ${kw('in')}
+${ok(`                ${ty('Task')} { [${kw('weak self')}] ${kw('in')}`)}
+${ok(`                    ${kw('await self')}?.clearContinuation()`)}
+                ${cm('// 🛡️ 안전: Actor 컨텍스트로 우회 진입')}
+                }
+            }
+        }
+    }
+
+    ${kw('private func')} clearContinuation() {
+        continuation = ${kw('nil')}
+    }
+}`;
+
+let activeTimers = [];
+let shuttleInterval = null;
+let isMoving = false;
+
+const consoleEl = document.getElementById('console-box');
+const reportEl = document.getElementById('report-box');
+const codeBox = document.getElementById('code-box-id');
+const packet = document.getElementById('packet-node');
+const continuationNode = document.getElementById('continuation-node');
+const methodNode = document.getElementById('method-node');
+const actorZone = document.getElementById('actor-zone-id');
+const queueLane = document.getElementById('queue-lane-id');
+const wall = document.getElementById('wall-id');
+const wallLbl = document.getElementById('wall-lbl-id');
+
+function clearTimeline() {
+    activeTimers.forEach(clearTimeout);
+    activeTimers = [];
+    if (shuttleInterval) { clearInterval(shuttleInterval); shuttleInterval = null; }
+    isMoving = false;
+    for (let i = 1; i <= 4; i++) document.getElementById('th-' + i).className = "thread-track";
+    packet.style.display = "none";
+    packet.style.transition = "none";
+    packet.style.left = "62%";
+    packet.style.top = "110px";
+    packet.innerHTML = "가변 데이터";
+    packet.className = "packet-capsule";
+    continuationNode.classList.remove('shake-target');
+    continuationNode.style.borderColor = "#cbd5e0";
+    methodNode.style.display = "none";
+    queueLane.style.display = "none";
+    reportEl.style.display = "none";
+    wall.className = "center-isolation-wall";
+    wallLbl.style.display = "none";
+    actorZone.className = "zone zone-actor";
+    document.getElementById('btn-problem').disabled = false;
+    document.getElementById('btn-solution').disabled = false;
+}
+
+function initLanding() {
+    clearTimeline();
+    codeBox.innerHTML = CODE_INIT;
+}
+
+document.getElementById('btn-problem').addEventListener('click', () => {
+    clearTimeline();
+    document.getElementById('btn-problem').disabled = true;
+    document.getElementById('btn-solution').disabled = true;
+    codeBox.innerHTML = CODE_PROB;
+    consoleEl.innerHTML = "> swiftc -strict-concurrency=complete<br>> 검사: @Sendable 클로저 내부에서 격리 프로퍼티 접근 감지...<br>";
+
+    packet.style.display = "flex";
+    packet.className = "packet-capsule err-style";
+    packet.innerHTML = "⚠️ 위험 데이터";
+
+    shuttleInterval = setInterval(() => {
+        if (isMoving) return;
+        for (let i = 1; i <= 4; i++) document.getElementById('th-' + i).className = "thread-track";
+        const t = Math.floor(Math.random() * 4) + 1;
+        document.getElementById('th-' + t).className = "thread-track active-track";
+        packet.style.top = (40 + t * 35) + "px";
+    }, 280);
+
+    activeTimers.push(setTimeout(() => {
+        isMoving = true;
+        packet.style.transition = "all 2.2s cubic-bezier(0.25, 1, 0.5, 1)";
+        packet.style.left = "46%";
+    }, 100));
+
+    activeTimers.push(setTimeout(() => {
+        clearInterval(shuttleInterval); shuttleInterval = null;
+        wall.className = "center-isolation-wall wall-activated";
+        wallLbl.style.display = "block";
+        actorZone.className = "zone zone-actor shield-alert";
+        continuationNode.classList.add('shake-target');
+        continuationNode.style.borderColor = "var(--danger-color)";
+        packet.innerHTML = "💥 접근 차단됨";
+        consoleEl.innerHTML += "<br><span style='color:var(--danger-color); font-weight:bold;'>❌ error: Actor-isolated property 'continuation' can not be mutated from a Sendable closure</span><br>";
+        reportEl.className = "alert-box";
+        reportEl.innerHTML = `💥 차단 원인: @Sendable 클로저는 어느 스레드(Th A~D)에서 실행될지 예측 불가능합니다. 불안정한 스레드가 Actor의 격리된 가변 프로퍼티(continuation)를 동기화 없이 직접 수정하려 했기 때문에 컴파일러가 차단했습니다.`;
+        reportEl.style.display = "block";
+        document.getElementById('btn-problem').disabled = false;
+        document.getElementById('btn-solution').disabled = false;
+    }, 2300));
+});
+
+document.getElementById('btn-solution').addEventListener('click', () => {
+    clearTimeline();
+    document.getElementById('btn-problem').disabled = true;
+    document.getElementById('btn-solution').disabled = true;
+    codeBox.innerHTML = CODE_SOL;
+    methodNode.style.display = "block";
+    queueLane.style.display = "block";
+    consoleEl.innerHTML = "> swiftc -strict-concurrency=complete<br>> Task + await 우회 진입 경로 분석 중...<br>";
+
+    document.getElementById('th-3').className = "thread-track active-track";
+    packet.innerHTML = "📦 Task { await }";
+    packet.className = "packet-capsule ok-style";
+    packet.style.display = "flex";
+
+    activeTimers.push(setTimeout(() => {
+        isMoving = true;
+        packet.style.transition = "top 1.2s cubic-bezier(0.4, 0, 0.2, 1)";
+        packet.style.top = "202px";
+    }, 100));
+
+    activeTimers.push(setTimeout(() => {
+        packet.style.transition = "left 1.0s cubic-bezier(0.25, 1, 0.5, 1)";
+        packet.style.left = "28px";
+    }, 1300));
+
+    activeTimers.push(setTimeout(() => {
+        queueLane.style.background = "#e6fffa";
+        queueLane.style.borderColor = "var(--success-color)";
+        queueLane.style.color = "#234e52";
+        methodNode.style.backgroundColor = "rgba(52,199,89,0.1)";
+        continuationNode.style.borderColor = "var(--success-color)";
+        packet.innerHTML = "🛡️ 안전 안착";
+        consoleEl.innerHTML += "> Actor 직렬 큐 진입 성공.<br><span style='color:var(--success-color); font-weight:bold;'>✓ 빌드 성공: 데이터 레이스 없음.</span><br>";
+        reportEl.className = "alert-box success-style";
+        reportEl.innerHTML = `🛡️ 해결 원리: Task로 감싸 Actor 전용 직렬 대기열에 줄을 세웠습니다. await로 내 차례가 올 때까지 대기한 후 Actor 내부의 clearContinuation()을 안전하게 호출하여 동시성 오염을 완벽히 차단합니다.`;
+        reportEl.style.display = "block";
+        document.getElementById('btn-problem').disabled = false;
+        document.getElementById('btn-solution').disabled = false;
+    }, 2350));
+});
+
+initLanding();
+</script>
+</body>
+</html>
