@@ -593,6 +593,39 @@ func start() {
 
 ---
 
+그리고 또 한가지
+
+같은 기능을 `Task`로도 구현할 수 있다. `Task.sleep`으로 1초를 직접 기다리고, 취소될 때까지 반복하는 구조다.
+
+그리고 `connect()`와 달리 `Task`는 `cancel()` 후 새로 생성하면 재사용이 가능하다.
+
+```swift
+// Task 방식
+var elapsedTime = 0
+private var timerTask: Task<Void, Never>?
+
+func start() {
+    timerTask?.cancel()
+    timerTask = Task { 
+        while !Task.isCancelled {
+            try? await Task.sleep(for: .seconds(1))
+            elapsedTime += 1
+        }
+    }
+}
+
+func stop() {
+    timerTask?.cancel()
+    timerTask = nil
+}
+```
+
+두 방식 모두 동일하게 동작한다. Combine은 이미 프로젝트에서 사용 중인 패턴이라 일관성을 위해 선택했다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/timer.png){: width="50%" height="50%"}
+
+---
+
 ##### Avg pace 구하기
 
 이제 타이머도 해결되었으니 거리를 이용해서 평균 페이스를 구해서 적용을 해보려 한다.
