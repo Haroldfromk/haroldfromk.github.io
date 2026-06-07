@@ -46,9 +46,6 @@ struct PFDView: View {
                             .foregroundColor(.rwRed)
                     }
                     Spacer()
-                    Text("48:12")
-                        .font(.orbitron(18, weight: .bold))
-                        .foregroundColor(.rwText)
                     Spacer()
                     Button { dismiss() } label: {
                         Image(systemName: "xmark")

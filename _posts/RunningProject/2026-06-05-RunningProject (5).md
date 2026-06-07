@@ -4,7 +4,7 @@ writer: Harold
 date: 2026-06-05 08:33:00 +0800
 last_modified_at: 2026-06-06 10:24
 categories: [RunWay]
-tags: [Actor, AsyncStream, FlightPhase, Concurrency]
+tags: [Actor, AsyncStream, Concurrency]
 
 toc: true
 toc_sticky: true
@@ -15,7 +15,7 @@ published: true
 
 아무래도 Actor쪽이다보니 빨리하는게 좋다고 판단했다.
 
-Actor의 경우 [Swift Concurrency & 격리(Isolation) 핵심 개념 정리](https://haroldfromk.github.io/posts/swift-concurrency-isolation/){:target="_blank"}, [미니프로젝트](https://haroldfromk.github.io/posts/Actor-%EB%AF%B8%EB%8B%88-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8(1)/){:target="_blank"}같이 언급을 많이 했어서 패스하도록 한다.
+Actor의 경우 [Swift Concurrency & 격리(Isolation) 핵심 개념 정리](https://haroldfromk.github.io/posts/swift-concurrency-isolation/){:target="_blank"}, [미니프로젝트](https://haroldfromk.github.io/posts/Actor-%EB%AF%B8%EB%8B%88-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8(1)/){:target="_blank"} 등등 언급을 많이 했어서 패스하도록 한다.
 
 ## RunningCenter Actor 기본 구조 구현
 
@@ -59,7 +59,7 @@ actor RunningCenter {
 
 ---
 
-#### 1. 위치 데이터 처리
+#### 위치 데이터 처리
 `LocationService`에서 실시간으로 받아오는 `latitude`, `longitude`를 Actor로 전달하여 누적 거리 계산과 경로 좌표 저장을 담당한다.
 
 우선 계획은 다음과 같다.
@@ -96,7 +96,7 @@ func processLocation(_ location: CLLocation) {
 
 ---
 
-##### 1. 작동 확인하기
+##### 작동 확인하기
 
 Actor만 만들어둔 상태로는 테스트가 불가능하다. ViewModel에서 Actor로 데이터를 넘기는 연결이 필요하다.
 
@@ -284,7 +284,7 @@ init() {
 
 ---
 
-#### 2. FlightPhase 상태 관리
+#### FlightPhase 상태 관리
 러닝 시작/종료 등 사용자 액션에 따라 `FlightPhase`를 전환하고 관리한다. 앱 전체가 동일한 상태를 참조할 수 있도록 Actor 내부에서 단일 상태로 관리한다.
 
 지금은 기본 틀만 잡아두는 수준이다. `enum FlightPhase`를 정의하고 Actor에 `phase` 프로퍼티와 `updatePhase()` 함수를 추가했다.
@@ -309,7 +309,7 @@ phase에 따른 실제 동작 분기는 Week2에서 GPWS, MINIMUMS 로직을 붙
 
 ---
 
-#### 3. AsyncStream으로 ViewModel에 전달
+#### AsyncStream으로 ViewModel에 전달
 
 위에서 처리한 데이터들을 묶어 AsyncStream으로 ViewModel에 전달한다. ViewModel은 이 스트림을 구독하여 View에 필요한 값만 노출한다.
 
@@ -574,7 +574,11 @@ private func clearContinuation() {
 
 ###### init 수정
 
-기존에는 `init` 내부에서 바로 `Task`를 생성하여 스트림을 시작했다.
+`streamFlightData()`에서 location 파라미터를 제거했으니 ViewModel의 init도 맞춰서 수정해야 한다.
+
+기존에는 `locationPublisher`의 sink 안에서 스트림을 구독하고 있었는데, 이 구조가 문제였다. 위치 업데이트가 올 때마다 `for await` 루프가 새로 시작되어 스트림 구독이 중첩되는 것이다.
+
+이를 해결하기 위해 두 Task를 완전히 분리했다.
 
 ```swift
 init() {
@@ -593,6 +597,16 @@ init() {
         .store(in: &cancellables)
 }
 ```
+
+스트림 구독은 init 시점에 한 번만 열고, 위치 업데이트가 올 때마다 `processLocation`만 호출하는 구조다. continuation에 yield하는 건 `processLocation` 내부에서 처리하므로 스트림은 계속 살아있고 구독이 중첩되지 않는다.
+
+<img width="1536" height="1024" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/49eb78a6-be4c-46ae-93f1-bfa809bdf09a.png" />
+
+- Task 1 = `streamFlightData()` (스트림 생성 및 대기)
+- Task 2 = `processLocation()` (데이터 생성 및 전달)
+- continuation = 둘을 연결하는 통로
+
+하지만 문제가 발생했다.
 
 실제로 로그를 찍어보면 스트림이 두 번 생성되는 것을 확인할 수 있었다.
 
@@ -652,7 +666,3 @@ View에서는 이렇게 호출한다.
 
 Before: `init` → 내가 직접 생성한 `Task` → stream 소비
 After: `RunWayApp.$main` → SwiftUI `.task` → `MainActor` 격리 컨텍스트 → stream 소비
-
-<img width="1536" height="1024" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/49eb78a6-be4c-46ae-93f1-bfa809bdf09a.png" />
-
-스트림이 무한 증식하던 문제부터 시작해서 Sendable 에러를 거쳐 최종 구조까지 오는 과정을 한눈에 정리하면 위 만화와 같다.
