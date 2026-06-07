@@ -100,15 +100,6 @@ Swift에서 `struct`는 값 타입, `class`는 참조 타입이다. 이번 `Flig
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/structvsclass.png){: width="50%" height="50%"}
 
-<iframe 
-    src="/assets/demo/flight_data_simulator.html" 
-    width="100%" 
-    height="720" 
-    style="border: 2px solid #a0aec0; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); background-color: #fdfbf7;" 
-    allow="autoplay; clipboard-write;" 
-    loading="lazy">
-</iframe>
-
 ---
 
 #### FlightData 처리하기
@@ -182,7 +173,7 @@ FlightData(distance: 608.5788572025573, phase: RunWay.FlightPhase.preflight, pac
 
 ### PFDView와 연결하기
 
-UI 작업은 AI의 도움을 받아 빠르게 처리했다. 아키텍처 설계와 동시성 로직에 집중하기 위한 선택이다.
+UI 작업은 AI의 도움을 받아 빠르게 처리했다. 데이터 흐름과 동시성 로직에 집중하기 위한 선택이다.
 
 여기서 한 가지 정리가 필요했다. 지금까지는 테스트 목적으로 각 View에서 ViewModel을 개별 생성해서 썼는데, PFDView까지 연결하려면 동일한 인스턴스를 여러 View가 공유해야 한다. 각자 생성하면 서로 다른 인스턴스라 데이터가 공유되지 않는다.
 

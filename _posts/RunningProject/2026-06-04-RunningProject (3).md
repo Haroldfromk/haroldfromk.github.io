@@ -608,6 +608,10 @@ func fetchStrideLength() async {
 ```
 이렇게 잘 되는걸 알 수 있다.
 
+둘의 비교를 만화로 넣어보았다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-04-RunningProject-3/querydiff.png){: width="50%" height="50%"}
+
 ---
 
 ### 4. 시뮬레이터 시간 문제 수정
