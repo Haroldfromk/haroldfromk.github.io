@@ -1,5 +1,5 @@
 ---
-title: RunWay (8) GPWS 실제 데이터 연동
+title: RunWay (7) GPWS 실제 데이터 연동
 writer: Harold
 date: 2026-06-08 08:33:00 +0900
 # last_modified_at: 2026-06-07 08:33:00 +0800
@@ -10,13 +10,6 @@ toc: true
 toc_sticky: true
 published: true
 ---
-
-
-MINIMUMS 자동 트리거
-
-햅틱 + 경고음 연동
-
-AlertsView SwiftData 자동 저장 연동
 
 ## ModeAView 설정하기
 
