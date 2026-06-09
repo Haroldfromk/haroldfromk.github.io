@@ -342,7 +342,7 @@ var latestFlight: SwiftDataFlight? {
 
 이제 하드코딩된 값들을 바꿔준다.
 
-![](/assets/images/upload/touchdownview.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-09-RunningProject-8/touchdownview.png){: width="50%" height="50%"}
 
 실행하면 적용이 잘된걸 알 수 있다.
 
@@ -465,6 +465,6 @@ var overspeedCount: Int { alerts.filter { $0.gpwsState == "overspeed" }.count }
 
 그리고 날짜별 목록은 `DisclosureGroup`을 사용하여 폴더식으로 펼쳤다 닫았다 할 수 있도록 했다. 날짜가 많아질수록 화면이 길어지는 문제를 자연스럽게 해결할 수 있고, 원하는 날짜만 열어서 확인하는 방식이 더 직관적이다.
 
-![](/assets/images/upload/folder.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-09-RunningProject-8/folder.gif){: width="50%" height="50%"}
 
 실행하면 기록이 뜨는 걸 알 수 있다. `DisclosureGroup` 덕분에 별도 화면 전환 없이 한 화면에서 날짜별로 접었다 펼 수 있어 더 깔끔해졌다.
