@@ -3,7 +3,7 @@ title: RunWay (8) SwiftData 연동
 writer: Harold
 date: 2026-06-09 08:33:00 +0900
 categories: [RunWay]
-tags: [SwiftData, SwiftUI, Actor]
+tags: [SwiftData, SwiftUI, Actor, CoreLocation]
 
 toc: true
 toc_sticky: true
@@ -20,7 +20,7 @@ published: true
 
 ---
 
-## 모델 설계
+## 모델링
 
 러닝 기록을 저장하기 위한 모델을 설계한다.
 
@@ -459,11 +459,66 @@ var sortedDates: [String] {
     groupedAlerts.keys.sorted(by: >)
 }
 
-var sinkRateCount: Int { alerts.filter { $0.gpwsState == "sinkRate" }.count }
-var overspeedCount: Int { alerts.filter { $0.gpwsState == "overspeed" }.count }
+var sinkRateCount: Int { alerts.filter {
+    $0.gpwsState == "sinkRate" }.count
+}
+var overspeedCount: Int { alerts.filter {
+    $0.gpwsState == "overspeed" }.count
+}
 ```
 
-그리고 날짜별 목록은 `DisclosureGroup`을 사용하여 폴더식으로 펼쳤다 닫았다 할 수 있도록 했다. 날짜가 많아질수록 화면이 길어지는 문제를 자연스럽게 해결할 수 있고, 원하는 날짜만 열어서 확인하는 방식이 더 직관적이다.
+날짜별 목록은 `DisclosureGroup`을 사용하여 폴더식으로 펼쳤다 닫았다 할 수 있도록 했다. 날짜가 많아질수록 화면이 길어지는 문제를 자연스럽게 해결할 수 있고, 원하는 날짜만 열어서 확인하는 방식이 더 직관적이다.
+
+[DisclosureGroup Docs](https://developer.apple.com/documentation/swiftui/disclosuregroup){:target="_blank"}를 보면 label과 content로 구성되며, label은 항상 표시되고 content는 펼쳤을 때만 보이는 구조다.
+
+```swift
+var groupedAlerts: [String: [SwiftDataAlert]] {
+    Dictionary(grouping: alerts) { alert in
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd"
+        return formatter.string(from: alert.timestamp)
+    }
+}
+
+ForEach(sortedDates, id: \.self) { date in
+    DisclosureGroup {
+        // 해당 날짜의 Alert 목록
+        ForEach(groupedAlerts[date] ?? [], id: \.id) { alert in
+            SwiftDataAlertRow(alert: alert)
+        }
+    } label: {
+        HStack {
+            Image(systemName: "airplane")
+            Text(date)
+            Spacer()
+            Text("\(groupedAlerts[date]?.count ?? 0) alerts")
+        }
+    }
+}
+```
+
+날짜별로 그룹으로 묶는건 `Dictionary(grouping:by:)`를 활용했다. `timestamp`가 `Date` 타입이라 그대로는 딕셔너리 키로 쓸 수 없으므로 `DateFormatter`로 `"yyyy.MM.dd"` 문자열로 변환하여 같은 날짜의 Alert를 하나의 키로 묶었다.
+
+예를 들어 Alert가 아래와 같이 있다면 (나머지 프로퍼티는 생략)
+
+```text
+Alert A — 2026.06.09 20:01:17
+Alert B — 2026.06.09 20:03:27
+Alert C — 2026.06.10 09:15:42
+```
+
+결과는 이렇게 된다.
+
+```text
+{
+  "2026.06.09": [Alert A, Alert B],
+  "2026.06.10": [Alert C]
+}
+```
+
+위의 예시와 같이 결과는 `[String: [SwiftDataAlert]]` 타입이 되고, 키는 날짜 문자열, 값은 해당 날짜의 Alert 배열이다. 여기서 `sortedDates`로 키를 내림차순 정렬하면 최신 날짜가 위에 오는 구조가 된다.
+
+`groupedAlerts[date] ?? []`는 해당 날짜에 Alert가 없을 경우 빈 배열을 반환하도록 옵셔널을 처리한 것이다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-09-RunningProject-8/folder.gif){: width="50%" height="50%"}
 
