@@ -1,5 +1,5 @@
 ---
-title: RunWay (10) Week 3 — GPS 페이스 보정과 GPWS 오작동 잡기
+title: RunWay (10) GPS 페이스 보정과 GPWS 오작동 잡기
 writer: Harold
 date: 2026-06-11 08:33:00 +0900
 categories: [RunWay]

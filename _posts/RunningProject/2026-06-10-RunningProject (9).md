@@ -1,5 +1,5 @@
 ---
-title: RunWay (9) Week 2 마무리 — 실제 데이터 연동 및 실기기 테스트
+title: RunWay (9) 실제 데이터 연동 및 실기기 테스트
 writer: Harold
 date: 2026-06-10 08:33:00 +0900
 categories: [RunWay]

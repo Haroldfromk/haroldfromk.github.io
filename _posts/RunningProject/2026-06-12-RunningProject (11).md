@@ -1,5 +1,5 @@
 ---
-title: RunWay (11) Week 3 — 3차 실기기 테스트 & FlightPhase 복원
+title: RunWay (11) 3차 실기기 테스트 & FlightPhase 복원
 writer: Harold
 date: 2026-06-12 08:33:00 +0900
 categories: [RunWay]
