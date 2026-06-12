@@ -84,6 +84,8 @@ Task {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/reset.png){: width="50%" height="50%"}
 
+ai로 생성된 이미지다 보니 거리튐의 글자가 깨진건 쩔수..
+
 ---
 
 ### ModeAView 버튼 simultaneousGesture 위치 수정
