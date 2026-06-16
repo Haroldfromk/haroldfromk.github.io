@@ -393,7 +393,7 @@ func updateForStatistics(_ statistics: HKStatistics) {
 
 ---
 
-### 8. AsyncStream으로 실시간 데이터 전달
+### 7. AsyncStream으로 실시간 데이터 전달
 
 `workoutBuilder(_:didCollectDataOf:)`에서 데이터를 받으면 AsyncStream으로 흘려서 외부에서 구독할 수 있게 한다.
 
@@ -557,6 +557,8 @@ func resetWorkout() {
 이제 VM에 HealthKit 관련 부분만 추가해주면 된다.
 
 생소한 부분이라 이것도 상세하게 기록하면서 진행한다.
+
+다만 이부분은 자료도 많이없어서 AI의 도움을 받아 먼저 코드 작성을 해보고 이후에 AI에게 방향성을 물어보며 구현했다.
 
 ---
 
