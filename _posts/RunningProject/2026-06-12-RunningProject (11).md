@@ -839,9 +839,11 @@ touchdown
 
 원인은 두 가지가 복합적으로 작용한 것이었다.
 
-첫째, `HomeView`에서 `Bindable(runViewModel).didError`로 VM 전체를 바인딩한 것이 문제였다. `@Observable` 객체를 `Bindable`로 감싸는 순간 SwiftUI는 해당 객체의 상태 변화 추적 범위를 넓히게 된다. 러닝 중에는 `flightData`, `elapsedTime`, `lastReceivedTime` 등이 1초마다 계속 바뀌는데, 화면에 보이지 않는 백그라운드 상태의 `HomeView`가 이 변화에 반응해 지속적으로 재렌더링을 시도하고 있었던 것이다. 이 상태에서 `AppState.shared.reset()`으로 `sessionID`를 바꿔 뷰를 강제 재생성하면 `NavigationStack` 내부 상태가 꼬여 버튼이 먹통이 되었다.
+첫째, `HomeView`에서 `Bindable(runViewModel).didError`로 VM 전체를 바인딩한 것이 문제였다. `Bindable(runViewModel)`로 Observable 객체를 View dependency graph에 올리면서 `HomeView`가 `runViewModel` 전체 상태 변화에 간접적으로 영향을 받는 구조가 됐다. 
+본래 `@Observable`은 `body`에서 실제로 읽히는 프로퍼티만 추적해 재렌더링을 최소화하는 구조지만([WWDC23](https://developer.apple.com/videos/play/wwdc2023/10149/){:target="_blank"}), `Bindable`을 통해 Observable 객체를 binding context로 올리면 객체 전체가 상태 그래프에 연결되는 효과가 생긴다. 러닝 중에는 `flightData`, `elapsedTime`, `lastReceivedTime` 등이 1초마다 계속 바뀌는데, 화면에 보이지 않는 백그라운드 상태의 `HomeView`가 이 변화에 간접적으로 반응해 지속적으로 재렌더링을 시도하고 있었던 것이다. 이 상태에서 `AppState.shared.reset()`으로 `sessionID`를 바꿔 뷰를 강제 재생성하면 `NavigationStack` 내부 상태가 꼬여 버튼이 먹통이 되었다.
 
-둘째, `AppState.sessionID` 방식 자체의 구조적 한계였다. 이 방식은 뷰 컨테이너를 통째로 파괴하고 새로 만드는 방식인데, 화면 전환 애니메이션이 완전히 끝나기 전에 부모 뷰가 사라지면서 SwiftUI 내부에서 Race Condition이 발생했다.
+둘째, `AppState.sessionID` 방식 자체의 구조적 한계였다. SwiftUI의 `NavigationStack`은 transition animation 중에도 view가 메모리에 남아 있는 상태 머신 기반 구조인데, `sessionID` 변경으로 root view를 강제로 재생성하면 animation이 참조하던 view identity가 소멸하면서 rendering transaction 불일치가 발생할 수 있다. 
+Apple이 `NavigationPath`를 권장하는 이유도 view hierarchy를 파괴하지 않고 path 상태만 변경해 navigation을 제어하기 위해서다. ([Understanding the Navigation Stack](https://developer.apple.com/documentation/swiftui/understanding-the-navigation-stack){:target="_blank"})
 
 기존 방식과 새로운 방식을 비교하면 아래와 같다.
 
@@ -882,6 +884,8 @@ NavigationStack(path: $vm.navigationPath) {
 ```
 
 각 View에서의 화면 전환은 `runViewModel.navigationPath.append()`로, 홈 복귀는 `resetState()`의 `navigationPath = []`로만 처리하는 단일 파이프라인 구조가 완성되었다.
+
+이 패턴에 대해 [Swift with Majid](https://swiftwithmajid.com/2022/10/05/mastering-navigationstack-in-swiftui-navigationpath/){:target="_blank"}와 [Medium](https://medium.com/@kusalprabathrajapaksha/master-swiftui-navigation-with-navigationpath-and-enum-3c08bee4a41a){:target="_blank"} 등에서도 enum 기반 `NavigationPath` 단일 파이프라인 구조를 소개하고 있다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/aisolution.png){: width="50%" height="50%"}
 

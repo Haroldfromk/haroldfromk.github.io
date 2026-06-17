@@ -4,7 +4,7 @@ writer: Harold
 date: 2026-06-16 08:33:00 +0900
 #last_modified_at: 2026-06-15 08:33:00 +0900
 categories: [RunWay]
-tags: [watchOS, WatchConnectivity, HealthKit, CoreLocation, CoreMotion]
+tags: [watchOS, WatchConnectivity, HealthKit]
 
 toc: true
 toc_sticky: true
