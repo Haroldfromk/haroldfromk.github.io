@@ -2,7 +2,7 @@
 title: RunWay (15) iPhone 주도 미러링 & CoreMotion
 writer: Harold
 date: 2026-06-22 08:33:00 +0900
-last_modified_at: 2026-06-25 08:33:00 +0900
+last_modified_at: 2026-06-26 08:33:00 +0900
 categories: [RunWay]
 tags: [watchOS, WatchConnectivity, HealthKit]
 
@@ -1707,3 +1707,7 @@ func resetState() async {
 - `stopOrigin`(`.local`/`.remote`) — 종료를 누른 게 나인지 상대인지. `.local`이면 Touchdown → Summary를 거치고 동시에 `sendStopSignal()`로 상대에게 알리고, `.remote`면 곧바로 홈으로 복귀한다.
 
 세 값 모두 "주체가 누구인가"라는 같은 질문에 대한 답이고, 시점만 다를 뿐이다. 시작 시점엔 `startOrigin`이, 종료 시점엔 `stopOrigin`이 책임지고, `runningMode`는 그 사이 내내 데이터 흐름을 어떻게 처리할지를 결정한다.
+
+아래는 최종정리를 간단하게 정리한 만화 (오타는 쩔수..)
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-22-RunningProject-15/summary.png){: width="50%" height="50%"}
