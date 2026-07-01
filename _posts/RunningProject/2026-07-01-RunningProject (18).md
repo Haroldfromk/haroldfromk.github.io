@@ -308,3 +308,112 @@ retrieveRemoteSession handler fired: state=2
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/result.png){: width="50%" height="50%"}
 
 실기기 테스트를 통해 발견한 버그들을 하나씩 잡아나갔다. 일시정지 동기화는 `sendPauseData()`를 별도로 만들어 해결했고, Pause overlay는 `.allowsHitTesting(false)`로 종료 버튼 접근성을 확보했다. `elapsedTime` 싱크는 1초마다 별도 전송하는 방식으로 해결했다. 미러링 세션 관련 두 문제는 `resetWorkout()`에서 `startOrigin`/`stopOrigin` 초기화 누락과 iPhone 세션 미종료가 원인이었고, 각각 `resetWorkout()`에 nil 초기화와 `session?.end()` 추가로 해결했다.
+
+탭바 배경색이 뷰 전환 시 흰색으로 튀는 현상도 발견했다. `RunWayApp.swift`의 `init()`에서 `UITabBarAppearance`로 배경색과 아이콘 색을 전역으로 세팅하고, `RootTabView`에 `.tint(.rwGreen)`을 추가해 해결했다. 시뮬레이터에서는 여전히 간헐적으로 튀지만 실기기에서는 정상 동작한다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/problem.png){: width="50%" height="50%"}
+
+```swift
+// RunWayApp
+init() {
+    let appearance = UITabBarAppearance()
+    appearance.configureWithOpaqueBackground()
+    appearance.backgroundColor = UIColor(red: 11/255, green: 14/255, blue: 20/255, alpha: 1.0)
+    UITabBar.appearance().standardAppearance = appearance
+    UITabBar.appearance().scrollEdgeAppearance = appearance
+    UITabBar.appearance().unselectedItemTintColor = UIColor(red: 136/255, green: 148/255, blue: 158/255, alpha: 1.0) // rwMuted
+}
+
+struct RootTabView: View {
+    var body: some View {
+        TabView {
+            NavigationStack { HomeView() }
+                .tabItem { Label("Deck", systemImage: "house.fill") }
+            NavigationStack { LogbookView() }
+                .tabItem { Label("Logbook", systemImage: "list.bullet.clipboard") }
+            AlertsView()
+                .tabItem { Label("Alerts", systemImage: "bell") }
+        }
+        .tint(.rwGreen)
+    }
+}
+```
+
+---
+
+## 추가 보완
+
+테스트하다 보니 정상 흐름 외에 탭바로 중간에 이탈하는 경우를 처리하지 않았다는 걸 발견했다. 러닝 중 탭바로 홈으로 가거나, TouchdownView나 FlightSummaryView에서 `GO TO DECK` 버튼을 안 누르고 나가는 경우 `resetState()`가 호출되지 않아 이전 세션 상태가 남아있는 채로 다음 러닝이 시작되는 문제가 생긴다.
+
+세 곳에 `.onDisappear`를 추가했다.
+
+---
+
+### PFDView
+
+러닝 중 탭바로 이탈하면 워크아웃 세션이 살아있는 채로 홈으로 가버린다. 처음엔 `isRunning`으로 체크하려 했는데, 미러링 중 iPhone은 `startOrigin == .remote`라 `start()`를 호출하지 않아 `isRunning`이 `false`인 경우가 있었다. 그래서 `HealthKitService.shared.session != nil`로 워크아웃 세션 자체가 살아있는지를 기준으로 바꿨다. 단독이든 미러링이든 세션이 있으면 정리한다.
+
+다만 터치다운 버튼을 눌렀을 때도 `.onDisappear`가 트리거되면서 `resetState()`가 먼저 호출되어 `navigationPath`가 초기화되는 문제가 있었다. `didNavigateToTouchdown` 플래그를 추가해서 정상 이탈과 탭바 이탈을 구분했다.
+
+```swift
+@State private var didNavigateToTouchdown = false
+
+// 터치다운 버튼
+Button {
+    didNavigateToTouchdown = true
+    Task {
+        // 생략
+    }
+}
+
+.onDisappear {
+    guard !didNavigateToTouchdown else { return }
+    guard HealthKitService.shared.session != nil else { return }
+    Task {
+        await runViewModel.stop()
+        HealthKitService.shared.stopWorkout()
+        await runViewModel.resetState()
+    }
+}
+```
+
+---
+
+### TouchdownView
+
+TouchdownView에서 Summary로 정상 이동하지 않고 탭바로 나가는 경우를 처리했다. Summary로 이동했을 때는 `resetState()`가 불리면 안 되니까 `didNavigateToSummary` 플래그로 구분했다.
+
+```swift
+@State private var didNavigateToSummary = false
+
+// Summary 버튼
+Button {
+    didNavigateToSummary = true
+    runViewModel.navigationPath.append(.summary)
+}
+
+.onDisappear {
+    if !didNavigateToSummary {
+        Task {
+            await runViewModel.flightActivityService.endActivity()
+            await runViewModel.resetState()
+        }
+    }
+}
+```
+
+---
+
+### FlightSummaryView
+
+`GO TO DECK` 버튼을 안 누르고 탭바로 나가는 경우를 처리했다. Logbook에서 열린 경우는 `selectedFlight != nil`이라 조건으로 막았다.
+
+```swift
+.onDisappear {
+    guard selectedFlight == nil else { return }
+    Task {
+        await runViewModel.flightActivityService.endActivity()
+        await runViewModel.resetState()
+    }
+}
+```
