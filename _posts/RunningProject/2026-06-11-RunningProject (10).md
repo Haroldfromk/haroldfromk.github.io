@@ -134,9 +134,9 @@ NavigationLink(destination: TakeoffView()) {
 
 ---
 
-### timestamp / horizontalAccuracy 필터 — 노이즈 위치 무시
+### timestamp / horizontalAccuracy 필터 - 노이즈 위치 무시
 
-[Vol.5 — How to filter locations](https://medium.com/how-to-track-users-location-with-high-accuracy-ios/make-it-even-better-than-nike-how-to-filter-locations-tracking-highly-accurate-location-in-774be045f8d6){:target="_blank"}를 읽다가 CoreLocation의 캐시 위치 문제를 알게 됐다.
+[Vol.5 - How to filter locations](https://medium.com/how-to-track-users-location-with-high-accuracy-ios/make-it-even-better-than-nike-how-to-filter-locations-tracking-highly-accurate-location-in-774be045f8d6){:target="_blank"}를 읽다가 CoreLocation의 캐시 위치 문제를 알게 됐다.
 
 GPS 신호가 나쁜 환경(흐린 날씨, 고층 빌딩 사이, 나무가 많은 공원 등)에서는 GPS 하드웨어가 위치를 얻지 못한다. 이때 CoreLocation은 신호가 좋았던 시점에 저장해둔 캐시 위치를 `didUpdateLocations`로 보낸다. 캐시 위치는 현재 사용자 위치가 아니기 때문에 그대로 처리하면 앱이 부정확하게 동작한다.
 
@@ -223,11 +223,11 @@ func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:
 func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
     switch manager.authorizationStatus {
         // 생략
-        // 항상 허용 — 백그라운드 포함 수집 가능
+        // 항상 허용 - 백그라운드 포함 수집 가능
     case .authorizedAlways:
         locationManager.startUpdatingLocation()
         break
-        // 앱 사용 중 허용 — 정상 동작
+        // 앱 사용 중 허용 - 정상 동작
     case .authorizedWhenInUse:
         locationManager.startUpdatingLocation()
         break
@@ -246,10 +246,10 @@ func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
 func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
             //생략
-            // 항상 허용 — 백그라운드 포함 수집 가능
+            // 항상 허용 - 백그라운드 포함 수집 가능
         case .authorizedAlways:
             break
-            // 앱 사용 중 허용 — 정상 동작
+            // 앱 사용 중 허용 - 정상 동작
         case .authorizedWhenInUse:
             break
         default:
@@ -489,11 +489,11 @@ smoothing 작업 전에 지금까지 구현한 기능들을 실기기로 먼저 
 - 방향 전환 시 페이스 튀는 현상 개선 (추가 테스트 필요)
 
 ### 발견된 문제
-- 페이스가 10분대로 튀는 현상 지속 — smoothing 필요
-- PAUSE 오버레이가 VStack 뒤에 가려짐 — ZStack 순서 수정 필요
-- PAUSE 작동 안 함 — `distanceFilter` 조정 필요
-- 러닝 종료 후 재시작 시 거리 40m 누적 — `flightData` 리셋 필요
-- GPWS 알림 과도하게 발생 — smoothing으로 해결 예상
+- 페이스가 10분대로 튀는 현상 지속 - smoothing 필요
+- PAUSE 오버레이가 VStack 뒤에 가려짐 - ZStack 순서 수정 필요
+- PAUSE 작동 안 함 - `distanceFilter` 조정 필요
+- 러닝 종료 후 재시작 시 거리 40m 누적 - `flightData` 리셋 필요
+- GPWS 알림 과도하게 발생 - smoothing으로 해결 예상
 
 이렇게 확인이 되었다.
 
@@ -501,7 +501,7 @@ smoothing 작업 전에 지금까지 구현한 기능들을 실기기로 먼저 
 
 ## 문제 수정하기
 
-### 페이스 smoothing — IIR 필터 적용
+### 페이스 smoothing - IIR 필터 적용
 
 timestamp/accuracy 필터를 적용했음에도 실기기 테스트에서 페이스가 여전히 튀는 현상이 발생했다. 필터가 잘못된 위치 데이터를 걸러내더라도 GPS 특성상 순간 속도 값 자체의 변동은 막을 수 없기 때문이다.
 
@@ -519,10 +519,10 @@ In some implementations of the apparatus, the GPS data may be speed and the cont
 RS = (1 - β) × RSprev + β × S
 ```
 
-- `RS` — 현재 보정된 속도
-- `RSprev` — 이전 보정된 속도  
-- `S` — 현재 GPS 속도
-- `β` — smoothing 계수
+- `RS` - 현재 보정된 속도
+- `RSprev` - 이전 보정된 속도  
+- `S` - 현재 GPS 속도
+- `β` - smoothing 계수
 
 
 러닝앱때문에 별걸 다 찾아보고 읽어본다...
@@ -550,11 +550,11 @@ RS2 = (1 - β) × RS2prev + β × RS1
 
 β는 **"방금 들어온 GPS 속도를 얼마나 믿을 것인가"** 에 대한 신뢰도 값이다. 이 값 하나에 따라 페이스가 날뛰거나, 반대로 너무 굼떠지거나 둘 중 하나가 된다.
 
-**β 값이 높을 때 — 반응은 빠르지만 노이즈에 취약**
+**β 값이 높을 때 - 반응은 빠르지만 노이즈에 취약**
 
 현재 GPS 속도를 그대로 반영하는 세팅이다. 반응 속도는 빠르지만 GPS가 조금만 튀어도 페이스가 10분대, 20분대로 출렁거린다. 보정 전 앱의 상태가 바로 이랬다.
 
-**β 값이 낮을 때 — 안정적이지만 반응이 느림**
+**β 값이 낮을 때 - 안정적이지만 반응이 느림**
 
 새로 들어온 GPS 값을 일단 의심하고 과거 흐름을 더 많이 반영하는 세팅이다. GPS 노이즈에 흔들리지 않고 페이스가 안정적으로 유지된다. GPWS 오작동도 함께 잡힌다. 다만 갑자기 멈추거나 가속할 때 페이스가 즉각 반응하지 않고 슬금슬금 따라오는 지연이 생긴다.
 
@@ -660,11 +660,11 @@ func resetState() async {
 원인은 `ZStack` 순서 문제였다. PAUSE 오버레이가 `VStack` 앞에 선언되어 있어 UI 뒤에 깔리고 있었던 것이다.
 
 ```swift
-// ❌ VStack 앞에 선언 — UI에 가려짐
+// ❌ VStack 앞에 선언 - UI에 가려짐
 if runViewModel.flightData.isPaused { ... }
 VStack { ... }
 
-// ✅ VStack 뒤에 선언 — UI 위에 덮임
+// ✅ VStack 뒤에 선언 - UI 위에 덮임
 VStack { ... }
 if runViewModel.flightData.isPaused { ... }
 ```
@@ -675,11 +675,11 @@ if runViewModel.flightData.isPaused { ... }
 
 멈춰있었지만 PAUSE가 작동하지 않았다. 원인을 파악하기 위해 두 AI에게 의견을 물어봤는데, 서로 다른 해결책을 제시했다.
 
-**AI-A의 의견 — `distanceFilter = 0`**
+**AI-A의 의견 - `distanceFilter = 0`**
 
 업데이트를 매초 받아서 `detectPause`를 더 자주 체크하자는 방식이다. 이론적으로는 `timestampGap`이 1초 단위로 정확히 쌓여서 5초 감지가 더 세밀해진다.
 
-**AI-B의 의견 — `distanceFilter = 10` + `distanceGap <= 4`**
+**AI-B의 의견 - `distanceFilter = 10` + `distanceGap <= 4`**
 
 GPS 드래프트로 인해 정지 상태에서도 좌표가 매초 2~5m씩 튀는데, `distanceFilter = 0`이면 이 노이즈가 매초 `RunningCenter`에 들어와 `distanceGap <= 2` 조건이 절대 충족되지 않는다. `distanceFilter = 10`으로 노이즈를 하드웨어 선에서 차단하고, `distanceGap` 임계값을 4m로 넓혀서 소프트웨어에서 2차로 잡자는 방식이다.
 

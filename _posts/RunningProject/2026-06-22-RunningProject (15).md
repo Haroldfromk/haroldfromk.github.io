@@ -215,9 +215,9 @@ struct MyWatchApp_Watch_AppApp: App {
 
 이참에 지금까지 iPhone과 Watch에 각각 별도로 만들어두었던 `HealthKitService`도 하나로 합치기로 했다. Apple 샘플 프로젝트처럼 공통 부분은 `HealthKitService.swift`에 두고, 플랫폼별 전용 코드는 extension으로 분리하는 구조다.
 
-- `HealthKitService.swift` — 공통 (싱글톤 선언, session, builder, startWorkout, stopWorkout)
-- `HealthKitService+iOS.swift` — iPhone 전용 (retrieveRemoteSession, fetch 함수들 등)
-- `HealthKitService+watchOS.swift` — Watch 전용 (streamHealthData, updateForStatistics 등)
+- `HealthKitService.swift` - 공통 (싱글톤 선언, session, builder, startWorkout, stopWorkout)
+- `HealthKitService+iOS.swift` - iPhone 전용 (retrieveRemoteSession, fetch 함수들 등)
+- `HealthKitService+watchOS.swift` - Watch 전용 (streamHealthData, updateForStatistics 등)
 
 각 파일에 해당 타겟 멤버십만 걸어주면 `#if os()` 분기 없이도 컴파일러가 타겟에 포함된 파일만 빌드하게 된다.
 
@@ -241,9 +241,9 @@ weak var viewModel: WatchViewModel?
 
 이렇게 `viewModel` 프로퍼티 타입만 `#if os()`로 분기해서 공통 파일에 두고, 나머지는 동일하게 extension으로 나누기로 했다.
 
-- `WatchConnectivityService.swift` — 공통 (클래스 선언, session, lastSentTime, viewModel, activationDidCompleteWith)
-- `WatchConnectivityService+iOS.swift` — iPhone 전용 (sendFlightData, didReceiveUserInfo 등)
-- `WatchConnectivityService+watchOS.swift` — Watch 전용 (sendHealthData, sendRunningData, sendModeData 등)
+- `WatchConnectivityService.swift` - 공통 (클래스 선언, session, lastSentTime, viewModel, activationDidCompleteWith)
+- `WatchConnectivityService+iOS.swift` - iPhone 전용 (sendFlightData, didReceiveUserInfo 등)
+- `WatchConnectivityService+watchOS.swift` - Watch 전용 (sendHealthData, sendRunningData, sendModeData 등)
 
 이렇게 분리하고 나니 새로운 경고가 떴다.
 
@@ -662,9 +662,9 @@ Watch 입장에서 실제로 구분해야 하는 경우는 셋이다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/sce.png){: width="50%" height="50%"}
 
-1. **Watch 단독** — `WatchTakeoffView`에서 시작했고, iPhone이 없거나 미러링이 안 잡힌 경우
-2. **Watch 주도 미러링** — `WatchTakeoffView`에서 시작했는데 iPhone이 미러링을 받아준 경우
-3. **iPhone 주도 미러링** — `AppDelegate.handle(_:)`로 시작된 경우. 이건 항상 미러링이다
+1. **Watch 단독** - `WatchTakeoffView`에서 시작했고, iPhone이 없거나 미러링이 안 잡힌 경우
+2. **Watch 주도 미러링** - `WatchTakeoffView`에서 시작했는데 iPhone이 미러링을 받아준 경우
+3. **iPhone 주도 미러링** - `AppDelegate.handle(_:)`로 시작된 경우. 이건 항상 미러링이다
 
 ("iPhone 단독"은 Watch가 아예 켜지지 않으니 Watch 쪽에서는 신경 쓸 필요가 없는 경우다.)
 
@@ -1702,9 +1702,9 @@ func resetState() async {
 
 핵심은 `HealthKitService`가 `HKWorkoutSessionState`를 받아서 `SessionStateEvent`라는 하나의 이벤트로 가공해 `sessionStatePublisher`를 통해 흘려보내고, `WatchViewModel`과 `RunViewModel`이 똑같은 구조로 그걸 구독해서 세 가지 값을 각자 다른 용도로 쓰는 것이다.
 
-- `startOrigin`(`.local`/`.remote`) — 이 워크아웃을 내가 직접 시작했는지, 상대가 시작시켜서 따라왔는지. `.remote`일 때만 PFD로 push한다.
-- `runningMode`(`.standalone`/`.mirrored`) — 지금 미러링 중인지 여부. `.standalone`일 때만 GPS를 직접 추적한다.
-- `stopOrigin`(`.local`/`.remote`) — 종료를 누른 게 나인지 상대인지. `.local`이면 Touchdown → Summary를 거치고 동시에 `sendStopSignal()`로 상대에게 알리고, `.remote`면 곧바로 홈으로 복귀한다.
+- `startOrigin`(`.local`/`.remote`) - 이 워크아웃을 내가 직접 시작했는지, 상대가 시작시켜서 따라왔는지. `.remote`일 때만 PFD로 push한다.
+- `runningMode`(`.standalone`/`.mirrored`) - 지금 미러링 중인지 여부. `.standalone`일 때만 GPS를 직접 추적한다.
+- `stopOrigin`(`.local`/`.remote`) - 종료를 누른 게 나인지 상대인지. `.local`이면 Touchdown → Summary를 거치고 동시에 `sendStopSignal()`로 상대에게 알리고, `.remote`면 곧바로 홈으로 복귀한다.
 
 세 값 모두 "주체가 누구인가"라는 같은 질문에 대한 답이고, 시점만 다를 뿐이다. 시작 시점엔 `startOrigin`이, 종료 시점엔 `stopOrigin`이 책임지고, `runningMode`는 그 사이 내내 데이터 흐름을 어떻게 처리할지를 결정한다.
 

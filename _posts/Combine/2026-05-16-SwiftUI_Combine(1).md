@@ -262,7 +262,7 @@ let squared = numbers.map { $0 * $0 }  // 새 Publisher
 
 ### 쉬운 설명
 
-**PassthroughSubject — 메가폰**
+**PassthroughSubject - 메가폰**
 
 * 누군가 듣고 있을 때 소리치면 들린다.
 * 아무도 없을 때 소리치면 메시지는 사라진다.
@@ -272,7 +272,7 @@ MMA 로스터로 비유하면:
 - 로스터를 업데이트하면 구독자는 그 업데이트만 본다.
 - 나중에 구독한 사람은 이전 로스터를 못 본다. 이후 업데이트만 본다.
 
-**CurrentValueSubject — 화이트보드**
+**CurrentValueSubject - 화이트보드**
 
 * 항상 현재 상태가 적혀있다.
 * 누가 들어오든 즉시 현재 내용을 볼 수 있다.

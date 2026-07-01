@@ -80,13 +80,13 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
 우선 기능을 추려본다. (Docs하단부 Topic을 보면 다 있다.)
 
-1. `requestWhenInUseAuthorization()` — 앱 사용 중 위치 권한 요청. 러닝 시작 전 반드시 필요하다.
-2. `startUpdatingLocation()` / `stopUpdatingLocation()` — 러닝 시작/종료 시점에 맞춰 GPS 수집을 켜고 끈다.
-3. `desiredAccuracy = kCLLocationAccuracyBest` — GPS 정확도를 최고로 설정. 러닝 경로 추적이 핵심이라 필수다.
-4. `distanceFilter` — 몇 미터마다 위치 업데이트를 받을지 설정. 너무 잦으면 배터리 소모가 크고, 너무 드물면 경로가 뭉개진다.
-5. `accuracyAuthorization` — 사용자가 정확한 위치를 허용했는지 대략적 위치만 허용했는지 확인. 대략적 위치면 경로 추적이 의미없으니 안내가 필요하다.
-6. `allowsBackgroundLocationUpdates = true` — 러닝 중 화면이 꺼지거나 다른 앱으로 전환돼도 GPS 수집을 유지한다.
-7. `pausesLocationUpdatesAutomatically = false` — iOS가 자동으로 위치 업데이트를 멈추는 걸 방지한다. 러닝 중 갑자기 끊기면 안 되니까.
+1. `requestWhenInUseAuthorization()` - 앱 사용 중 위치 권한 요청. 러닝 시작 전 반드시 필요하다.
+2. `startUpdatingLocation()` / `stopUpdatingLocation()` - 러닝 시작/종료 시점에 맞춰 GPS 수집을 켜고 끈다.
+3. `desiredAccuracy = kCLLocationAccuracyBest` - GPS 정확도를 최고로 설정. 러닝 경로 추적이 핵심이라 필수다.
+4. `distanceFilter` - 몇 미터마다 위치 업데이트를 받을지 설정. 너무 잦으면 배터리 소모가 크고, 너무 드물면 경로가 뭉개진다.
+5. `accuracyAuthorization` - 사용자가 정확한 위치를 허용했는지 대략적 위치만 허용했는지 확인. 대략적 위치면 경로 추적이 의미없으니 안내가 필요하다.
+6. `allowsBackgroundLocationUpdates = true` - 러닝 중 화면이 꺼지거나 다른 앱으로 전환돼도 GPS 수집을 유지한다.
+7. `pausesLocationUpdatesAutomatically = false` - iOS가 자동으로 위치 업데이트를 멈추는 걸 방지한다. 러닝 중 갑자기 끊기면 안 되니까.
 
 ---
 
@@ -120,23 +120,23 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
         
-            // 아직 권한 요청 전 — 권한 요청
+            // 아직 권한 요청 전 - 권한 요청
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
             
-            // 자녀 보호 등 시스템 제한 — 앱에서 처리 불가
+            // 자녀 보호 등 시스템 제한 - 앱에서 처리 불가
         case .restricted:
             print("Location access restricted")
             
-            // 사용자가 거부 — 설정 앱으로 안내 필요
+            // 사용자가 거부 - 설정 앱으로 안내 필요
         case .denied:
             print("Location access denied")
             
-            // 항상 허용 — 백그라운드 포함 수집 가능
+            // 항상 허용 - 백그라운드 포함 수집 가능
         case .authorizedAlways:
             locationManager.startUpdatingLocation()
         
-            // 앱 사용 중 허용 — 정상 동작
+            // 앱 사용 중 허용 - 정상 동작
         case .authorizedWhenInUse:
             locationManager.startUpdatingLocation()
             
@@ -156,11 +156,11 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
 ---
 
-`didUpdateLocations` — GPS 위치 업데이트가 올 때마다 호출된다. `locations.last`로 가장 최신 좌표를 꺼내 쓴다.
+`didUpdateLocations` - GPS 위치 업데이트가 올 때마다 호출된다. `locations.last`로 가장 최신 좌표를 꺼내 쓴다.
 
-`didFailWithError` — 위치 수집에 실패했을 때 호출된다. 권한 문제나 GPS 신호 없음 등이 원인이 될 수 있다.
+`didFailWithError` - 위치 수집에 실패했을 때 호출된다. 권한 문제나 GPS 신호 없음 등이 원인이 될 수 있다.
 
-`locationManagerDidChangeAuthorization` — 권한 상태가 바뀔 때마다 호출된다. 앱 최초 실행 시에도 호출되기 때문에 여기서 권한 요청과 위치 수집 시작을 함께 처리한다.
+`locationManagerDidChangeAuthorization` - 권한 상태가 바뀔 때마다 호출된다. 앱 최초 실행 시에도 호출되기 때문에 여기서 권한 요청과 위치 수집 시작을 함께 처리한다.
 
 ---
 
@@ -176,10 +176,10 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
 ##### 권한 / 상태 확인
 
-1. `requestWhenInUseAuthorization()` — 앱 사용 중 위치 권한 요청
+1. `requestWhenInUseAuthorization()` - 앱 사용 중 위치 권한 요청
     - `locationManagerDidChangeAuthorization` 메서드에서 권한요청 전인 `case .notDetermined:` 일때, `locationManager.requestWhenInUseAuthorization()`를 통해 권한 요청을 하게 된다.
 
-2. `accuracyAuthorization` — 정확한 위치 허용 여부 확인
+2. `accuracyAuthorization` - 정확한 위치 허용 여부 확인
     - 사용자가 위치 권한을 허용할 때 "정확한 위치"와 "대략적인 위치" 중 선택할 수 있다.
     - 러닝 경로 추적이 핵심인 앱이라 대략적인 위치로는 의미가 없다.
     - 디폴트는 `fullAccuracy`라 init에서 별도 설정은 불필요하다.
@@ -192,23 +192,23 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
 accuracyAuthorization의 공식 상수는 다음과 같다
 
-• kCLLocationAccuracyBestForNavigation — 내비게이션용 최고 정확도 (배터리 소모 큼)
-• kCLLocationAccuracyBest — 최고 정확도
-• kCLLocationAccuracyNearestTenMeters — 10m 단위
-• kCLLocationAccuracyHundredMeters — 100m 단위
-• kCLLocationAccuracyKilometer — 1km 단위
-• kCLLocationAccuracyThreeKilometers — 3km 단위
+• kCLLocationAccuracyBestForNavigation - 내비게이션용 최고 정확도 (배터리 소모 큼)
+• kCLLocationAccuracyBest - 최고 정확도
+• kCLLocationAccuracyNearestTenMeters - 10m 단위
+• kCLLocationAccuracyHundredMeters - 100m 단위
+• kCLLocationAccuracyKilometer - 1km 단위
+• kCLLocationAccuracyThreeKilometers - 3km 단위
 
 ---
 
 ##### 동작 설정
 
-- `desiredAccuracy = kCLLocationAccuracyBest` — GPS 정확도 최고로 설정
-- `distanceFilter` — 몇 미터마다 업데이트할지
-- `allowsBackgroundLocationUpdates = true` — 백그라운드에서도 GPS 수집
-- `pausesLocationUpdatesAutomatically = false` — 자동 중지 방지
-- `startUpdatingLocation()` — 러닝 시작 시 수집 시작
-- `stopUpdatingLocation()` — 러닝 종료 시 수집 중단
+- `desiredAccuracy = kCLLocationAccuracyBest` - GPS 정확도 최고로 설정
+- `distanceFilter` - 몇 미터마다 업데이트할지
+- `allowsBackgroundLocationUpdates = true` - 백그라운드에서도 GPS 수집
+- `pausesLocationUpdatesAutomatically = false` - 자동 중지 방지
+- `startUpdatingLocation()` - 러닝 시작 시 수집 시작
+- `stopUpdatingLocation()` - 러닝 종료 시 수집 중단
 
 위의 `accuracyAuthorization`와 더불어 동작 설정에 해당하는 부분은 사실 init에서 쓰기에는 앱을 켜자마자 배터리 소모가 심해지기 때문에 러닝을 할때 작동을 해주는것이 바람직 하다고 생각 했다.
 
@@ -521,11 +521,11 @@ func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
     switch manager.authorizationStatus {
     // 생략
         
-        // 항상 허용 — 백그라운드 포함 수집 가능
+        // 항상 허용 - 백그라운드 포함 수집 가능
     case .authorizedAlways:
         //locationManager.startUpdatingLocation()
         break
-        // 앱 사용 중 허용 — 정상 동작
+        // 앱 사용 중 허용 - 정상 동작
     case .authorizedWhenInUse:
         //locationManager.startUpdatingLocation()
         break

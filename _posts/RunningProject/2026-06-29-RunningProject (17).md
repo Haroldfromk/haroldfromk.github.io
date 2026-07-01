@@ -357,7 +357,7 @@ func retrieveRemoteSession() {
     store.workoutSessionMirroringStartHandler = { mirroredSession in
         Task { @MainActor in
             if mirroredSession.state == .running && self.wasZombieSuspected {
-                ZombieSessionLogger.shared.info("zombie session detected — ending it")
+                ZombieSessionLogger.shared.info("zombie session detected - ending it")
                 mirroredSession.end()
                 UserDefaults.standard.set(false, forKey: HealthKitService.isRunningKey)
                 self.session = nil
@@ -387,7 +387,7 @@ func retrieveRemoteSession() {
 
 ```swift
 if self.wasZombieSuspected {
-    ZombieSessionLogger.shared.info("zombie session detected — ignoring")
+    ZombieSessionLogger.shared.info("zombie session detected - ignoring")
     self.session = nil
     return
 }
@@ -407,7 +407,7 @@ if self.wasZombieSuspected {
 ```text
 정보	RunWay	09:27:57.085022+0900	RunViewModel init: wasZombieSuspected set to true
 정보	RunWay	09:27:57.125680+0900	retrieveRemoteSession: wasZombieSuspected=true, state=2
-정보	RunWay	09:27:57.125688+0900	zombie session detected — ignoring
+정보	RunWay	09:27:57.125688+0900	zombie session detected - ignoring
 정보	RunWay	09:28:04.628314+0900	RunViewModel init: wasZombieSuspected set to false
 정보	RunWay	09:28:04.687958+0900	retrieveRemoteSession: wasZombieSuspected=false, state=2
 정보	RunWay	09:28:04.687966+0900	handleiOSStateChange called: toState=2
@@ -424,11 +424,11 @@ home → pfd → home → pfd 반복이 이루어지고 있었다. `wasZombieSus
 
 ```text
 정보	RunWay	09:58:22.322114+0900	retrieveRemoteSession: wasZombieSuspected=true, state=2
-정보	RunWay	09:58:22.322266+0900	zombie session detected — ending it
+정보	RunWay	09:58:22.322266+0900	zombie session detected - ending it
 정보	RunWay	09:58:22.333930+0900	retrieveRemoteSession: wasZombieSuspected=true, state=2
-정보	RunWay	09:58:22.333962+0900	zombie session detected — ending it
+정보	RunWay	09:58:22.333962+0900	zombie session detected - ending it
 정보	RunWay	09:58:22.338567+0900	retrieveRemoteSession: wasZombieSuspected=true, state=2
-정보	RunWay	09:58:22.338675+0900	zombie session detected — ending it
+정보	RunWay	09:58:22.338675+0900	zombie session detected - ending it
 ```
 
 (이후 동일한 패턴이 수십 번 연속으로 트리거됐다.)
@@ -462,7 +462,7 @@ if self.wasZombieSuspected {
         self.wasZombieSuspected = false
         UserDefaults.standard.set(false, forKey: HealthKitService.isRunningKey)
     } else {
-        ZombieSessionLogger.shared.info("zombie session detected — ignoring")
+        ZombieSessionLogger.shared.info("zombie session detected - ignoring")
         self.session = nil
         return
     }
@@ -474,7 +474,7 @@ if self.wasZombieSuspected {
 ```text
 정보	RunWay	09:53:31.268034+0900	retrieveRemoteSession: wasZombieSuspected=true, state=2
 정보	RunWay	09:53:31.268125+0900	zombie check: sessionStart=1782780799.559969, appLaunchTime=1782780811.202153, isNewSession=false
-정보	RunWay	09:53:31.268186+0900	zombie session detected — ignoring
+정보	RunWay	09:53:31.268186+0900	zombie session detected - ignoring
 ```
 
 세션이 앱 재실행보다 12초 전에 시작된 것으로 확인되어 좀비로 정확히 판별됐다. 그러나 좀비를 무시한 후 Watch에서 새 미러링을 시작해도 핸들러가 불리지 않아 미러링 자체가 불가능한 상태가 됐다. `end()`를 다시 넣으면 Watch 세션까지 끊기고, 넣지 않으면 새 미러링이 안 되는 딜레마였다.

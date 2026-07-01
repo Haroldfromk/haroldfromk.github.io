@@ -558,8 +558,8 @@ func refreshDataThrottled() {
 
 결론은
 
-- latest: false — 구간 안에서 첫 번째 값 방출
-- latest: true — 구간 안에서 마지막 값 방출
+- latest: false - 구간 안에서 첫 번째 값 방출
+- latest: true - 구간 안에서 마지막 값 방출
 
 이거였다.
 
@@ -822,7 +822,7 @@ func asyncFetchGitUser(user: String) async throws -> GithubUser {
 
 `of`에는 각 태스크가 반환하는 타입을 적는다. `asyncFetchGitUser`가 `GithubUser`를 반환하니까 `GithubUser.self`가 된다.
 
-**첫 번째 `for` — 태스크 등록**
+**첫 번째 `for` - 태스크 등록**
 
 ```swift
 for name in names {
@@ -834,7 +834,7 @@ for name in names {
 
 `names` 배열을 순회하면서 각 이름마다 태스크를 그룹에 등록한다. 이 시점에 태스크들이 동시에 실행되기 시작한다. 순서대로 기다리는 게 아니라 전부 한꺼번에 출발하는 것이다.
 
-**두 번째 `for` — 결과 수집**
+**두 번째 `for` - 결과 수집**
 
 ```swift
 for try await user in group {

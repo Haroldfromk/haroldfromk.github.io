@@ -22,7 +22,7 @@ Combine을 오랜만에 사용할 겸 간단한 프로젝트를 만든다.
 아마 여기선 생각의 흐름대로 쓰면서 내용을 정리하지 않을까 싶다.
 내용이 상당히 길 예정
 
-## Day 1 — 검색 파이프라인 만들기
+## Day 1 - 검색 파이프라인 만들기
 ### 미션 (Task)
 
 1. **입력창 바인딩**
@@ -458,7 +458,7 @@ Haroldfrom으로 검색을하니
 
 #### 5. 해결해보기
 
-Future 삽질기 — 왜 안됐는가?
+Future 삽질기 - 왜 안됐는가?
 
 처음 시도한 코드는 이렇다.
 
@@ -506,7 +506,7 @@ Cannot convert value of type 'Publishers.Map<...>' to closure result type 'Void'
 강의에서 `Future`를 쓴 이유는 로컬 파일 읽기라는 **동기 작업**을 `promise`로 감싼 것이었다.
 
 ```swift
-// 강의 코드 — 동기 작업을 Future로 감싼 올바른 사용
+// 강의 코드 - 동기 작업을 Future로 감싼 올바른 사용
 Future<Data, Error> { promise in
     do {
         let data = try Data(contentsOf: url)

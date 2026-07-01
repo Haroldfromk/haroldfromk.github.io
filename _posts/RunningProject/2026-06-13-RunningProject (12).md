@@ -281,9 +281,9 @@ var session: HKWorkoutSession?
 var builder: HKLiveWorkoutBuilder?
 ```
 
-- [`HKHealthStore`](https://developer.apple.com/documentation/healthkit/hkhealthstore) — HealthKit에서 관리하는 모든 데이터에 접근하는 진입점이다.
-- [`HKWorkoutSession`](https://developer.apple.com/documentation/healthkit/hkworkoutsession) — 워크아웃의 생명주기를 관리한다. 시작, 일시정지, 종료 등 운동 자체의 상태를 담당한다.
-- [`HKLiveWorkoutBuilder`](https://developer.apple.com/documentation/healthkit/hkliveworkoutbuilder) — 데이터 수집을 담당한다. 언제부터 언제까지 데이터를 모을지 관리하며, 수집이 끝나면 `finishWorkout()`으로 최종 워크아웃 객체를 생성해 HealthKit에 저장한다.
+- [`HKHealthStore`](https://developer.apple.com/documentation/healthkit/hkhealthstore) - HealthKit에서 관리하는 모든 데이터에 접근하는 진입점이다.
+- [`HKWorkoutSession`](https://developer.apple.com/documentation/healthkit/hkworkoutsession) - 워크아웃의 생명주기를 관리한다. 시작, 일시정지, 종료 등 운동 자체의 상태를 담당한다.
+- [`HKLiveWorkoutBuilder`](https://developer.apple.com/documentation/healthkit/hkliveworkoutbuilder) - 데이터 수집을 담당한다. 언제부터 언제까지 데이터를 모을지 관리하며, 수집이 끝나면 `finishWorkout()`으로 최종 워크아웃 객체를 생성해 HealthKit에 저장한다.
 
 세션이 운동의 흐름을 관리한다면, 빌더는 그 흐름 안에서 데이터를 모으고 정산하는 역할이다. 그래서 종료 시에도 `session.stopActivity()`와 `builder.endCollection()`을 따로 호출해야 한다.
 
@@ -493,9 +493,9 @@ let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: allStatisti
 
 우리 앱에서 필요한 케이스는 세 가지다.
 
-- `.running` — 워크아웃이 시작되거나 재개된 상태
-- `.paused` — 일시정지 상태
-- `.stopped` — 워크아웃이 종료된 상태. 이 시점에서 `endCollection()`, `finishWorkout()`을 호출해 수집된 데이터를 정산하고 저장한다
+- `.running` - 워크아웃이 시작되거나 재개된 상태
+- `.paused` - 일시정지 상태
+- `.stopped` - 워크아웃이 종료된 상태. 이 시점에서 `endCollection()`, `finishWorkout()`을 호출해 수집된 데이터를 정산하고 저장한다
 
 처음에는 `stopWorkout()` 내부에서 `finishWorkout()`까지 호출하려 했지만, Apple 샘플에서는 `stopActivity()`만 호출하고 실제 데이터 정산은 `didChangeTo(.stopped)`에서 수행한다. `WorkoutSession`이 상태 전환을 완료한 이후 Builder를 종료하는 구조가 더 자연스럽다고 판단해 동일한 패턴을 사용했다.
 

@@ -34,7 +34,7 @@ published: true
 `isPaused` 전용 메시지 타입(`pauseData`)을 별도로 만들어서 주도 기기가 일시정지 상태가 되는 순간 즉시 상대 기기로 전달하도록 했다. `sendFlightData()`는 throttle이 걸려 있어 최대 3초 지연이 있는 반면, `sendPauseData()`는 상태 변화 시점에 바로 호출되기 때문에 응답성이 더 빠르다.
 
 ```swift
-// sendPauseData — iOS / watchOS 동일
+// sendPauseData: iOS / watchOS 동일
 func sendPauseData(_ pause: Bool) {
     let message: [String: Any] = [
         "type": "pauseData",
@@ -417,3 +417,72 @@ Button {
     }
 }
 ```
+
+---
+
+### WatchPFDView
+
+iPhone과 동일하게 `END FLIGHT` 없이 크라운으로 이탈하는 경우를 처리했다. `didNavigateToTouchdown` 플래그로 정상 종료와 이탈을 구분했다.
+
+```swift
+@State private var didNavigateToTouchdown = false
+
+// onEndFlight 클로저
+onEndFlight: {
+    didNavigateToTouchdown = true
+    Task {
+        await saveRunningData()
+        viewModel.updatePhase(.touchdown)
+        await viewModel.stop()
+        viewModel.navigateTo(.touchdown)
+    }
+}
+
+.onDisappear {
+    guard !didNavigateToTouchdown else { return }
+    guard HealthKitService.shared.session != nil else { return }
+    Task {
+        await viewModel.stop()
+        HealthKitService.shared.stopWorkout()
+        await viewModel.resetState()
+    }
+}
+```
+
+---
+
+### WatchTouchdownView
+
+Summary로 이동하지 않고 크라운으로 나가는 경우를 처리했다.
+
+```swift
+@State private var didNavigateToSummary = false
+
+// SUMMARY 버튼
+Button {
+    didNavigateToSummary = true
+    viewModel.navigateTo(.summary)
+}
+
+.onDisappear {
+    guard !didNavigateToSummary else { return }
+    Task {
+        await viewModel.resetState()
+    }
+}
+```
+
+---
+
+### WatchSummaryView
+
+Watch는 탭바가 없고 크라운으로만 이탈하니 `RETURN TO BASE` 버튼을 안 눌러도 `.onDisappear`에서 무조건 `resetState()`를 호출한다.
+
+```swift
+.onDisappear {
+    Task {
+        await viewModel.resetState()
+    }
+}
+```
+

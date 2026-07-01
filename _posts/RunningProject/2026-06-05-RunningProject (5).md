@@ -52,10 +52,10 @@ actor RunningCenter {
 
 이 두 가지를 기준으로 Actor에서 처리할 수 있는 것들을 정리해보면 아래와 같다.
 
-- 위치 데이터 받아서 처리 — LocationService에서 좌표 받아서 거리 계산, 경로 누적
-- HealthKit 데이터 받아서 저장 — fetch 결과를 Actor 내부에서 관리 (실시간 스트림은 Apple Watch 연동 후 가능, 현재는 MockData fetch 수준)
-- FlightPhase 상태 전환 — 러닝 시작/종료에 따라 상태 변경
-- AsyncStream으로 ViewModel에 전달 — 위 데이터들을 묶어서 전달
+- 위치 데이터 받아서 처리 - LocationService에서 좌표 받아서 거리 계산, 경로 누적
+- HealthKit 데이터 받아서 저장 - fetch 결과를 Actor 내부에서 관리 (실시간 스트림은 Apple Watch 연동 후 가능, 현재는 MockData fetch 수준)
+- FlightPhase 상태 전환 - 러닝 시작/종료에 따라 상태 변경
+- AsyncStream으로 ViewModel에 전달 - 위 데이터들을 묶어서 전달
 
 ---
 
@@ -90,9 +90,9 @@ func processLocation(_ location: CLLocation) {
 
 `processLocation`이 호출될 때마다 세 가지 작업이 순서대로 이루어진다.
 
-1. **거리 누적** — `lastLocation`이 있으면 이전 좌표와 현재 좌표 사이의 거리를 `CLLocation`의 `distance(from:)` 메서드로 계산하여 `totalDistance`에 더한다. 처음 호출 시에는 `lastLocation`이 `nil`이므로 건너뛴다.
-2. **이전 좌표 갱신** — 현재 좌표를 `lastLocation`에 저장하여 다음 호출 때 기준점으로 사용한다.
-3. **경로 좌표 누적** — 현재 좌표를 `coordinateArray`에 추가한다. 이 배열이 나중에 `MapPolyline` 경로 표시에 사용된다.
+1. **거리 누적** - `lastLocation`이 있으면 이전 좌표와 현재 좌표 사이의 거리를 `CLLocation`의 `distance(from:)` 메서드로 계산하여 `totalDistance`에 더한다. 처음 호출 시에는 `lastLocation`이 `nil`이므로 건너뛴다.
+2. **이전 좌표 갱신** - 현재 좌표를 `lastLocation`에 저장하여 다음 호출 때 기준점으로 사용한다.
+3. **경로 좌표 누적** - 현재 좌표를 `coordinateArray`에 추가한다. 이 배열이 나중에 `MapPolyline` 경로 표시에 사용된다.
 
 ---
 
@@ -496,10 +496,10 @@ Swift Concurrency Docs 에서는 이렇게 설명한다.
 
 타입별로 간단하게 정리하면:
 
-- **구조체/열거형** — 모든 저장 프로퍼티가 `Sendable`이면 자동으로 준수된다.
-- **클래스** — `final`이고 모든 프로퍼티가 불변이어야 한다. `@MainActor` 클래스는 메인 액터가 상태 접근을 조율하므로 예외적으로 가변 프로퍼티도 허용된다.
-- **액터** — 내부적으로 순차 처리를 보장하므로 자동으로 준수된다.
-- **함수/클로저** — 프로토콜 채택 대신 `@Sendable`을 붙인다. 캡처하는 모든 값이 `Sendable`이어야 하며, 여러 동시성 컨텍스트에서 실행될 수 있다.
+- **구조체/열거형** - 모든 저장 프로퍼티가 `Sendable`이면 자동으로 준수된다.
+- **클래스** - `final`이고 모든 프로퍼티가 불변이어야 한다. `@MainActor` 클래스는 메인 액터가 상태 접근을 조율하므로 예외적으로 가변 프로퍼티도 허용된다.
+- **액터** - 내부적으로 순차 처리를 보장하므로 자동으로 준수된다.
+- **함수/클로저** - 프로토콜 채택 대신 `@Sendable`을 붙인다. 캡처하는 모든 값이 `Sendable`이어야 하며, 여러 동시성 컨텍스트에서 실행될 수 있다.
 
 컴파일러 검사를 우회하고 싶을 때는 `@unchecked Sendable`을 쓸 수 있지만, 그 경우 스레드 안전성은 개발자가 직접 보장해야 한다.
 
@@ -554,8 +554,8 @@ private func clearContinuation() {
 
 정리하면:
 
-- `clearContinuation()` — Actor-isolated 메서드이므로 Actor의 직렬 큐를 통해서만 실행된다.
-- `Task { await self?.clearContinuation() }` — `@Sendable` 클로저 안에서 직접 프로퍼티를 수정하는 대신, Task를 생성하고 `await`로 Actor의 격리 컨텍스트로 진입한 뒤 안전하게 수정한다.
+- `clearContinuation()` - Actor-isolated 메서드이므로 Actor의 직렬 큐를 통해서만 실행된다.
+- `Task { await self?.clearContinuation() }` - `@Sendable` 클로저 안에서 직접 프로퍼티를 수정하는 대신, Task를 생성하고 `await`로 Actor의 격리 컨텍스트로 진입한 뒤 안전하게 수정한다.
 
 쉽게 말하면:
 - Actor: "내 프로퍼티는 한 번에 하나의 작업만 접근할 수 있어"

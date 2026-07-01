@@ -310,7 +310,7 @@ strPublisher.send("a")
 numPublisher.send(1)   // Receive: a, 1
 strPublisher.send("b")
 strPublisher.send("c")
-// "b", "c"는 대기 중 — numPublisher 값 기다림
+// "b", "c"는 대기 중 - numPublisher 값 기다림
 
 numPublisher.send(2)   // Receive: b, 2
 numPublisher.send(3)   // Receive: c, 3

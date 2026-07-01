@@ -344,7 +344,7 @@ if type == "flightData" {
 반대로 iOS 쪽 `didReceiveMessage`에는 `flightData` 파싱이 없었다. Watch에서 FlightData를 보내는 경로 자체가 없었으니 당연한 결과였다. Watch 주도 미러링을 지원하려면 iPhone도 `flightData`를 받아서 처리할 수 있어야 한다.
 
 ```swift
-// before — WatchConnectivityService+iOS.swift
+// before - WatchConnectivityService+iOS.swift
 nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
     if let type = message["type"] as? String, type == "remoteStopped" {
         handleStopSignal()
@@ -464,7 +464,7 @@ Watch가 `startOrigin: .local`이므로 GPS와 `RunningCenter`를 직접 돌려 
 그리고 watchOS 쪽 `sendFlightData()`에는 throttle이 없었다. iOS 쪽과 동일하게 3초 throttle을 추가하면서 구조도 통일했다.
 
 ```swift
-// sendFlightData — iOS / watchOS 동일하게 적용
+// sendFlightData - iOS / watchOS 동일하게 적용
 func sendFlightData(_ data: FlightData) {
     let now = Date()
     guard now.timeIntervalSince(lastSentTime) >= 3.0 else { return }

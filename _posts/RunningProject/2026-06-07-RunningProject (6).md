@@ -30,8 +30,8 @@ Mock UI 기준으로 PFDView에 하드코딩된 값들을 추려보면 아래와
 
 - `lastLocations.speed` → m/s → min/km 변환으로 페이스 계산 가능
 - `lastLocations.course` → 방향 (0~360°)
-- 거리 — `RunningCentor`에서 이미 계산 중
-- 경과 시간 — 러닝 시작 시점 기준으로 ViewModel에서 관리
+- 거리 - `RunningCentor`에서 이미 계산 중
+- 경과 시간 - 러닝 시작 시점 기준으로 ViewModel에서 관리
 
 즉 publisher를 통해 실시간으로 스트림되고 있는 값을 꺼내서 쓰기만 하면 된다. `FlightData`에 추가가 필요하다.
 
@@ -657,7 +657,7 @@ var avgPace: String {
 
 물론 즉각적인 보완이 가능한 부분은 바로바로 해결을 해주었다.
 
-- [x] `AVG` 페이스 하드코딩 — 타이머 구현 후 완료
-- [x] `FLIGHT TIME` — 타이머 구현 후 완료
+- [x] `AVG` 페이스 하드코딩 - 타이머 구현 후 완료
+- [x] `FLIGHT TIME` - 타이머 구현 후 완료
 - [x] `AltTapeView` 단위 `km` → `m` 수정 필요 - 완료
 - [ ] SpeedTape 애니메이션 미구현

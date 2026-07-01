@@ -141,7 +141,7 @@ let timer = Timer.publish(every: 1.0, on: .main, in: .common)
 
 ---
 
-##### connect() — 수동 연결
+##### connect() - 수동 연결
 
 구독만 하면 아무 일도 일어나지 않는다.
 
@@ -166,7 +166,7 @@ connection.cancel()
 
 ---
 
-##### autoconnect() — 자동 연결
+##### autoconnect() - 자동 연결
 
 구독하는 순간 타이머가 바로 시작되길 원한다면 `autoconnect()`를 사용한다.
 

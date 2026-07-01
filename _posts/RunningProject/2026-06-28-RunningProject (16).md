@@ -721,7 +721,7 @@ static let healthKitAuthorizationFailed = AlertItem(
 func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
             
-            // 아직 권한 요청 전 — 권한 요청
+            // 아직 권한 요청 전 - 권한 요청
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         // 생략

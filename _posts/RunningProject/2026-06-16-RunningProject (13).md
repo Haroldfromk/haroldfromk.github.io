@@ -86,7 +86,7 @@ WatchHomeView에서
 2. Cadence 변경필요
 3. GPWS 안됨
 4. 페이스가 반영이 느린듯한 느낌이 있음
-5. transferUserInfo 미구현 — 러닝 결과 iPhone 전송 안 됨
+5. transferUserInfo 미구현 - 러닝 결과 iPhone 전송 안 됨
 
 하나씩 수정해나간다.
 
@@ -919,12 +919,12 @@ iPhone 없이 Watch만으로 러닝하는 경우다. `CoreLocation`으로 GPS를
 
 ## 3차 간이 테스트 결과
 
-1. **PFD 자동 전환** — 간헐적으로 동작. 주머니에서 꺼냈을 때 전환된 것으로 보아 `workoutSessionMirroringStartHandler` 트리거 타이밍 문제로 추정.
-2. **Watch PFD 데이터** — 페이스/거리 표시는 되나 간헐적으로 못 받아오는 경우 있음. `sendMessage()` 연결 불안정 시 실패하는 것으로 추정.
-3. **iPhone 심박/케이던스 미표시** — `runningMode`가 `.mirrored`로 전환되기 전에 스트림이 시작되는 타이밍 문제로 추정.
-4. **transferUserInfo** — LogbookView 기록 확인. 다만 거리 단위가 m로 저장되는 문제와 좌표 배열이 전송되지 않아 Summary에 경로가 표시되지 않는 문제 확인.
-5. **PFD 표시값 불일치** — Watch PFD와 iPhone PFD가 서로 다른 값을 표시. 데이터 전송 타이밍 차이로 추정.
-6. **종료 동기화 미작동** — Watch에서 종료해도 iPhone PFD가 자동으로 종료되지 않아 수동으로 종료 필요. 결과적으로 SwiftData에 중복 저장되는 문제 발생.
+1. **PFD 자동 전환** - 간헐적으로 동작. 주머니에서 꺼냈을 때 전환된 것으로 보아 `workoutSessionMirroringStartHandler` 트리거 타이밍 문제로 추정.
+2. **Watch PFD 데이터** - 페이스/거리 표시는 되나 간헐적으로 못 받아오는 경우 있음. `sendMessage()` 연결 불안정 시 실패하는 것으로 추정.
+3. **iPhone 심박/케이던스 미표시** - `runningMode`가 `.mirrored`로 전환되기 전에 스트림이 시작되는 타이밍 문제로 추정.
+4. **transferUserInfo** - LogbookView 기록 확인. 다만 거리 단위가 m로 저장되는 문제와 좌표 배열이 전송되지 않아 Summary에 경로가 표시되지 않는 문제 확인.
+5. **PFD 표시값 불일치** - Watch PFD와 iPhone PFD가 서로 다른 값을 표시. 데이터 전송 타이밍 차이로 추정.
+6. **종료 동기화 미작동** - Watch에서 종료해도 iPhone PFD가 자동으로 종료되지 않아 수동으로 종료 필요. 결과적으로 SwiftData에 중복 저장되는 문제 발생.
 
 이렇게 확인이 되었다.
 

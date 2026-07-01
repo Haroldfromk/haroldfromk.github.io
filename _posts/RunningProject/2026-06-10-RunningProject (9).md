@@ -385,7 +385,7 @@ if let alerts = self.alerts, !alerts.isEmpty {
 
 순서대로 해결해본다.
 
-**1번** — annotation이 일부만 표시되거나 사라지는 문제였다. 두 가지 원인이 있었다.
+**1번** - annotation이 일부만 표시되거나 사라지는 문제였다. 두 가지 원인이 있었다.
 
 첫 번째는 `updateUIView`를 비워두었던 구조 문제였다. `@Query` 결과가 업데이트될 때 SwiftUI가 `updateUIView`를 호출하는데 거기서 아무것도 하지 않으니 annotation이 반영되지 않았다. `updateUIView`에서 기존 overlay/annotation을 제거하고 다시 그리는 방식으로 변경했다.
 
@@ -458,13 +458,13 @@ func updateUIView(_ uiView: MKMapView, context: Context) {
 
 이부분은 AI의 도움을 받아 해결했다.
 
-- [MKMarkerAnnotationView](https://developer.apple.com/documentation/mapkit/mkmarkerannotationview){:target="_blank"} — 기본 `displayPriority`가 `defaultLow`임을 명시
-- [MKAnnotationView - displayPriority](https://developer.apple.com/documentation/mapkit/mkannotationview/displaypriority){:target="_blank"} — `required`로 설정하면 항상 표시, 다른 우선순위는 숨겨질 수 있음
-- [MKFeatureDisplayPriority](https://developer.apple.com/documentation/mapkit/mkfeaturedisplaypriority){:target="_blank"} — `required`, `defaultHigh`, `defaultLow` 상수 정의
+- [MKMarkerAnnotationView](https://developer.apple.com/documentation/mapkit/mkmarkerannotationview){:target="_blank"} - 기본 `displayPriority`가 `defaultLow`임을 명시
+- [MKAnnotationView - displayPriority](https://developer.apple.com/documentation/mapkit/mkannotationview/displaypriority){:target="_blank"} - `required`로 설정하면 항상 표시, 다른 우선순위는 숨겨질 수 있음
+- [MKFeatureDisplayPriority](https://developer.apple.com/documentation/mapkit/mkfeaturedisplaypriority){:target="_blank"} - `required`, `defaultHigh`, `defaultLow` 상수 정의
 
 ---
 
-**2번** — annotation을 탭해도 정보가 표시되지 않은 건 `canShowCallout`이 설정되지 않은 것이 원인이었다. 또한 페이스/거리/시간을 callout에 보여주려면 `MKPointAnnotation`에 해당 프로퍼티가 없어서 커스텀 클래스가 필요했다.
+**2번** - annotation을 탭해도 정보가 표시되지 않은 건 `canShowCallout`이 설정되지 않은 것이 원인이었다. 또한 페이스/거리/시간을 callout에 보여주려면 `MKPointAnnotation`에 해당 프로퍼티가 없어서 커스텀 클래스가 필요했다.
 
 ```swift
 @MainActor
@@ -857,7 +857,7 @@ Text("\(timeOfDay) \(lastestFlight?.mode == "modeA" ? "Mission" : "Free") Run")
 
 CoreLocation 보정을 하기위한 좋은 참고글이있어 별도로 정리해둔다.
 
-- [Vol.1 — CoreLocation 소개](https://medium.com/how-to-track-users-location-with-high-accuracy-ios/tracking-location-in-ios-vol-1-introduction-98c535e646a9){:target="_blank"}
-- [Vol.3 — 백그라운드 추적, distanceFilter](https://medium.com/how-to-track-users-location-with-high-accuracy-ios/tracking-highly-accurate-location-in-ios-vol-3-7cd827a84e4d){:target="_blank"}
-- [Vol.5 — 위치 필터링 (핵심)](https://medium.com/how-to-track-users-location-with-high-accuracy-ios/make-it-even-better-than-nike-how-to-filter-locations-tracking-highly-accurate-location-in-774be045f8d6){:target="_blank"}
+- [Vol.1 - CoreLocation 소개](https://medium.com/how-to-track-users-location-with-high-accuracy-ios/tracking-location-in-ios-vol-1-introduction-98c535e646a9){:target="_blank"}
+- [Vol.3 - 백그라운드 추적, distanceFilter](https://medium.com/how-to-track-users-location-with-high-accuracy-ios/tracking-highly-accurate-location-in-ios-vol-3-7cd827a84e4d){:target="_blank"}
+- [Vol.5 - 위치 필터링 (핵심)](https://medium.com/how-to-track-users-location-with-high-accuracy-ios/make-it-even-better-than-nike-how-to-filter-locations-tracking-highly-accurate-location-in-774be045f8d6){:target="_blank"}
 - [Freeletics GPS 정확도 테스트 가이드](https://freeletics.engineering/2019/06/03/ios_gps_testing.html){:target="_blank"}
