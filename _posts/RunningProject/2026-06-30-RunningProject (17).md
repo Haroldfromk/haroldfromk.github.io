@@ -498,5 +498,3 @@ if let type = message["type"] as? String, type == "flightData" {
 ```
 
 이제 주도 기기의 타이머가 기준이 되고, 미러링 기기는 3초마다 동기화되어 두 기기의 경과 시간이 항상 일치한다.
-
----
