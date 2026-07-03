@@ -140,7 +140,7 @@ GPS는 카운트다운 시작 전부터 락을 잡아둬야 해서 `start()`와 
 
 이걸로 Master Plan에 적어둔 항목은 다 끝났다. 남은 건 App Store 심사 제출뿐이다.
 
-![](/assets/images/upload/finalcut.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-v1.end/finalcut.png){: width="50%" height="50%"}
 
 ---
 
