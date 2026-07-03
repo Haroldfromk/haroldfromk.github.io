@@ -1,16 +1,17 @@
 ---
 title: RunWay 개발 회고 - GitHub Issue로 돌아보는 5주
 writer: Harold
-date: 2026-07-03 04:00:00 +0900
+date: 2026-07-02 04:00:00 +0900
 categories: [RunWay]
 tags: [회고, Retrospective]
+last_modified_at: 2026-07-03 18:33:00 +0900
 
 toc: true
 toc_sticky: true
-published: false
+published: true
 ---
 
-RunWay를 만들면서 매일 GitHub Issue에 그날 겪은 문제와 해결 과정을 댓글로 남겼다. 이슈만 23개, 댓글은 그보다 훨씬 많다. App Store 심사를 기다리는 지금, 이 기록들을 Week 단위로 압축해서 5주 전체를 한 번에 돌아본다.
+RunWay를 만들면서 매일 GitHub Issue에 그날 겪은 문제와 해결 과정을 댓글로 남겼다. 이슈만 23개, 댓글은 그보다 훨씬 많다. App Store 심사 제출을 앞둔 지금, 이 기록들을 Week 단위로 압축해서 5주 전체를 한 번에 돌아본다.
 
 세세한 코드 diff는 각 Day별 포스트나 [README](https://github.com/Haroldfromk/RunWay)에 있으니, 여기서는 "무슨 일이 있었고 어떻게 풀었는가"에 집중한다.
 
@@ -114,7 +115,7 @@ Day 19에 `os_log`/Console.app으로 재도전했다. `healthd`가 앱 재실행
 
 `HKWorkoutSession`이 시스템 데몬 레벨 자원이라 앱 코드로는 완전한 제어가 불가능하다는 결론을 내렸다. 관련 코드를 전부 롤백하고 known limitation으로 남겼다. 로깅 인프라(`ZombieSessionLogger`)만 향후를 위해 남겨뒀다.
 
-### Day 20 - 전체 실기기 테스트
+### 전체 실기기 테스트
 
 미러링 아키텍처를 다 갈아엎은 뒤 전체 테스트를 돌리니 마무리 버그들이 나왔다. 일시정지 상태가 미러링 기기에 전달되지 않던 문제, `resetWorkout()`에서 `startOrigin`/`stopOrigin` 초기화가 빠져서 특정 순서로 미러링을 반복하면 다음 미러링이 안 되던 문제, 탭바로 갑자기 이탈해도 상태가 정리 안 되던 문제까지 - `.onDisappear` + boolean 플래그 패턴을 5개 View에 동일하게 적용해서 정리했다.
 
@@ -124,7 +125,22 @@ Day 19에 `os_log`/Console.app으로 재도전했다. `healthd`가 앱 재실행
 
 ## Week 5 - Release
 
-App Store 출시 준비. 스크린샷 캡처(iPhone 6장, Watch 3장), 앱 설명/키워드/연령 등급 작성, 온보딩에 개인정보 처리방침 동의 페이지 추가, 포트폴리오 사이트 배포까지 끝냈다. TestFlight 외부 베타 심사도 통과해 공개 링크로 배포 중이다. 남은 건 스크린샷 디바이스 프레임 작업, TestFlight 피드백 수집 및 보완, App Store Connect 최종 제출.
+App Store 출시 준비. 스크린샷 캡처(iPhone 6장, Watch 3장), 앱 설명/키워드/연령 등급 작성, 온보딩에 개인정보 처리방침 동의 페이지 추가(한/영/일 언어 전환 지원), 포트폴리오 사이트 배포까지 끝냈다. TestFlight 외부 베타도 배포를 마쳐 공개 링크로 나가 있고, App Store Connect 등록(연령 등급, 개인정보 처리방침 URL, 한/영/일 지역화)도 완료했다.
+
+가장 마지막에 손댄 건 `TakeoffView`였다. Pre-flight Check 체크리스트 4개 항목이 그동안 더미 값이었는데, 이걸 전부 실기기 센서로 교체했다. (07.03)
+
+| 항목 | 소스 | 판정 기준 |
+|---|---|---|
+| GPS SIGNAL | `locationService.accuracy` | STRONG(10m 미만) / GOOD(30m 미만) / WEAK |
+| APPLE WATCH | `WCSession.isReachable` | CONNECTED / NOT CONNECTED |
+| BATTERY | `UIDevice.batteryLevel` | 20% 미만이면 경고 |
+| WEATHER | 신규 `WeatherKitService` | GOOD/CLOUDY는 정상, RAIN/SNOW는 경고 |
+
+GPS는 카운트다운 시작 전부터 락을 잡아둬야 해서 `start()`와 분리한 `prepareTracking()`을 `.task`에서 미리 호출하도록 했다. WeatherKit은 Apple Developer 포털에서 Capabilities와 App Services 탭 양쪽에 다 켜야 entitlement가 정상 동작한다는 걸 이번에 처음 알았다.
+
+이걸로 Master Plan에 적어둔 항목은 다 끝났다. 남은 건 App Store 심사 제출뿐이다.
+
+![](/assets/images/upload/finalcut.png){: width="50%" height="50%"}
 
 ---
 
