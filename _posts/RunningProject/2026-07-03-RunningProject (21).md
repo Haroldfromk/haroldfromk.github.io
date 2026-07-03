@@ -285,3 +285,50 @@ JWT 인증 에러였다. Xcode에서 Signing & Capabilities에 WeatherKit을 추
 ![](/assets/images/upload/done2.png){: width="50%" height="50%"}
 
 시뮬레이터에서 이렇게 나오는걸 알 수 있다.
+
+---
+
+## onDisappear 처리
+
+TakeoffView에서 `.task`로 `prepareTracking()`을 호출해 GPS 락을 미리 잡아두는데, ROTATE 없이 뒤로 나가는 경우 트래킹이 계속 돌고 있는 문제가 생긴다. `.onDisappear`에서 러닝이 시작되지 않은 경우에만 트래킹을 중단하도록 했다.
+
+`locationService`가 private라 VM에 함수를 추가했다.
+
+```swift
+// RunViewModel
+func cancelTracking() {
+    locationService.stopTracking()
+}
+```
+
+`startCountdown()`에서 PFDView로 전환되기 직전에 `didStartFlight = true`로 세팅한다.
+
+```swift
+} else {
+    countdownActive = false
+    runViewModel.updatePhase(.cruise)
+    runViewModel.start()
+    didStartFlight = true  // 정상 흐름으로 PFD 진입
+    runViewModel.navigationPath.append(.pfd)
+}
+```
+
+`.onDisappear`에서 `didStartFlight`가 `false`인 경우에만 트래킹을 중단한다.
+
+```swift
+@State private var didStartFlight = false
+
+.onDisappear {
+    if !didStartFlight {
+        runViewModel.cancelTracking()
+    }
+}
+```
+
+`didStartFlight`가 `true`인 경우, 즉 ROTATE를 눌러 PFDView로 넘어가는 정상 흐름에서는 트래킹을 중단하지 않는다.
+
+---
+
+그리고 하단에 있던 3, 2, 1 시그널 강도에 대한 내용은 필요 없을듯 해서 지워주었다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/takeoff.png){: width="50%" height="50%"}
