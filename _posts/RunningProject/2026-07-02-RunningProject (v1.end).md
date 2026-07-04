@@ -1,7 +1,7 @@
 ---
 title: RunWay 개발 회고 - GitHub Issue로 돌아보는 5주
 writer: Harold
-date: 2026-07-02 04:00:00 +0900
+date: 2026-07-02 17:00:00 +0900
 categories: [RunWay]
 tags: [회고, Retrospective]
 last_modified_at: 2026-07-03 18:33:00 +0900
@@ -140,7 +140,7 @@ GPS는 카운트다운 시작 전부터 락을 잡아둬야 해서 `start()`와 
 
 이걸로 Master Plan에 적어둔 항목은 다 끝났다. 남은 건 App Store 심사 제출뿐이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-v1.end/finalcut.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-v1.end/realdone.png){: width="50%" height="50%"}
 
 ---
 
