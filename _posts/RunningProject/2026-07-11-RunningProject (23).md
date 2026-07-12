@@ -1,7 +1,7 @@
 ---
 title: RunWay (23) 언어 설정
 writer: Harold
-date: 2026-07-12 11:33:00 +0900
+date: 2026-07-11 11:33:00 +0900
 categories: [RunWay]
 tags: [SwiftUI, Localization, Xcode]
 
