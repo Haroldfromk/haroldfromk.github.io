@@ -2,7 +2,7 @@
 title: RunWay () 미러링 중 강제종료 PFD 좀비 세션 이슈 재도전
 writer: Harold
 date: 2026-06-29 08:33:00 +0900
-last_modified_at: 2026-06-30 03:33:00 +0900
+last_modified_at: 2026-07-13 03:33:00 +0900
 categories: [RunWay]
 tags: [HealthKit, WatchConnectivity, SwiftUI]
 
@@ -486,6 +486,32 @@ if self.wasZombieSuspected {
 `appLaunchTime` 방식까지 적용했지만 결국 해결하지 못했다. 좀비를 ignoring하면 Watch에서 새 미러링을 시작할 수 없고, `end()`로 정리하면 Watch 세션까지 끊기거나 healthd가 핸들러를 폭탄처럼 재트리거했다. 근본적으로 `HKWorkoutSession`이 시스템 데몬(`healthd`) 레벨에서 관리되는 자원이라, 앱 레벨에서 완벽하게 제어하는 데 한계가 있었다.
 
 v1.0 기준으로 미러링 중 강제종료는 일반적인 사용 시나리오가 아니라는 판단 하에, 좀비 세션 관련 코드를 전부 롤백하고 known limitation으로 남겨두기로 했다. `ZombieSessionLogger`와 `os_log` 기반 로깅 구조는 향후 디버깅을 위해 그대로 유지한다.
+
+---
+
+### 다시 들여다보다가 - 세션을 안 건드리는 방향
+
+한참 지나서 이 부분을 다시 들여다봤다. 지금까지 시도한 두 가지(`.end()` 호출 / `session = nil`로 무시)는 전부 세션 자체를 어떻게든 조작하려는 접근이었다. `.end()`는 healthd가 핸들러를 곧바로 다시 트리거해서 무한루프가 났고, `session = nil`은 이후 Watch에서 새 미러링을 시작해도 핸들러 자체가 안 불리는 문제로 이어졌다. 둘 다 좀비 판별 정확도의 문제가 아니라, 세션을 건드리는 행위 자체가 daemon 쪽에서 다른 방식으로 고장나는 거였다.
+
+그래서 방향을 바꿔서, **세션은 아예 손대지 않고 화면 전환만 막으면 어떨까** 싶었다. `retrieveRemoteSession()`에서 하던 대로 `self.session`, `delegate`, `startOrigin`은 정상적으로 세팅해두고, `RunViewModel`의 구독부에서 `navigationPath.append(.pfd)` 이 한 줄만 좀비로 의심되는 상황에서 건너뛰는 것이다.
+
+```swift
+if result.state == .running {
+    if result.startOrigin == .remote {
+        if !wasZombieSuspected {
+            self.navigationPath.append(.pfd)
+        }
+    }
+}
+```
+
+`.end()`를 안 부르니 재트리거 폭풍이 날 이유가 없다는 점에서는 이전 두 시도보다 안전해 보였다.
+
+그런데 다시 생각해보니 허점이 있었다. `self.session`을 nil로 안 만들고 그대로 둔다고 해도, 그건 그냥 Swift 쪽 로컬 변수 하나일 뿐이다. **healthd가 그 세션을 "아직 살아있다"고 기억하는 것 자체는 이 앱 코드가 로컬 변수를 어떻게 다루든 전혀 영향을 안 받는다.** 저번에 `session = nil`로 무시했을 때도 새 미러링이 막혔던 건, 로컬 변수가 nil이라서가 아니라 daemon이 그 세션을 여전히 붙들고 있어서였다. 그러니 이번에 로컬 변수를 안 건드린다고 해서 daemon 쪽 상태가 달라질 이유가 없고, 결국 다음에 Watch에서 새로 미러링을 시작해도 똑같이 핸들러가 안 불릴 가능성이 크다.
+
+거기다 아이폰 주도로 새 러닝을 시작하는 경우도 걸린다. `startWorkout()`은 완전히 새로운 `HKWorkoutSession`을 만드는데, HealthKit은 기기당 동시에 하나의 활성 워크아웃 세션만 허용한다. 좀비가 daemon에 `.running`으로 여전히 남아있는 상태에서 새 세션을 만들려고 하면 충돌하거나 시작 자체가 실패할 가능성이 있다.
+
+정리하면, 이 방향은 "이번 재실행에서 PFD가 이상하게 뜨는 것"만 안 보이게 할 뿐, 진짜 문제 - daemon에 좀비가 살아있어서 이후 어떤 방식으로든 새 러닝을 막는 것 - 는 전혀 해결하지 못하는 반쪽짜리 처방이었다. 화면 전환만 막는 방식으로는 근본적인 해결이 안 되고, 결국 daemon이 붙들고 있는 세션 자체를 어떻게든 정리해야 하는 문제로 다시 돌아온다.
 
 ---
 
