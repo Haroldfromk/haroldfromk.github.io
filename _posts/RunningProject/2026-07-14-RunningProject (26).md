@@ -1,5 +1,5 @@
 ---
-title: RunWay (26) 미러링 범위 축소 - 워치 주도는 독립 실행으로
+title: RunWay (26) 미러링 범위 축소
 writer: Harold
 date: 2026-07-14 15:33:00 +0900
 categories: [RunWay]
@@ -12,7 +12,7 @@ published: true
 
 이전글에서 문제 1~7번을 고치고 나서, AI한테 "미러링 4가지 경우의 수(앱주도/워치주도 × 앱종료/워치종료)를 코드로 전부 다시 분석해봐 달라"고 시켰다.
 
-사실 그 전에 실기기 테스트하면서 **워치 위치 정보와 앱 위치 정보가 교차로 발생하는 것 같은 현상**을 이미 한 번 언급했었다 - 앱에서 미러링을 시도할 때 워치 GPS랑 앱 GPS가 동시에 따로 작동하는 것처럼 값이 튀는 증상이었다. 당시엔 `start()`에 방어적 리셋(5번 문제)을 걸어서 우회했는데, 근본 원인은 못 찾은 채로 넘어갔었다. 실제 GPS 경로 데이터가 오염될 수 있는 문제라 다이나믹 아일랜드보다 오히려 더 크리티컬한 쪽이었다.
+사실 그 전에 실기기 테스트하면서 **워치 위치 정보와 앱 위치 정보가 교차로 발생하는 것 같은 현상**을 이미 한 번 언급했었다. 앱에서 미러링을 시도할 때 워치 GPS랑 앱 GPS가 동시에 따로 작동하는 것처럼 값이 튀는 증상이었다. 당시엔 `start()`에 방어적 리셋(5번 문제)을 걸어서 우회했는데, 근본 원인은 못 찾은 채로 넘어갔었다. 실제 GPS 경로 데이터가 오염될 수 있는 문제라 다이나믹 아일랜드보다 오히려 더 크리티컬한 쪽이었다.
 
 이번에 4가지 경우의 수를 다시 분석하면서, 이 문제를 다시 붙잡고 원인을 제대로 찾아봤다. 그리고 실기기로 나가서 테스트하다가 하나가 더 걸렸다.
 
@@ -33,7 +33,7 @@ published: true
 struct WatchPFDView: View {
 ```
 
-근데 실제 코드엔 `.onDisappear` 자체가 없었다. iPhone의 `PFDView`엔 있는데, 워치 쪽은 처음부터 안 만들어져 있었던 거다. 그러니까 워치에서 화면을 나가도(크라운으로 이탈) `locationService.stopTracking()`이 호출된 적이 없어서 GPS 추적이 백그라운드에서 계속 돌고 있었다. **위치 정보가 교차로 발생하던 게 바로 이거였다** - 멈추지 않고 계속 돌던 이전 추적이 orphan 상태로 남아있는 채로 새 러닝이 시작되니, 두 개의 위치 소스가 동시에 값을 흘려보내고 있었던 거다. 5번 문제 때 걸어둔 `start()`의 방어적 리셋은 `flightData`/`elapsedTime` 값만 0으로 되돌릴 뿐 이 orphan 추적 자체를 멈추는 게 아니라서, 근본적으로는 안 고쳐진 채로 남아있었다.
+근데 실제 코드엔 `.onDisappear` 자체가 없었다. iPhone의 `PFDView`엔 있는데, 워치 쪽은 처음부터 안 만들어져 있었던 거다. 그러니까 워치에서 화면을 나가도(크라운으로 이탈) `locationService.stopTracking()`이 호출된 적이 없어서 GPS 추적이 백그라운드에서 계속 돌고 있었다. **위치 정보가 교차로 발생하던 게 바로 이거였다.** 멈추지 않고 계속 돌던 이전 추적이 orphan 상태로 남아있는 채로 새 러닝이 시작되니, 두 개의 위치 소스가 동시에 값을 흘려보내고 있었던 거다. 5번 문제 때 걸어둔 `start()`의 방어적 리셋은 `flightData`/`elapsedTime` 값만 0으로 되돌릴 뿐 이 orphan 추적 자체를 멈추는 게 아니라서, 근본적으로는 안 고쳐진 채로 남아있었다.
 
 ---
 
@@ -96,7 +96,7 @@ if let type = message["type"] as? String, type == "flightData" {
 
 ### 1. 워치가 리딩일 땐 미러링 시도 자체를 안 함
 
-`startWorkout()`은 iPhone과 Watch 양쪽에서 공유하는 함수라, `#if os(watchOS)` 분기 안에서 무조건 `startMirroringToCompanionDevice()`를 호출하고 있었다. 이 함수는 워치가 직접 주도할 때(`WatchViewModel.updatePhase(.cruise)`)와 iPhone의 주도를 받아서 미러링을 완성할 때(`AppDelegate.handle(_:)`) 양쪽 다에서 호출되는데, 마침 이 두 경우 `startOrigin`이 각각 `.local`/`.remote`로 이미 다르게 세팅되어 있어서 이걸로 분기할 수 있었다.
+`startWorkout()`은 iPhone과 Watch 양쪽에서 공유하는 함수라, `#if os(watchOS)` 조건 안에서 무조건 `startMirroringToCompanionDevice()`를 호출하고 있었다. 이 함수는 워치가 직접 주도할 때(`WatchViewModel.updatePhase(.cruise)`)와 iPhone의 주도를 받아서 미러링을 완성할 때(`AppDelegate.handle(_:)`) 양쪽 다에서 호출되는데, 마침 이 두 경우 `startOrigin`이 각각 `.local`/`.remote`로 이미 다르게 세팅되어 있어서 이 값으로 두 경우를 구분할 수 있었다.
 
 ```swift
 // HealthKitService.swift
@@ -112,7 +112,7 @@ if let type = message["type"] as? String, type == "flightData" {
 #endif
 ```
 
-`startOrigin == .local`(워치가 직접 주도)일 땐 이 블록 자체를 건너뛰어서, iPhone의 `workoutSessionMirroringStartHandler`가 아예 트리거되지 않는다.
+`startOrigin == .local`(워치가 직접 주도)일 땐 이 블록 자체를 건너뛰어서, iPhone의 `workoutSessionMirroringStartHandler`가 아예 실행되지 않는다.
 
 ---
 
@@ -152,4 +152,4 @@ if result.stopOrigin == .local {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-14-RunningProject-26/runway26-scope-narrowing.png){: width="75%" height="75%"}
 
-이제 4가지 경우의 수가 사실상 3가지로 줄었다 - 앱 주도(워치 미러링 + 워치 종료 포함)는 그대로, 워치 주도는 미러링 없이 독립 실행 하나로 합쳐졌다. 다시 실기기로 테스트해보고 이상 없으면 App Store Connect에 재제출할 예정이다.
+이제 4가지 경우의 수가 사실상 3가지로 줄었다. 앱 주도(워치 미러링 + 워치 종료 포함)는 그대로, 워치 주도는 미러링 없이 독립 실행 하나로 합쳐졌다. 다시 실기기로 테스트해보고 이상 없으면 App Store Connect에 재제출할 예정이다.
