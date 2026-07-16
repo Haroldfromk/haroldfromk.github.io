@@ -10,7 +10,7 @@ toc_sticky: true
 published: true
 ---
 
-26번 글에서 미러링 범위를 축소하고 재제출 준비까지 마쳤는데, 이번엔 다른 사유로 리젝을 받았다.
+[이전글](https://haroldfromk.github.io/posts/RunningProject-(26)/){:target="_blank"} 에서 미러링 범위를 축소하고 재제출 준비까지 마쳤는데, 이번엔 다른 사유로 리젝을 받았다.
 
 ---
 
@@ -46,7 +46,7 @@ RunWay는 로그인 자체가 없는 앱이라, App Store Connect의 App Review 
 
 ## Notes 필드 채우기
 
-2~7번은 이미 25번 글에서 App Store 리젝 위험 요소를 점검하며 정리해뒀던 내용(의료기기 아님, 서드파티 SDK 없음 등)을 그대로 재사용할 수 있었다. 새로 정리한 건:
+2~7번은 이미 [이전글](https://haroldfromk.github.io/posts/RunningProject-(25)/){:target="_blank"}에서 App Store 리젝 위험 요소를 점검하며 정리해뒀던 내용(의료기기 아님, 서드파티 SDK 없음 등)을 그대로 재사용할 수 있었다. 새로 정리한 건:
 
 - **앱 목적**: 항공정비사 배경 + "Turn Every Run Into A Flight" 컨셉, Mission Flight/Free Flight 두 모드
 - **설정 방법**: 계정 없음, 온보딩 후 위치/HealthKit 권한만 승인하면 바로 사용 가능
@@ -171,7 +171,7 @@ func resetWorkout() {
 >
 > The app appears to support WeatherKit but we need to confirm if the app follows the WeatherKit attribution requirements. WeatherKit apps must clearly display the Apple Weather trademark ( Weather) and the legal source link, so users know the source of the weather information.
 
-코드를 확인해보니 진짜로 없었다. WeatherKit을 붙일 때(21번 글) 데이터 가져오는 것만 신경 썼지, Apple이 요구하는 저작권 표시(마크 이미지 + 법적 출처 링크)는 애초에 넣은 적이 없었다.
+코드를 확인해보니 진짜로 없었다. WeatherKit을 붙일 때([이전글](https://haroldfromk.github.io/posts/RunningProject-(21)/){:target="_blank"}) 데이터 가져오는 것만 신경 썼지, Apple이 요구하는 저작권 표시(마크 이미지 + 법적 출처 링크)는 애초에 넣은 적이 없었다.
 
 ---
 
@@ -236,7 +236,7 @@ var lastestFlight: SwiftDataFlight? { flights.first }
 var displayFlight: SwiftDataFlight? { selectedFlight ?? lastestFlight }
 ```
 
-평소엔 방금 끝난 러닝이 항상 저장되니까 "가장 최근 기록 = 방금 끝낸 러닝"이 우연히 맞아떨어졌던 거다. 근데 25번 글에서 "50m 미만이면 저장 안 함" 가드를 추가하면서 이 전제가 깨졌다.
+평소엔 방금 끝난 러닝이 항상 저장되니까 "가장 최근 기록 = 방금 끝낸 러닝"이 우연히 맞아떨어졌던 거다. 근데 [이전글](https://haroldfromk.github.io/posts/RunningProject-(25)/){:target="_blank"}에서 "50m 미만이면 저장 안 함" 가드를 추가하면서 이 전제가 깨졌다.
 
 짧은 러닝은 저장이 안 되니, 그 이전에 저장됐던 진짜 기록이 대신 뜨는 거였다.
 
