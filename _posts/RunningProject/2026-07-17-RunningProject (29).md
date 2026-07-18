@@ -224,7 +224,7 @@ func body(content: Content) -> some View {
 
 다시 확인해보니 상태바까지 배경색이 제대로 채워졌다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/after.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/after11.png){: width="50%" height="50%"}
 
 생각보다 Custom Navigation Header의 크기가 작은것 같아 조금 사이즈를 키워 주었다.
 
