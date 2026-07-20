@@ -16,7 +16,7 @@ published: true
 
 ---
 
-## 다시 발견한 문제 하나 더
+## 또 다른 문제
 
 옮기려고 보니 [이전글](https://haroldfromk.github.io/posts/RunningProject-(28)/){:target="_blank"}에서 다뤘던 워치 단독 러닝 문제도 같이 짚어야 했다. 그 글에서 `isReachable` 가드를 없애고 `pendingFlightData`를 큐로 바꾸는 수정을 적어놨었는데, 실제로 `v1.0` 코드를 열어보니 그 수정이 하나도 반영이 안 되어 있었다. 글만 쓰고 코드에는 안 옮긴 채로 넘어갔던 것 같다.
 
@@ -37,7 +37,7 @@ func sendRunningData() {
 
 ---
 
-## GPWS 리셋 버그도 같이
+## GPWS 리셋 문제도 같이
 
 `RunningCenter`의 `reset()`/`clearModeAData()` 분리도 심박 기능 없이 그대로 옮겼다. 이번 세션에서 새로 만든 `determineGPWSStatus` 같은 건 안 가져오고, 원래 있던 `calculateGPWSStatus` 구조는 그대로 둔 채 `modeAData`만 안 지워지게 손봤다.
 
@@ -76,7 +76,7 @@ func clearModeAData() {
 
 ---
 
-## 편차 초 단위 계산도 잘못되어 있었다
+## 편차 초 단위 계산 오류
 
 실기기로 다시 테스트해보니 리셋 버그는 해결됐는데, sink rate 경고에 뜨는 "+18 sec" 같은 편차 표시가 이상했다. 페이스가 목표보다 살짝만 벗어나면 항상 "+0 sec"으로만 뜨고 있었다.
 
@@ -102,7 +102,7 @@ var gpwsDeviation: Int {
 
 ---
 
-## 경고 오버레이가 러닝을 못 멈추게 막고 있었다
+## 경고 중엔 러닝 종료 안 됨
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchgpws.png){: width="50%" height="50%"}
 
@@ -137,7 +137,7 @@ if let gpwsType = gpwsOverlayType {
 
 ---
 
-## MINIMUMS 거리도 그냥 숫자로 고정되어 있었다
+## MINIMUMS 거리 안 바뀜
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchminimus.png)
 
@@ -168,7 +168,7 @@ var gpwsRemainingMeters: Int {
 
 ---
 
-## STATUS 칸에 미션 여부도 안 보이고 있었다
+## STATUS 칸에 미션 여부 안 보임
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpace.png){: width="50%" height="50%"}
 
@@ -201,6 +201,53 @@ private var statusText: String {
 
 ---
 
+## 아이폰 수신 쪽 유실 위험
+
+여기까지 고치고 나서 워치 단독 러닝이 끝난 뒤 Logbook에 제대로 전달되는지만 다시 확인해보려고 했는데, 확인하다가 반대편에도 같은 종류의 문제가 있는 걸 찾았다.
+
+`WatchConnectivityService+iOS.swift`의 `didReceiveUserInfo`가 `SwiftDataFlight`를 만들어서 `pendingWatchData`라는 단일 값에 넣고, `HomeView`의 `onChange`가 그걸 받아서 `modelContext.insert()`한 다음 비우는 구조였다.
+
+```swift
+// HomeView.swift
+.onChange(of: runViewModel.pendingWatchData) { _, newValue in
+    if let flight = newValue {
+        if flight.distance >= 0.05 {
+            modelContext.insert(flight)
+        }
+        runViewModel.pendingWatchData = nil
+    }
+}
+```
+
+문제는 워치 쪽을 큐로 고치면서 아이폰이 연결 안 된 사이 워치에서 러닝을 두 번 하고 나중에 연결되면, 두 기록이 짧은 간격을 두고 연달아 도착할 수 있게 됐다는 거다. 아이폰이 두 번째 기록을 수신하는 순간 `pendingWatchData`를 덮어써버리면, `HomeView`가 첫 번째 기록을 미처 저장하기 전에 사라질 수 있다. 워치 쪽 큐 수정 전에는 애초에 두 건이 연달아 전송될 일 자체가 없었으니 드러나지 않았던 문제가, 이번에 고치면서 새로 노출된 셈이다.
+
+워치 쪽과 똑같은 방식으로 고쳤다.
+
+```swift
+// RunViewModel.swift
+var pendingWatchDataQueue: [SwiftDataFlight] = []
+```
+
+```swift
+// WatchConnectivityService+iOS.swift
+vm?.pendingWatchDataQueue.append(flight)
+```
+
+```swift
+// HomeView.swift
+.onChange(of: runViewModel.pendingWatchDataQueue) { _, newValue in
+    guard !newValue.isEmpty else { return }
+    for flight in newValue where flight.distance >= 0.05 {
+        modelContext.insert(flight)
+    }
+    runViewModel.pendingWatchDataQueue.removeAll()
+}
+```
+
+`didReceiveUserInfo`는 큐에 추가만 하고, `HomeView`가 그 시점의 큐 전체를 한 번에 순회해서 저장한 뒤 비운다. 두 기록이 거의 동시에 도착해도 어느 한쪽이 덮어써질 일이 없다.
+
+---
+
 ## 브랜치 정리
 
-`reset()`/워치 단독 러닝 수정까지만 놓고 보면 `v1.0`에서 갈라진 `hotfix/v1.1` 브랜치엔 딱 5개 파일만 바뀌었다. 버전 번호(1.0 → 1.1, build 2)까지 포함해서다. 여기에 실기기 재테스트 과정에서 나온 편차 계산, 색상, 오버레이 수정으로 `WatchPFDView.swift`/`WatchGPWSView.swift` 두 개가 더 붙었다. 심박 기능이 들어간 브랜치는 손대지 않고 그대로 남겨뒀고, 이 핫픽스는 완전히 별도로 진행한다.
+`reset()`/워치 단독 러닝 수정까지만 놓고 보면 `v1.0`에서 갈라진 `hotfix/v1.1` 브랜치엔 딱 5개 파일만 바뀌었다. 버전 번호(1.0 → 1.1, build 2)까지 포함해서다. 여기에 실기기 재테스트 과정에서 나온 편차 계산, 색상, 오버레이 수정으로 `WatchPFDView.swift`/`WatchGPWSView.swift`, 그리고 아이폰 수신 큐 수정으로 `RunViewModel.swift`/`WatchConnectivityService+iOS.swift`/`HomeView.swift`까지 붙었다. 심박 기능이 들어간 브랜치는 손대지 않고 그대로 남겨뒀고, 이 핫픽스는 완전히 별도로 진행한다.

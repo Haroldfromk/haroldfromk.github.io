@@ -19,7 +19,7 @@ published: true
 
 ---
 
-## GPS Signal
+## GPS 신호
 
 우선 GPS 감도이다.
 
@@ -109,7 +109,7 @@ var checkItems: [(icon: String, name: String, value: String, ok: Bool)] {
 
 ---
 
-## Apple Watch Connect
+## Apple Watch 연결
 
 심박수와 케이던스는 둘 다 Watch에서 오는 데이터라 별도로 구분할 필요가 없다. 두 항목을 `APPLE WATCH` 하나로 통합하고, Watch 연결 여부만 표시하도록 했다.
 
@@ -152,7 +152,7 @@ Watch 앱이 포그라운드로 실행 중일 때
 
 ---
 
-## Battery
+## 배터리
 
 배터리 잔량은 `UIDevice.current.batteryLevel`로 가져올 수 있다. 다만 기본적으로 배터리 모니터링이 비활성화되어 있어서 `UIDevice.current.isBatteryMonitoringEnabled = true`를 먼저 설정해야 한다.
 
@@ -175,7 +175,7 @@ var batteryStatus: (label: String, ok: Bool) {
 
 ---
 
-## Weather
+## 날씨
 
 날씨 정보는 Apple의 WeatherKit을 사용했다. WeatherKit은 WWDC22에서 공개된 Apple 자체 날씨 프레임워크로, 서드파티 SDK 없이 `async/await`으로 간결하게 날씨 데이터를 받아올 수 있다. Apple Developer 계정당 월 500,000 API 호출이 무료로 제공된다.
 
