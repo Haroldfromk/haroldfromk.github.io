@@ -12,7 +12,7 @@ published: true
 
 네비게이션 헤더를 바꿔보려고한다.
 
-사실 의식을 하지 않고있었는데, 새로운 기능을 준비중이라 관련 기능을 설명하고 mockui를 받고, 또 그걸 swiftui를 통해 그리게 했는데, Custom Navigation Header 가 눈에 띄였다.
+사실 의식을 하지 않고있었는데, 새로운 기능을 준비중이라 AI에게 관련 기능을 설명하고 mockui를 받고, 또 그걸 swiftui로 그리게 했는데 UI를 확인해보던 중 Custom Navigation Header 가 눈에 띄였다.
 
 그래서 이걸 아예 디폴트로 해서 헤더를 바꿔보려고 한다.
 

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Dependency Architecture Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+            color: #f4f4f5;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 3px;
+        }
+        /* Custom slider style */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 24px;
+            border-radius: 4px;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transition: background 0.15s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #e4e4e7;
+        }
+        .error-glow {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+        .success-glow {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8 overflow-x-hidden">
+
+    <div class="max-w-4xl w-full mx-auto flex-1 flex flex-col justify-between gap-6">
+        
+        <!-- Header Section (Only Korean title, no translation toggles) -->
+        <header class="flex justify-between items-center border-b border-zinc-800/80 pb-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-normal tracking-tight text-white">Swift 의존성 아키텍처</h1>
+                <p class="text-xs text-zinc-500 mt-1">의존성 주입(Constructor Injection)과 싱글톤 패턴의 차이점 및 상태 동기화 시각화</p>
+            </div>
+        </header>
+
+        <!-- Diagram Workspace Container -->
+        <main class="relative w-full flex-1 flex flex-col justify-center min-h-[340px] my-4 rounded-xl bg-zinc-950/40 border border-zinc-900 p-6 overflow-hidden">
+            
+            <!-- Connection Line Canvas -->
+            <canvas id="flowCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+            <!-- Interactive Node Elements overlay -->
+            <div class="relative w-full h-full min-h-[300px] z-10 flex flex-col justify-between gap-8">
+                
+                <!-- Top Row: Source Instance Nodes -->
+                <div class="flex flex-col md:flex-row justify-between items-center md:items-start w-full gap-6">
+                    
+                    <!-- HealthCenter Node (Source of Truth) -->
+                    <div id="node-health" class="relative bg-[#18181b] border border-zinc-800 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300">
+                        <div class="text-center">
+                            <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest block mb-1">데이터 소스</span>
+                            <h3 id="node-health-title" class="text-white font-semibold text-sm tracking-wide">HealthCenter</h3>
+                            <p id="node-health-sub" class="text-[10px] font-mono text-zinc-400 mt-1.5">인스턴스 전달됨</p>
+                        </div>
+                        <!-- Connection Anchor Right -->
+                        <div id="anchor-health-right" class="absolute hidden md:block right-0 top-1/2 -translate-y-1/2 translate-x-1.5 w-3 h-3 rounded-full bg-blue-400 border border-zinc-950 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                        <!-- Connection Anchor Bottom (For mobile view stack) -->
+                        <div id="anchor-health-bottom" class="absolute md:hidden bottom-0 left-1/2 -translate-x-1/2 translate-y-1.5 w-3 h-3 rounded-full bg-blue-400 border border-zinc-950 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                    </div>
+
+                    <!-- Middle Helper text block in between -->
+                    <div class="hidden md:flex flex-col justify-center items-center text-center self-center max-w-[150px]">
+                        <span id="flow-indicator" class="text-[10px] font-mono tracking-wider text-zinc-600 bg-zinc-900/60 px-2 py-1 rounded border border-zinc-800/40">연결 상태</span>
+                    </div>
+
+                    <!-- RunningCenter Node -->
+                    <div id="node-running" class="relative bg-[#18181b] border border-zinc-800 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300">
+                        <div class="absolute -top-3 -right-2 bg-zinc-900 border border-blue-500/50 text-blue-400 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg flex items-center gap-1">
+                            <span id="tooltip-running-text">HR: 145</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest block mb-1">의존성 주입</span>
+                            <h3 class="text-white font-semibold text-sm tracking-wide">RunningCenter</h3>
+                            <p id="node-running-sub" class="text-[10px] font-mono text-zinc-400 mt-1.5">생성자 주입됨</p>
+                        </div>
+                        <!-- Connection Anchors -->
+                        <div id="anchor-running-left" class="absolute hidden md:block left-0 top-1/2 -translate-y-1/2 -translate-x-1.5 w-3 h-3 rounded-full bg-blue-400 border border-zinc-950 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                        <div id="anchor-running-bottom" class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1.5 w-3 h-3 rounded-full bg-blue-400 border border-zinc-950 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Row: Consumer ViewModels / View targets -->
+                <div class="flex flex-col md:flex-row justify-between items-center md:items-end w-full gap-6">
+                    
+                    <!-- Dynamic Description & Diagnostics panel -->
+                    <div class="w-full max-w-[340px] text-center md:text-left bg-zinc-900/20 p-4 rounded-lg border border-zinc-800/30">
+                        <span class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase block mb-1">아키텍처 동작 상태</span>
+                        <p id="architecture-desc" class="text-xs text-zinc-400 font-normal leading-relaxed">패턴: 생성자를 통해 동일한 HealthCenter 인스턴스가 두 클래스 모두에 주입됨</p>
+                    </div>
+
+                    <!-- RunViewModel Node -->
+                    <div id="node-viewmodel" class="relative bg-[#18181b] border border-zinc-800 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300">
+                        <div class="absolute -top-3 -right-2 bg-zinc-900 border border-blue-500/50 text-blue-400 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg flex items-center gap-1">
+                            <span id="tooltip-viewmodel-text">HR: 145</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest block mb-1">최종 소비자</span>
+                            <h3 class="text-white font-semibold text-sm tracking-wide">RunViewModel</h3>
+                            <p id="node-viewmodel-sub" class="text-[10px] font-mono text-zinc-400 mt-1.5">생성자 주입됨</p>
+                        </div>
+                        <!-- Connection Anchors -->
+                        <div id="anchor-viewmodel-top" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1.5 w-3 h-3 rounded-full bg-blue-400 border border-zinc-950 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                        <div id="anchor-viewmodel-left" class="absolute hidden left-0 top-1/2 -translate-y-1/2 -translate-x-1.5 w-3 h-3 rounded-full bg-blue-400 border border-zinc-950 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- Live Dashboard Data Points -->
+        <section class="grid grid-cols-2 gap-4 py-4 border-y border-zinc-900 max-w-2xl mx-auto w-full bg-zinc-950/20 rounded-lg px-6">
+            <div class="text-center flex flex-col justify-center items-center py-2">
+                <span class="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">RunningCenter 수신 심박수</span>
+                <span id="dashboard-hr" class="text-2xl font-bold text-white mt-1">145</span>
+            </div>
+            
+            <div class="flex items-center justify-center relative py-2">
+                <div class="absolute left-0 h-10 w-[1px] bg-zinc-800/80"></div>
+                <div class="text-center flex flex-col justify-center items-center w-full">
+                    <span class="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">시스템 동기화 상태</span>
+                    <span id="dashboard-status" class="text-xl font-bold text-white mt-1 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block animate-ping"></span>
+                        <span id="status-text-val">정상 동기화</span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Control Interface Panel -->
+        <section class="space-y-4 p-5 bg-zinc-950/60 rounded-xl border border-zinc-900">
+            
+            <!-- Pattern Configuration Row -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex flex-col">
+                    <label class="text-sm font-medium text-zinc-300">의존성 아키텍처 패턴 선택</label>
+                    <span class="text-[11px] text-zinc-500">생성자 주입 방식(Constructor DI)과 글로벌 static .shared 싱글톤 방식 비교</span>
+                </div>
+                <div class="relative w-full sm:w-[320px]">
+                    <select id="patternSelect" class="w-full bg-[#121214] border border-zinc-800 text-zinc-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-zinc-600 appearance-none cursor-pointer">
+                        <option value="injection" selected>의존성 주입 패턴 (Dependency Injection)</option>
+                        <option value="singleton">싱글톤 패턴 (Singleton Architecture)</option>
+                    </select>
+                    <!-- Custom Arrow Indicator -->
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-zinc-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-[1px] bg-zinc-900"></div>
+
+            <!-- Connected Instance Toggle Row -->
+            <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                    <label class="text-sm font-medium text-zinc-300">동일한 인스턴스 참조 보장</label>
+                    <span id="toggleConnectedDesc" class="text-[11px] text-zinc-500">정상적인 단일 공유 참조 상태와 인스턴스 재생성으로 인한 오류를 토글합니다.</span>
+                </div>
+                <button id="toggleConnected" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-white">
+                    <span id="toggleKnob" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+                </button>
+            </div>
+
+            <div class="h-[1px] bg-zinc-900"></div>
+
+            <!-- Heart Rate Slider Control Row -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex flex-col">
+                    <label class="text-sm font-medium text-zinc-300">실시간 심박수 데이터 (센서 정보)</label>
+                    <span class="text-[11px] text-zinc-500">HealthCenter 소스의 센서 데이터 값을 변경하여 연결 상태를 확인합니다.</span>
+                </div>
+                <div class="flex items-center gap-4 w-full sm:w-[320px]">
+                    <div class="relative flex-1 flex items-center">
+                        <input id="hrSlider" type="range" min="60" max="190" value="145" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-white">
+                    </div>
+                    <!-- Value Display Bubble -->
+                    <div class="bg-[#121214] border border-zinc-800 text-white rounded-lg px-4 py-1.5 text-sm font-mono min-w-[64px] text-center shadow-lg">
+                        <span id="hrValueText">145</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <script>
+        // Korean Direct Texts Configuration
+        const textConfig = {
+            statusSynced: "정상 동기화",
+            statusMismatch: "상태 불일치",
+            patternInjectedDesc: "패턴: 생성자를 통해 동일한 HealthCenter 인스턴스가 두 클래스 모두에 안정적으로 주입됨",
+            patternInjectedErrorDesc: "오류: 두 곳에 서로 다른 독립적 HealthCenter 인스턴스가 각각 생성되어 센서 데이터 전달 불일치 발생!",
+            patternSingletonDesc: "패턴: 전역 shared 정적 상수를 참조하여 완전한 단일 데이터 소스로 상시 작동",
+            patternSingletonNote: "singleton은 static let이라 프로세스가 살아있는 한 인스턴스가 둘로 나뉠 수 없다. 대신 이름만 알면 앱 어디서든 접근된다는 게 실제 트레이드오프다.",
+            nodeInstance: "인스턴스 전달됨",
+            nodeInjected: "생성자 주입됨",
+            nodeShared: "정적 shared 참조",
+            nodeDirectRef: "직접 참조 (pull)",
+            nodeConsumer: "데이터 소비 객체",
+            nodeUnused: "미참조된 객체",
+            toggleDescInjection: "정상적인 단일 공유 참조 상태와 인스턴스 재생성으로 인한 오류를 토글합니다.",
+            toggleDescSingleton: "싱글턴은 static let이라 인스턴스가 둘로 나뉠 수 없다. 이 토글은 주입 패턴에서만 의미가 있다."
+        };
+
+        // Setup Initial State
+        const state = {
+            pattern: 'injection',
+            connected: true,
+            heartRate: 145,
+            particleOffset: 0
+        };
+
+        // DOM elements
+        const patternSelect = document.getElementById('patternSelect');
+        const toggleConnected = document.getElementById('toggleConnected');
+        const toggleKnob = document.getElementById('toggleKnob');
+        const toggleConnectedDesc = document.getElementById('toggleConnectedDesc');
+        const hrSlider = document.getElementById('hrSlider');
+        const hrValueText = document.getElementById('hrValueText');
+        const dashboardHr = document.getElementById('dashboard-hr');
+        const dashboardStatus = document.getElementById('dashboard-status');
+        const statusTextVal = document.getElementById('status-text-val');
+        const architectureDesc = document.getElementById('architecture-desc');
+
+        // Dynamic Labels and Tags
+        const nodeHealth = document.getElementById('node-health');
+        const nodeRunning = document.getElementById('node-running');
+        const nodeViewModel = document.getElementById('node-viewmodel');
+        const nodeHealthTitle = document.getElementById('node-health-title');
+        const nodeHealthSub = document.getElementById('node-health-sub');
+        const nodeRunningSub = document.getElementById('node-running-sub');
+        const nodeViewModelSub = document.getElementById('node-viewmodel-sub');
+        const tooltipRunningText = document.getElementById('tooltip-running-text');
+        const tooltipViewModelText = document.getElementById('tooltip-viewmodel-text');
+
+        // Input Actions mapping
+        patternSelect.addEventListener('change', (e) => {
+            state.pattern = e.target.value;
+            // 싱글턴은 static let이라 인스턴스가 나뉘는 시나리오 자체가 없다. 항상 connected로 고정한다.
+            if (state.pattern === 'singleton') {
+                state.connected = true;
+            }
+            updateUI();
+        });
+
+        toggleConnected.addEventListener('click', () => {
+            if (state.pattern === 'singleton') return; // 싱글턴에서는 이 토글이 의미가 없다
+            state.connected = !state.connected;
+            updateUI();
+        });
+
+        hrSlider.addEventListener('input', (e) => {
+            state.heartRate = parseInt(e.target.value);
+            updateUI();
+        });
+
+        // Canvas Setup
+        const canvas = document.getElementById('flowCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function getRelativeCenter(elId) {
+            const el = document.getElementById(elId);
+            if (!el) return { x: 0, y: 0 };
+            
+            const canvasRect = canvas.getBoundingClientRect();
+            const elRect = el.getBoundingClientRect();
+            
+            return {
+                x: elRect.left - canvasRect.left + elRect.width / 2,
+                y: elRect.top - canvasRect.top + elRect.height / 2
+            };
+        }
+
+        // Draw animated connection helper
+        function drawDashedLine(from, to, color, offset) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(from.x, from.y);
+            
+            if (Math.abs(from.y - to.y) > 40 && Math.abs(from.x - to.x) > 100) {
+                const midX = (from.x + to.x) / 2;
+                ctx.bezierCurveTo(midX, from.y, midX, to.y, to.x, to.y);
+            } else {
+                ctx.lineTo(to.x, to.y);
+            }
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+            ctx.setLineDash([8, 6]);
+            ctx.lineDashOffset = -offset;
+            
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = color;
+            ctx.stroke();
+
+            // Flowing fluid particle indicator
+            const distance = Math.hypot(to.x - from.x, to.y - from.y);
+            const progress = (offset % distance) / distance;
+            const px = from.x + (to.x - from.x) * progress;
+            const py = from.y + (to.y - from.y) * progress;
+
+            ctx.beginPath();
+            ctx.arc(px, py, 5, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#ffffff';
+            ctx.fill();
+            
+            ctx.restore();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            state.particleOffset += 0.8;
+
+            // Compute anchor endpoints
+            const hRight = getRelativeCenter('anchor-health-right');
+            const hBottom = getRelativeCenter('anchor-health-bottom');
+            
+            const rLeft = getRelativeCenter('anchor-running-left');
+            const rBottom = getRelativeCenter('anchor-running-bottom');
+            
+            const vmTop = getRelativeCenter('anchor-viewmodel-top');
+            const vmLeft = getRelativeCenter('anchor-viewmodel-left');
+
+            const isMobile = window.innerWidth < 768;
+            let primaryColor = state.connected ? '#3b82f6' : '#3f3f46';
+
+            // Draw flow lines based on current states
+            if (state.pattern === 'injection') {
+                if (state.connected) {
+                    if (!isMobile) {
+                        drawDashedLine(hRight, rLeft, primaryColor, state.particleOffset);
+                        drawDashedLine(rBottom, vmTop, primaryColor, state.particleOffset);
+                    } else {
+                        drawDashedLine(hBottom, rBottom, primaryColor, state.particleOffset);
+                        drawDashedLine(rBottom, vmTop, primaryColor, state.particleOffset);
+                    }
+                } else {
+                    const brokenInstanceRight = { x: hRight.x + 60, y: vmLeft.y };
+                    if (!isMobile) {
+                        drawDashedLine(brokenInstanceRight, vmLeft, '#ef4444', state.particleOffset);
+                    } else {
+                        drawDashedLine(hBottom, vmLeft, '#ef4444', state.particleOffset);
+                    }
+                }
+            } else {
+                // 싱글턴은 static let이라 항상 연결된 상태만 존재한다 (연결 끊김 케이스 없음)
+                if (!isMobile) {
+                    drawDashedLine(hRight, rLeft, '#10b981', state.particleOffset);
+                    drawDashedLine(hRight, vmTop, '#10b981', state.particleOffset);
+                } else {
+                    drawDashedLine(hBottom, rBottom, '#10b981', state.particleOffset);
+                    drawDashedLine(hBottom, vmTop, '#10b981', state.particleOffset);
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        // Update UI Visual elements
+        function updateUI() {
+            hrValueText.innerText = state.heartRate;
+
+            const isSingleton = state.pattern === 'singleton';
+
+            // Toggle knob styling UI (싱글턴에서는 비활성화 표시)
+            if (isSingleton) {
+                toggleConnected.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-not-allowed rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-emerald-500/40";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5";
+                toggleConnectedDesc.innerText = textConfig.toggleDescSingleton;
+            } else if (state.connected) {
+                toggleConnected.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-emerald-500";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5";
+                toggleConnectedDesc.innerText = textConfig.toggleDescInjection;
+            } else {
+                toggleConnected.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-zinc-800";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-400 shadow ring-0 transition duration-200 ease-in-out translate-x-0";
+                toggleConnectedDesc.innerText = textConfig.toggleDescInjection;
+            }
+
+            const hNode = document.getElementById('node-health');
+            const rNode = document.getElementById('node-running');
+            const vmNode = document.getElementById('node-viewmodel');
+            const anchorViewModelTop = document.getElementById('anchor-viewmodel-top');
+            const anchorViewModelLeft = document.getElementById('anchor-viewmodel-left');
+
+            if (state.pattern === 'injection') {
+                if (state.connected) {
+                    nodeHealthTitle.innerText = "HealthCenter";
+                    nodeHealthSub.innerText = `[${textConfig.nodeInstance}]`;
+                    nodeRunningSub.innerText = `[${textConfig.nodeInjected}]`;
+                    nodeViewModelSub.innerText = `[${textConfig.nodeInjected}]`;
+                    
+                    anchorViewModelTop.classList.remove('hidden');
+                    anchorViewModelLeft.classList.add('hidden');
+
+                    architectureDesc.innerText = textConfig.patternInjectedDesc;
+                    dashboardHr.innerText = state.heartRate;
+                    statusTextVal.innerText = textConfig.statusSynced;
+                    dashboardStatus.className = "text-xl font-bold text-emerald-400 mt-1 flex items-center gap-2";
+                    dashboardStatus.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block animate-ping"></span>${textConfig.statusSynced}`;
+
+                    hNode.className = "relative bg-[#1c1c24] border border-blue-500/80 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300";
+                    rNode.className = "relative bg-[#1c1c24] border border-zinc-700 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300";
+                    vmNode.className = "relative bg-[#1c1c24] border border-zinc-700 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300";
+
+                    tooltipRunningText.innerText = `HR: ${state.heartRate}`;
+                    tooltipViewModelText.innerText = `HR: ${state.heartRate}`;
+                } else {
+                    nodeHealthTitle.innerText = "HealthCenter (Instance A)";
+                    nodeHealthSub.innerText = `[${textConfig.nodeUnused}]`;
+                    nodeRunningSub.innerText = "HealthCenter (Instance B)";
+                    nodeViewModelSub.innerText = "HealthCenter (Instance A)";
+                    
+                    anchorViewModelTop.classList.add('hidden');
+                    anchorViewModelLeft.classList.remove('hidden');
+
+                    architectureDesc.innerText = textConfig.patternInjectedErrorDesc;
+                    dashboardHr.innerText = "0";
+                    statusTextVal.innerText = textConfig.statusMismatch;
+                    dashboardStatus.className = "text-xl font-bold text-red-500 mt-1 flex items-center gap-2";
+                    dashboardStatus.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block animate-pulse"></span>${textConfig.statusMismatch}`;
+
+                    hNode.className = "relative bg-[#1f1618] border border-red-900/80 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300";
+                    rNode.className = "relative bg-[#1f1618] border border-red-900/80 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300 error-glow";
+                    vmNode.className = "relative bg-[#1c1c24] border border-zinc-700 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300";
+
+                    tooltipRunningText.innerText = `HR: --`;
+                    tooltipViewModelText.innerText = `HR: ${state.heartRate}`;
+                }
+            } else {
+                // static let shared는 프로세스가 살아있는 한 인스턴스가 하나뿐이라 연결이 끊기는 상태가 없다.
+                nodeHealthTitle.innerText = "HealthCenter.shared";
+                nodeHealthSub.innerText = `[${textConfig.nodeShared}]`;
+                nodeRunningSub.innerText = `[${textConfig.nodeDirectRef}]`;
+                nodeViewModelSub.innerText = `[${textConfig.nodeConsumer}]`;
+
+                anchorViewModelTop.classList.remove('hidden');
+                anchorViewModelLeft.classList.add('hidden');
+
+                architectureDesc.innerText = `${textConfig.patternSingletonDesc}. ${textConfig.patternSingletonNote}`;
+                dashboardHr.innerText = state.heartRate;
+                statusTextVal.innerText = textConfig.statusSynced;
+                dashboardStatus.className = "text-xl font-bold text-emerald-400 mt-1 flex items-center gap-2";
+                dashboardStatus.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block animate-ping"></span>${textConfig.statusSynced}`;
+
+                hNode.className = "relative bg-[#151c19] border border-emerald-500/80 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300 success-glow";
+                rNode.className = "relative bg-[#1c1c24] border border-zinc-700 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300";
+                vmNode.className = "relative bg-[#1c1c24] border border-zinc-700 rounded-lg py-4 px-6 w-full max-w-[240px] shadow-2xl transition-all duration-300";
+
+                tooltipRunningText.innerText = `HR: ${state.heartRate}`;
+                tooltipViewModelText.innerText = `HR: ${state.heartRate}`;
+            }
+        }
+
+        // Initialize App
+        updateUI();
+        draw();
+    </script>
+</body>
+</html>
