@@ -301,6 +301,8 @@ private func drainPendingWatchData(_ queue: [SwiftDataFlight]) {
 
 `.onChange`가 문 앞을 지켜보는 역할이라면, `.onAppear`는 지켜보기 시작하기 전에 문 앞에 이미 뭐가 와 있는지 한 번 미리 확인하는 역할이다. 화면이 떠 있는 동안 도착하는 기록은 `.onChange`가, 화면이 뜨기 전에 이미 도착해있던 기록은 `.onAppear`가 나눠서 맡는 구조가 됐다.
 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-21-RunningProject-31/sum1.png){: width="50%" height="50%"}
+
 ---
 
 ## 브랜치 정리
