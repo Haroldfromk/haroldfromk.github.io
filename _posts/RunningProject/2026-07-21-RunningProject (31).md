@@ -1,7 +1,7 @@
 ---
 title: RunWay (31) v1.1 핫픽스
 writer: Harold
-date: 2026-07-21 11:00:00 +0900
+date: 2026-07-21 10:00:00 +0900
 categories: [RunWay]
 tags: [WatchConnectivity, watchOS]
 
@@ -37,7 +37,7 @@ func sendRunningData() {
 
 ---
 
-## GPWS 리셋 문제도 같이
+## GPWS 리셋 문제
 
 `RunningCenter`의 `reset()`/`clearModeAData()` 분리도 심박 기능 없이 그대로 옮겼다. 이번 세션에서 새로 만든 `determineGPWSStatus` 같은 건 안 가져오고, 원래 있던 `calculateGPWSStatus` 구조는 그대로 둔 채 `modeAData`만 안 지워지게 손봤다.
 
@@ -219,21 +219,19 @@ private var statusText: String {
 }
 ```
 
-문제는 워치 쪽을 큐로 고치면서 아이폰이 연결 안 된 사이 워치에서 러닝을 두 번 하고 나중에 연결되면, 두 기록이 짧은 간격을 두고 연달아 도착할 수 있게 됐다는 거다. 아이폰이 두 번째 기록을 수신하는 순간 `pendingWatchData`를 덮어써버리면, `HomeView`가 첫 번째 기록을 미처 저장하기 전에 사라질 수 있다. 워치 쪽 큐 수정 전에는 애초에 두 건이 연달아 전송될 일 자체가 없었으니 드러나지 않았던 문제가, 이번에 고치면서 새로 노출된 셈이다.
+문제는 워치 쪽을 큐로 고치면서 아이폰이 연결 안 된 사이 워치에서 러닝을 두 번 하고 나중에 연결되면, 두 기록이 짧은 간격을 두고 연달아 도착할 수 있게 됐다는 거다. 
+
+아이폰이 두 번째 기록을 수신하는 순간 `pendingWatchData`를 덮어써버리면, `HomeView`가 첫 번째 기록을 미처 저장하기 전에 사라질 수 있다. 워치 쪽 큐 수정 전에는 애초에 두 건이 연달아 전송될 일 자체가 없었으니 드러나지 않았던 문제가, 이번에 고치면서 새로 노출된 셈이다.
 
 워치 쪽과 똑같은 방식으로 고쳤다.
 
 ```swift
 // RunViewModel.swift
 var pendingWatchDataQueue: [SwiftDataFlight] = []
-```
 
-```swift
 // WatchConnectivityService+iOS.swift
 vm?.pendingWatchDataQueue.append(flight)
-```
 
-```swift
 // HomeView.swift
 .onChange(of: runViewModel.pendingWatchDataQueue) { _, newValue in
     guard !newValue.isEmpty else { return }
@@ -248,6 +246,73 @@ vm?.pendingWatchDataQueue.append(flight)
 
 ---
 
+## onChange가 놓치는 타이밍
+
+이걸로 됐다고 생각했는데, 실기기로 워치 단독 마트 왕복 러닝을 두 번 기록해봤더니 또 문제가 있었다. 워치 앱은 계속 켜둔 채로, 정상적으로 END FLIGHT부터 RETURN TO BASE까지 매번 거쳤는데, 집에 와서 아이폰 앱을 켜보니 Logbook에 아무 기록도 없었다.
+
+`.onChange(of: pendingWatchDataQueue)`가 왜 안 불렸는지 다시 짚어봤다.
+
+```swift
+.onChange(of: runViewModel.pendingWatchDataQueue) { _, newValue in
+    guard !newValue.isEmpty else { return }
+    for flight in newValue where flight.distance >= 0.05 {
+        modelContext.insert(flight)
+    }
+    runViewModel.pendingWatchDataQueue.removeAll()
+}
+```
+
+`WatchConnectivityService`는 `HomeView`가 뜨기 한참 전, 아이폰 앱이 켜지자마자 가장 먼저 만들어진다. `didReceiveUserInfo`도 이 시점에 바로 불릴 수 있다는 뜻이다.
+
+문제는 `.onChange`가 동작하는 방식이었다. `.onChange`는 자기가 지켜보기 시작한 그 이후에 일어나는 변화만 감지한다. 택배가 이미 문 앞에 와 있는데 그제서야 나가서 문을 지켜보기 시작하면, "택배가 도착하는 순간" 자체를 못 보는 것과 같다.
+
+워치를 계속 켜둔 채로 집에 와서 아이폰 앱을 콜드 런치하면 정확히 이 상황이 된다. `HomeView`가 뜨기도 전에 `pendingWatchDataQueue`엔 이미 워치가 보낸 기록이 들어가 있다. `.onChange`가 지켜보기 시작한 시점엔 이미 다 도착해 있는 상태니, 거기서부터는 "변화"라고 할 게 없어서 콜백 자체가 평생 안 불리는 거였다.
+
+토글로 켜고 꺼보면서 타이밍이 어떻게 갈리는지 확인해볼 수 있게 만들어봤다.
+
+<iframe
+  src="/assets/demo/onchange_race_simulator.html"
+  width="100%"
+  height="680px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+`HomeView`의 `.onAppear`에서도 같은 걸 한 번 더 확인하도록 고쳤다.
+
+```swift
+.onChange(of: runViewModel.pendingWatchDataQueue) { _, newValue in
+    drainPendingWatchData(newValue)
+}
+.onAppear {
+    runViewModel.modelContext = modelContext
+    drainPendingWatchData(runViewModel.pendingWatchDataQueue)
+}
+
+private func drainPendingWatchData(_ queue: [SwiftDataFlight]) {
+    guard !queue.isEmpty else { return }
+    for flight in queue where flight.distance >= 0.05 {
+        modelContext.insert(flight)
+    }
+    runViewModel.pendingWatchDataQueue.removeAll()
+}
+```
+
+`.onChange`가 문 앞을 지켜보는 역할이라면, `.onAppear`는 지켜보기 시작하기 전에 문 앞에 이미 뭐가 와 있는지 한 번 미리 확인하는 역할이다. 화면이 떠 있는 동안 도착하는 기록은 `.onChange`가, 화면이 뜨기 전에 이미 도착해있던 기록은 `.onAppear`가 나눠서 맡는 구조가 됐다.
+
+---
+
 ## 브랜치 정리
 
 `reset()`/워치 단독 러닝 수정까지만 놓고 보면 `v1.0`에서 갈라진 `hotfix/v1.1` 브랜치엔 딱 5개 파일만 바뀌었다. 버전 번호(1.0 → 1.1, build 2)까지 포함해서다. 여기에 실기기 재테스트 과정에서 나온 편차 계산, 색상, 오버레이 수정으로 `WatchPFDView.swift`/`WatchGPWSView.swift`, 그리고 아이폰 수신 큐 수정으로 `RunViewModel.swift`/`WatchConnectivityService+iOS.swift`/`HomeView.swift`까지 붙었다. 심박 기능이 들어간 브랜치는 손대지 않고 그대로 남겨뒀고, 이 핫픽스는 완전히 별도로 진행한다.
+
+---
+
+## 배포 성공
+
+업데이트 노트에 1.1에서 어떤 문제를 고쳤는지 적어서 제출했다. 영어/일본어는 AI 번역을 받았다. 그러고 나서 심사를 기다렸다.
+
+In Review가 뜨고 나서 3시간 반쯤 지나서야 승인이 났다.
+
+지금까지 중 가장 오래 걸린 심사였다. 그래도 1.0 때 이미 몇 번 리젝을 겪고 나서 승인받아본 적이 있어서, 이번에도 무난히 통과할 거라고는 생각하고 있었다.
