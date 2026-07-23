@@ -364,7 +364,7 @@ actor HealthCenter {
 
 ## actor를 사용하는 결론
 
-정리하면, 심박값은 도착하는 즉시 두 곳으로 나뉘어 간다. `HealthCenter`는 iOS/Watch 양쪽 타겟에 다 들어가는 공유 코드라, 이 구조는 두 플랫폼에 똑같이 적용된다.
+심박값은 도착하는 즉시 두 곳으로 나뉘어 간다. `HealthCenter`가 iOS/Watch 양쪽 타겟에 다 들어가는 공유 코드라, 아이폰이든 워치든 똑같이 이렇게 처리된다.
 
 - **화면 표시용 VM**(iOS는 `RunViewModel`, Watch는 `WatchViewModel`): PFDView/WatchPFDView에 HEART RATE를 찍고, 러닝 후 평균을 내는 데 쓰인다. 여기서 끝난다.
 - **`HealthCenter`(actor)**: 판정용. 플랫폼에 상관없이 똑같은 하나의 타입이고, `RunningCenter`가 `await`로 안전하게 읽어가서 GPWS를 판정하는 데만 쓰인다.

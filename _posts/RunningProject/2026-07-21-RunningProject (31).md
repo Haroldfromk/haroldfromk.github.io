@@ -10,7 +10,11 @@ toc_sticky: true
 published: true
 ---
 
-심박 기반 러닝 모드를 만들다가 [이전글](https://haroldfromk.github.io/posts/RunningProject-(30)/){:target="_blank"}에서 `reset()`이 `modeAData`를 지우는 진짜 원인을 찾았다. 확인해보니 이 버그는 지금 작업 중인 브랜치에서 생긴 게 아니라 원래 배포된 버전(`v1.0`)에도 그대로 있는 문제였다. 지금 실제로 앱을 쓰고 있는 사람들한테는 Mission Flight GPWS가 페이스든 심박이든 계속 안 뜨고 있었다는 뜻이다.
+심박 기반 러닝 모드를 만들다가 [이전글](https://haroldfromk.github.io/posts/RunningProject-(30)/){:target="_blank"}에서 `reset()`이 `modeAData`를 지우는 진짜 원인을 찾았다. 
+
+확인해보니 이 문제는 지금 작업 중인 브랜치에서 생긴 게 아니라 원래 배포된 버전(`v1.0`)에도 그대로 있는 문제였다. 
+
+지금 실제로 앱을 쓰고 있는 사람들한테는 Mission Flight GPWS가 페이스든 심박이든 계속 안 뜨고 있었다는 뜻이다.
 
 이걸 심박 기능이랑 같이 묶어서 다음 업데이트 때 내보내는 건 맞지 않다고 봤다. 심박 기능은 아직 실제 기기로 끝까지 검증도 못 한 상태고, 급한 건 지금 배포판에 있는 버그를 최소한으로 고치는 거였다. 그래서 작업하던 브랜치는 그대로 두고, `v1.0` 태그에서 새 브랜치(`hotfix/v1.1`)를 파서 딱 필요한 것만 옮겼다.
 
@@ -133,7 +137,7 @@ if let gpwsType = gpwsOverlayType {
 
 이제 경고가 뜬 상태에서도 그 화면 안에서 바로 END FLIGHT를 길게 눌러 러닝을 끝낼 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchrunninggpws.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchrunninggpws.gif)
 
 ---
 

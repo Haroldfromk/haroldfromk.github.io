@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModeData Sync Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+            color: #f4f4f5;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        #packet {
+            transition: left 1.1s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .track-line {
+            background: repeating-linear-gradient(90deg, #3f3f46 0, #3f3f46 6px, transparent 6px, transparent 12px);
+        }
+        .node-dot {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8 overflow-x-hidden">
+
+    <div class="max-w-4xl w-full mx-auto flex-1 flex flex-col justify-between gap-6">
+
+        <header class="flex justify-between items-center border-b border-zinc-800/80 pb-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-normal tracking-tight text-white">ModeData Sync</h1>
+                <p class="text-xs text-zinc-500 mt-1">아이폰이 주도할 때 워치로 미션 설정이 안 넘어가던 경로</p>
+            </div>
+        </header>
+
+        <main class="relative w-full flex-1 flex flex-col justify-center gap-8 my-2 rounded-xl bg-zinc-950/40 border border-zinc-900 p-6 pt-10 pb-10">
+
+            <div class="relative w-full h-14">
+                <div class="track-line absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px]"></div>
+
+                <div id="packet" class="absolute top-1/2 z-10 w-4 h-4 -mt-2 -ml-2 rounded-full bg-blue-400" style="left: 0%; box-shadow: 0 0 12px rgba(96,165,250,0.7);"></div>
+
+                <div id="node-0" class="node-dot absolute top-1/2 -translate-y-1/2 -ml-[5px] w-[10px] h-[10px] rounded-full bg-zinc-700" style="left: 0%;"></div>
+                <div id="node-1" class="node-dot absolute top-1/2 -translate-y-1/2 -ml-[5px] w-[10px] h-[10px] rounded-full bg-zinc-700" style="left: 25%;"></div>
+                <div id="node-2" class="node-dot absolute top-1/2 -translate-y-1/2 -ml-[5px] w-[10px] h-[10px] rounded-full bg-zinc-700" style="left: 50%;"></div>
+                <div id="node-3" class="node-dot absolute top-1/2 -translate-y-1/2 -ml-[5px] w-[10px] h-[10px] rounded-full bg-zinc-700" style="left: 75%;"></div>
+                <div id="node-4" class="node-dot absolute top-1/2 -translate-y-1/2 -ml-[5px] w-[10px] h-[10px] rounded-full bg-zinc-700" style="left: 100%;"></div>
+            </div>
+
+            <div class="relative w-full text-[9px] md:text-[10px] text-zinc-500 leading-tight">
+                <div class="absolute text-center" style="left: 0%;"><p class="w-20 -ml-10">아이폰<br>ModeAView 설정</p></div>
+                <div class="absolute text-center" style="left: 25%;"><p class="w-24 -ml-12">sendModeData()<br>호출</p></div>
+                <div class="absolute text-center" style="left: 50%;"><p class="w-24 -ml-12">워치<br>didReceiveMessage</p></div>
+                <div class="absolute text-center" style="left: 75%;"><p class="w-20 -ml-10">워치<br>modeAData</p></div>
+                <div class="absolute text-right" style="left: 100%;"><p class="w-20 -ml-10">STATUS<br>화면</p></div>
+            </div>
+
+            <div id="status-box" class="w-full max-w-2xl mx-auto text-center bg-zinc-900/20 p-4 rounded-lg border border-zinc-800/30 mt-2">
+                <span id="status-title" class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase block mb-1">대기 중</span>
+                <p id="status-desc" class="text-xs text-zinc-400 font-mono leading-relaxed">재생을 누르면 아이폰에서 미션 설정이 시작된다</p>
+            </div>
+
+        </main>
+
+        <section class="space-y-4 p-5 bg-zinc-950/60 rounded-xl border border-zinc-900">
+
+            <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                    <label class="text-sm font-medium text-zinc-300">setModeData() + 워치 수신 처리 (수정 후)</label>
+                    <span id="toggleDesc" class="text-[11px] text-zinc-500">꺼보면 아이폰→워치 전송 경로 자체가 없던 수정 전 상태가 된다.</span>
+                </div>
+                <button id="toggleFix" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-emerald-500">
+                    <span id="toggleKnob" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+                </button>
+            </div>
+
+            <div class="h-[1px] bg-zinc-900"></div>
+
+            <button id="playBtn" class="w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20">
+                재생: 심박 미션 설정 시뮬레이션
+            </button>
+
+        </section>
+
+    </div>
+
+    <script>
+        const state = { hasFix: true, playing: false };
+
+        const toggleFix = document.getElementById('toggleFix');
+        const toggleKnob = document.getElementById('toggleKnob');
+        const toggleDesc = document.getElementById('toggleDesc');
+        const playBtn = document.getElementById('playBtn');
+        const packet = document.getElementById('packet');
+        const statusTitle = document.getElementById('status-title');
+        const statusDesc = document.getElementById('status-desc');
+        const statusBox = document.getElementById('status-box');
+
+        const nodes = [0, 1, 2, 3, 4].map(i => document.getElementById('node-' + i));
+        const positions = [0, 25, 50, 75, 100];
+
+        const steps = [
+            { title: '아이폰: ModeAView 설정', desc: '심박 기준 Mission Flight 구성, setModeData() 호출' },
+            { title: 'sendModeData() 호출', desc: 'WCSession으로 target/targetHeartRate 등 전송' },
+            { title: '워치: didReceiveMessage 수신', desc: '"modeData" 타입 메시지 도착' },
+            { title: '워치: modeAData 반영', desc: 'getModeData(modeA)로 로컬 상태 갱신' },
+        ];
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function resetNodes() {
+            nodes.forEach(n => {
+                n.className = "node-dot absolute top-1/2 -translate-y-1/2 -ml-[5px] w-[10px] h-[10px] rounded-full bg-zinc-700";
+            });
+        }
+
+        function resetUI() {
+            state.playing = false;
+
+            if (state.hasFix) {
+                toggleFix.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-emerald-500";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5";
+                toggleDesc.innerText = "수정 후 상태. setModeData()가 워치까지 전송하고, 워치도 modeData를 받을 줄 안다.";
+            } else {
+                toggleFix.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-red-500";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-0";
+                toggleDesc.innerText = "이게 실제로 있던 문제다. getModeData()가 로컬 상태만 세팅하고 끝났다.";
+            }
+
+            packet.style.transition = "none";
+            packet.style.left = "0%";
+            packet.style.opacity = "1";
+            packet.style.backgroundColor = "#60a5fa";
+            packet.style.boxShadow = "0 0 12px rgba(96,165,250,0.7)";
+            void packet.offsetWidth;
+            packet.style.transition = "left 1.1s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease";
+
+            resetNodes();
+            statusBox.className = "w-full max-w-2xl mx-auto text-center bg-zinc-900/20 p-4 rounded-lg border border-zinc-800/30 mt-2";
+            statusTitle.innerText = "대기 중";
+            statusDesc.innerText = "재생을 누르면 아이폰에서 미션 설정이 시작된다";
+
+            playBtn.disabled = false;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20";
+            playBtn.innerText = "재생: 심박 미션 설정 시뮬레이션";
+        }
+
+        function lightNode(i, colorClass) {
+            nodes[i].className = "node-dot absolute top-1/2 -ml-[5px] w-[10px] h-[10px] rounded-full " + colorClass;
+            nodes[i].style.transform = "translateY(-50%) scale(1.4)";
+        }
+
+        toggleFix.addEventListener('click', () => {
+            state.hasFix = !state.hasFix;
+            resetUI();
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (state.playing) return;
+            playSequence();
+        });
+
+        async function playSequence() {
+            state.playing = true;
+            playBtn.disabled = true;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-zinc-800 text-zinc-500 text-xs font-semibold cursor-default";
+            playBtn.innerText = "재생 중...";
+
+            lightNode(0, "bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]");
+            statusTitle.innerText = steps[0].title;
+            statusDesc.innerText = steps[0].desc;
+            packet.style.left = positions[0] + "%";
+            await sleep(2200);
+
+            if (!state.hasFix) {
+                lightNode(0, "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]");
+                packet.style.opacity = "0.25";
+                packet.style.backgroundColor = "#ef4444";
+                packet.style.boxShadow = "0 0 10px rgba(239,68,68,0.6)";
+                statusTitle.innerText = "여기서 멈춤";
+                statusDesc.innerText = "getModeData()는 로컬 상태만 세팅하고 끝난다. 워치로 보내는 코드 자체가 없다";
+                statusBox.className = "w-full max-w-2xl mx-auto text-center bg-red-950/20 p-4 rounded-lg border border-red-900/40 mt-2";
+                await sleep(1200);
+
+                playBtn.disabled = false;
+                playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20";
+                playBtn.innerText = "다시 재생";
+                state.playing = false;
+                return;
+            }
+
+            for (let i = 1; i <= 3; i++) {
+                lightNode(i, "bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]");
+                statusTitle.innerText = steps[i].title;
+                statusDesc.innerText = steps[i].desc;
+                packet.style.left = positions[i] + "%";
+                await sleep(2200);
+            }
+
+            lightNode(4, "bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]");
+            packet.style.left = positions[4] + "%";
+            packet.style.backgroundColor = "#34d399";
+            packet.style.boxShadow = "0 0 14px rgba(52,211,153,0.9)";
+            statusTitle.innerText = "STATUS: HEART RATE ↔ 150bpm";
+            statusDesc.innerText = "워치가 미션 정보를 알고 있어 FREE 대신 목표 기준이 제대로 뜬다";
+            statusBox.className = "w-full max-w-2xl mx-auto text-center bg-emerald-950/20 p-4 rounded-lg border border-emerald-900/40 mt-2";
+            await sleep(1200);
+
+            playBtn.disabled = false;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20";
+            playBtn.innerText = "다시 재생";
+            state.playing = false;
+        }
+
+        resetUI();
+    </script>
+</body>
+</html>

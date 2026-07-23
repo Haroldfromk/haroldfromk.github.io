@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sendModeData Recovery Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+            color: #f4f4f5;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        .track-line {
+            background: repeating-linear-gradient(90deg, #3f3f46 0, #3f3f46 6px, transparent 6px, transparent 12px);
+        }
+        .tick-dot {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .watch-box {
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8 overflow-x-hidden">
+
+    <div class="max-w-4xl w-full mx-auto flex-1 flex flex-col justify-between gap-6">
+
+        <header class="flex justify-between items-center border-b border-zinc-800/80 pb-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-normal tracking-tight text-white">sendModeData 실패 후 회복</h1>
+                <p class="text-xs text-zinc-500 mt-1">전송 한 번이 실패해도 워치가 스스로 다시 맞추는 과정</p>
+            </div>
+        </header>
+
+        <main class="relative w-full flex-1 flex flex-col justify-center gap-10 my-2 rounded-xl bg-zinc-950/40 border border-zinc-900 p-6 pt-10 pb-10">
+
+            <div class="relative w-full h-14">
+                <div class="track-line absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px]"></div>
+
+                <div id="tick-0" class="tick-dot absolute top-1/2 -translate-y-1/2 -ml-[7px] w-[14px] h-[14px] rounded-full bg-zinc-700" style="left: 0%;"></div>
+                <div id="tick-3" class="tick-dot absolute top-1/2 -translate-y-1/2 -ml-[6px] w-[12px] h-[12px] rounded-full bg-zinc-700" style="left: 33%;"></div>
+                <div id="tick-6" class="tick-dot absolute top-1/2 -translate-y-1/2 -ml-[6px] w-[12px] h-[12px] rounded-full bg-zinc-700" style="left: 66%;"></div>
+                <div id="tick-9" class="tick-dot absolute top-1/2 -translate-y-1/2 -ml-[6px] w-[12px] h-[12px] rounded-full bg-zinc-700" style="left: 100%;"></div>
+            </div>
+
+            <div class="relative w-full text-[9px] md:text-[10px] text-zinc-500 leading-tight">
+                <div class="absolute text-center" style="left: 0%;"><p class="w-24 -ml-12">0초<br>sendModeData()<br>전송 실패</p></div>
+                <div class="absolute text-center" style="left: 33%;"><p class="w-24 -ml-12">3초<br>flightData 틱<br>(목표 정보 포함)</p></div>
+                <div class="absolute text-center" style="left: 66%;"><p class="w-24 -ml-12">6초<br>flightData 틱</p></div>
+                <div class="absolute text-right" style="left: 100%;"><p class="w-24 -ml-12">9초<br>flightData 틱</p></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <div id="phone-box" class="watch-box rounded-lg border border-zinc-800/60 bg-zinc-900/20 p-4 text-center">
+                    <span class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase block mb-1">아이폰</span>
+                    <p id="phone-desc" class="text-xs text-zinc-400 font-mono leading-relaxed">재생을 누르면 시작</p>
+                </div>
+                <div id="watch-box" class="watch-box rounded-lg border border-zinc-800/60 bg-zinc-900/20 p-4 text-center">
+                    <span class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase block mb-1">워치 modeAData</span>
+                    <p id="watch-desc" class="text-xs text-zinc-400 font-mono leading-relaxed">nil</p>
+                </div>
+            </div>
+
+        </main>
+
+        <section class="space-y-4 p-5 bg-zinc-950/60 rounded-xl border border-zinc-900">
+
+            <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                    <label class="text-sm font-medium text-zinc-300">flightData가 목표 정보도 같이 보냄 (수정 후)</label>
+                    <span id="toggleDesc" class="text-[11px] text-zinc-500">꺼보면 sendModeData() 하나에만 의존하던 원래 구조가 된다.</span>
+                </div>
+                <button id="toggleFix" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-emerald-500">
+                    <span id="toggleKnob" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+                </button>
+            </div>
+
+            <div class="h-[1px] bg-zinc-900"></div>
+
+            <button id="playBtn" class="w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20">
+                재생: sendModeData() 실패 시뮬레이션
+            </button>
+
+        </section>
+
+    </div>
+
+    <script>
+        const state = { hasFix: true, playing: false };
+
+        const toggleFix = document.getElementById('toggleFix');
+        const toggleKnob = document.getElementById('toggleKnob');
+        const toggleDesc = document.getElementById('toggleDesc');
+        const playBtn = document.getElementById('playBtn');
+        const phoneBox = document.getElementById('phone-box');
+        const phoneDesc = document.getElementById('phone-desc');
+        const watchBox = document.getElementById('watch-box');
+        const watchDesc = document.getElementById('watch-desc');
+
+        const ticks = ['tick-0', 'tick-3', 'tick-6', 'tick-9'].map(id => document.getElementById(id));
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function resetTicks() {
+            ticks.forEach((n, i) => {
+                const size = i === 0 ? "w-[14px] h-[14px] -ml-[7px]" : "w-[12px] h-[12px] -ml-[6px]";
+                n.className = "tick-dot absolute top-1/2 -translate-y-1/2 " + size + " rounded-full bg-zinc-700";
+            });
+        }
+
+        function resetUI() {
+            state.playing = false;
+
+            if (state.hasFix) {
+                toggleFix.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-emerald-500";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5";
+                toggleDesc.innerText = "수정 후 상태. flightData가 3초마다 목표 정보를 같이 실어 보낸다.";
+            } else {
+                toggleFix.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-red-500";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-0";
+                toggleDesc.innerText = "sendModeData() 하나만 있던 상태. 이게 실패하면 다시 보낼 방법이 없다.";
+            }
+
+            resetTicks();
+            phoneBox.className = "watch-box rounded-lg border border-zinc-800/60 bg-zinc-900/20 p-4 text-center";
+            phoneDesc.innerText = "재생을 누르면 시작";
+            watchBox.className = "watch-box rounded-lg border border-zinc-800/60 bg-zinc-900/20 p-4 text-center";
+            watchDesc.innerText = "nil";
+
+            playBtn.disabled = false;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20";
+            playBtn.innerText = "재생: sendModeData() 실패 시뮬레이션";
+        }
+
+        toggleFix.addEventListener('click', () => {
+            state.hasFix = !state.hasFix;
+            resetUI();
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (state.playing) return;
+            playSequence();
+        });
+
+        async function playSequence() {
+            state.playing = true;
+            playBtn.disabled = true;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-zinc-800 text-zinc-500 text-xs font-semibold cursor-default";
+            playBtn.innerText = "재생 중...";
+
+            // 0초: sendModeData 실패
+            ticks[0].className = "tick-dot absolute top-1/2 -ml-[7px] w-[14px] h-[14px] rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]";
+            ticks[0].style.transform = "translateY(-50%) scale(1.3)";
+            phoneBox.className = "watch-box rounded-lg border border-red-900/40 bg-red-950/20 p-4 text-center";
+            phoneDesc.innerText = "sendModeData() 전송 실패 (워치 아직 reachable 아님)";
+            await sleep(1600);
+
+            if (!state.hasFix) {
+                watchBox.className = "watch-box rounded-lg border border-red-900/40 bg-red-950/20 p-4 text-center";
+                watchDesc.innerText = "계속 nil → STATUS는 계속 FREE";
+                await sleep(1400);
+
+                playBtn.disabled = false;
+                playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20";
+                playBtn.innerText = "다시 재생";
+                state.playing = false;
+                return;
+            }
+
+            // 3초: flightData 틱, 목표 정보 도착
+            await sleep(600);
+            ticks[1].className = "tick-dot absolute top-1/2 -ml-[6px] w-[12px] h-[12px] rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]";
+            ticks[1].style.transform = "translateY(-50%) scale(1.3)";
+            phoneBox.className = "watch-box rounded-lg border border-zinc-800/60 bg-zinc-900/20 p-4 text-center";
+            phoneDesc.innerText = "flightData 전송, modeATarget 등 같이 포함";
+            watchBox.className = "watch-box rounded-lg border border-emerald-900/40 bg-emerald-950/20 p-4 text-center";
+            watchDesc.innerText = "target: heartRate, 150bpm → STATUS 정상화";
+            await sleep(1800);
+
+            // 6초, 9초: 계속 정상 유지
+            ticks[2].className = "tick-dot absolute top-1/2 -ml-[6px] w-[12px] h-[12px] rounded-full bg-emerald-400/70";
+            await sleep(700);
+            ticks[3].className = "tick-dot absolute top-1/2 -ml-[6px] w-[12px] h-[12px] rounded-full bg-emerald-400/70";
+            phoneDesc.innerText = "이후로도 3초마다 계속 같은 값 확인";
+            await sleep(1200);
+
+            playBtn.disabled = false;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20";
+            playBtn.innerText = "다시 재생";
+            state.playing = false;
+        }
+
+        resetUI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Rate Gate Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+            color: #f4f4f5;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        #marker {
+            transition: left 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8 overflow-x-hidden">
+
+    <div class="max-w-4xl w-full mx-auto flex-1 flex flex-col justify-between gap-6">
+
+        <header class="flex justify-between items-center border-b border-zinc-800/80 pb-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-normal tracking-tight text-white">Heart Rate Gate</h1>
+                <p class="text-xs text-zinc-500 mt-1">목표 심박 구간에 한 번 들어오기 전까지는 GPWS를 판정하지 않는 유예 구간</p>
+            </div>
+        </header>
+
+        <main class="relative w-full flex-1 flex flex-col justify-center gap-8 my-2 rounded-xl bg-zinc-950/40 border border-zinc-900 p-6 pt-10 pb-10">
+
+            <div class="relative w-full">
+                <div class="relative w-full h-8 rounded-full bg-zinc-900 overflow-hidden border border-zinc-800">
+                    <div class="absolute top-0 bottom-0 bg-emerald-500/20 border-l border-r border-emerald-500/40" style="left: 44.4%; width: 11.1%;"></div>
+                </div>
+                <div class="flex justify-between text-[9px] text-zinc-600 mt-1 font-mono">
+                    <span>60</span><span>90</span><span>120</span>
+                    <span class="text-emerald-500">140-160 목표</span>
+                    <span>180 bpm</span>
+                </div>
+                <div id="marker" class="absolute -top-2 w-4 h-4 -ml-2 rounded-full bg-blue-400" style="left: 12.5%; box-shadow: 0 0 10px rgba(96,165,250,0.7);"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 py-4 border-y border-zinc-900 max-w-2xl mx-auto w-full bg-zinc-950/20 rounded-lg px-6">
+                <div class="text-center flex flex-col justify-center items-center py-2">
+                    <span class="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">현재 심박수</span>
+                    <span id="hr-value" class="text-2xl font-bold mt-1 font-mono">75<span class="text-xs text-zinc-500 ml-1">bpm</span></span>
+                </div>
+                <div class="flex items-center justify-center relative py-2">
+                    <div class="absolute left-0 h-10 w-[1px] bg-zinc-800/80"></div>
+                    <div class="text-center flex flex-col justify-center items-center w-full">
+                        <span class="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">GPWS 상태</span>
+                        <span id="gpws-text" class="text-xl font-bold mt-1 font-mono flex items-center gap-2">
+                            <span id="gpws-dot" class="w-2.5 h-2.5 rounded-full bg-zinc-500 inline-block"></span>
+                            NORMAL
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="status-box" class="w-full max-w-2xl mx-auto text-center bg-zinc-900/20 p-4 rounded-lg border border-zinc-800/30">
+                <span class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase block mb-1">대기 중</span>
+                <p id="status-desc" class="text-xs text-zinc-400 font-mono leading-relaxed">재생을 누르면 러닝이 시작되고 심박수가 서서히 오른다</p>
+            </div>
+
+        </main>
+
+        <section class="space-y-4 p-5 bg-zinc-950/60 rounded-xl border border-zinc-900">
+
+            <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                    <label class="text-sm font-medium text-zinc-300">isReachedHeartRate 유예 구간 (수정 후)</label>
+                    <span id="toggleDesc" class="text-[11px] text-zinc-500">꺼보면 유예 구간 없이 시작하자마자 판정하던 수정 전 상태가 된다.</span>
+                </div>
+                <button id="toggleFix" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-emerald-500">
+                    <span id="toggleKnob" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+                </button>
+            </div>
+
+            <div class="h-[1px] bg-zinc-900"></div>
+
+            <button id="playBtn" class="w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20">
+                재생: 심박 상승 시뮬레이션
+            </button>
+
+        </section>
+
+    </div>
+
+    <script>
+        const state = { hasGate: true, playing: false };
+
+        const toggleFix = document.getElementById('toggleFix');
+        const toggleKnob = document.getElementById('toggleKnob');
+        const toggleDesc = document.getElementById('toggleDesc');
+        const playBtn = document.getElementById('playBtn');
+        const marker = document.getElementById('marker');
+        const hrValue = document.getElementById('hr-value');
+        const gpwsText = document.getElementById('gpws-text');
+        const gpwsDot = document.getElementById('gpws-dot');
+        const statusDesc = document.getElementById('status-desc');
+        const statusTitle = document.querySelector('#status-box span');
+        const statusBox = document.getElementById('status-box');
+
+        const TARGET = 150, DEVIATION = 10;
+        // bpm 60~180 범위를 0~100%로 매핑
+        const toPercent = bpm => ((bpm - 60) / (180 - 60)) * 100;
+
+        const steps = [75, 95, 115, 135, 148, 152, 165];
+        let reached = false;
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        function gpwsFor(hr, gateOn) {
+            const inZone = hr >= TARGET - DEVIATION && hr <= TARGET + DEVIATION;
+            if (gateOn) {
+                if (!reached && inZone) reached = true;
+                if (!reached) return 'normal';
+            }
+            if (inZone) return 'normal';
+            return hr < TARGET - DEVIATION ? 'sinkRate' : 'overspeed';
+        }
+
+        function renderGpws(status) {
+            if (status === 'normal') {
+                gpwsDot.className = "w-2.5 h-2.5 rounded-full bg-zinc-500 inline-block";
+                gpwsText.innerHTML = '<span id="gpws-dot" class="w-2.5 h-2.5 rounded-full bg-zinc-500 inline-block"></span> NORMAL';
+                gpwsText.className = "text-xl font-bold mt-1 font-mono flex items-center gap-2 text-zinc-300";
+            } else if (status === 'sinkRate') {
+                gpwsText.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block animate-pulse"></span> SINK RATE';
+                gpwsText.className = "text-xl font-bold mt-1 font-mono flex items-center gap-2 text-red-400";
+            } else {
+                gpwsText.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block animate-pulse"></span> OVERSPEED';
+                gpwsText.className = "text-xl font-bold mt-1 font-mono flex items-center gap-2 text-amber-400";
+            }
+        }
+
+        function resetUI() {
+            state.playing = false;
+            reached = false;
+
+            if (state.hasGate) {
+                toggleFix.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-emerald-500";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-5";
+                toggleDesc.innerText = "수정 후 상태. 목표 구간에 한 번 들어오기 전까진 NORMAL을 유지한다.";
+            } else {
+                toggleFix.className = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-red-500";
+                toggleKnob.className = "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-zinc-950 shadow ring-0 transition duration-200 ease-in-out translate-x-0";
+                toggleDesc.innerText = "이게 실제로 있던 문제다. 시작하자마자 바로 판정을 시작한다.";
+            }
+
+            marker.style.transition = "none";
+            marker.style.left = toPercent(steps[0]) + "%";
+            void marker.offsetWidth;
+            marker.style.transition = "left 1.3s cubic-bezier(0.4, 0, 0.2, 1)";
+
+            hrValue.innerHTML = steps[0] + '<span class="text-xs text-zinc-500 ml-1">bpm</span>';
+            renderGpws('normal');
+            statusBox.className = "w-full max-w-2xl mx-auto text-center bg-zinc-900/20 p-4 rounded-lg border border-zinc-800/30";
+            statusTitle.innerText = "대기 중";
+            statusDesc.innerText = "재생을 누르면 러닝이 시작되고 심박수가 서서히 오른다";
+
+            playBtn.disabled = false;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20";
+            playBtn.innerText = "재생: 심박 상승 시뮬레이션";
+        }
+
+        toggleFix.addEventListener('click', () => {
+            state.hasGate = !state.hasGate;
+            resetUI();
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (state.playing) return;
+            playSequence();
+        });
+
+        async function playSequence() {
+            state.playing = true;
+            reached = false;
+            playBtn.disabled = true;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-zinc-800 text-zinc-500 text-xs font-semibold cursor-default";
+            playBtn.innerText = "재생 중...";
+
+            for (const hr of steps) {
+                marker.style.left = toPercent(hr) + "%";
+                hrValue.innerHTML = hr + '<span class="text-xs text-zinc-500 ml-1">bpm</span>';
+                const status = gpwsFor(hr, state.hasGate);
+                renderGpws(status);
+
+                if (status === 'normal') {
+                    statusTitle.innerText = reached || (hr >= TARGET - DEVIATION && hr <= TARGET + DEVIATION) ? "목표 구간" : (state.hasGate ? "유예 구간 (판정 보류)" : "정상 범위");
+                    statusDesc.innerText = state.hasGate && !reached
+                        ? "아직 목표 구간에 한 번도 안 들어와서 판정을 보류한다"
+                        : "목표 구간 안이라 경고 없음";
+                    statusBox.className = "w-full max-w-2xl mx-auto text-center bg-zinc-900/20 p-4 rounded-lg border border-zinc-800/30";
+                } else if (status === 'sinkRate') {
+                    statusTitle.innerText = "SINK RATE 발생";
+                    statusDesc.innerText = state.hasGate
+                        ? "목표보다 낮지만 이미 한 번 도달한 뒤라 정상적으로 경고"
+                        : "심박이 목표 구간 아래인데, 시작하자마자라 그냥 워밍업 중인 것뿐이다";
+                    statusBox.className = "w-full max-w-2xl mx-auto text-center bg-red-950/20 p-4 rounded-lg border border-red-900/40";
+                } else {
+                    statusTitle.innerText = "OVERSPEED 발생";
+                    statusDesc.innerText = "심박이 목표 구간을 넘어섰다";
+                    statusBox.className = "w-full max-w-2xl mx-auto text-center bg-amber-950/20 p-4 rounded-lg border border-amber-900/40";
+                }
+
+                await sleep(1800);
+            }
+
+            playBtn.disabled = false;
+            playBtn.className = "w-full px-3 py-2.5 rounded-lg border border-blue-400/40 bg-blue-400/10 text-blue-300 text-xs font-semibold transition-colors hover:bg-blue-400/20";
+            playBtn.innerText = "다시 재생";
+            state.playing = false;
+        }
+
+        resetUI();
+    </script>
+</body>
+</html>
