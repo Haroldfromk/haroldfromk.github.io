@@ -92,20 +92,22 @@ if type == "modeData" {
 이건 원인이 훨씬 단순했다. `RunViewModel.startStream()`에서 Live Activity를 갱신하는 코드를 보니
 
 ```swift
+// Before
 await flightActivityService.updateCruise(
     pace: PaceFormatter.format(data.pace),
     distance: data.distance / 1000,
     heartRate: 0
 )
+
+// After
+await flightActivityService.updateCruise(
+    pace: PaceFormatter.format(data.pace),
+    distance: data.distance / 1000,
+    heartRate: Int(healthData.heartRate)
+)
 ```
 
 `heartRate` 자리에 그냥 0이 박혀 있었다. 실시간 심박값(`healthData.heartRate`)은 이미 받아오고 있었는데, 여기 연결을 안 해둔 채로 넘어갔던 것 같다.
-
-```swift
-heartRate: Int(healthData.heartRate)
-```
-
-이렇게 바꿔서 해결했다.
 
 ---
 
@@ -143,30 +145,34 @@ if isModeA, let modeAData {
 
 ---
 
-## DIFF 칸에 이상한 음수
+## DIFF에 페이스값이 반영되는 문제
 
 워치는 고쳤는데, 아이폰 PFDView의 `MissionHUDBar`에서 DIFF 칸에 러닝 시작 직후 "-150" 같은 큰 음수가 떴다.
 
+저 -150의 음수는 heartrate 설정할때 내가 세팅해둔 값이었다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/heartrate.png){: width="50%" height="50%"}
+
+실제로 뛰어보니 DIFF 칸에 이렇게 떴다.
+
+![](/assets/images/upload/diff_before_crop.png)
+
 ```swift
-private var devText: String {
-    let sign = deviation >= 0 ? "+" : ""
-    if target == .pace {
-        guard pace > 0 && pace.isFinite else { return "--" }
-        return sign + PaceFormatter.format(abs(deviation))
-    } else {
-        return "\(sign)\(Int(deviation))"
-    }
+// Before (else 분기, 심박 기준일 때)
+} else {
+    return "\(sign)\(Int(deviation))"
+}
+
+// After
+} else {
+    guard heartRate > 0 else { return "--" }
+    return "\(sign)\(Int(deviation))"
 }
 ```
 
-페이스 쪽엔 `pace > 0` 가드가 있는데 심박 쪽엔 이 가드가 없었다. 아직 심박수를 못 받은 시점(`heartRate == 0`)에 `deviation = 0 - targetHeartRate`가 그대로 계산돼서 큰 음수가 나온 거였다.
+페이스 쪽엔 `pace > 0` 가드가 있는데 심박 쪽엔 이 가드가 없었다. 아직 심박수를 못 받은 시점(`heartRate == 0`)에 `deviation = 0 - targetHeartRate`가 그대로 계산돼서 큰 음수가 나온 거였다. 페이스 쪽이랑 똑같은 방식으로 가드를 추가해서 해결했다.
 
-```swift
-guard heartRate > 0 else { return "--" }
-return "\(sign)\(Int(deviation))"
-```
-
-페이스 쪽이랑 똑같은 방식으로 가드를 추가해서 해결했다.
+![](/assets/images/upload/diff_after_crop.png)
 
 ---
 
@@ -200,20 +206,20 @@ if let modeA = viewModel?.modeAData {
 `SwiftDataAlert`에 이번에 `target`/`heartRate` 필드를 추가했는데, 기본값이 `init()` 파라미터에만 있고 프로퍼티 선언 자체에는 없었다.
 
 ```swift
+// Before
 var target: String
 var heartRate: Double
 ...
 init(..., target: String = ModeATarget.pace.rawValue, ..., heartRate: Double = 0, ...) { ... }
-```
 
-SwiftData의 자동 라이트웨이트 마이그레이션은 기존 레코드에 새 필드 값을 채울 때 프로퍼티 선언부의 기본값을 보는데, init 파라미터에 있는 기본값은 여기서 안 보인다. 이 필드가 없던 버전(v1.1)을 쓰던 유저가 이 빌드로 업데이트하면 마이그레이션이 실패하거나 크래시할 수 있는 구조였다. 계속 삭제 후 재설치로만 테스트해서 이 문제가 한 번도 드러나지 않았던 거다.
-
-```swift
+// After
 var target: String = ModeATarget.pace.rawValue
 var heartRate: Double = 0
+...
+init(..., target: String = ModeATarget.pace.rawValue, ..., heartRate: Double = 0, ...) { ... }
 ```
 
-선언부에 기본값을 직접 넣어서 고쳤다.
+SwiftData의 자동 라이트웨이트 마이그레이션은 기존 레코드에 새 필드 값을 채울 때 프로퍼티 선언부의 기본값을 보는데, init 파라미터에 있는 기본값은 여기서 안 보인다. 이 필드가 없던 버전(v1.1)을 쓰던 유저가 이 빌드로 업데이트하면 마이그레이션이 실패하거나 크래시할 수 있는 구조였다. 계속 삭제 후 재설치로만 테스트해서 이 문제가 한 번도 드러나지 않았던 거다. 선언부에 기본값을 직접 넣어서 고쳤다.
 
 이 정도 고치고 나니 혹시 다른 사람들도 이런 문제를 겪었는지 궁금해서, AI한테 SwiftData 라이트웨이트 마이그레이션에서 프로퍼티 선언부 기본값과 init 파라미터 기본값이 왜 다르게 취급되는지 자료를 찾아서 요약해달라고 시켰다.
 
@@ -236,19 +242,12 @@ var heartRate: Double = 0
 코드를 보니 실제로 페이스 쪽에만 `isReachedPace`라는 유예 플래그가 있었다.
 
 ```swift
-switch modeA.target {
-case .pace:
-    guard isReachedPace else { return .normal }
-    return calculateGPWSStatus(pace)
+// Before
 case .heartRate:
     let heartRate = await healthCenter.currentHeartRate
     return calculateHeartRateGPWSStatus(heartRate)
-}
-```
 
-심박 쪽에도 똑같은 개념의 `isReachedHeartRate`를 추가했다. 목표 심박 허용 범위 안에 한 번이라도 들어와야 그 뒤로 GPWS 판정을 시작하고, 그 전까진 무조건 NORMAL이다.
-
-```swift
+// After
 case .heartRate:
     let heartRate = await healthCenter.currentHeartRate
     if !isReachedHeartRate, heartRate > 0 {
@@ -260,6 +259,8 @@ case .heartRate:
     guard isReachedHeartRate else { return .normal }
     return calculateHeartRateGPWSStatus(heartRate)
 ```
+
+심박 쪽에도 똑같은 개념의 `isReachedHeartRate`를 추가했다. 목표 심박 허용 범위 안에 한 번이라도 들어와야 그 뒤로 GPWS 판정을 시작하고, 그 전까진 무조건 NORMAL이다.
 
 토글로 켜고 꺼보면서 심박수가 오르는 동안 GPWS가 어떻게 달라지는지 볼 수 있게 만들어봤다.
 
