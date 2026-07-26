@@ -163,7 +163,7 @@ Text("Ready for your next flight?")
 
 ```swift
 Text("개인정보 처리방침에 동의합니다")
-// ...
+// 생략
 Text("동의하지 않으면 앱을 사용할 수 없습니다.\n앱을 종료해주세요.")
 ```
 

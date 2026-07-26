@@ -148,7 +148,7 @@ func updatePhase(_ changedPhase: FlightPhase) {
     Task {
         await runningCenter.updatePhase(changedPhase)
     }
-    // ...
+    // 생략
 }
 ```
 

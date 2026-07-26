@@ -25,7 +25,7 @@ func sendRunningData() {
     guard WCSession.default.activationState == .activated else { return }
     guard session.isReachable else { return }
     guard let flight = viewModel?.pendingFlightData else { return }
-    ...
+    // 생략
     session.transferUserInfo(userInfo)
 }
 ```
@@ -62,7 +62,7 @@ func sendRunningData() {
     guard let viewModel, !viewModel.pendingFlightQueue.isEmpty else { return }
 
     for flight in viewModel.pendingFlightQueue {
-        // ... userInfo 구성은 기존과 동일
+        // 생략 (userInfo 구성은 기존과 동일)
         session.transferUserInfo(userInfo)
     }
     viewModel.pendingFlightQueue.removeAll()

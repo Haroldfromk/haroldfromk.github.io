@@ -59,7 +59,7 @@ viewModel.start()
 
 ```swift
 func start() {
-    ...
+    // 생략
     if HealthKitService.shared.startOrigin == .local {
         locationService.startTracking()
     }
@@ -168,7 +168,7 @@ var avgPace: String {
     guard runViewModel.elapsedTime > 0, runViewModel.flightData.distance > 0 else { return "--'--\"" }
     let avg = (Double(runViewModel.elapsedTime) / 60) / (runViewModel.flightData.distance / 1000)
     guard avg.isFinite && avg > 0 else { return "--'--\"" }
-    ...
+    // 생략
 }
 ```
 
@@ -179,7 +179,7 @@ func saveRunningData() async {
     let totalDistance = runViewModel.flightData.distance / 1000
     let totalTime = runViewModel.elapsedTime
     let totalPace = (Double(totalTime) / 60) / totalDistance
-    ...
+    // 생략
 }
 ```
 

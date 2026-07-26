@@ -47,7 +47,7 @@ struct WatchPFDView: View {
 // RunViewModel.swift, startStream()
 for await data in await runningCenter.streamFlightData() {
     self.flightData = data
-    ...
+    // 생략
     Task {
         await flightActivityService.updateCruise(
             pace: PaceFormatter.format(data.pace),
@@ -63,7 +63,7 @@ for await data in await runningCenter.streamFlightData() {
 ```swift
 // WatchConnectivityService+iOS.swift
 if let type = message["type"] as? String, type == "flightData" {
-    ...
+    // 생략
     Task { @MainActor in
         vm?.flightData = flightData   // 화면 값만 갱신
         vm?.isPaused = false

@@ -391,7 +391,7 @@ func sendHealthData() {
     let now = Date()
     guard now.timeIntervalSince(lastHealthSentTime) >= 3.0 else { return }
     lastHealthSentTime = now
-    // ...
+    // 생략
     session.sendMessage(message, replyHandler: nil, errorHandler: nil)
 }
 ```
@@ -559,7 +559,7 @@ var healthCenter = HealthCenter()
 
 init() {
     runningCenter = RunningCenter(healthCenter: healthCenter)
-    ...
+    // 생략
 }
 ```
 
@@ -583,7 +583,7 @@ actor도 싱글턴이 된다고 했다. 이 프로젝트에 이미 있는 `Healt
 actor HealthCenter {
     static let shared = HealthCenter()
     private init() {}
-    ...
+    // 생략
 }
 ```
 
@@ -630,7 +630,7 @@ actor HealthCenter {
 
 init() {
     runningCenter = RunningCenter(healthCenter: healthCenter)
-    ...
+    // 생략
 }
 ```
 
@@ -701,7 +701,7 @@ PACE를 고르면 원래 있던 흐름(`WatchPaceSettingView` → `WatchPaceDevi
 ```swift
 case .targetSelection(let preset):
     WatchTargetSelectionView(preset: preset)
-...
+// 생략
 case .heartRateSetting(let preset):
     WatchHeartRateSettingView(preset: preset)
 case .heartRateDeviation(let preset, let heartRate):
@@ -717,7 +717,7 @@ Button {
     viewModel.navigateTo(.missionSummary)
 } label: {
     Text("NEXT")
-    ...
+    // 생략
 }
 ```
 
@@ -734,7 +734,7 @@ Button {
 ```swift
 var isHeartRateTarget: Bool { viewModel.modeAData?.target == .heartRate }
 
-...
+// 생략
 
 if isHeartRateTarget {
     SummaryRow(icon: "heart.fill", label: "TARGET HEART RATE", value: heartRateString, color: .rwGreen)
@@ -797,7 +797,7 @@ private var devColor: Color {
 }
 ```
 
-페이스 쪽 30초/10초 기준을 심박에도 그대로 쓰진 않았다. 초 단위 숫자랑 bpm 숫자를 같은 30/10으로 비교하는 게 말이 안 돼서, 심박 스케일(15bpm/5bpm)로 따로 뒀다.
+페이스 쪽 30초/10초 기준을 심박에도 그대로 쓰진 않았다. 초 단위 숫자랑 bpm 숫자를 같은 30/10으로 비교하는 게 말이 안 돼서, 심박 스케일(15bpm/5bpm)로 따로 뒀다. 15bpm/5bpm도 무슨 공식에서 나온 값은 아니고, 페이스 30초/10초와 같은 감으로 잡은 경험적 기준이다. 가벼운 러닝 중 심박은 보통 목표치 기준으로 몇 bpm 안쪽에서 오르내리니까, 5bpm 벗어나면 슬슬 벗어나는 중이라는 신호(AMBER), 15bpm 벗어나면 확실히 벗어난 상태(RED)로 보면 될 정도로 잡았다. 실기기로 뛰어보면서 너무 예민하거나 둔감하면 조정할 값이다.
 
 TARGET 패널도 라벨과 단위를 통째로 갈아끼웠다.
 
@@ -958,7 +958,7 @@ if isHeartRateAlert {
 ```swift
 private func determineGPWSStatus(pace: Double) async -> GPWSState {
     guard let modeA = modeAData else { return .normal }
-    ...
+    // 생략
 }
 ```
 

@@ -247,6 +247,8 @@ func reset() {
 }
 ```
 
+`smoothingSpeedFirst`/`smoothingSpeedSecond`는 [10번 글](https://haroldfromk.github.io/posts/RunningProject-(10)/){:target="_blank"}에서 만든 이중 지수 이동 평균(Double EMA) 페이스 스무딩 값이다. 다음 러닝을 위해 여기서 0으로 리셋해둔다.
+
 여기서 `coordinateArray`가 통째로 비워진다. 좌표가 포함된 저장은 PFDView의 TOUCHDOWN 버튼을 눌렀을 때만 실행되는 `saveRunningData()`에서 일어나는데, Watch가 종료를 주도하면 이 버튼을 아예 안 거치니까 이 저장 자체가 실행되지 않는다.
 
 더 골치 아픈 건, Watch 쪽 `saveRunningData()`는 그대로 실행된다는 거다. Watch는 미러링만 하던 입장이라 자기 `coordinateArray`가 애초에 비어있는데, 이 빈 좌표 기록이 iPhone으로 전달돼서 저장까지 된다. 그러니까 iPhone의 진짜 경로는 버려지고, 좌표가 없는 Watch발 기록이 대신 남는 셈이다.
@@ -290,6 +292,8 @@ func saveRunningData() async {
 }
 ```
 
+`avgHR`/`avgCad`는 `heartRateBuffer`/`cadenceBuffer`를 합해서 개수로 나눈 값인데, 이 버퍼는 러닝 내내 채워지고 있던 거다. 워치가 3초마다 심박/케이던스를 보내오는데(`WatchConnectivityService+iOS.swift`의 `didReceiveMessage`), 받을 때마다 그 값을 버퍼에 그냥 쌓아만 둔다. 저장 시점에 HealthKit에 다시 물어봐서 러닝 구간 평균을 계산할 수도 있었겠지만, 그러면 비동기 쿼리가 하나 더 필요하고 그 쿼리의 시간 범위를 러닝 시작/종료 시각과 정확히 맞춰야 하는 번거로움이 생긴다. 대신 그냥 받는 족족 배열에 넣어뒀다가 끝에 한 번 나누는 게 훨씬 간단해서 이 방식으로 갔다.
+
 ```swift
 // HomeView.swift
 .onAppear {
@@ -321,7 +325,7 @@ if result.stopOrigin == .remote {
 // WatchPFDView.swift
 func saveRunningData() async {
     guard HealthKitService.shared.startOrigin == .local else { return }
-    // ... 기존 로직
+    // 생략 (기존 로직)
 }
 ```
 
@@ -460,7 +464,7 @@ func saveRunningData() async {
     let totalTime = elapsedTime
     let minimumValidDistance = 0.05
     guard totalDistance >= minimumValidDistance else { return }
-    // ... 이하 동일
+    // 생략 (이하 동일)
 }
 ```
 
@@ -509,7 +513,7 @@ func sendRunningData() {
     guard WCSession.default.activationState == .activated else { return }
     guard session.isReachable else { return }
     guard let flight = viewModel?.pendingFlightData else { return }
-    ...
+    // 생략
 }
 ```
 
@@ -531,7 +535,7 @@ func sendRunningData() {
 func saveRunningData() async {
     guard let modelContext else { return }
     guard HealthKitService.shared.startOrigin == .local else { return }
-    // ... 이하 동일
+    // 생략 (이하 동일)
 }
 ```
 
@@ -542,7 +546,7 @@ func saveRunningData() async {
 func saveRunningData() async {
     guard HealthKitService.shared.startOrigin == .local else { return }
     let totalDistance = flightData.distance / 1000
-    ...
+    // 생략
     pendingFlightData = runningData
 }
 ```
@@ -610,7 +614,7 @@ func start() {
         .sink { [weak self] _ in
             guard let self else { return }
             elapsedTime += 1   // 0부터가 아니라 이전 값에 이어서 증가
-            ...
+            // 생략
         }.store(in: &timerCancellable)
 }
 ```
@@ -637,7 +641,7 @@ func start() async {
     isPaused = false
     lastReceivedTime = .now
     timerCancellable.removeAll()
-    ...
+    // 생략
 }
 ```
 
@@ -723,9 +727,9 @@ if result.stopOrigin == .remote {
 
 ```swift
 .background(Color("#161A22"))
-...
+// 생략
 .foregroundColor(Color("#FF453A"))
-...
+// 생략
 .foregroundColor(ok ? Color("#64FFDA") : Color("#FF453A"))
 ```
 
@@ -739,9 +743,9 @@ if result.stopOrigin == .remote {
 
 ```swift
 .background(Color(hex: "#161A22"))
-...
+// 생략
 .foregroundColor(Color(hex: "#FF453A"))
-...
+// 생략
 .foregroundColor(ok ? Color(hex: "#64FFDA") : Color(hex: "#FF453A"))
 ```
 
@@ -753,7 +757,7 @@ ActivityConfiguration(for: FlightActivityAttributes.self) { context in
         .activityBackgroundTint(Color(hex: "#161A22"))
         .activitySystemActionForegroundColor(.white)
 } dynamicIsland: { context in
-    ...
+    // 생략
 }
 ```
 

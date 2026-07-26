@@ -1,5 +1,5 @@
 ---
-title: RunWay 1.2 (1) - 심박 미러링 실기기 테스트
+title: RunWay 1.2 (1) 심박 미러링 실기기 테스트
 writer: Harold
 date: 2026-07-22 11:00:00 +0900
 categories: [RunWay]
@@ -155,7 +155,7 @@ if isModeA, let modeAData {
 
 실제로 뛰어보니 DIFF 칸에 이렇게 떴다.
 
-![](/assets/images/upload/diff_before_crop.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/diff_before_crop.png)
 
 ```swift
 // Before (else 분기, 심박 기준일 때)
@@ -172,7 +172,7 @@ if isModeA, let modeAData {
 
 페이스 쪽엔 `pace > 0` 가드가 있는데 심박 쪽엔 이 가드가 없었다. 아직 심박수를 못 받은 시점(`heartRate == 0`)에 `deviation = 0 - targetHeartRate`가 그대로 계산돼서 큰 음수가 나온 거였다. 페이스 쪽이랑 똑같은 방식으로 가드를 추가해서 해결했다.
 
-![](/assets/images/upload/diff_after_crop.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/diff_after_crop.png)
 
 ---
 
@@ -209,13 +209,13 @@ if let modeA = viewModel?.modeAData {
 // Before
 var target: String
 var heartRate: Double
-...
+// 생략
 init(..., target: String = ModeATarget.pace.rawValue, ..., heartRate: Double = 0, ...) { ... }
 
 // After
 var target: String = ModeATarget.pace.rawValue
 var heartRate: Double = 0
-...
+// 생략
 init(..., target: String = ModeATarget.pace.rawValue, ..., heartRate: Double = 0, ...) { ... }
 ```
 

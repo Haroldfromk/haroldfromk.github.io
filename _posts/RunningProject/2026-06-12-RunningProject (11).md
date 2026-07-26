@@ -861,7 +861,7 @@ Apple이 `NavigationPath`를 권장하는 이유도 view hierarchy를 파괴하�
 var navigationPath: [FlightDestination] = []
 
 func resetState() async {
-    // ... 기존 초기화 ...
+    // 생략 (기존 초기화)
     await runningCenter.reset()
     navigationPath = [] // 배열을 비우면 HomeView(Root)로 자동 복귀
 }
@@ -870,7 +870,7 @@ func resetState() async {
 ```swift
 // HomeView
 NavigationStack(path: $vm.navigationPath) {
-    // ...
+    // 생략
     .navigationDestination(for: FlightDestination.self) { destination in
         switch destination {
         case .modeA:     ModeAView()

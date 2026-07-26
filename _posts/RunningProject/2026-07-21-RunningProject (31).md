@@ -32,7 +32,7 @@ func sendRunningData() {
     guard let viewModel, !viewModel.pendingFlightQueue.isEmpty else { return }
 
     for flight in viewModel.pendingFlightQueue {
-        // ... userInfo 구성은 기존과 동일, date만 flight.date로 수정
+        // 생략 (userInfo 구성은 기존과 동일, date만 flight.date로 수정)
         session.transferUserInfo(userInfo)
     }
     viewModel.pendingFlightQueue.removeAll()
@@ -150,7 +150,7 @@ if let gpwsType = gpwsOverlayType {
 ```swift
 var subtitle: String {
     switch self {
-    ...
+    // 생략
     case .minimums:  return "50 m"
     }
 }

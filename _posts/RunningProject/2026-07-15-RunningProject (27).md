@@ -107,13 +107,13 @@ TOUCHDOWN을 누르면 `stopWorkout()`이 세션을 `.stopped`로 전환시키�
 ```swift
 // HealthKitService+iOS.swift
 func handleiOSStateChange(_ toState: HKWorkoutSessionState) {
-    ...
+    // 생략
     if toState == .stopped {
         session?.end()   // 1번째 호출
         let event = SessionStateEvent(state: state, runningMode: runningMode, stopOrigin: stopOrigin, startOrigin: nil)
         updateAndSendState(event)
     }
-    ...
+    // 생략
 }
 ```
 
@@ -252,7 +252,7 @@ func saveRunningData() async {
     lastSavedFlight = nil
     guard let modelContext else { return }
     guard HealthKitService.shared.startOrigin == .local else { return }
-    // ... 거리 가드 등 기존 로직
+    // 생략 (거리 가드 등 기존 로직)
     modelContext.insert(runningData)
     lastSavedFlight = runningData
 }
