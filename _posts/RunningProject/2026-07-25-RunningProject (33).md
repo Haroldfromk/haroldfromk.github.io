@@ -468,7 +468,7 @@ func processAltitude(_ rawAltitude: Double, timestamp: TimeInterval) {
 
 두 스무딩을 나란히 놓고 보면 공식 자체는 완전히 같고, "첫 샘플을 언제 시드할지" 판단하는 방법만 다르다는 게 더 잘 보인다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/smoothing_init_compare.svg)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/smoothing_init_compare.svg){: width="700" height="373"}
 
 원래 `FlightData.altitude`는 GPS 절대 고도(`location.altitude`)를 그대로 담고 있었는데, 아무 화면에서도 안 쓰고 있어서 이번에 스무딩된 상대 고도로 바꿔치기했다.
 
