@@ -965,3 +965,39 @@ private var maxWeeklyDistance: Double {
 이제 그 주에 제일 많이 뛴 요일이 항상 딱 맞는 높이(44pt)로 채워지고, 나머지 요일은 그에 비례한 높이로 나온다. 하루에 몇 km를 뛰든 카드 밖으로 넘칠 일이 없다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/chartafter.png){: width="50%" height="50%"}
+
+---
+
+## 워치 GPWS 경고 화면에서 배경 길게 누르면 PFD 잠깐 보기
+
+`WatchGPWSView`는 SINK RATE/OVERSPEED 같은 경고가 뜨면 화면 전체를 덮어버린다. 그래서 경고가 떠 있는 동안엔 실제 페이스/거리 같은 숫자를 확인할 방법이 END FLIGHT로 러닝을 끝내는 것 말고는 없었다. 배경을 길게 누르고 있는 동안만 잠깐 실제 PFD 화면이 비쳐 보이고, 손을 떼면 다시 경고로 돌아오는 기능을 추가했다.
+
+`WatchPFDView`의 ZStack 구조를 보면 `WatchGPWSView`는 `TabView`(PFD 화면) 위에 얹히는 오버레이일 뿐이라, PFD 화면은 이미 그 밑에 계속 그려지고 있다. 그래서 `WatchGPWSView` 자신을 투명하게 만들기만 하면 아래 있는 PFD가 그대로 드러난다.
+
+```swift
+@State private var isPeeking = false
+
+var body: some View {
+    ZStack {
+        type.bgColor.ignoresSafeArea()
+            .onLongPressGesture(minimumDuration: 0.2, maximumDistance: 50, pressing: { pressing in
+                isPeeking = pressing
+            }, perform: {})
+
+        VStack(spacing: 8) {
+            // 생략
+            EndFlightHoldButton(onEndFlight: onEndFlight)
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+        }
+    }
+    .opacity(isPeeking ? 0 : 1)
+    .animation(.easeOut(duration: 0.15), value: isPeeking)
+}
+```
+
+`WatchGPWSView`엔 이미 러닝 종료용 2초 홀드 버튼(`EndFlightHoldButton`)이 있어서, 새 롱프레스 제스처가 그 버튼이랑 겹치면 안 됐다. 그런데 제스처를 배경(`type.bgColor.ignoresSafeArea()`) 하나에만 걸어두면 따로 영역을 계산할 필요가 없다. SwiftUI가 터치가 들어온 지점의 가장 구체적인 뷰한테 먼저 넘겨주기 때문에, 버튼 위를 누르면 버튼이 받고 그 바깥(배경)을 누르면 이 제스처가 받는다.
+
+`.opacity(...)`는 `ZStack` 전체 바깥에 붙였다. 배경에만 붙이면 텍스트/버튼은 그대로 남아있고 배경만 투명해지는 식이 되어서, 배경과 내용물이 같이 사라지게 하려면 이렇게 바깥에서 한 번에 걸어야 한다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/gpws.gif)
