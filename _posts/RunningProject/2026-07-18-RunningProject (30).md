@@ -663,9 +663,7 @@ if preset.distance == 0 {
 } else {
     viewModel.navigateTo(.targetSelection(preset: preset))  // 기존엔 .paceSetting(preset: preset)
 }
-```
 
-```swift
 // WatchDistanceSettingView, NEXT 버튼
 viewModel.navigateTo(.targetSelection(preset: MissionPreset(
     label: "CUSTOM",
@@ -778,6 +776,8 @@ let modeA = ModeA(target: target, targetPace: targetPace, paceDeviation: paceDev
 
 여기까지 하고 나서 짚어봤는데, 설정(`ModeAView`, 워치 미션 설정 화면)이랑 판정(`RunningCenter`)은 심박 모드가 다 들어갔는데 정작 뛰는 도중에 보는 화면은 그대로였다. 심박 미션으로 시작해도 화면엔 여전히 TARGET PACE만 떠 있었던 거다.
 
+---
+
 ### iOS: MissionHUDBar 분기
 
 `PFDView`의 `MissionHUDBar`가 `targetPace`만 받고 있었다. `target`, `heartRate`, `targetHeartRate`를 추가로 받게 하고, 편차 계산이랑 색깔 기준부터 갈랐다.
@@ -811,6 +811,8 @@ if target == .pace {
 }
 ```
 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/appbpm.png){: width="50%" height="50%"}
+
 ---
 
 ### 워치: GPWS 오버레이 단위 분기
@@ -830,6 +832,8 @@ var gpwsDeviation: Int {
 ```
 
 그리고 `WatchGPWSView`가 편차를 표시할 때 단위를 `"sec"`로 하드코딩하고 있었다. 심박 모드에서 SINK RATE가 뜨면 "+18 sec"라고 나왔을 텐데, 실제로는 bpm 차이인데 초 단위인 것처럼 보였을 거다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/gpwswarn.gif){: width="50%" height="50%"}
 
 ```swift
 var deviationUnit: String = "sec"
@@ -851,11 +855,15 @@ var gpwsDeviationUnit: String {
 }
 ```
 
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/gpwswarn1.gif){: width="50%" height="50%"}
+
 전체 계기판 탭의 STATUS 칸도 항상 "PACE"로 고정돼 있던 걸, 실제 미션 기준에 맞게 바꿨다.
 
 ```swift
 Text(missionTarget == .heartRate ? "HEART RATE" : "PACE")
 ```
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/heartrate.png){: width="50%" height="50%"}
 
 ---
 
