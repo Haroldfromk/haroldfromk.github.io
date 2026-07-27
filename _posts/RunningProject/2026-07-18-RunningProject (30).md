@@ -404,8 +404,6 @@ func sendHealthData() {
 
 ## RunningCenter 수정
 
----
-
 ### didReceiveMessage 수정
 
 먼저 심박이 들어오는 지점(`WatchConnectivityService+iOS`의 `didReceiveMessage`)에 `HealthCenter`로 보내는 한 줄을 추가한다. 화면용 `RunViewModel` 배선은 그대로 두고 옆에 얹는 것뿐이다.
@@ -614,13 +612,13 @@ actor HealthCenter {
 
 ---
 
-## 워치 쪽도 실제로 연결하기
+## 워치 수정
 
 미뤄뒀던 워치 쪽을 연결할 차례다. `HealthCenter`는 처음 설계할 때부터 iOS/watchOS 양쪽이 같이 쓰는 걸 염두에 두고 만든 타입이라, 워치도 똑같은 패턴을 한 번 더 적용하면 된다. 다만 워치는 미션 설정 자체를 폰 없이 워치만으로도 끝낼 수 있는 독자적인 화면 흐름을 갖고 있어서, 그쪽도 같이 손봐야 했다.
 
 ---
 
-### HealthCenter 연결
+### HealthCenter 수정
 
 `WatchViewModel`도 `RunViewModel`과 똑같은 구조로 맞췄다. `healthCenter`를 들고, `runningCenter`를 만들 때 그걸 넘긴다. 이걸 빼먹으면 앞서 본 것과 똑같은 문제가 워치에서도 그대로 재현된다. `runningCenter`가 `RunningCenter()`의 기본값을 타면서 아무도 채워주지 않는 빈 `healthCenter`를 혼자 들게 되고, 워치에서 심박 미션을 켜도 GPWS 판정은 계속 0을 기준으로 돌아간다.
 
@@ -652,7 +650,7 @@ Task {
 
 ---
 
-### 워치 단독 미션 설정 화면
+### 워치 단독 미션 설정
 
 워치에는 원래 폰 없이도 Mission Flight를 시작할 수 있는 자체 설정 흐름이 있었다. 거리 프리셋을 고르거나 CUSTOM으로 직접 입력하면, 곧바로 페이스 설정 화면으로 넘어가는 식이었다. 여기에 페이스/심박 중 뭘 기준으로 할지 고르는 단계를 끼워 넣어야 했다.
 

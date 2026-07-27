@@ -615,11 +615,11 @@ func startTracking() {
 <string>러닝 중 고도 변화를 측정하기 위해 동작 및 피트니스 데이터가 필요합니다.</string>
 ```
 
-워치 앱은 `Info.plist` 파일이 따로 없고 빌드 세팅에서 `GENERATE_INFOPLIST_FILE = YES`로 자동 생성되는 구조라, `project.pbxproj`의 빌드 세팅에 같은 키를 추가했다.
+![](/assets/images/upload/fitness.png){: width="50%" height="50%"}
 
-```
-INFOPLIST_KEY_NSMotionUsageDescription = "러닝 중 고도 변화를 측정하기 위해 동작 및 피트니스 데이터가 필요합니다.";
-```
+워치 앱은 `Info.plist` 파일이 따로 없기에, Project Target에서 값을 추가해주었다.
+
+![](/assets/images/upload/watchfitness.png){: width="50%" height="50%"}
 
 시뮬레이터의 하드웨어 가용성 체크가 오히려 이 크래시를 계속 가려주고 있었던 셈이다. 심박 미션 크래시도 그렇고, 이번 것도 그렇고, 실기기에서만 드러나는 종류의 문제는 결국 실기기로 가봐야 안다.
 
