@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #141a22;
+    --border: #2a3542;
+    --muted: #8a95a3;
+    --text: #c7d0da;
+    --cyan: #3fe6c4;
+    --red: #ff6b6b;
+    --red-bg: #3a1414;
+    --red-border: #7a2a2a;
+    --green-bg: #12332c;
+    --green-border: #1f6f5c;
+    --green: #7ff0d4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    padding: 20px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 {
+    font-size: 15px;
+    color: var(--cyan);
+    letter-spacing: 0.5px;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .controls label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .controls input[type="range"] { flex: 1; min-width: 140px; accent-color: var(--cyan); }
+  .n-value { font-size: 13px; font-weight: 700; color: var(--cyan); min-width: 50px; text-align: right; }
+  .buttons { display: flex; gap: 8px; margin-left: auto; }
+  button {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 9px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: #1c2530;
+    color: var(--text);
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  button.before { border-color: var(--red-border); color: var(--red); }
+  button.after { border-color: var(--green-border); color: var(--green); }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .panel-title { font-size: 13px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .panel-title.before { color: var(--red); }
+  .panel-title.after { color: var(--cyan); }
+
+  .stat-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .stat {
+    flex: 1;
+    background: #1c2530;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+  }
+  .stat b { display: block; font-size: 16px; margin-top: 2px; }
+  .stat b.before { color: var(--red); }
+  .stat b.after { color: var(--green); }
+
+  .stage {
+    position: relative;
+    height: 150px;
+    background: #0f151c;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .stage-label {
+    position: absolute;
+    font-size: 10px;
+    color: #5b6b7d;
+    letter-spacing: 0.5px;
+  }
+  .source-label { top: 8px; left: 14px; }
+  .target-label { top: 8px; right: 20px; text-align: right; }
+
+  .box {
+    position: absolute;
+    right: 20px;
+    top: 34px;
+    width: 92px;
+    height: 92px;
+    border-radius: 10px;
+    background: #1c2530;
+    border: 2px dashed #3a4656;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .box.lit.before { border-color: var(--red-border); background: #23181a; }
+  .box.lit.after { border-color: var(--green-border); background: #16261f; }
+
+  .dot {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #3a4656;
+    border: 1px solid #5b6b7d;
+    transition: transform 0.35s ease, background 0.12s ease, border-color 0.12s ease;
+  }
+  .dot.converted { background: #ff6ec7; border-color: #ff6ec7; }
+  .dot.before-landed { background: var(--red); border-color: var(--red); box-shadow: none; }
+  .dot.after-landed { background: var(--green); border-color: var(--green); box-shadow: none; }
+
+  .result { font-size: 12px; color: var(--muted); margin-top: 4px; min-height: 16px; }
+  .result b { font-size: 14px; }
+  .result b.before { color: var(--red); }
+  .result b.after { color: var(--green); }
+
+  .note { font-size: 11px; color: #5b6b7d; margin-top: 4px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>터치다운 저장 방식 비교 — 좌표가 러닝 기록에 붙는 모습</h1>
+
+  <div class="controls">
+    <label for="nSlider">좌표 개수 (N)</label>
+    <input type="range" id="nSlider" min="4" max="16" step="1" value="8">
+    <span class="n-value" id="nValue">8개</span>
+    <div class="buttons">
+      <button class="before" id="runBefore">BEFORE 실행</button>
+      <button class="after" id="runAfter">AFTER 실행</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title before">BEFORE — 좌표마다 변환하고, 그때그때 하나씩 붙임</div>
+    <div class="stat-row">
+      <div class="stat">변환 횟수<b class="before" id="beforeConvertCount">0</b></div>
+      <div class="stat">붙이기 횟수<b class="before" id="beforeAttachCount">0</b></div>
+    </div>
+    <div class="stage" id="beforeStage">
+      <span class="stage-label source-label">좌표 원본 배열</span>
+      <span class="stage-label target-label">러닝 기록<br>.coordinates</span>
+      <div class="box" id="beforeBox"></div>
+    </div>
+    <div class="result" id="beforeResult">대기 중 — BEFORE 실행을 눌러보세요.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title after">AFTER — 변환은 하되, 붙이기는 다 모아서 한 번만</div>
+    <div class="stat-row">
+      <div class="stat">변환 횟수<b class="after" id="afterConvertCount">0</b></div>
+      <div class="stat">붙이기 횟수<b class="after" id="afterAttachCount">0</b></div>
+    </div>
+    <div class="stage" id="afterStage">
+      <span class="stage-label source-label">좌표 원본 배열</span>
+      <span class="stage-label target-label">러닝 기록<br>.coordinates</span>
+      <div class="box" id="afterBox"></div>
+    </div>
+    <div class="result" id="afterResult">대기 중 — AFTER 실행을 눌러보세요.</div>
+  </div>
+
+  <div class="note">
+    회색 = 아직 변환 전인 원본 좌표, 분홍 = SwiftDataCoordinate로 변환됨, 빨강/초록 = 러닝 기록에 붙음(붙이기 완료). 작은 N으로 실제 움직임을 보여주는 시각화입니다. 실제 10km 러닝이면 좌표가 2000개쯤 쌓이는데, 그 규모에서는 붙이기 한 번당 걸리는 시간이 아주 짧아도 BEFORE는 그걸 2000번 반복하니 다 더하면 체감될 정도로 느려지고, AFTER는 몇 번을 뛰든 붙이기가 딱 한 번이라 거의 그대로입니다.
+  </div>
+</div>
+
+<script>
+  const nSlider = document.getElementById('nSlider');
+  const nValue = document.getElementById('nValue');
+  const runBeforeBtn = document.getElementById('runBefore');
+  const runAfterBtn = document.getElementById('runAfter');
+
+  const beforeStage = document.getElementById('beforeStage');
+  const beforeBox = document.getElementById('beforeBox');
+  const beforeResult = document.getElementById('beforeResult');
+  const beforeConvertCount = document.getElementById('beforeConvertCount');
+  const beforeAttachCount = document.getElementById('beforeAttachCount');
+
+  const afterStage = document.getElementById('afterStage');
+  const afterBox = document.getElementById('afterBox');
+  const afterResult = document.getElementById('afterResult');
+  const afterConvertCount = document.getElementById('afterConvertCount');
+  const afterAttachCount = document.getElementById('afterAttachCount');
+
+  const FLASH_MS = 220; // "변환" 표시(색 반짝임)가 유지되는 시간
+  const MOVE_MS = 350;  // "붙이기" 이동 애니메이션 시간
+  const STEP_MS = FLASH_MS + MOVE_MS; // BEFORE에서 좌표 하나의 변환+붙이기 한 사이클 시간
+  const AFTER_FLASH_HOLD_MS = 300; // AFTER에서 전체가 변환 표시된 채 대기하는 시간
+
+  function updateNLabel() {
+    nValue.textContent = nSlider.value + '개';
+  }
+  nSlider.addEventListener('input', () => {
+    updateNLabel();
+    layoutDots(beforeStage, 'before');
+    layoutDots(afterStage, 'after');
+  });
+  updateNLabel();
+
+  function setControlsDisabled(disabled) {
+    runBeforeBtn.disabled = disabled;
+    runAfterBtn.disabled = disabled;
+    nSlider.disabled = disabled;
+  }
+
+  function layoutDots(stage, mode) {
+    stage.querySelectorAll('.dot').forEach(d => d.remove());
+    const n = parseInt(nSlider.value, 10);
+    const box = mode === 'before' ? beforeBox : afterBox;
+    box.classList.remove('lit', 'before', 'after');
+
+    const cols = Math.ceil(n / 2);
+    const spacing = 26;
+    const startX = 16;
+    const startY = 40;
+
+    const dots = [];
+    for (let i = 0; i < n; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      const row = Math.floor(i / cols);
+      const col = i % cols;
+      const x = startX + col * spacing;
+      const y = startY + row * spacing;
+      dot.style.left = x + 'px';
+      dot.style.top = y + 'px';
+      dot.style.transitionDelay = '0ms';
+      stage.appendChild(dot);
+      dots.push(dot);
+    }
+    return dots;
+  }
+
+  let beforeDots = layoutDots(beforeStage, 'before');
+  let afterDots = layoutDots(afterStage, 'after');
+
+  function boxTarget(stage, box) {
+    const stageRect = stage.getBoundingClientRect();
+    const boxRect = box.getBoundingClientRect();
+    return {
+      x: (boxRect.left - stageRect.left) + boxRect.width / 2 - 7,
+      y: (boxRect.top - stageRect.top) + boxRect.height / 2 - 7
+    };
+  }
+
+  function runBeforeAnim() {
+    setControlsDisabled(true);
+    beforeResult.textContent = '';
+    beforeConvertCount.textContent = '0';
+    beforeAttachCount.textContent = '0';
+    beforeBox.classList.remove('lit');
+    const dots = layoutDots(beforeStage, 'before');
+    const n = dots.length;
+    const target = boxTarget(beforeStage, beforeBox);
+
+    dots.forEach((dot, i) => {
+      const flashAt = i * STEP_MS;
+      const moveAt = flashAt + FLASH_MS;
+
+      // 1단계: 변환 — 색만 반짝, 아직 움직이지 않음
+      setTimeout(() => {
+        dot.classList.add('converted');
+        beforeConvertCount.textContent = i + 1;
+      }, flashAt);
+
+      // 2단계: 붙이기 — 변환 직후 곧바로 박스로 이동
+      setTimeout(() => {
+        dot.classList.remove('converted');
+        const dx = target.x - parseFloat(dot.style.left);
+        const dy = target.y - parseFloat(dot.style.top);
+        dot.style.transform = `translate(${dx}px, ${dy}px)`;
+        dot.classList.add('before-landed');
+        beforeAttachCount.textContent = i + 1;
+        beforeBox.classList.add('lit', 'before');
+
+        if (i === n - 1) {
+          setTimeout(() => {
+            const totalMs = (n - 1) * STEP_MS + FLASH_MS + MOVE_MS;
+            beforeResult.innerHTML = `변환 <b class="before">${n}번</b> + 붙이기 <b class="before">${n}번</b> — 좌표 하나 변환하자마자 바로 붙이고, 다음 좌표로 (총 ${totalMs}ms)`;
+            setControlsDisabled(false);
+          }, MOVE_MS);
+        }
+      }, moveAt);
+    });
+  }
+
+  function runAfterAnim() {
+    setControlsDisabled(true);
+    afterResult.textContent = '';
+    afterConvertCount.textContent = '0';
+    afterAttachCount.textContent = '0';
+    afterBox.classList.remove('lit');
+    const dots = layoutDots(afterStage, 'after');
+    const n = dots.length;
+    const target = boxTarget(afterStage, afterBox);
+
+    // 1단계: 전부 동시에 변환 — 아직 움직이지 않음
+    dots.forEach((dot) => dot.classList.add('converted'));
+    afterConvertCount.textContent = n;
+
+    setTimeout(() => {
+      // 2단계: 다 변환된 걸 확인하고, 한꺼번에 박스로 이동 (붙이기 1번)
+      dots.forEach((dot) => {
+        dot.classList.remove('converted');
+        const dx = target.x - parseFloat(dot.style.left);
+        const dy = target.y - parseFloat(dot.style.top);
+        dot.style.transform = `translate(${dx}px, ${dy}px)`;
+        dot.classList.add('after-landed');
+      });
+      afterBox.classList.add('lit', 'after');
+
+      setTimeout(() => {
+        afterAttachCount.textContent = '1';
+        afterResult.innerHTML = `변환 <b class="after">${n}번</b> + 붙이기 <b class="after">1번</b> — 다 변환해두고, 배열째로 한 번에 붙였다 (총 ${AFTER_FLASH_HOLD_MS + MOVE_MS}ms)`;
+        setControlsDisabled(false);
+      }, MOVE_MS);
+    }, AFTER_FLASH_HOLD_MS);
+  }
+
+  runBeforeBtn.addEventListener('click', runBeforeAnim);
+  runAfterBtn.addEventListener('click', runAfterAnim);
+</script>
+</body>
+</html>

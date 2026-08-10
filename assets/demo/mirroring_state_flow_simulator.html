@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #141a22;
+    --border: #2a3542;
+    --muted: #8a95a3;
+    --text: #c7d0da;
+    --cyan: #3fe6c4;
+    --pink: #ff6ec7;
+    --red: #ff6b6b;
+    --red-bg: #3a1414;
+    --red-border: #7a2a2a;
+    --green: #7ff0d4;
+    --green-bg: #12332c;
+    --green-border: #1f6f5c;
+    --amber: #ffb454;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    padding: 20px;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  h1 {
+    font-size: 15px;
+    color: var(--cyan);
+    letter-spacing: 0.5px;
+    margin: 0 0 4px;
+    font-weight: 700;
+  }
+  .sub { font-size: 11.5px; color: var(--muted); margin: 0 0 14px; }
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  button {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: #1c2530;
+    color: var(--text);
+    flex: 1;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+
+  .cols { display: flex; gap: 12px; flex-wrap: wrap; }
+  .col { flex: 1; min-width: 260px; }
+  .col-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 8px 10px;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+  }
+  .col-title.before { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); border-bottom: none; }
+  .col-title.after { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); border-bottom: none; }
+
+  .stage {
+    border-radius: 0 0 10px 10px;
+    padding: 12px;
+    min-height: 330px;
+  }
+  .stage.before { background: var(--panel); border: 1px solid var(--red-border); border-top: none; }
+  .stage.after { background: var(--panel); border: 1px solid var(--green-border); border-top: none; }
+
+  .devices { display: flex; gap: 8px; margin-bottom: 10px; }
+  .device {
+    flex: 1;
+    background: #1c2530;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .device.active { border-color: var(--pink); }
+  .device-name { font-size: 10.5px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .device-row { font-size: 10px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 2px; }
+  .device-row b { color: var(--text); font-weight: 700; }
+
+  .log {
+    background: #0f151c;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 11px;
+    min-height: 150px;
+    font-size: 11.5px;
+    line-height: 1.75;
+  }
+  .log-empty { color: #5b6b7d; }
+  .log-line { opacity: 0; transform: translateY(3px); transition: opacity 0.2s ease, transform 0.2s ease; }
+  .log-line.show { opacity: 1; transform: translateY(0); }
+
+  .verdict {
+    margin-top: 10px;
+    border-radius: 8px;
+    padding: 10px 11px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .verdict.show { opacity: 1; }
+  .verdict.bad { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .verdict.good { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+
+  .note { font-size: 11px; color: #5b6b7d; margin-top: 14px; line-height: 1.6; }
+  .note code { color: var(--amber); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>runningMode 기준 vs startOrigin 기준</h1>
+  <p class="sub">아이폰이 startWatchApp으로 워치를 실행시킨 뒤, 워치에서 종료 버튼을 누르는 상황</p>
+
+  <div class="controls">
+    <button id="runBtn">두 기준 동시에 실행</button>
+  </div>
+
+  <div class="cols">
+    <div class="col">
+      <div class="col-title before">BEFORE - runningMode 기준</div>
+      <div class="stage before">
+        <div class="devices">
+          <div class="device" id="beforeIphone">
+            <div class="device-name">아이폰</div>
+            <div class="device-row"><span>상태</span><b class="beforeIphoneState">러닝 중</b></div>
+          </div>
+          <div class="device" id="beforeWatch">
+            <div class="device-name">워치</div>
+            <div class="device-row"><span>startOrigin</span><b class="beforeStartOrigin">-</b></div>
+            <div class="device-row"><span>runningMode</span><b class="beforeRunningMode">-</b></div>
+          </div>
+        </div>
+        <div class="log" id="beforeLog"><span class="log-empty">대기 중</span></div>
+        <div class="verdict bad" id="beforeVerdict"></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-title after">AFTER - startOrigin 기준</div>
+      <div class="stage after">
+        <div class="devices">
+          <div class="device" id="afterIphone">
+            <div class="device-name">아이폰</div>
+            <div class="device-row"><span>상태</span><b class="afterIphoneState">러닝 중</b></div>
+          </div>
+          <div class="device" id="afterWatch">
+            <div class="device-name">워치</div>
+            <div class="device-row"><span>startOrigin</span><b class="afterStartOrigin">-</b></div>
+            <div class="device-row"><span>runningMode</span><b class="afterRunningMode">-</b></div>
+          </div>
+        </div>
+        <div class="log" id="afterLog"><span class="log-empty">대기 중</span></div>
+        <div class="verdict good" id="afterVerdict"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <code>runningMode</code>는 <code>startMirroringToCompanionDevice()</code>가 성공했을 때만 <code>.mirrored</code>로 바뀐다. <code>retrieveRemoteSession()</code>을 끈 뒤로는 아이폰에 그 핸드셰이크를 받아줄 리스너가 없어서 이 호출이 실패하고, <code>runningMode</code>는 계속 <code>.standalone</code>으로 남는다. 반면 <code>startOrigin</code>은 <code>AppDelegate.handle()</code>에서 이 핸드셰이크 성공 여부와 무관하게 항상 먼저 세팅되고, <code>stopWorkout()</code>도 이 값을 안 건드려서 종료 시점까지 그대로 남아있다.
+  </div>
+</div>
+
+<script>
+  const runBtn = document.getElementById('runBtn');
+
+  function setControlsDisabled(disabled) {
+    runBtn.disabled = disabled;
+  }
+
+  function addLog(logId, text) {
+    const log = document.getElementById(logId);
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = text;
+    log.appendChild(line);
+    requestAnimationFrame(() => line.classList.add('show'));
+  }
+
+  function clearLog(logId) {
+    document.getElementById(logId).innerHTML = '';
+  }
+
+  function setText(cls, value, color) {
+    document.querySelectorAll('.' + cls).forEach(el => {
+      el.textContent = value;
+      if (color) el.style.color = color;
+    });
+  }
+
+  function runSequence() {
+    setControlsDisabled(true);
+    clearLog('beforeLog');
+    clearLog('afterLog');
+    ['beforeVerdict', 'afterVerdict'].forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('show');
+      el.textContent = '';
+    });
+    ['beforeIphone', 'beforeWatch', 'afterIphone', 'afterWatch'].forEach(id => {
+      document.getElementById(id).classList.remove('active');
+    });
+    setText('beforeIphoneState', '러닝 중');
+    setText('afterIphoneState', '러닝 중');
+    setText('beforeStartOrigin', '-');
+    setText('afterStartOrigin', '-');
+    setText('beforeRunningMode', '-');
+    setText('afterRunningMode', '-');
+
+    const steps = [
+      {
+        at: 100,
+        run: () => {
+          ['beforeIphone', 'afterIphone'].forEach(id => document.getElementById(id).classList.add('active'));
+          addLog('beforeLog', '<b>아이폰</b>: 러닝 시작, startWatchApp() 호출');
+          addLog('afterLog', '<b>아이폰</b>: 러닝 시작, startWatchApp() 호출');
+        }
+      },
+      {
+        at: 900,
+        run: () => {
+          ['beforeIphone', 'afterIphone'].forEach(id => document.getElementById(id).classList.remove('active'));
+          ['beforeWatch', 'afterWatch'].forEach(id => document.getElementById(id).classList.add('active'));
+          setText('beforeStartOrigin', '.remote');
+          setText('afterStartOrigin', '.remote');
+          addLog('beforeLog', '<b>워치</b>: AppDelegate.handle() 진입 → startOrigin = .remote');
+          addLog('afterLog', '<b>워치</b>: AppDelegate.handle() 진입 → startOrigin = .remote');
+        }
+      },
+      {
+        at: 1700,
+        run: () => {
+          setText('beforeRunningMode', '.standalone', 'var(--red)');
+          setText('afterRunningMode', '.standalone', 'var(--red)');
+          addLog('beforeLog', '<b>워치</b>: startMirroringToCompanionDevice() 시도 → 실패 (리스너 없음) → runningMode 그대로');
+          addLog('afterLog', '<b>워치</b>: startMirroringToCompanionDevice() 시도 → 실패 (리스너 없음) → runningMode 그대로');
+        }
+      },
+      {
+        at: 2500,
+        run: () => {
+          ['beforeWatch', 'afterWatch'].forEach(id => document.getElementById(id).classList.remove('active'));
+          addLog('beforeLog', '<b>워치</b>: 종료 버튼 누름 → stopOrigin = .local');
+          addLog('afterLog', '<b>워치</b>: 종료 버튼 누름 → stopOrigin = .local');
+        }
+      },
+      {
+        at: 3300,
+        run: () => {
+          addLog('beforeLog', 'if <b>runningMode == .mirrored</b> → <span style="color:var(--red)">false</span> → sendStopSignal() 호출 안 됨');
+          addLog('afterLog', 'if <b>startOrigin != .local</b> → <span style="color:var(--green)">true</span> → sendStopSignal() 호출됨');
+        }
+      },
+      {
+        at: 4100,
+        run: () => {
+          setText('beforeIphoneState', '계속 러닝 중', 'var(--red)');
+          setText('afterIphoneState', '정상 종료됨', 'var(--green)');
+          const bv = document.getElementById('beforeVerdict');
+          bv.textContent = '아이폰은 종료 신호를 영영 못 받는다';
+          bv.classList.add('show');
+          const av = document.getElementById('afterVerdict');
+          av.textContent = '핸드셰이크 성공 여부와 무관하게 항상 종료된다';
+          av.classList.add('show');
+          setControlsDisabled(false);
+        }
+      }
+    ];
+
+    steps.forEach(step => setTimeout(step.run, step.at));
+  }
+
+  runBtn.addEventListener('click', runSequence);
+</script>
+</body>
+</html>

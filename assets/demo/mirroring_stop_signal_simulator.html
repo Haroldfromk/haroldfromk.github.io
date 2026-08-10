@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #141a22;
+    --border: #2a3542;
+    --muted: #8a95a3;
+    --text: #c7d0da;
+    --cyan: #3fe6c4;
+    --pink: #ff6ec7;
+    --green: #7ff0d4;
+    --green-border: #1f6f5c;
+    --green-bg: #12332c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    padding: 20px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 {
+    font-size: 15px;
+    color: var(--cyan);
+    letter-spacing: 0.5px;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 9px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: #1c2530;
+    color: var(--text);
+    flex: 1;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  button.app { border-color: #3a5a7a; color: #6fb8ff; }
+  button.watch { border-color: var(--green-border); color: var(--green); }
+
+  .stage {
+    position: relative;
+    height: 190px;
+    background: #0f151c;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .device {
+    position: absolute;
+    top: 20px;
+    width: 260px;
+    height: 150px;
+    border-radius: 12px;
+    background: #1c2530;
+    border: 2px solid var(--border);
+    padding: 12px 14px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .device.iphone { left: 24px; }
+  .device.watch { right: 24px; }
+  .device-title { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.5px; }
+  .device-title.iphone { color: #6fb8ff; }
+  .device-title.watch { color: var(--green); }
+  .device-row { font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .device-row b { color: var(--text); font-weight: 700; }
+  .device.active { border-color: var(--pink); background: #241a24; }
+  .device.saved b.state { color: var(--green); }
+  .device.saved { border-color: var(--green-border); background: var(--green-bg); }
+
+  .msg-dot {
+    position: absolute;
+    top: 90px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--pink);
+    box-shadow: 0 0 10px var(--pink);
+    opacity: 0;
+    transition: left 0.7s ease, opacity 0.15s ease;
+  }
+  .msg-label {
+    position: absolute;
+    top: 108px;
+    font-size: 10px;
+    color: var(--pink);
+    white-space: nowrap;
+    opacity: 0;
+    transition: left 0.7s ease, opacity 0.15s ease;
+  }
+
+  .log {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    min-height: 150px;
+    font-size: 12px;
+    line-height: 1.9;
+  }
+  .log-empty { color: #5b6b7d; }
+  .log-line { opacity: 0; transform: translateY(4px); transition: opacity 0.25s ease, transform 0.25s ease; }
+  .log-line.show { opacity: 1; transform: translateY(0); }
+  .log-line .who { font-weight: 700; }
+  .log-line .who.iphone { color: #6fb8ff; }
+  .log-line .who.watch { color: var(--green); }
+  .log-line .who.system { color: var(--pink); }
+
+  .note { font-size: 11px; color: #5b6b7d; margin-top: 10px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>종료 신호가 반대 기기까지 전달되는 구조</h1>
+
+  <div class="controls">
+    <button class="app" id="runApp">앱에서 종료</button>
+    <button class="watch" id="runWatch">워치에서 종료</button>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="device iphone" id="deviceIphone">
+      <div class="device-title iphone">아이폰</div>
+      <div class="device-row"><span>상태</span><b class="state" id="iphoneState">러닝 중</b></div>
+      <div class="device-row"><span>stopOrigin</span><b id="iphoneStopOrigin">nil</b></div>
+    </div>
+    <div class="device watch" id="deviceWatch">
+      <div class="device-title watch">워치</div>
+      <div class="device-row"><span>상태</span><b class="state" id="watchState">러닝 중</b></div>
+      <div class="device-row"><span>stopOrigin</span><b id="watchStopOrigin">nil</b></div>
+    </div>
+    <div class="msg-dot" id="msgDot"></div>
+    <div class="msg-label" id="msgLabel"></div>
+  </div>
+
+  <div class="log" id="log">
+    <span class="log-empty">대기 중 — 위 버튼을 눌러보세요.</span>
+  </div>
+
+  <div class="note">
+    stopOrigin이 .local이면 "내가 직접 끝낸 것", .remote면 "상대가 보낸 종료 신호를 받은 것"이다. 어느 쪽에서 눌러도 sendStopSignal()/handleStopSignal() 메시지 하나로 반대쪽까지 saveRunningData() + resetState()가 실행된다. 이 흐름은 시작 쪽 native 미러링(retrieveRemoteSession)과는 별개라 그걸 꺼도 그대로 동작한다.
+  </div>
+</div>
+
+<script>
+  const runAppBtn = document.getElementById('runApp');
+  const runWatchBtn = document.getElementById('runWatch');
+  const deviceIphone = document.getElementById('deviceIphone');
+  const deviceWatch = document.getElementById('deviceWatch');
+  const iphoneState = document.getElementById('iphoneState');
+  const watchState = document.getElementById('watchState');
+  const iphoneStopOrigin = document.getElementById('iphoneStopOrigin');
+  const watchStopOrigin = document.getElementById('watchStopOrigin');
+  const msgDot = document.getElementById('msgDot');
+  const msgLabel = document.getElementById('msgLabel');
+  const log = document.getElementById('log');
+  const stage = document.getElementById('stage');
+
+  const LEFT_X = 60;
+  const RIGHT_X = 490;
+
+  function setControlsDisabled(disabled) {
+    runAppBtn.disabled = disabled;
+    runWatchBtn.disabled = disabled;
+  }
+
+  function resetPanels() {
+    [deviceIphone, deviceWatch].forEach(d => d.classList.remove('active', 'saved'));
+    iphoneState.textContent = '러닝 중';
+    watchState.textContent = '러닝 중';
+    iphoneStopOrigin.textContent = 'nil';
+    watchStopOrigin.textContent = 'nil';
+    msgDot.style.opacity = '0';
+    msgLabel.style.opacity = '0';
+    log.innerHTML = '';
+  }
+
+  function addLog(who, whoLabel, text) {
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = `<span class="who ${who}">${whoLabel}</span> ${text}`;
+    log.appendChild(line);
+    requestAnimationFrame(() => line.classList.add('show'));
+  }
+
+  function moveMessage(fromX, toX, label, cb) {
+    msgDot.style.left = fromX + 'px';
+    msgLabel.style.left = (fromX - 10) + 'px';
+    msgLabel.textContent = label;
+    msgDot.style.transition = 'none';
+    msgLabel.style.transition = 'none';
+    void msgDot.offsetWidth;
+    msgDot.style.transition = 'left 0.7s ease, opacity 0.15s ease';
+    msgLabel.style.transition = 'left 0.7s ease, opacity 0.15s ease';
+    msgDot.style.opacity = '1';
+    msgLabel.style.opacity = '1';
+    requestAnimationFrame(() => {
+      msgDot.style.left = toX + 'px';
+      msgLabel.style.left = (toX - 10) + 'px';
+    });
+    setTimeout(() => {
+      msgDot.style.opacity = '0';
+      msgLabel.style.opacity = '0';
+      cb();
+    }, 750);
+  }
+
+  function runScenario(origin) {
+    setControlsDisabled(true);
+    resetPanels();
+
+    const isApp = origin === 'app';
+    const localDevice = isApp ? deviceIphone : deviceWatch;
+    const localState = isApp ? iphoneState : watchState;
+    const localStopOrigin = isApp ? iphoneStopOrigin : watchStopOrigin;
+    const remoteDevice = isApp ? deviceWatch : deviceIphone;
+    const remoteState = isApp ? watchState : iphoneState;
+    const remoteStopOrigin = isApp ? watchStopOrigin : iphoneStopOrigin;
+    const localWho = isApp ? 'iphone' : 'watch';
+    const localLabel = isApp ? '아이폰' : '워치';
+    const remoteWho = isApp ? 'watch' : 'iphone';
+    const remoteLabel = isApp ? '워치' : '아이폰';
+
+    setTimeout(() => {
+      localDevice.classList.add('active');
+      localStopOrigin.textContent = '.local';
+      addLog(localWho, localLabel, `종료 버튼 눌림 → stopOrigin = .local`);
+    }, 100);
+
+    setTimeout(() => {
+      addLog(localWho, localLabel, `saveRunningData() + resetState() 실행, sendStopSignal() 전송`);
+      moveMessage(
+        isApp ? LEFT_X : RIGHT_X,
+        isApp ? RIGHT_X : LEFT_X,
+        'remoteStopped',
+        () => {}
+      );
+    }, 900);
+
+    setTimeout(() => {
+      remoteDevice.classList.add('active');
+      remoteStopOrigin.textContent = '.remote';
+      addLog(remoteWho, remoteLabel, `handleStopSignal() 수신 → stopOrigin = .remote`);
+    }, 1750);
+
+    setTimeout(() => {
+      addLog(remoteWho, remoteLabel, `saveRunningData() + resetState() 실행`);
+      localDevice.classList.remove('active');
+      remoteDevice.classList.remove('active');
+      localDevice.classList.add('saved');
+      remoteDevice.classList.add('saved');
+      localState.textContent = '종료됨';
+      remoteState.textContent = '종료됨';
+    }, 2450);
+
+    setTimeout(() => {
+      addLog('system', '결과', `양쪽 다 저장 완료 — ${localLabel}이 끝내도 ${remoteLabel}까지 같이 끝난다.`);
+      setControlsDisabled(false);
+    }, 3000);
+  }
+
+  runAppBtn.addEventListener('click', () => runScenario('app'));
+  runWatchBtn.addEventListener('click', () => runScenario('watch'));
+</script>
+</body>
+</html>

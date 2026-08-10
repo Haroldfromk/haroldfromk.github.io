@@ -157,7 +157,7 @@ holdTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ 
 
 스와이프를 해봐도 아래로 안 넘어가고 그대로 멈춰있었다.
 
-[예전 글](https://haroldfromk.github.io/posts/RunningProject-(33)/){:target="_blank"}에서 스플릿이 몇 개 없을 땐 스크롤이 필요 없는데도 스크롤이 되는 게 어색해서, 콘텐츠 높이를 직접 재서 화면을 넘칠 때만 스크롤을 켜는 방식으로 고쳤었다.
+[이전글](https://haroldfromk.github.io/posts/RunningProject-(33)/){:target="_blank"}에서 스플릿이 몇 개 없을 땐 스크롤이 필요 없는데도 스크롤이 되는 게 어색해서 'scrollDisabled'을 사용했었다.
 
 ```swift
 // FlightSummaryView (기존)
@@ -382,7 +382,7 @@ Text("Hold background to peek PFD")
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/watchgpws.png){: width="50%" height="50%"}
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/gpwspfdbutton.gif)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/gpws11.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/gpwspfdbutton.gif)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/gpws11.gif)
 
 ---
 
