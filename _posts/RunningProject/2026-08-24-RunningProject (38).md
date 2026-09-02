@@ -69,7 +69,7 @@ locationManager.distanceFilter = kCLDistanceFilterNone
 
 같은 러닝을 "달리는 중"에서 "멈춤"으로 이어간다고 할 때, 두 설정에서 위치가 언제 들어오는지를 그려보면 이렇다.
 
-![](/assets/images/upload/2026-08-24-RunningProject-38/distance-filter-update-timeline.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-24-RunningProject-38/distance-filter-update-timeline.png)
 
 위 그림에서 보듯 예전 설정(5m)에서는 멈추는 순간 초록 점(위치 데이터)이 아예 끊긴다. 코드 입장에서는 이게 "사용자가 멈췄다"인지 "GPS 신호만 잠깐 안 잡힌다"인지 구분할 방법이 없다. 새 설정(None)에서는 멈춰도 파란 점이 계속 들어오고, 그 점들이 실어오는 raw 속도값이 낮다는 걸로 "진짜 정지"를 판단할 수 있게 된다.
 

@@ -15,8 +15,8 @@ published: true
 배포한 지 얼마 안 된 버전에서 나온 문제라 밴드에이드로 덮지 않고 진짜 원인을 찾기로 했다. 원인을 정리하면 아래 흐름과 같다.
 
 <picture>
-  <source srcset="/assets/images/upload/2026-08-27-RunningProject-40/speed-accuracy-gap-flow-dark.png" media="(prefers-color-scheme: dark)">
-  <img src="/assets/images/upload/2026-08-27-RunningProject-40/speed-accuracy-gap-flow-light.png" alt="GPS 속도값을 못 믿을 때 정지 판단은 건너뛰지만 페이스 계산용 스무딩 값은 그대로 갱신되면서, 페이스가 계속 커지다 결국 앱이 강제 종료되는 흐름도">
+  <source srcset="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-27-RunningProject-40/speed-accuracy-gap-flow-dark.png" media="(prefers-color-scheme: dark)">
+  <img src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-27-RunningProject-40/speed-accuracy-gap-flow-light.png" alt="GPS 속도값을 못 믿을 때 정지 판단은 건너뛰지만 페이스 계산용 스무딩 값은 그대로 갱신되면서, 페이스가 계속 커지다 결국 앱이 강제 종료되는 흐름도">
 </picture>
 
 ---

@@ -16,7 +16,7 @@ published: true
 
 쉽게 비유하면 이렇다. 원래는 기록이 도착해도 "관제탑(HomeView)"이 켜져 있어야만 그걸 받아서 보관함에 넣어주는 구조였다. 관제탑이 꺼져있는 상태(화면이 안 떠있는 상태)에서 도착한 기록은 그대로 흩어져 사라졌다. 그래서 관제탑 유무와 상관없이 도착 즉시 스스로 기록하는 "비행 기록 장치"로 바꿨다.
 
-![](/assets/images/upload/2026-08-24-RunningProject-39/flight-recorder-concept.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-24-RunningProject-39/flight-recorder-concept.png)
 
 ---
 
@@ -118,7 +118,7 @@ Task { @MainActor in
 
 `WatchConnectivityService`는 여전히 SwiftData를 전혀 모른다. 그저 이미 참조하고 있던 `RunViewModel`에게 "이 기록 좀 맡아줘"라고 부탁할 뿐이고, 저장을 어떻게 할지는 전부 `RunViewModel` 안에 있다. `insert` 직후 `save()`를 명시적으로 호출해서 SwiftData의 자동 저장 시점을 기다리지 않고 그 자리에서 디스크에 반영되게 했다. 이러면 적어도 저장 자체가 `HomeView`의 `.onChange`/`.onAppear` 타이밍에 걸리는 일은 없어진다.
 
-![](/assets/images/upload/2026-08-24-RunningProject-39/watch-data-save-flow.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-24-RunningProject-39/watch-data-save-flow.png)
 
 정리하면, 저장으로 이어지는 주 통로 자체를 `HomeView`에서 `didReceiveUserInfo` 콜백으로 옮긴 것이다. `HomeView`의 `drainPendingWatchData()`는 지우지 않고 그대로 뒀지만, 이제는 주 통로가 아니라 `modelContext`가 아직 안 붙어있는 예외적인 상황에서만 쓰이는 보조 안전망으로 격하됐다.
 
@@ -172,7 +172,7 @@ init() {
 
 앱이 완전히 꺼져있던 상태에서 워치가 기록을 보냈을 때, 실제로 어떤 순서로 저장까지 이어지는지 정리하면 이렇다.
 
-![](/assets/images/upload/2026-08-24-RunningProject-39/init-flow.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-24-RunningProject-39/init-flow.png)
 
 `RunWayApp.init()` 안에서 일어나는 두 줄(`RunViewModel()` 생성, `modelContext` 대입)이 전부 `WCSession.activate()`보다 먼저 끝난다는 게 핵심이다. 그래서 iOS가 `didReceiveUserInfo` 콜백을 부를 시점엔 `vm`과 `modelContext`가 이미 둘 다 준비돼있고, `HomeView`는 이 흐름에 한 번도 등장하지 않는다.
 
@@ -186,7 +186,7 @@ init() {
 
 여기서 "앱이 안 켜져있다"를 두 상태로 나눠야 한다.
 
-![](/assets/images/upload/2026-08-24-RunningProject-39/process-states.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-24-RunningProject-39/process-states.png)
 
 **백그라운드 정지 상태**라면 사실 오늘 버그와는 상관이 없었다. 프로세스가 메모리에 그대로 남아있으니, `RunViewModel`도 `modelContext`도 예전에(마지막으로 앱을 열었을 때) 이미 다 준비된 채로 얼어있을 뿐이다.
 
