@@ -1,7 +1,7 @@
 ---
 title: RunWay 1.3.1 HotFix
 writer: Harold
-date: 2026-09-02 21:00:00 +0900
+date: 2026-09-02 07:00:00 +0900
 categories: [RunWay]
 tags: [GPS]
 
