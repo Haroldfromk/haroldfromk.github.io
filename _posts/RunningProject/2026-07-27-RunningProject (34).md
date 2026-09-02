@@ -200,7 +200,7 @@ Task {
 </array>
 ```
 
-찾아보니 `AVSpeechSynthesizer`는 이 설정을 다 해줘도 워치 백그라운드에서 완벽하게 동작하지 않는다는 보고가 있다([Apple Developer Forums](https://developer.apple.com/forums/thread/64275){:target="_blank"}). 화면을 보고 있을 땐 문제없이 들리겠지만, 화면이 꺼진 채로도 항상 들릴 거라고는 장담 못 한다 - 이 부분은 실기기로 오래 뛰어보면서 확인해야 할 것 같다.
+찾아보니 `AVSpeechSynthesizer`는 이 설정을 다 해줘도 워치 백그라운드에서 완벽하게 동작하지 않는다는 보고가 있다([Apple Developer Forums](https://developer.apple.com/forums/thread/64275){:target="_blank"}). 화면을 보고 있을 땐 문제없이 들리겠지만, 화면이 꺼진 채로도 항상 들릴 거라고는 장담 못 한다. 이 부분은 실기기로 오래 뛰어보면서 확인해야 할 것 같다.
 
 ---
 

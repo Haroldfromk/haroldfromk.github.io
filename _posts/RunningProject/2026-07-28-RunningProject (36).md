@@ -18,7 +18,7 @@ km 스플릿 음성 안내는 이미 붙였는데, 원래 계획했던 오디오
 
 `TakeoffView`엔 이미 ROTATE 버튼을 누르면 3, 2, 1, ROTATE! 순서로 숫자가 커지는 카운트다운(`startCountdown()`, `countdownValue`)이 있다. 여기에 숫자가 바뀔 때마다 `SpeechAnnouncerService`로 짧게 읽어주기만 하면 될 것 같다. km 스플릿 때 만든 서비스를 그대로 재사용하는 거라 새로 만들 건 별로 없어 보인다.
 
-터치다운 쪽은 `TouchdownHoldButton`의 홀드가 끝나는 시점(`onTouchdown` 클로저)에 이미 `distance`, `time`, `avgPace`를 계산해서 Live Activity 갱신에 쓰고 있으니, 같은 값을 그대로 문장 하나로 만들어서 읽어주면 된다. km 스플릿 안내랑 똑같이 영어로 고정하는 게 맞을 것 같다 - "TOTAL 5.2 KILOMETERS, TIME 32 MINUTES, AVERAGE PACE 6 10 PER KILOMETER" 이런 식으로.
+터치다운 쪽은 `TouchdownHoldButton`의 홀드가 끝나는 시점(`onTouchdown` 클로저)에 이미 `distance`, `time`, `avgPace`를 계산해서 Live Activity 갱신에 쓰고 있으니, 같은 값을 그대로 문장 하나로 만들어서 읽어주면 된다. km 스플릿 안내랑 똑같이 영어로 고정하는 게 맞을 것 같다. "TOTAL 5.2 KILOMETERS, TIME 32 MINUTES, AVERAGE PACE 6 10 PER KILOMETER" 이런 식으로.
 
 카운트다운/터치다운 둘 다 km 스플릿 안내랑 겹칠 일은 없다. 카운트다운은 러닝 시작 전, 터치다운은 러닝이 완전히 끝난 시점이라 시간상 안 마주친다.
 
@@ -28,7 +28,7 @@ km 스플릿 음성 안내는 이미 붙였는데, 원래 계획했던 오디오
 
 로컬 기록이 통째로 날아가는 걸 막는 백업이라, 여러 유저 레코드를 공유하는 크루 기능(v1.3에서 쓸 Public Database)이랑은 성격이 다르다. 내 계정 Private Database에만 쓰는 개인 백업이라 리스크도 훨씬 작다.
 
-백업 대상은 `SwiftDataFlight`랑 거기 딸린 관계(`SwiftDataCoordinate`, `SwiftDataAlert`, `SwiftDataSplit`)다. 다행히 오늘 미션 목표 필드 추가할 때 이미 한 번 겪어봤듯이, SwiftData는 새 필드에 선언부 기본값을 주는 방식으로 마이그레이션을 관리하고 있는데, SwiftData가 지원하는 자동 CloudKit 동기화(`ModelConfiguration(cloudKitDatabase:)`)도 비슷한 조건을 요구한다고 알고 있다 - 필드마다 기본값이 있거나 옵셔널이어야 하고, 유니크 제약이 없어야 하는 식. 지금까지 필드 추가할 때마다 이 규칙을 지켜온 게 우연히 CloudKit 동기화 조건도 같이 만족시켜온 셈이라, 스키마를 아예 새로 짤 필요 없이 이 자동 동기화를 그대로 써볼 수 있을 것 같다.
+백업 대상은 `SwiftDataFlight`랑 거기 딸린 관계(`SwiftDataCoordinate`, `SwiftDataAlert`, `SwiftDataSplit`)다. 다행히 오늘 미션 목표 필드 추가할 때 이미 한 번 겪어봤듯이, SwiftData는 새 필드에 선언부 기본값을 주는 방식으로 마이그레이션을 관리하고 있는데, SwiftData가 지원하는 자동 CloudKit 동기화(`ModelConfiguration(cloudKitDatabase:)`)도 비슷한 조건을 요구한다고 알고 있다. 필드마다 기본값이 있거나 옵셔널이어야 하고, 유니크 제약이 없어야 하는 식. 지금까지 필드 추가할 때마다 이 규칙을 지켜온 게 우연히 CloudKit 동기화 조건도 같이 만족시켜온 셈이라, 스키마를 아예 새로 짤 필요 없이 이 자동 동기화를 그대로 써볼 수 있을 것 같다.
 
 그래도 몇 가지는 미리 정해야 한다.
 
@@ -136,7 +136,7 @@ enum SettingsDestination: Hashable {
 
 struct SettingsView: View {
     var body: some View {
-        // ...
+        // 생략
         .customNavHeader("SETTINGS", showsBackButton: false)
         .navigationDestination(for: SettingsDestination.self) { destination in
             switch destination {
@@ -336,7 +336,7 @@ enum PolylineSimplifier {
 
     static func simplify(_ coordinates: [(latitude: Double, longitude: Double)]) -> [(latitude: Double, longitude: Double)] {
         guard coordinates.count > 2 else { return coordinates }
-        let points = project(coordinates) // 위경도 -> 로컬 미터 좌표 변환 (생략)
+        let points = project(coordinates) // 위경도 -> 로컬 미터 좌표 변환
         let keptIndices = simplifiedIndices(points, tolerance: tolerance)
         return keptIndices.map { coordinates[$0] }
     }
@@ -353,7 +353,7 @@ enum PolylineSimplifier {
 
     static func simplify(_ coordinates: [(latitude: Double, longitude: Double)]) -> [(latitude: Double, longitude: Double)] {
         guard coordinates.count > 2 else { return coordinates }
-        let points = project(coordinates) // 위경도 -> 로컬 미터 좌표 변환 (생략)
+        let points = project(coordinates) // 위경도 -> 로컬 미터 좌표 변환
 
         let xs = points.map(\.x)
         let ys = points.map(\.y)
@@ -509,7 +509,7 @@ query.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
 
 대시보드의 "Query Records" 버튼은 필터/정렬을 아무것도 안 넣으면 자기 나름의 기본 조회를 만드는데, 그때 recordName을 참조하는 것으로 보인다. 반면 우리 앱 코드는 조건(`date > ...`)과 정렬(`date` 기준) 둘 다 이미 인덱스가 있는 `date` 필드만 쓰도록 명시했기 때문에 recordName을 아예 참조할 일이 없다. 대시보드에서 그때그때 `date`로 정렬(또는 필터) 조건을 직접 추가해서 눌러봐도 되지만, [Apple Docs](https://developer.apple.com/documentation/cloudkit/inspecting-and-editing-an-icloud-container-s-schema#Enable-querying-for-your-record-type)를 보니 아예 recordName 자체에 QUERYABLE 인덱스를 걸어두는 방법도 있었다.
 
-![](/assets/images/upload/addindex.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/addindex.png){: width="50%" height="50%"}
 
 - Dashboard 왼쪽 메뉴에서 **Schema > Indexes**로 들어간다.
 - 위쪽 **+** 버튼을 눌러 Add Index를 연다.
@@ -575,12 +575,12 @@ var label: LocalizedStringKey {
 
 ```swift
 // before
-Tab("Deck", ...) {
+Tab("Deck") {
     NavigationStack { HomeView() }
 }
 
 // after
-Tab("Deck", ...) {
+Tab("Deck") {
     HomeView()
 }
 ```
@@ -590,7 +590,7 @@ TAKEOFF 화면엔 "카운트다운을 시작했는지"를 나타내는 `isLaunch
 ```swift
 // TakeoffView.swift
 private var isLaunching: Bool { countdownActive || didStartFlight }
-...
+// 생략
 .customNavHeader("TAKEOFF", showsBackButton: !isLaunching)
 .navigationBarBackButtonHidden(isLaunching)
 .toolbar(isLaunching ? .hidden : .visible, for: .tabBar)
@@ -607,7 +607,7 @@ PFDView(러닝 중 화면)는 들어온 시점에 이미 러닝이 시작된 뒤
 
 FlightSummaryView는 원래부터 탭바를 숨기는 코드가 없어서 손대지 않았다. 시뮬레이터로 확인해보니 TAKEOFF에서 ROTATE 누르기 전엔 뒤로가기/탭바가 그대로 보이다가, ROTATE를 누르고 카운트다운이 시작되면서(PFDView로 넘어간 뒤까지) 둘 다 사라지는 게 의도한 대로 동작했다.
 
-![](/assets/images/upload/rotate.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/rotate.gif){: width="50%" height="50%"}
 
 ---
 

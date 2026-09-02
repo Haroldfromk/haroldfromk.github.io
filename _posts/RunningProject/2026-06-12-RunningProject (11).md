@@ -37,11 +37,11 @@ return distanceGap <= 4 && timestampGap >= 5 ? true : false
 
 ---
 
-**AI-B의 의견 - IIR 버리고 SMA(이동 평균 큐)로 전환 + 타임아웃 PAUSE**
+**AI-B의 의견: IIR 버리고 SMA(이동 평균 큐)로 전환 + 타임아웃 PAUSE**
 
 AI-B는 30초 지연의 원인을 IIR 필터 자체의 구조적 한계로 진단했다. 초기값이 0인 상태에서 β = 0.25로 수렴하려면 수학적으로 10~15번 이상의 업데이트가 필요하고, `distanceFilter = 5` 환경에서는 그게 딱 30초에 해당한다는 것이다. 따라서 IIR을 버리고 최근 N개의 속도를 배열로 관리하는 SMA 방식으로 전환하고, PAUSE는 GPS 업데이트가 끊긴 지 5초가 지나면 자동 감지하는 타임아웃 방식을 제안했다.
 
-**AI-A의 의견 - IIR 유지 + 초기값 처리 수정 + ViewModel 타임아웃 PAUSE**
+**AI-A의 의견: IIR 유지 + 초기값 처리 수정 + ViewModel 타임아웃 PAUSE**
 
 AI-A는 IIR 자체의 문제가 아니라 초기값 처리의 허점이라고 반박했다. `location.speed`가 음수(-1)일 때도 초기화 조건을 통과해버리는 것이 문제이며, `max(speed, 0)`으로 음수를 보정하고 `speed > 0`일 때만 초기화하도록 수정하면 수렴 지연이 해결된다는 것이다. PAUSE는 Actor에 `await`로 매초 물어보는 대신 ViewModel이 마지막 데이터 수신 시각을 자체적으로 기록해 타이머 콜백에서 체크하는 방식을 제안했다.
 
@@ -293,7 +293,7 @@ struct AlertContext {
         dismissButton: .default(Text("OK"))
     )
     
-    // 나머지도 같은 방식이라 생략
+    // 생략
 }
 ```
 
@@ -861,7 +861,7 @@ Apple이 `NavigationPath`를 권장하는 이유도 view hierarchy를 파괴하�
 var navigationPath: [FlightDestination] = []
 
 func resetState() async {
-    // 생략 (기존 초기화)
+    // 생략
     await runningCenter.reset()
     navigationPath = [] // 배열을 비우면 HomeView(Root)로 자동 복귀
 }

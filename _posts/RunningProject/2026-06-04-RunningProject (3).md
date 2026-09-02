@@ -432,7 +432,7 @@ try await store.requestAuthorization(toShare: healthTypes as! Set<HKSampleType>,
 > 💡 `runningSpeed`를 실시간으로 UI에 표시할 때 데이터가 튀거나 주기가 불규칙해서 화면이 출렁거린다면 `HKStatisticsCollectionQuery`를 대안으로 검토해볼 수 있다.
 >
 >[HKStatisticsCollectionQuery Docs](https://developer.apple.com/documentation/healthkit/hkstatisticscollectionquery){:target="_blank"}에 의하면
-> **HKStatisticsCollectionQuery** - 고정된 시간 간격으로 여러 통계 쿼리를 수행하는 쿼리이다.
+> **HKStatisticsCollectionQuery**는 고정된 시간 간격으로 여러 통계 쿼리를 수행하는 쿼리이다.
 >
 > 예를 들어 5초 단위의 평균 속도로 묶어서 쿼리를 던지면 실시간성을 유지하면서도 UI를 훨씬 부드럽게 표현할 수 있다.
 >
@@ -620,7 +620,7 @@ func fetchStrideLength() async {
 
 알고 보니 두 가지 문제가 겹쳐있었다.
 
-**첫 번째** - `HKStatisticsCollectionQueryDescriptor`의 `stat.startDate`는 MockData의 실제 등록 시간이 아니라 쿼리가 구간을 나누는 기준 시간이다. 즉 프린트 자체가 잘못된 것이었다.
+**첫 번째**, `HKStatisticsCollectionQueryDescriptor`의 `stat.startDate`는 MockData의 실제 등록 시간이 아니라 쿼리가 구간을 나누는 기준 시간이다. 즉 프린트 자체가 잘못된 것이었다.
 
 실제 등록 시간을 확인하려면 `sample.startDate`로 출력해야 한다.
 
@@ -630,7 +630,7 @@ for sample in result.addedSamples {
 }
 ```
 
-**두 번째** - 근본적으로도 문제가 있었다. `.now`에 현재 시각이 그대로 포함되어 있기 때문에 `-i`일을 빼더라도 시/분/초는 그대로 유지된다. 그래서 `startOfDay`로 하루의 시작(00:00:00)으로 초기화한 뒤 hour offset을 더해야 날짜별로 오전 6~8시 사이의 랜덤한 시간이 잡힌다.
+**두 번째**, 근본적으로도 문제가 있었다. `.now`에 현재 시각이 그대로 포함되어 있기 때문에 `-i`일을 빼더라도 시/분/초는 그대로 유지된다. 그래서 `startOfDay`로 하루의 시작(00:00:00)으로 초기화한 뒤 hour offset을 더해야 날짜별로 오전 6~8시 사이의 랜덤한 시간이 잡힌다.
 
 ```swift
 // Before

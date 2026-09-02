@@ -662,9 +662,9 @@ Watch 입장에서 실제로 구분해야 하는 경우는 셋이다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/sce.png){: width="50%" height="50%"}
 
-1. **Watch 단독** - `WatchTakeoffView`에서 시작했고, iPhone이 없거나 미러링이 안 잡힌 경우
-2. **Watch 주도 미러링** - `WatchTakeoffView`에서 시작했는데 iPhone이 미러링을 받아준 경우
-3. **iPhone 주도 미러링** - `AppDelegate.handle(_:)`로 시작된 경우. 이건 항상 미러링이다
+1. **Watch 단독**. `WatchTakeoffView`에서 시작했고, iPhone이 없거나 미러링이 안 잡힌 경우
+2. **Watch 주도 미러링**. `WatchTakeoffView`에서 시작했는데 iPhone이 미러링을 받아준 경우
+3. **iPhone 주도 미러링**. `AppDelegate.handle(_:)`로 시작된 경우. 이건 항상 미러링이다
 
 ("iPhone 단독"은 Watch가 아예 켜지지 않으니 Watch 쪽에서는 신경 쓸 필요가 없는 경우다.)
 

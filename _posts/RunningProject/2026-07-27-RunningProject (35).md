@@ -62,7 +62,7 @@ private struct TouchdownHoldButton: View {
             }
             .foregroundColor(.white)
         }
-        // 생략 (frame, clipShape)
+        // 생략
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in
@@ -165,7 +165,7 @@ holdTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ 
 GeometryReader { proxy in
     ScrollView(showsIndicators: false) {
         VStack(spacing: 10) {
-            // 생략 (실제 콘텐츠)
+            // 생략
         }
         .background(
             GeometryReader { contentProxy in
@@ -189,7 +189,7 @@ GeometryReader { proxy in
 
 GeometryReader { proxy in
     VStack(spacing: 10) {
-        // 생략 (배지, 지도 카드, 통계 박스)
+        // 생략
 
         if !splits.isEmpty {
             SplitsChartView(splits: splits, totalDistance: displayFlight?.distance ?? 0)
@@ -198,7 +198,7 @@ GeometryReader { proxy in
             Spacer(minLength: 0)
         }
 
-        // 생략 (GO TO DECK 버튼)
+        // 생략
     }
     .frame(width: proxy.size.width, height: proxy.size.height)
 }
@@ -256,7 +256,7 @@ let runningData = SwiftDataFlight(
 // WatchConnectivityService+watchOS.swift, sendRunningData()
 
 let userInfo: [String: Any] = [
-    // 생략 (mode, distance, time, ...)
+    // 생략
     "missionTarget": flight.missionTarget,
     "missionTargetPace": flight.missionTargetPace,
     "missionPaceDeviation": flight.missionPaceDeviation,

@@ -156,11 +156,11 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
 ---
 
-`didUpdateLocations` - GPS 위치 업데이트가 올 때마다 호출된다. `locations.last`로 가장 최신 좌표를 꺼내 쓴다.
+`didUpdateLocations`는 GPS 위치 업데이트가 올 때마다 호출된다. `locations.last`로 가장 최신 좌표를 꺼내 쓴다.
 
-`didFailWithError` - 위치 수집에 실패했을 때 호출된다. 권한 문제나 GPS 신호 없음 등이 원인이 될 수 있다.
+`didFailWithError`는 위치 수집에 실패했을 때 호출된다. 권한 문제나 GPS 신호 없음 등이 원인이 될 수 있다.
 
-`locationManagerDidChangeAuthorization` - 권한 상태가 바뀔 때마다 호출된다. 앱 최초 실행 시에도 호출되기 때문에 여기서 권한 요청과 위치 수집 시작을 함께 처리한다.
+`locationManagerDidChangeAuthorization`는 권한 상태가 바뀔 때마다 호출된다. 앱 최초 실행 시에도 호출되기 때문에 여기서 권한 요청과 위치 수집 시작을 함께 처리한다.
 
 ---
 

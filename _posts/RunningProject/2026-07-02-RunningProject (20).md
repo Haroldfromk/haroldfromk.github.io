@@ -58,18 +58,18 @@ App Store 스크린샷은 그냥 캡처한 화면을 올리는 게 아니라, �
 
 **실제 캡처 순서 - iPhone (6장, 스토리텔링 구성)**
 
-1. Home - 앱 첫인상, RUNWAY 브랜드 + Mission/Free Flight 선택
-2. Takeoff - Pre-flight check, 앱만의 독특한 시작 시퀀스
-3. PFD Mission Flight - 핵심 기능, 목표 페이스 대비 진행 상황
-4. Dynamic Island - 다른 앱엔 없는 차별점, 락스크린에서도 보이는 정보
-5. Flight Summary - 실제 GPS 경로 지도, 결과물
-6. Flight Calendar - 히트맵, 꾸준함/기록 관리 매력
+1. Home. 앱 첫인상, RUNWAY 브랜드 + Mission/Free Flight 선택
+2. Takeoff. Pre-flight check, 앱만의 독특한 시작 시퀀스
+3. PFD Mission Flight. 핵심 기능, 목표 페이스 대비 진행 상황
+4. Dynamic Island. 다른 앱엔 없는 차별점, 락스크린에서도 보이는 정보
+5. Flight Summary. 실제 GPS 경로 지도, 결과물
+6. Flight Calendar. 히트맵, 꾸준함/기록 관리 매력
 
 **실제 캡처 순서 - Apple Watch (3장)**
 
-1. Home - Mission/Free Flight 선택, iPhone과 동일한 브랜드 경험
-2. Running (PFD) - 페이스/GPWS/심박/케이던스, 손목에서도 유지되는 계기판 룩
-3. Summary - MISSION COMPLETE, 결과 확인 후 RETURN TO BASE
+1. Home. Mission/Free Flight 선택, iPhone과 동일한 브랜드 경험
+2. Running (PFD). 페이스/GPWS/심박/케이던스, 손목에서도 유지되는 계기판 룩
+3. Summary. MISSION COMPLETE, 결과 확인 후 RETURN TO BASE
 
 ---
 

@@ -178,9 +178,9 @@ Strava나 Nike Run Club 같은 러닝 앱들도 다 이 카테고리라, 우리�
 
 보면 새롭게 2 항목이 추가된걸 알 수 있다.
 
-**소셜 미디어** - 소셜 피드나 비슷한 방식으로 사용자 생성 콘텐츠(UGC)를 재배포·확산시키는 기능이 있는지 묻는 항목이다. RunWay는 러닝 기록이 전부 기기 로컬에만 저장되고, 다른 사용자와 공유하거나 피드로 노출하는 기능 자체가 없어서 아니오로 답했다.
+**소셜 미디어**는 소셜 피드나 비슷한 방식으로 사용자 생성 콘텐츠(UGC)를 재배포·확산시키는 기능이 있는지 묻는 항목이다. RunWay는 러닝 기록이 전부 기기 로컬에만 저장되고, 다른 사용자와 공유하거나 피드로 노출하는 기능 자체가 없어서 아니오로 답했다.
 
-**13세 미만 사용자의 소셜 미디어 비활성화** - 소셜 미디어 기능이 있는 앱한테 묻는 후속 질문이라, 애초에 소셜 미디어 기능이 없다고 답한 이상 이것도 해당 없음으로 아니오로 해주었다.
+**13세 미만 사용자의 소셜 미디어 비활성화**는 소셜 미디어 기능이 있는 앱한테 묻는 후속 질문이라, 애초에 소셜 미디어 기능이 없다고 답한 이상 이것도 해당 없음으로 아니오로 해주었다.
 
 ---
 
@@ -325,7 +325,7 @@ if result.stopOrigin == .remote {
 // WatchPFDView.swift
 func saveRunningData() async {
     guard HealthKitService.shared.startOrigin == .local else { return }
-    // 생략 (기존 로직)
+    // 생략
 }
 ```
 
@@ -464,7 +464,7 @@ func saveRunningData() async {
     let totalTime = elapsedTime
     let minimumValidDistance = 0.05
     guard totalDistance >= minimumValidDistance else { return }
-    // 생략 (이하 동일)
+    // 생략
 }
 ```
 
@@ -535,7 +535,7 @@ func sendRunningData() {
 func saveRunningData() async {
     guard let modelContext else { return }
     guard HealthKitService.shared.startOrigin == .local else { return }
-    // 생략 (이하 동일)
+    // 생략
 }
 ```
 

@@ -62,7 +62,7 @@ func sendRunningData() {
     guard let viewModel, !viewModel.pendingFlightQueue.isEmpty else { return }
 
     for flight in viewModel.pendingFlightQueue {
-        // 생략 (userInfo 구성은 기존과 동일)
+        // 생략
         session.transferUserInfo(userInfo)
     }
     viewModel.pendingFlightQueue.removeAll()

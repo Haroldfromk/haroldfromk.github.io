@@ -310,7 +310,7 @@ actor HealthCenter {
 
 나중에 심박 말고 다른 건강 데이터(케이던스 등)가 Mission Flight에 추가되더라도, `HealthCenter`엔 딱 그만큼의 프로퍼티와 함수만 늘어난다. 
 
-`currentCadence`, `processCadence(_:)` 하나씩 추가되는 식이다. 판단 로직은 여기 들어오지 않는다 - 그건 언제나 `RunningCenter`의 몫이다.
+`currentCadence`, `processCadence(_:)` 하나씩 추가되는 식이다. 판단 로직은 여기 들어오지 않는다. 그건 언제나 `RunningCenter`의 몫이다.
 
 ---
 

@@ -858,7 +858,7 @@ var body: some View {
         GeometryReader { proxy in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 10) {
-                    // 생략 (기존 콘텐츠)
+                    // 생략
                 }
                 .background(
                     GeometryReader { contentProxy in

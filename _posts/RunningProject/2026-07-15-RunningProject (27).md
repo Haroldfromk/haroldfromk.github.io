@@ -252,7 +252,7 @@ func saveRunningData() async {
     lastSavedFlight = nil
     guard let modelContext else { return }
     guard HealthKitService.shared.startOrigin == .local else { return }
-    // 생략 (거리 가드 등 기존 로직)
+    // 생략
     modelContext.insert(runningData)
     lastSavedFlight = runningData
 }
