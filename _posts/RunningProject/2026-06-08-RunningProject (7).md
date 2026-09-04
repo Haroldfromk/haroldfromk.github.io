@@ -288,6 +288,21 @@ func calculateGPWSStatus(_ pace: Double) -> GPWSState {
 
 `calculateGPWSStatus` 하나로 두 케이스가 모두 처리된다.
 
+이 구간을 직접 움직여볼 수 있게 만들었다. 목표 페이스와 허용 오차를 바꾸면 정상 구간이 어떻게 넓어지고 좁아지는지 보인다.
+
+<iframe
+  src="/assets/demo/gpws_band_simulator.html"
+  width="100%"
+  height="610px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+만들어놓고 보니 지금 알아둘 게 하나 있다. 허용 오차를 **초**로 정하는데, 실제로 몸이 조절해야 하는 건 **속도**다. 이 둘이 비례하지 않는다. 목표 5'45"에 오차 30초면 속도로는 0.508m/s 폭인데, 오차를 10초로 줄이면 **0.168m/s**밖에 안 된다. 오차를 3분의 1로 줄였는데 실제 허용 폭도 3분의 1이 된다는 게, 숫자로 보면 당연한데 화면에서 "±10초"라는 글자만 봐서는 그게 얼마나 빡빡한 건지 감이 안 온다.
+
+지금은 30초로 두고 넘어가지만, 이 구간의 넓이가 곧 경고가 얼마나 자주 뜨는지를 정한다는 건 기억해둘 만하다.
+
 이후
 
 ```swift
@@ -338,6 +353,8 @@ func processLocation(_ location: CLLocation) {
 러닝 시작 직후에는 속도가 0이라 페이스가 유효하지 않은 상태에서 GPWS가 즉시 트리거되기 때문이다.
 
 이를 해결하기 위해 `RunningCentor`에 `isReachedPace` 플래그를 두고, 현재 페이스가 유효하고 목표 페이스에 한 번이라도 도달한 이후부터 GPWS를 활성화하는 구조로 변경한다. `rawPace.isFinite`, `rawPace > 0` 조건을 먼저 체크하여 시작 직후 무효한 값이 들어오는 경우도 걸러준다.
+
+위 시뮬레이터에서 속도를 0으로 내려보면 이 문제가 그대로 나온다. 속도가 0이면 페이스는 무한대인데, 무한대는 목표보다 한없이 느린 값이라 **출발선에 서 있기만 해도 SINK RATE 조건을 만족해버린다.** "목표에 한 번 닿은 뒤부터" 쪽으로 바꿔놓고 같은 걸 해보면 조용하다.
 
 ```swift
 private(set) var isReachedPace: Bool = false

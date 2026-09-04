@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pace Tape Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --tape:#0f1215; --tape-ink:#dfe3e7; --tape-line:#272c33;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --tape:#0c0d10; --tape-ink:#dfe3e7; --tape-line:#25292f;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:14px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; }
+  input[type=range]{ flex:1 1 220px; min-width:180px; accent-color:var(--ok); height:26px; }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:8px 12px; border-radius:7px; }
+
+  .stage { display:grid; grid-template-columns:112px 1fr; gap:14px; align-items:stretch; }
+  @media (max-width:560px){ .stage{grid-template-columns:100px 1fr;} }
+
+  .tape { background:var(--tape); border:1px solid var(--tape-line); border-radius:10px;
+    padding:8px 6px; display:flex; flex-direction:column; justify-content:center; gap:2px; }
+  .rung { display:flex; align-items:center; justify-content:flex-end; gap:7px; height:34px;
+    font-family:'Fira Code',monospace; font-size:13px; color:#8b929c; padding-right:6px; }
+  .rung i { display:block; width:12px; height:1.5px; background:var(--tape-line); }
+  .rung.center { color:var(--tape-ink); font-size:17px; font-weight:600; }
+  .rung.center i { width:20px; height:2px; background:#4ade80; }
+
+  .side { display:flex; flex-direction:column; gap:7px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:15px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>페이스 눈금은 어디에 맞춰 서는가</h1>
+<p class="lead">GPS가 주는 건 초당 몇 미터(m/s)뿐이다. 이걸 <code>1 ÷ (속도 × 60 ÷ 1000)</code>으로 분/km으로 바꾸고, 눈금이 덜덜 떨리지 않게 <b>15초 단위로 반올림한 값</b>을 가운데에 놓는다.</p>
+
+<div class="bar">
+  <span>GPS 속도</span>
+  <input type="range" id="sp" min="0" max="600" value="290">
+  <span id="sp-label" style="font-size:12px;color:var(--ink);text-transform:none;letter-spacing:0">2.90 m/s</span>
+  <button type="button" class="btn" id="stop">멈춤(0 m/s)</button>
+</div>
+
+<div class="stage">
+  <div class="tape" id="tape"></div>
+  <div class="side">
+    <div class="cell"><div class="k">계산된 페이스 (그대로)</div><div class="v" id="v-raw">--</div></div>
+    <div class="cell"><div class="k">눈금 가운데 (15초 단위 반올림)</div><div class="v" id="v-center">--</div></div>
+    <div class="cell"><div class="k">화면에 찍히는 글자</div><div class="v" id="v-text">--</div></div>
+  </div>
+</div>
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  function fmt(pace) {
+    if (!isFinite(pace) || pace <= 0) return "--:--";
+    var total = Math.round(pace * 60);
+    return (total / 60 | 0) + "'" + String(total % 60).padStart(2, "0") + '"';
+  }
+
+  function render() {
+    var speed = parseInt(document.getElementById("sp").value, 10) / 100;
+    document.getElementById("sp-label").textContent = speed.toFixed(2) + " m/s";
+
+    var pace = 1 / (speed * 60 / 1000);          // 분/km
+    var center = Math.round(pace / 0.25) * 0.25; // 15초 단위로 반올림
+    var valid = isFinite(pace) && pace > 0 && pace < 60;
+
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-raw", speed <= 0 ? "무한대" : pace.toFixed(3) + " 분/km", speed <= 0 ? "alarm" : "");
+    set("v-center", valid ? fmt(center) : "--", valid ? "" : "alarm");
+    set("v-text", fmt(pace), valid ? "good" : "alarm");
+
+    var html = "";
+    for (var k = -2; k <= 2; k++) {   // 위로 갈수록 빠른 페이스
+      var v = center + k * 0.25;
+      var isC = k === 0;
+      var label = (valid && v > 0) ? fmt(v) : "--:--";
+      html += '<div class="rung' + (isC ? " center" : "") + '"><span>' + label + '</span><i></i></div>';
+    }
+    document.getElementById("tape").innerHTML = html;
+
+    var note = document.getElementById("note");
+    if (speed <= 0) {
+      note.className = "note alarm";
+      note.innerHTML = "속도가 0이면 <b>1 ÷ 0</b>이라 페이스가 무한대가 된다. 그래서 화면에 찍기 전에 <code>isFinite</code>로 한 번 걸러서 <b>--:--</b>를 대신 보여준다. " +
+        "이 방어가 없으면 무한대를 정수로 바꾸려는 순간 앱이 그대로 죽는다.";
+    } else if (Math.abs(pace - center) < 0.005) {
+      note.className = "note fine";
+      note.innerHTML = "지금은 페이스가 딱 15초 눈금 위에 있다. 속도를 조금씩 움직여보면, 실제 페이스는 계속 변하는데 <b>가운데 눈금은 한동안 그대로 붙어 있다가</b> 한 칸씩 툭 옮겨간다.";
+    } else {
+      var diffSec = Math.round(Math.abs(pace - center) * 60);
+      note.className = "note";
+      note.innerHTML = "실제 페이스는 <b>" + fmt(pace) + "</b>인데 눈금 가운데는 <b>" + fmt(center) + "</b>다. " + diffSec + "초 차이는 반올림으로 흡수됐다. " +
+        "이렇게 해야 GPS가 조금 흔들릴 때마다 눈금 전체가 덜덜 떨리지 않는다.";
+    }
+  }
+
+  document.getElementById("sp").addEventListener("input", render);
+  document.getElementById("stop").addEventListener("click", function () {
+    document.getElementById("sp").value = 0; render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

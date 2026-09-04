@@ -171,13 +171,15 @@ class AppDelegate: NSObject, WKApplicationDelegate {
 }
 ```
 
-다만 문서 예시는 `WorkoutManager.shared`처럼 싱글톤을 전제로 만들어져 있다. 우리 프로젝트는 의도적으로 싱글톤을 쓰지 않고 있어서 처음에는 다른 방법을 고민했다.
+다만 문서 예시는 `WorkoutManager.shared`처럼 싱글턴을 전제로 만들어져 있다. 우리 프로젝트는 의도적으로 싱글턴을 쓰지 않고 있어서 처음에는 다른 방법을 고민했다.
+
+싱글턴은 **앱 전체에서 딱 하나만 만들어두고 어디서든 그걸 가져다 쓰는 방식**이다. `HealthKitService.shared`라고 부르면 어느 파일에서 부르든 항상 같은 물건이 나온다. 편한 대신, 누가 어디서 쓰는지 코드만 봐서는 알기 어려워진다는 대가가 있다.
 
 `@WKApplicationDelegateAdaptor`로 등록한 `AppDelegate`가 `HealthKitService` 인스턴스를 들고 있고, `WatchViewModel`이 그걸 주입받아 쓰는 구조를 생각해봤다. 하지만 `@WKApplicationDelegateAdaptor`가 자체적으로 인스턴스를 새로 만들기 때문에, `WatchViewModel`이 들고 있는 `HealthKitService`와 `AppDelegate`가 들고 있는 `HealthKitService`가 서로 다른 인스턴스가 되어 세션 불일치 문제가 생길 수 있었다.
 
-결국 `HealthKitService`를 싱글톤으로 바꾸기로 했다. `HKHealthStore` 자체가 Apple 문서에서도 앱당 하나만 만들라고 권장하는 자원이고, 워크아웃 세션도 기기당 하나만 의미가 있으니 본질적으로 "앱에 하나"가 자연스럽다. Apple 샘플 코드에서도 `WorkoutManager.shared`를 쓰고 있는 게 같은 이유일 것이다.
+결국 `HealthKitService`를 싱글턴으로 바꾸기로 했다. `HKHealthStore` 자체가 Apple 문서에서도 앱당 하나만 만들라고 권장하는 자원이고, 워크아웃 세션도 기기당 하나만 의미가 있으니 본질적으로 "앱에 하나"가 자연스럽다. Apple 샘플 코드에서도 `WorkoutManager.shared`를 쓰고 있는 게 같은 이유일 것이다.
 
-무분별한 싱글톤 사용은 의존성 추적이 어려워지는 문제가 있지만, 이 경우는 시스템적으로 하나만 존재해야 하는 자원이라는 근거가 명확하고 나머지는 전부 DI로 관리하고 있어서 크게 문제될 것이 없다고 판단했다.
+무분별한 싱글턴 사용은 의존성 추적이 어려워지는 문제가 있지만, 이 경우는 시스템적으로 하나만 존재해야 하는 자원이라는 근거가 명확하고 나머지는 전부 DI로 관리하고 있어서 크게 문제될 것이 없다고 판단했다.
 
 [WKApplicationDelegate Docs](https://developer.apple.com/documentation/WatchKit/WKApplicationDelegate){:target="_blank"}를 보면 `NSObject`를 상속한 delegate 클래스를 만들고, SwiftUI `App`에서 `@WKApplicationDelegateAdaptor`로 등록해주는 방식을 안내하고 있다.
 
@@ -215,11 +217,13 @@ struct MyWatchApp_Watch_AppApp: App {
 
 이참에 지금까지 iPhone과 Watch에 각각 별도로 만들어두었던 `HealthKitService`도 하나로 합치기로 했다. Apple 샘플 프로젝트처럼 공통 부분은 `HealthKitService.swift`에 두고, 플랫폼별 전용 코드는 extension으로 분리하는 구조다.
 
-- `HealthKitService.swift` - 공통 (싱글톤 선언, session, builder, startWorkout, stopWorkout)
+- `HealthKitService.swift` - 공통 (싱글턴 선언, session, builder, startWorkout, stopWorkout)
 - `HealthKitService+iOS.swift` - iPhone 전용 (retrieveRemoteSession, fetch 함수들 등)
 - `HealthKitService+watchOS.swift` - Watch 전용 (streamHealthData, updateForStatistics 등)
 
 각 파일에 해당 타겟 멤버십만 걸어주면 `#if os()` 분기 없이도 컴파일러가 타겟에 포함된 파일만 빌드하게 된다.
+
+![공통 파일과 플랫폼별 확장 파일을 타겟 멤버십으로 골라 담는 구조](/assets/img/runway/healthkit-target-split.svg){: width="720" height="250"}
 
 <script src="https://gist.github.com/Haroldfromk/4b97a23a28484fd1599cd25228e208bb.js"></script>
 
@@ -296,7 +300,7 @@ class AppDelegate: NSObject, WKApplicationDelegate {
 
 `handle(_:)` 안에서 에러가 나면 어떻게 처리할지가 고민이었다. 단순히 `print(error)`로 묻어버리면, 나중에 사용자에게 알려주거나 UI에 반영할 방법이 없어진다.
 
-`RunViewModel`이 이미 `alertPublisher`로 에러를 Combine을 통해 흘려서 View가 구독하는 패턴을 쓰고 있으니, `AppDelegate`도 같은 방식으로 가는 게 맞다고 생각했다. `HealthKitService`(이미 싱글톤이니)에 에러 publisher를 두고, `AppDelegate`는 에러를 그쪽으로 흘려보내기만 하고, 실제 처리는 `WatchViewModel`이나 View 쪽에서 구독해서 하는 구조다.
+`RunViewModel`이 이미 `alertPublisher`로 에러를 Combine을 통해 흘려서 View가 구독하는 패턴을 쓰고 있으니, `AppDelegate`도 같은 방식으로 가는 게 맞다고 생각했다. `HealthKitService`(이미 싱글턴이니)에 에러 publisher를 두고, `AppDelegate`는 에러를 그쪽으로 흘려보내기만 하고, 실제 처리는 `WatchViewModel`이나 View 쪽에서 구독해서 하는 구조다.
 
 다만 지금은 `HealthKitService`에 아직 publisher 자체가 없는 상태라서, 이 부분은 일단 `print(error)`로 임시 처리해두고 다음에 다루기로 한다.
 
@@ -672,6 +676,21 @@ Watch 입장에서 실제로 구분해야 하는 경우는 셋이다.
 
 지금까지는 `runningMode`를 `sessionReachabilityDidChange`에서 `isReachable` 값에 따라 실시간으로 갱신하고 있었는데, 이게 문제였다. `isReachable`은 "지금 이 순간 iPhone과 통신 가능한가"를 나타내는 값이라 수시로 바뀌는데, `runningMode`는 "이 워크아웃이 어떻게 시작됐는가"라는 시작 시점에 고정되어야 하는 값이다. 둘을 같은 걸로 취급하면, 예를 들어 Watch 단독으로 뛰다가 중간에 iPhone을 꺼내 보기만 해도 `runningMode`가 `.mirrored`로 잘못 바뀔 수 있다.
 
+이게 실제로 어떻게 어긋나는지 그려보면 이렇다.
+
+<iframe
+  src="/assets/demo/running_mode_latch_simulator.html"
+  width="100%"
+  height="580px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+제일 나쁜 건 그 다음이다. `runningMode`가 `.mirrored`로 바뀌면 워치는 **아이폰이 GPS를 담당한다고 믿고 자기 GPS를 끈다.** 그런데 아이폰 앱은 러닝을 시작한 적이 없다. 결국 **아무도 GPS를 안 보는 구간**이 생긴다. 아이폰을 다시 주머니에 넣으면 원래대로 돌아오니까, 나중에 기록을 봐도 그냥 중간이 좀 이상하다 정도로만 보인다.
+
+두 값이 답하는 질문이 애초에 달랐다. `isReachable`은 **"지금 닿는가"**이고 `runningMode`는 **"어떻게 시작했는가"**다. 앞의 것은 계속 바뀌는 게 정상이고 뒤의 것은 안 바뀌는 게 정상인데, 하나로 묶어둔 게 문제였다.
+
 그래서 `runningMode`는 시작 시점에 한 번 확정하고, 그 값을 세션이 끝날 때까지 유지하는 방향으로 가기로 했다.
 
 ---
@@ -930,7 +949,7 @@ HealthKitService.shared.sessionStatePublisher
 
 이젠 싱글턴인 `HealthKitService`가 `runningMode`를 직접 들고 있으니, `WatchViewModel`이 자체적으로 갖고 있던 `runningMode` 프로퍼티는 더 이상 필요가 없다. 
 
-다만 그 값을 읽을 때는 `HealthKitService.shared.runningMode`로 다시 싱글톤을 거칠 필요 없이, `sink`로 받은 `result`에 이미 `runningMode`가 같이 들어 있으니 `result.runningMode`로 바로 읽으면 된다.
+다만 그 값을 읽을 때는 `HealthKitService.shared.runningMode`로 다시 싱글턴을 거칠 필요 없이, `sink`로 받은 `result`에 이미 `runningMode`가 같이 들어 있으니 `result.runningMode`로 바로 읽으면 된다.
 
 그리고 VM에서 `runningMode`라는 프로퍼티가 사라졌으므로 관련 에러는 전부
 

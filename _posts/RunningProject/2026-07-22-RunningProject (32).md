@@ -219,6 +219,8 @@ var heartRate: Double = 0
 init(..., target: String = ModeATarget.pace.rawValue, ..., heartRate: Double = 0, ...) { ... }
 ```
 
+![SwiftData가 기존 기록의 빈 필드를 채울 때 프로퍼티 선언부 기본값만 보고 init 파라미터 기본값은 안 보는 구조](/assets/img/runway/swiftdata-default-lookup.svg){: width="720" height="320"}
+
 SwiftData의 자동 라이트웨이트 마이그레이션은 기존 레코드에 새 필드 값을 채울 때 프로퍼티 선언부의 기본값을 보는데, init 파라미터에 있는 기본값은 여기서 안 보인다. 이 필드가 없던 버전(v1.1)을 쓰던 유저가 이 빌드로 업데이트하면 마이그레이션이 실패하거나 크래시할 수 있는 구조였다. 계속 삭제 후 재설치로만 테스트해서 이 문제가 한 번도 드러나지 않았던 거다. 선언부에 기본값을 직접 넣어서 고쳤다.
 
 이 정도 고치고 나니 혹시 다른 사람들도 이런 문제를 겪었는지 궁금해서, AI한테 SwiftData 라이트웨이트 마이그레이션에서 프로퍼티 선언부 기본값과 init 파라미터 기본값이 왜 다르게 취급되는지 자료를 찾아서 요약해달라고 시켰다.

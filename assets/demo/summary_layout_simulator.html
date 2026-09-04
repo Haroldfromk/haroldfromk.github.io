@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summary Layout Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --screen:#101215; --screen-ink:#e6e8ea; --screen-line:#262a30;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --screen:#0d0e11; --screen-ink:#e6e8ea; --screen-line:#26292f;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:9px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; min-width:56px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:8px 12px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+
+  .stage { display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:start; margin-top:14px; }
+  @media (max-width:600px){ .stage{grid-template-columns:1fr; justify-items:center;} }
+
+  .phone { width:186px; border:6px solid var(--screen-line); border-radius:22px;
+    background:var(--screen); overflow:hidden; position:relative; }
+  .screen { position:relative; overflow:hidden; display:flex; flex-direction:column; }
+  .screen.fixed { }
+  .pad { padding:7px; display:flex; flex-direction:column; gap:6px; min-height:0; flex:1 1 auto; }
+  .card { border:1px solid var(--screen-line); border-radius:7px; color:var(--screen-ink);
+    font-family:'Fira Code',monospace; font-size:8px; padding:5px 6px; flex:0 0 auto; }
+  .card.map { height:52px; display:flex; align-items:center; justify-content:center; color:#6b7280; }
+  .card.stats { display:flex; gap:5px; }
+  .card.stats div { flex:1; text-align:center; }
+  .splits { border:1px solid var(--screen-line); border-radius:7px; padding:5px; min-height:0; }
+  .splits.flex { flex:1 1 auto; overflow-y:auto; }
+  .splits.grow { flex:0 0 auto; }
+  .srow { display:flex; justify-content:space-between; font-family:'Fira Code',monospace;
+    font-size:8px; color:var(--screen-ink); padding:3px 4px; border-bottom:1px solid var(--screen-line); }
+  .srow:last-child { border-bottom:none; }
+  .tabbar { position:absolute; left:0; right:0; bottom:0; height:30px;
+    background:rgba(20,22,26,.94); border-top:1px solid var(--screen-line);
+    display:flex; align-items:center; justify-content:space-around;
+    font-family:'Fira Code',monospace; font-size:8px; color:#8b929c; backdrop-filter:blur(2px); }
+
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:15px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>스플릿이 늘어나면 어디가 밀려나는가</h1>
+<p class="lead">요약 화면은 계기판처럼 한 화면에 고정돼 있어야 한다. 그래서 바깥 스크롤을 꺼뒀는데, 스플릿이 24개까지 늘어나는 러닝에서는 <b>넘친 부분이 그냥 탭바 뒤로 잘려버렸다.</b></p>
+
+<div class="bar">
+  <span>레이아웃</span>
+  <div class="seg" id="seg-mode">
+    <button type="button" class="danger" data-mode="before" aria-pressed="true">수정 전 (스크롤 꺼둔 세로 쌓기)</button>
+    <button type="button" data-mode="after" aria-pressed="false">수정 후 (고정 높이 + 스플릿만 유연)</button>
+  </div>
+</div>
+<div class="bar">
+  <span>스플릿</span>
+  <div class="seg" id="seg-n">
+    <button type="button" data-n="3" aria-pressed="true">3개</button>
+    <button type="button" data-n="8" aria-pressed="false">8개</button>
+    <button type="button" data-n="24" aria-pressed="false">24개</button>
+  </div>
+</div>
+<div class="bar">
+  <span>기종</span>
+  <div class="seg" id="seg-h">
+    <button type="button" data-h="300" aria-pressed="true">작은 화면</button>
+    <button type="button" data-h="360" aria-pressed="false">큰 화면</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="phone"><div class="screen" id="screen"></div></div>
+  <div>
+    <div class="row">
+      <div class="cell"><div class="k">화면 밖으로 밀려난 높이</div><div class="v" id="v-cut">--</div></div>
+      <div class="cell"><div class="k">손이 닿지 않는 스플릿</div><div class="v" id="v-hidden">--</div></div>
+    </div>
+    <div class="note" id="note">스플릿 개수를 늘려보자.</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var mode = "before", n = 3, H = 300;
+
+  function build() {
+    var scr = document.getElementById("screen");
+    scr.style.height = H + "px";
+
+    var rows = "";
+    for (var k = 1; k <= n; k++) {
+      rows += '<div class="srow"><span>' + k + ' KM</span><span>5\'4' + (k % 10) + '"</span><span>15' + (k % 10) + ' BPM</span></div>';
+    }
+    scr.innerHTML =
+      '<div class="pad">' +
+        '<div class="card">FLIGHT SUMMARY · MISSION</div>' +
+        '<div class="card map">MAP</div>' +
+        '<div class="card stats"><div>AVG HR</div><div>CADENCE</div><div>ELEV</div></div>' +
+        '<div class="splits ' + (mode === "after" ? "flex" : "grow") + '" id="splits">' + rows + '</div>' +
+        (mode === "after" ? '<div class="card">GO TO DECK</div>' : '<div class="card">GO TO DECK</div>') +
+        '<div style="height:26px;flex:0 0 auto"></div>' +
+      '</div>' +
+      '<div class="tabbar"><span>DECK</span><span>LOGBOOK</span><span>ALERTS</span></div>';
+    if (mode === "after") scr.querySelector(".pad").style.height = "100%";
+  }
+
+  function measure() {
+    var scr = document.getElementById("screen");
+    var pad = scr.querySelector(".pad");
+    var cut = Math.max(0, pad.scrollHeight - H);
+    var hidden = 0;
+    if (mode === "before") {
+      // 바깥 스크롤이 꺼져 있으니, 탭바 위로 올라오지 못한 줄은 영영 볼 수 없다
+      var tabTop = scr.getBoundingClientRect().bottom - 30;
+      scr.querySelectorAll(".srow").forEach(function (r) {
+        if (r.getBoundingClientRect().bottom > tabTop) hidden++;
+      });
+    }
+    return { cut: cut, hidden: hidden };
+  }
+
+  function render() {
+    build();
+    var m = measure();
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-cut", m.cut + " pt", m.cut > 0 ? "alarm" : "good");
+    set("v-hidden", m.hidden + "개", m.hidden > 0 ? "alarm" : "good");
+
+    var note = document.getElementById("note");
+    if (mode === "after") {
+      note.className = "note fine";
+      note.innerHTML = "화면 전체 높이를 <b>기기 높이로 고정</b>하고, 남는 공간을 스플릿 목록 하나가 전부 가져가게 했다. 스플릿이 몇 개든 화면 크기 자체는 안 변하고, 넘치면 <b>그 박스 안에서만</b> 스크롤된다. 목록 위에 마우스를 올리고 굴려보면 안쪽만 움직인다.";
+    } else if (m.cut > 0) {
+      note.className = "note alarm";
+      note.innerHTML = "스플릿이 늘어난 만큼 아래 내용이 <b>" + m.cut + "pt 밀려났다.</b> 바깥 스크롤을 꺼둔 상태라 손가락으로 끌어올릴 수도 없어서, 밀려난 부분에는 아예 손이 닿지 않는다. GO TO DECK 버튼까지 같이 사라진다.";
+    } else {
+      note.className = "note";
+      note.innerHTML = "여기까지는 내용이 화면 안에 다 들어와서 문제가 안 보인다. 스플릿을 늘려보자.";
+    }
+  }
+
+  function wire(sel, fn) {
+    document.querySelectorAll(sel + " button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        fn(b);
+        document.querySelectorAll(sel + " button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+        render();
+      });
+    });
+  }
+  wire("#seg-mode", function (b) { mode = b.dataset.mode; });
+  wire("#seg-n", function (b) { n = parseInt(b.dataset.n, 10); });
+  wire("#seg-h", function (b) { H = parseInt(b.dataset.h, 10); });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -198,6 +198,21 @@ private var monthAvgPace: String {
 
 `inf`가 하나라도 섞여서 `reduce`로 더해지는 순간, 나머지가 다 정상 값이어도 합계 자체가 `inf`가 되어버린다. 그래서 이번 달 평균 전체가 `--:--`(사실상 `inf`)로 나왔던 거다.
 
+이게 얼마나 쉽게 번지는지 직접 눌러볼 수 있게 만들었다. 정상 기록 5개에 이상한 기록을 하나만 얹어보면 된다.
+
+<iframe
+  src="/assets/demo/pace_contamination_simulator.html"
+  width="100%"
+  height="555px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+"거리 0으로 종료"를 하나 넣으면 평균이 그 자리에서 무한대가 된다. 나머지 다섯 개가 아무리 멀쩡해도 소용없다. 무한대는 **어떤 수를 더해도 무한대**라서, 하나만 섞이면 그 뒤로 계산되는 모든 값을 같이 끌고 간다.
+
+그리고 뒤에 나올 문제를 여기서 미리 볼 수도 있다. "몇 초 만에 종료"를 넣으면 평균이 60분/km까지 튀는데, **이건 무한대가 아니라 그냥 큰 값이라 `isFinite`로는 안 걸린다.** 막대 그래프 축이 이것 하나 때문에 눌려서 나머지가 전부 바닥에 붙는 것도 같이 보인다.
+
 ---
 
 ## 해결

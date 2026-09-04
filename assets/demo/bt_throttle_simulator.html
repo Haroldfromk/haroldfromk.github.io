@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bluetooth Throttle Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --grid:#eceff2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --grid:#1c1c20;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+  .caveat { font-size:11.5px; color:var(--faint); margin:-8px 0 14px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+  @media (max-width:520px){ .row{grid-template-columns:repeat(2,1fr);} }
+
+  .track { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:10px 10px 4px; overflow-x:auto; }
+  .track svg { display:block; width:100%; min-width:440px; height:auto; }
+  .legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:8px; font-size:11px; color:var(--dim); font-family:'Fira Code',monospace; }
+  .legend i { display:inline-block; width:15px; height:2.5px; border-radius:2px; vertical-align:middle; margin-right:5px; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>1초에 한 번씩 양쪽에서 밀어넣으면</h1>
+<p class="lead">야외에서는 와이파이가 끊기고 <b>블루투스 한 줄로만</b> 통신한다. 워치는 심박을, 아이폰은 페이스를 서로에게 계속 보내는데, 이 한 줄이 1초에 처리할 수 있는 양은 정해져 있다. 들어오는 게 처리되는 것보다 많으면 줄이 생긴다.</p>
+<p class="caveat">실제 측정값이 아니라 왜 밀리는지를 보여주는 모형이다. 처리 용량은 초당 1.2건으로 잡았다.</p>
+
+<div class="bar">
+  <span>전송 주기</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-p="1" aria-pressed="true">1초에 한 번 (양방향)</button>
+    <button type="button" data-p="3" aria-pressed="false">3초에 한 번 (양방향)</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn primary" id="play">60초 돌려보기</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">보낸 패킷</div><div class="v" id="v-sent">--</div></div>
+  <div class="cell"><div class="k">도착</div><div class="v" id="v-got">--</div></div>
+  <div class="cell"><div class="k">줄에서 밀려 버려짐</div><div class="v" id="v-drop">--</div></div>
+  <div class="cell"><div class="k">평균 도착 지연</div><div class="v" id="v-lag">--</div></div>
+</div>
+
+<div class="track">
+  <div id="plot"></div>
+  <div class="legend">
+    <span><i style="background:var(--mark)"></i>줄에 쌓인 패킷 수</span>
+    <span><i style="background:var(--bad)"></i>버려진 시점</span>
+  </div>
+</div>
+<div class="note" id="note">"60초 돌려보기"를 눌러보자.</div>
+
+<script>
+(function () {
+  "use strict";
+  var CAP = 1.2;     // 블루투스 한 줄이 1초에 처리하는 건수
+  var LIMIT = 8;     // 줄이 이만큼 길어지면 뒤에 온 것부터 버린다
+  var DUR = 60;
+  var period = 1, t = 0, timer = null;
+
+  function simulate(upto) {
+    var q = 0, credit = 0, sent = 0, got = 0, drop = 0, lagSum = 0, hist = [], drops = [];
+    for (var s = 1; s <= upto; s++) {
+      // 양쪽에서 하나씩 보낸다
+      if (s % period === 0) {
+        for (var d = 0; d < 2; d++) {
+          sent++;
+          if (q >= LIMIT) { drop++; drops.push(s); }
+          else q++;
+        }
+      }
+      credit += CAP;
+      while (credit >= 1 && q > 0) { credit -= 1; q -= 1; got++; lagSum += q / CAP; }
+      hist.push(q);
+    }
+    return { q: q, sent: sent, got: got, drop: drop, hist: hist, drops: drops,
+             lag: got ? lagSum / got : 0 };
+  }
+
+  function render() {
+    var r = simulate(t);
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-sent", r.sent + "개");
+    set("v-got", r.got + "개");
+    set("v-drop", r.drop + "개", r.drop ? "alarm" : "good");
+    set("v-lag", r.lag.toFixed(1) + "초", r.lag > 1.5 ? "alarm" : "good");
+
+    var W = 660, H = 150, PL = 30, PR = 10, PT = 12, PB = 24;
+    var X = function (s) { return PL + s / DUR * (W - PL - PR); };
+    var Y = function (v) { return PT + (LIMIT - v) / LIMIT * (H - PT - PB); };
+    var s2 = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="큐 길이">';
+    for (var g = 0; g <= LIMIT; g += 2) {
+      s2 += '<line x1="' + PL + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - PR) + '" y2="' + Y(g).toFixed(1) + '" stroke="var(--grid)" stroke-width="1"/>';
+      s2 += '<text x="' + (PL - 6) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + g + '</text>';
+    }
+    r.drops.forEach(function (s3) {
+      s2 += '<line x1="' + X(s3).toFixed(1) + '" y1="' + PT + '" x2="' + X(s3).toFixed(1) + '" y2="' + (H - PB) + '" stroke="var(--bad)" stroke-width="1" opacity="0.4"/>';
+    });
+    if (r.hist.length) {
+      s2 += '<polyline points="' + r.hist.map(function (v, k) { return X(k + 1).toFixed(1) + ',' + Y(v).toFixed(1); }).join(' ') +
+        '" fill="none" stroke="var(--mark)" stroke-width="2.2" stroke-linejoin="round"/>';
+    }
+    s2 += '<text x="' + PL + '" y="' + (H - 7) + '" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">0초</text>';
+    s2 += '<text x="' + (W - PR) + '" y="' + (H - 7) + '" text-anchor="end" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + DUR + '초</text>';
+    s2 += '</svg>';
+    document.getElementById("plot").innerHTML = s2;
+
+    var note = document.getElementById("note");
+    if (!t) { note.className = "note"; note.textContent = '"60초 돌려보기"를 눌러보자.'; return; }
+    if (period === 1) {
+      note.className = "note alarm";
+      note.innerHTML = "1초에 양쪽에서 하나씩, 그러니까 <b>초당 2건</b>을 밀어넣는데 처리는 1.2건뿐이다. " +
+        "차이가 매초 쌓여서 줄이 금방 꽉 차고, 그때부터는 뒤에 온 게 <b>" + r.drop + "개나 버려진다.</b> " +
+        "겨우 도착한 것도 평균 " + r.lag.toFixed(1) + "초 늦게 도착해서, 워치와 아이폰이 서로 다른 숫자를 보여주게 된다.";
+    } else {
+      note.className = "note fine";
+      note.innerHTML = "3초에 한 번으로 줄이니 <b>초당 0.67건</b>이 되어 처리 용량 안으로 들어왔다. 줄이 안 쌓이니 버려지는 것도 없고 지연도 " +
+        r.lag.toFixed(1) + "초다. 화면 갱신이 3초마다로 뜸해지는 건 감수해야 하는데, 그건 최근 값 몇 개를 평균 내서 부드럽게 보여주는 걸로 덮을 수 있다.";
+    }
+  }
+
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  document.getElementById("play").addEventListener("click", function () {
+    stop(); t = 0; render();
+    timer = setInterval(function () { t++; if (t >= DUR) stop(); render(); }, 45);
+  });
+  document.getElementById("reset").addEventListener("click", function () { stop(); t = 0; render(); });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      stop(); period = +b.dataset.p; t = 0;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

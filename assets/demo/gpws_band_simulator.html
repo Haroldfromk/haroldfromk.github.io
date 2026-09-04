@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPWS Band Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --amber:#b45309; --amber-bg:#fdf1dc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --amber:#fbbf24; --amber-bg:#2e2410;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .ctrl { display:grid; grid-template-columns:auto 1fr auto; gap:8px 12px; align-items:center; margin-bottom:12px; }
+  .ctrl label { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; white-space:nowrap; }
+  .ctrl output { font-family:'Fira Code',monospace; font-size:12.5px; font-weight:600;
+    font-variant-numeric:tabular-nums; min-width:82px; text-align:right; }
+  input[type=range]{ accent-color:var(--ok); height:26px; width:100%; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+
+  .track { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:10px 10px 4px; overflow-x:auto; }
+  .track svg { display:block; width:100%; min-width:420px; height:auto; }
+
+  .row { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin:12px 0 0; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:15px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.warn { background:var(--amber-bg); border-color:var(--amber); }
+  .cell.warn .v { color:var(--amber); }
+  .cell.good { background:var(--ok-bg); border-color:var(--ok); }
+  .cell.good .v { color:var(--ok); }
+  @media (max-width:520px){ .row{grid-template-columns:1fr 1fr;} }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>어디까지가 정상 페이스인가</h1>
+<p class="lead">목표 페이스를 가운데 두고 허용 오차만큼 양옆으로 벌린 구간이 <b>GLIDE PATH(정상)</b>다. 그보다 빠르면 OVERSPEED, 느리면 SINK RATE. 오차를 몇 초로 잡느냐가 이 구간의 넓이를 정한다.</p>
+
+<div class="ctrl">
+  <label>목표 페이스</label><input type="range" id="tp" min="240" max="480" value="345"><output id="o-tp"></output>
+  <label>허용 오차</label><input type="range" id="dv" min="5" max="60" value="30"><output id="o-dv"></output>
+  <label>지금 속도</label><input type="range" id="sp" min="0" max="500" value="290"><output id="o-sp"></output>
+</div>
+
+<div class="bar">
+  <span>시작 직후 처리</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-g="0" aria-pressed="true">그냥 판정</button>
+    <button type="button" data-g="1" aria-pressed="false">목표에 한 번 닿은 뒤부터</button>
+  </div>
+</div>
+
+<div class="track"><div id="plot"></div></div>
+
+<div class="row">
+  <div class="cell"><div class="k">지금 페이스</div><div class="v" id="v-pace">--</div></div>
+  <div class="cell"><div class="k">정상 구간 폭</div><div class="v" id="v-band">--</div></div>
+  <div class="cell"><div class="k">판정</div><div class="v" id="v-state">--</div></div>
+</div>
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+  var gate = false, reached = false;
+
+  function fmt(p) {
+    if (!isFinite(p) || p <= 0) return "--:--";
+    var t = Math.round(p * 60);
+    return (t / 60 | 0) + "'" + String(t % 60).padStart(2, "0") + '"';
+  }
+  function paceToSpeed(p) { return 1000 / (p * 60); }   // 분/km -> m/s
+
+  function render() {
+    var targetSec = +document.getElementById("tp").value;      // 목표 페이스(초/km)
+    var devSec = +document.getElementById("dv").value;         // 허용 오차(초)
+    var speed = +document.getElementById("sp").value / 100;    // m/s
+    var target = targetSec / 60;                               // 분/km
+    var dev = devSec / 60;
+    var pace = speed > 0 ? 1 / (speed * 60 / 1000) : Infinity;
+
+    document.getElementById("o-tp").textContent = fmt(target);
+    document.getElementById("o-dv").textContent = "±" + devSec + "초";
+    document.getElementById("o-sp").textContent = speed.toFixed(2) + " m/s";
+
+    var fast = target - dev, slow = target + dev;
+    if (gate && !reached && isFinite(pace) && pace > 0 && pace <= slow) reached = true;
+    var active = !gate || reached;
+
+    var state = "정상";
+    if (!isFinite(pace) || pace <= 0) state = "판정 불가";
+    else if (!active) state = "아직 판정 안 함";
+    else if (pace < fast) state = "OVERSPEED";
+    else if (pace > slow) state = "SINK RATE";
+    else state = "GLIDE PATH";
+
+    // 밴드를 속도 폭으로 환산
+    var bandSpeed = paceToSpeed(fast) - paceToSpeed(slow);
+
+    var W = 660, H = 116, PL = 14, PR = 14, Y = 54;
+    var lo = 2.5, hi = 9.5;   // 분/km 표시 범위
+    var X = function (p) { return PL + (Math.min(Math.max(p, lo), hi) - lo) / (hi - lo) * (W - PL - PR); };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="페이스 구간">';
+    s += '<rect x="' + PL + '" y="' + (Y - 15) + '" width="' + (X(fast) - PL).toFixed(1) + '" height="30" rx="6" fill="var(--mark)" opacity="0.2"/>';
+    s += '<rect x="' + X(fast).toFixed(1) + '" y="' + (Y - 15) + '" width="' + Math.max(2, X(slow) - X(fast)).toFixed(1) + '" height="30" rx="6" fill="var(--ok)" opacity="0.32"/>';
+    s += '<rect x="' + X(slow).toFixed(1) + '" y="' + (Y - 15) + '" width="' + (W - PR - X(slow)).toFixed(1) + '" height="30" rx="6" fill="var(--bad)" opacity="0.2"/>';
+
+    s += '<text x="' + ((PL + X(fast)) / 2).toFixed(1) + '" y="' + (Y + 5) + '" text-anchor="middle" font-size="10" font-family="Fira Code,monospace" fill="var(--mark)">OVERSPEED</text>';
+    if (X(slow) - X(fast) > 74)
+      s += '<text x="' + ((X(fast) + X(slow)) / 2).toFixed(1) + '" y="' + (Y + 5) + '" text-anchor="middle" font-size="10" font-family="Fira Code,monospace" fill="var(--ok)">GLIDE PATH</text>';
+    s += '<text x="' + ((X(slow) + W - PR) / 2).toFixed(1) + '" y="' + (Y + 5) + '" text-anchor="middle" font-size="10" font-family="Fira Code,monospace" fill="var(--bad)">SINK RATE</text>';
+
+    [fast, target, slow].forEach(function (p, i) {
+      s += '<line x1="' + X(p).toFixed(1) + '" y1="' + (Y - 19) + '" x2="' + X(p).toFixed(1) + '" y2="' + (Y + 19) + '" stroke="var(--faint)" stroke-width="1" stroke-dasharray="' + (i === 1 ? "0" : "3 2") + '"/>';
+      s += '<text x="' + X(p).toFixed(1) + '" y="' + (Y + 34) + '" text-anchor="middle" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + fmt(p) + '</text>';
+    });
+
+    if (isFinite(pace)) {
+      s += '<polygon points="' + X(pace).toFixed(1) + ',' + (Y - 24) + ' ' + (X(pace) - 6).toFixed(1) + ',' + (Y - 34) + ' ' + (X(pace) + 6).toFixed(1) + ',' + (Y - 34) + '" fill="var(--ink)"/>';
+      s += '<text x="' + X(pace).toFixed(1) + '" y="' + (Y - 38) + '" text-anchor="middle" font-size="10" font-weight="700" font-family="Fira Code,monospace" fill="var(--ink)">' + fmt(pace) + '</text>';
+    }
+    s += '</svg>';
+    document.getElementById("plot").innerHTML = s;
+
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-pace", fmt(pace), isFinite(pace) ? "" : "alarm");
+    set("v-band", devSec * 2 + "초 (" + bandSpeed.toFixed(3) + " m/s)", bandSpeed < 0.25 ? "warn" : "");
+    set("v-state", state,
+      state === "GLIDE PATH" ? "good" : (state === "정상" || state === "아직 판정 안 함" ? "" : "alarm"));
+
+    var note = document.getElementById("note");
+    if (!isFinite(pace)) {
+      note.className = gate ? "note fine" : "note alarm";
+      note.innerHTML = gate
+        ? "속도가 0이라 페이스를 계산할 수 없다. <b>목표에 한 번 닿기 전까지는 판정을 아예 안 하기로</b> 했으니 여기서는 아무 경고도 안 뜬다."
+        : "출발선에 서 있는 순간이다. 속도가 0이니 페이스는 무한대고, 그건 목표보다 한없이 느리다는 뜻이라 <b>시작 버튼을 누르자마자 SINK RATE가 울린다.</b> 아직 뛰지도 않았는데.";
+      return;
+    }
+    if (bandSpeed < 0.25) {
+      note.className = "note alarm";
+      note.innerHTML = "오차 " + devSec + "초는 페이스로는 넓어 보여도, 실제 <b>속도로 따지면 " + bandSpeed.toFixed(3) + " m/s짜리 구간</b>이다. " +
+        "사람이 뛰면서 이 안에 계속 머무는 건 거의 불가능해서, 정상과 경고 사이를 계속 왔다 갔다 하게 된다.";
+    } else if (state === "GLIDE PATH") {
+      note.className = "note fine";
+      note.innerHTML = "정상 구간 안이다. 이 구간의 폭은 페이스로 " + devSec * 2 + "초, 속도로는 " + bandSpeed.toFixed(3) + " m/s다.";
+    } else {
+      note.className = "note";
+      note.innerHTML = "지금은 <b>" + state + "</b>다. 구간의 넓이가 곧 경고가 얼마나 자주 뜨는지를 정한다. 오차를 좁힐수록 정확해지지만 그만큼 경고가 잦아진다.";
+    }
+  }
+
+  ["tp", "dv", "sp"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", function () {
+      if (id === "sp" && +document.getElementById("sp").value === 0) reached = false;
+      render();
+    });
+  });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      gate = b.dataset.g === "1"; reached = false;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

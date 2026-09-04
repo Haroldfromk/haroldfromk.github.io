@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distance Filter Path Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --route:#c3c8ce;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --route:#3f4650;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+  @media (max-width:520px){ .row{grid-template-columns:repeat(2,1fr);} }
+
+  .track { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:8px; overflow-x:auto; }
+  .track svg { display:block; width:100%; min-width:420px; height:auto; }
+  .legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:8px; font-size:11px; color:var(--dim); font-family:'Fira Code',monospace; }
+  .legend i { display:inline-block; width:15px; height:2.5px; border-radius:2px; vertical-align:middle; margin-right:5px; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>몇 미터마다 위치를 받을 것인가</h1>
+<p class="lead"><code>distanceFilter</code>는 "이만큼 움직였을 때만 새 위치를 달라"는 설정이다. 값을 키우면 위치를 덜 받아서 배터리를 아끼지만, <b>모서리를 잘라 먹으면서 뛴 거리가 실제보다 짧게 기록된다.</b></p>
+
+<div class="bar">
+  <span>distanceFilter</span>
+  <div class="seg" id="seg">
+    <button type="button" data-f="0" aria-pressed="true">제한 없음</button>
+    <button type="button" data-f="5" aria-pressed="false">5 m</button>
+    <button type="button" data-f="15" aria-pressed="false">15 m</button>
+    <button type="button" data-f="50" aria-pressed="false">50 m</button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">받은 위치 개수</div><div class="v" id="v-n">--</div></div>
+  <div class="cell"><div class="k">실제 뛴 거리</div><div class="v" id="v-real">--</div></div>
+  <div class="cell"><div class="k">기록된 거리</div><div class="v" id="v-rec">--</div></div>
+  <div class="cell"><div class="k">모자란 거리</div><div class="v" id="v-err">--</div></div>
+</div>
+
+<div class="track">
+  <div id="plot"></div>
+  <div class="legend">
+    <span><i style="background:var(--route)"></i>실제 뛴 경로</span>
+    <span><i style="background:var(--mark)"></i>앱이 기록한 경로</span>
+  </div>
+</div>
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  // 공원 한 바퀴 느낌의 경로를 1m 간격 점으로 만든다. 좌표 단위는 미터.
+  var PATH = (function () {
+    var pts = [], t;
+    function at(u) {
+      // 곡선 구간 + 지그재그 구간이 섞인 코스
+      var x = 120 + 95 * Math.cos(u) + 26 * Math.cos(3.1 * u);
+      var y = 92 + 62 * Math.sin(u) + 17 * Math.sin(2.7 * u);
+      return [x, y];
+    }
+    var prev = at(0), acc = [prev], total = 0;
+    for (t = 0.0005; t <= Math.PI * 2; t += 0.0005) {
+      var p = at(t);
+      var d = Math.hypot(p[0] - prev[0], p[1] - prev[1]);
+      total += d;
+      if (total >= 1) { acc.push(p); total = 0; }   // 약 1m 간격
+      prev = p;
+    }
+    acc.push(acc[0]);   // 출발점으로 돌아오는 루프 코스
+    return acc;
+  })();
+
+  function arcLength(list) {
+    var s = 0;
+    for (var k = 1; k < list.length; k++) s += Math.hypot(list[k][0] - list[k-1][0], list[k][1] - list[k-1][1]);
+    return s;
+  }
+  var REAL = arcLength(PATH);
+
+  var filter = 0;
+
+  function sample() {
+    if (filter <= 0) return PATH.slice();
+    var out = [PATH[0]], last = PATH[0];
+    for (var k = 1; k < PATH.length; k++) {
+      if (Math.hypot(PATH[k][0] - last[0], PATH[k][1] - last[1]) >= filter) {
+        out.push(PATH[k]); last = PATH[k];
+      }
+    }
+    if (out[out.length - 1] !== PATH[PATH.length - 1]) out.push(PATH[PATH.length - 1]);
+    return out;
+  }
+
+  function draw(rec) {
+    var W = 620, H = 230, PAD = 14;
+    var xs = PATH.map(function (p) { return p[0]; }), ys = PATH.map(function (p) { return p[1]; });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+    var y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    var k = Math.min((W - PAD * 2) / (x1 - x0), (H - PAD * 2) / (y1 - y0));
+    var ox = (W - (x1 - x0) * k) / 2, oy = (H - (y1 - y0) * k) / 2;
+    var X = function (v) { return ox + (v - x0) * k; };
+    var Y = function (v) { return oy + (v - y0) * k; };
+
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="실제 경로와 기록된 경로 비교">';
+    s += '<polyline points="' + PATH.map(function (p) { return X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }).join(' ') +
+         '" fill="none" stroke="var(--route)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>';
+    s += '<polyline points="' + rec.map(function (p) { return X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }).join(' ') +
+         '" fill="none" stroke="var(--mark)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    if (rec.length <= 200) {
+      rec.forEach(function (p) {
+        s += '<circle cx="' + X(p[0]).toFixed(1) + '" cy="' + Y(p[1]).toFixed(1) + '" r="2.6" fill="var(--mark)"/>';
+      });
+    }
+    s += '</svg>';
+    document.getElementById("plot").innerHTML = s;
+  }
+
+  function render() {
+    var rec = sample();
+    var recLen = arcLength(rec);
+    var miss = REAL - recLen;
+    var pct = miss / REAL * 100;
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-n", rec.length + "개", filter === 0 ? "alarm" : "");
+    set("v-real", REAL.toFixed(0) + " m");
+    set("v-rec", recLen.toFixed(0) + " m");
+    set("v-err", "-" + miss.toFixed(0) + " m (" + pct.toFixed(1) + "%)", pct > 1 ? "alarm" : "good");
+    draw(rec);
+
+    var note = document.getElementById("note");
+    if (filter === 0) {
+      note.className = "note";
+      note.innerHTML = "제한을 안 걸면 <b>" + rec.length + "개</b>를 다 받는다. 경로는 완벽하지만 이만큼 자주 깨어나 위치를 계산하는 만큼 배터리를 쓴다. 실제 GPS는 이렇게까지 촘촘하게 주지도 않는다.";
+    } else if (pct < 1) {
+      note.className = "note fine";
+      note.innerHTML = "위치를 <b>" + rec.length + "개</b>만 받고도 거리 오차가 " + pct.toFixed(1) + "%에 그친다. 사람이 뛰는 속도에서는 이 정도 간격이면 곡선을 거의 그대로 따라간다. RunWay가 처음에 5m를 고른 이유다.";
+    } else {
+      note.className = "note alarm";
+      note.innerHTML = "간격을 " + filter + "m로 벌리니 곡선이 직선으로 잘려서 <b>" + miss.toFixed(0) + "m(" + pct.toFixed(1) + "%)가 통째로 사라졌다.</b> 위치를 덜 받아 배터리는 아끼지만, 뛴 거리가 실제보다 짧게 나오고 지도의 경로도 각져 보인다.";
+    }
+  }
+
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      filter = parseInt(b.dataset.f, 10);
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

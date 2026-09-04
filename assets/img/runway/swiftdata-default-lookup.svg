@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" width="720" height="320" role="img" aria-label="SwiftData가 기존 기록의 빈 필드를 채울 때 프로퍼티 선언부 기본값만 보고 init 파라미터 기본값은 안 본다">
+<style>
+  :root { color-scheme: light dark; }
+  .bg{fill:#ffffff}.card{fill:#f7f8fa;stroke:#e3e6ea}
+  .ok{fill:#e2f4ef;stroke:#0d9276}.no{fill:#fbeae8;stroke:#d0392b}
+  .ttl{fill:#16181d;font-weight:700}.sub{fill:#6b7280}.dim{fill:#9aa1ab}
+  .okt{fill:#0d9276}.not{fill:#d0392b}.ln{stroke:#9aa1ab}.okl{stroke:#0d9276}.nol{stroke:#d0392b}
+  text{font-family:'Fira Code',ui-monospace,SFMono-Regular,Menlo,monospace}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0d0e11}.card{fill:#141417;stroke:#27272a}
+    .ok{fill:#0d2b23;stroke:#34d399}.no{fill:#331416;stroke:#f87171}
+    .ttl{fill:#f4f4f5}.sub{fill:#a1a1aa}.dim{fill:#71717a}
+    .okt{fill:#34d399}.not{fill:#f87171}.ln{stroke:#52525b}.okl{stroke:#34d399}.nol{stroke:#f87171}
+  }
+</style>
+<defs>
+  <marker id="g2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" class="okt"/></marker>
+  <marker id="r2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" class="not"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="720" height="320" rx="10"/>
+<text class="dim" x="24" y="28" font-size="11">v1.1을 쓰던 사람이 새 버전으로 업데이트했을 때</text>
+
+<!-- 기존 레코드 -->
+<rect class="card" x="24" y="48" width="188" height="110" rx="9" stroke-width="1.3"/>
+<text class="ttl" x="118" y="72" font-size="11.5" text-anchor="middle">기기에 이미 있던 기록</text>
+<text class="dim" x="118" y="88" font-size="9.5" text-anchor="middle">v1.1 때 저장된 것</text>
+<line class="ln" x1="42" y1="98" x2="194" y2="98" stroke-width="1" stroke-dasharray="3 3"/>
+<text class="sub" x="42" y="118" font-size="10.5">gpwsState  "sinkRate"</text>
+<text class="sub" x="42" y="134" font-size="10.5">pace       5.72</text>
+<text class="not" x="42" y="150" font-size="10.5">target     (빈칸)</text>
+
+<line class="ln" x1="216" y1="103" x2="266" y2="103" stroke-width="1.4"/>
+<text class="dim" x="241" y="94" font-size="9" text-anchor="middle">읽기</text>
+
+<!-- SwiftData -->
+<rect class="card" x="272" y="72" width="150" height="62" rx="9" stroke-width="1.3"/>
+<text class="ttl" x="347" y="96" font-size="11.5" text-anchor="middle">SwiftData</text>
+<text class="dim" x="347" y="114" font-size="9.5" text-anchor="middle">빈칸을 뭘로 채우지?</text>
+
+<!-- 두 후보 -->
+<line class="okl" x1="426" y1="92" x2="486" y2="72" stroke-width="1.8" marker-end="url(#g2)"/>
+<line class="nol" x1="426" y1="114" x2="486" y2="178" stroke-width="1.6" marker-end="url(#r2)" stroke-dasharray="4 3"/>
+
+<rect class="ok" x="492" y="46" width="204" height="70" rx="9" stroke-width="1.5"/>
+<text class="okt" x="510" y="68" font-size="10" font-weight="700">여기를 본다</text>
+<text class="sub" x="510" y="88" font-size="10.5">var target: String =</text>
+<text class="sub" x="510" y="104" font-size="10.5">    ModeATarget.pace.rawValue</text>
+<text class="dim" x="510" y="132" font-size="9.5">프로퍼티 선언부의 기본값</text>
+
+<rect class="no" x="492" y="152" width="204" height="70" rx="9" stroke-width="1.5"/>
+<text class="not" x="510" y="174" font-size="10" font-weight="700">여기는 안 본다</text>
+<text class="sub" x="510" y="194" font-size="10.5">init(target: String =</text>
+<text class="sub" x="510" y="210" font-size="10.5">    ModeATarget.pace.rawValue)</text>
+<text class="dim" x="510" y="238" font-size="9.5">init 파라미터의 기본값</text>
+
+<text class="dim" x="24" y="192" font-size="10.5">init은 앱이 새 기록을</text>
+<text class="dim" x="24" y="208" font-size="10.5">만들 때만 쓰인다.</text>
+<text class="dim" x="24" y="224" font-size="10.5">이미 저장된 기록을</text>
+<text class="dim" x="24" y="240" font-size="10.5">고칠 때는 안 거친다.</text>
+
+<line class="ln" x1="24" y1="266" x2="696" y2="266" stroke-width="1" stroke-dasharray="3 3"/>
+<text class="sub" x="24" y="288" font-size="11">앱을 지웠다 새로 깔면서 테스트하면 채울 기록이 없으니 이 차이가 한 번도 안 드러난다.</text>
+<text class="dim" x="24" y="308" font-size="10.5">업데이트로만 재현되는 종류라, 실제 유저 기기에서 처음 터진다.</text>
+</svg>

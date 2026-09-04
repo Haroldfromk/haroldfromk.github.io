@@ -106,14 +106,7 @@ Swift에서 `struct`는 값 타입, `class`는 참조 타입이다. 이번 `Flig
 
 현재 데이터 흐름을 다시한번 정리하면 아래와 같다.
 
-```text
-View (.task) → startStream() → AsyncStream 대기
-LocationService → locationPublisher.send() → ViewModel → RunningCentor.processLocation()
-                                                                      ↓
-                                                          continuation.yield(FlightData)
-                                                                      ↓
-                                                          ViewModel → View 업데이트
-```
+![화면이 스트림을 미리 열어두고 위치가 들어올 때마다 Actor가 그 스트림으로 값을 흘려보내는 왕복 구조](/assets/img/runway/flightdata-roundtrip.svg){: width="720" height="250"}
 
 여기서 `processLocation`이 계산을 담당하므로, 새로 추가한 `pace`, `altitude`, `heading`도 이 안에서 계산하여 `FlightData`에 담아 넘기면 된다.
 
@@ -176,6 +169,8 @@ FlightData(distance: 608.5788572025573, phase: RunWay.FlightPhase.preflight, pac
 UI 작업은 AI의 도움을 받아 빠르게 처리했다. 데이터 흐름과 동시성 로직에 집중하기 위한 선택이다.
 
 여기서 한 가지 정리가 필요했다. 지금까지는 테스트 목적으로 각 View에서 ViewModel을 개별 생성해서 썼는데, PFDView까지 연결하려면 동일한 인스턴스를 여러 View가 공유해야 한다. 각자 생성하면 서로 다른 인스턴스라 데이터가 공유되지 않는다.
+
+[이전글](https://haroldfromk.github.io/posts/RunningProject-(4)/){:target="_blank"}에서 화면과 뷰모델이 각자 `LocationService`를 만들어버려서 버튼을 눌러도 아무 일이 없던 문제와 뿌리가 같다. 그때는 화면 하나짜리라 "화면이 자기 것을 만들지 않게" 하는 걸로 해결했는데, 화면이 여러 개가 되니 그것만으로는 부족하다. **어디서 한 번만 만들지**를 정해야 한다.
 
 그래서 `RunWayApp`에서 단 한 번 생성하고 `.environment`로 하위 View 전체에 주입하는 방식으로 전환했다.
 
@@ -297,6 +292,21 @@ Text(formatPace(runViewModel.flightData.pace))
 식을 정리해보면 `0.25`는 0.25분, 즉 15초를 의미한다.
 
 페이스를 0.25로 나눠서 반올림한 뒤 다시 0.25를 곱하면 가장 가까운 15초 단위로 보정된다.
+
+속도를 움직여가며 이 눈금이 어떻게 서는지 볼 수 있게 만들었다.
+
+<iframe
+  src="/assets/demo/pace_tape_simulator.html"
+  width="100%"
+  height="510px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+슬라이더를 조금씩 움직여보면 실제 페이스는 계속 바뀌는데 **가운데 눈금은 한동안 붙어 있다가 한 칸씩 툭 옮겨간다.** 반올림이 하는 일이 이거다. 이게 없으면 GPS가 조금만 흔들려도 눈금 다섯 개가 통째로 덜덜 떨린다.
+
+"멈춤" 버튼을 눌러보면 앞에서 `isFinite`로 막아둔 게 왜 필요한지도 같이 보인다. 속도가 0이면 `1 ÷ 0`이라 페이스가 무한대가 되는데, 이걸 그대로 화면에 찍으려고 하면 앱이 죽는다. (이 무한대 문제는 나중에 1.3.1 버전에서 실제로 터진다.)
 
 예를 들어 페이스가 `4.37` min/km라면
 

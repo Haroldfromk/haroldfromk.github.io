@@ -18,6 +18,8 @@ published: true
 
 물론 Xcode에서 CoreData → SwiftData 마이그레이션을 제공하긴 하지만, 신규 프로젝트에서 굳이 마이그레이션을 거칠 이유가 없다고 판단했다.
 
+마이그레이션은 **저장 구조가 바뀌었을 때 이미 저장돼 있던 데이터를 새 구조에 맞춰 옮기는 작업**이다. 여기서는 CoreData로 저장한 걸 SwiftData로 옮기는 걸 말하는데, 아직 저장된 게 하나도 없으니 옮길 것도 없다. 다만 이 단어는 앞으로 계속 나온다. 앱을 배포한 뒤에 모델에 필드를 하나만 추가해도, 이미 그 앱을 쓰던 사람 기기에 있는 기록을 새 구조로 읽어낼 수 있어야 하기 때문이다.
+
 ---
 
 ## 모델링
@@ -106,6 +108,19 @@ class SwiftDataAlert {
 그리고 기존 `RunningCentor`에서 좌표를 튜플 배열 `[(latitude: Double, longitude: Double)]`로 관리하고 있는데, SwiftData는 튜플을 직접 저장할 수 없어 별도 모델로 전환하게 되었다.
 
 `SwiftDataFlight`와 연결되며 MapPolyline 경로 표시에 사용된다.
+
+여기서 `@Relationship(deleteRule: .cascade)`의 `deleteRule`은 **부모를 지울 때 딸린 것들을 어떻게 할지** 정하는 규칙이다. 러닝 기록 하나에 좌표가 수백 개씩 붙는 구조라 이걸 안 정해두면 지운 러닝의 좌표만 저장소에 계속 남는다.
+
+<iframe
+  src="/assets/demo/cascade_delete_simulator.html"
+  width="100%"
+  height="775px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+러닝 3개를 다 지웠는데 저장소에는 56개가 그대로 남는다. 화면 어디에도 안 보이는데 용량만 먹는 상태다. `.cascade`를 걸어두면 러닝을 지울 때 딸린 것들도 같이 정리된다.
 
 ```swift
 @Model
@@ -256,6 +271,8 @@ func saveAlert() {
 ```
 
 이미 우리는 onChange에서 gpwsStatus의 변화를 감지하여 트리거를 하고있었기에 normal, minimus가 아닌경우에만 저장을 하도록 해주면 된다.
+
+지금은 이게 제일 단순하고 맞아 보이는데, **상태가 바뀔 때마다 무조건 하나씩 저장한다**는 게 이 코드의 전부라는 점은 기억해둘 만하다. 나중에 허용 오차를 좁히면 SINK RATE와 OVERSPEED를 빠르게 오가게 되는데, 그때 이 코드가 그대로 남아 있으면 지도에 경고 표시가 스무 개씩 찍힌다. 실제로 1.3.1 버전에서 그렇게 됐다.
 
 ---
 

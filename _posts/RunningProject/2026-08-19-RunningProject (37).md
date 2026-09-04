@@ -97,6 +97,19 @@ Button {
 
 이제 100m에서 한 칸 돌리면 바로 500m, 그다음은 1.0km, 1.5km 순으로 깔끔하게 올라간다.
 
+두 방식을 직접 돌려볼 수 있게 만들었다. 크라운 대신 +/− 버튼을 누르면 한 칸씩 움직인다.
+
+<iframe
+  src="/assets/demo/crown_step_simulator.html"
+  width="100%"
+  height="700px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+돌려보면서 알게 된 게 하나 더 있다. 수정 전 방식으로 두고 **5K 프리셋을 누른 다음 크라운을 한 칸만 돌려보면 2.6km로 튄다.** 프리셋은 거리 값만 바꿔놓고 크라운이 들고 있는 값은 건드리지 않았는데, 크라운이 움직이는 순간 `onChange`가 다시 거리를 크라운 값으로 덮어써버리기 때문이다. 프리셋 버튼도 같이 고쳐야 했던 게 이 이유다. 인덱스 방식에서는 프리셋이 크라운의 자리 번호까지 같이 옮겨놓기 때문에, 5K를 누르고 한 칸 돌리면 5.5km로 이어진다.
+
 ---
 
 ## GPWS 경고 유형별로 다른 햅틱
@@ -215,6 +228,10 @@ enum RunReminderService {
 ```
 
 `reminderIdentifier`는 고정된 문자열 하나만 쓴다. 재예약할 때마다 같은 identifier로 `removePendingNotificationRequests`를 먼저 호출해서 기존 예약을 지우고 나서 새로 등록하는 방식이라, 러닝을 여러 번 저장해도 리마인더가 중복으로 쌓이지 않는다.
+
+![러닝을 저장할 때마다 기존 예약을 지우고 마지막 러닝 기준으로 다시 잡는 흐름](/assets/img/runway/reminder-reschedule.svg){: width="720" height="250"}
+
+그림으로 보면 이 방식의 핵심이 **살아남는 예약이 항상 하나뿐**이라는 점이다. 러닝을 세 번 하면 예약도 세 번 잡히는데, 앞의 두 개는 새로 잡을 때 같이 지워진다. 그래서 알림 기준은 언제나 마지막 러닝이 된다.
 
 트리거는 [`UNCalendarNotificationTrigger`](https://developer.apple.com/documentation/usernotifications/uncalendarnotificationtrigger) 대신 [`UNTimeIntervalNotificationTrigger`](https://developer.apple.com/documentation/usernotifications/untimeintervalnotificationtrigger)를 썼다. 매주 같은 요일/시각에 반복되는 알림이 아니라 "마지막 러닝으로부터 정확히 7일 뒤"라는 상대적인 시점만 필요해서, 절대 시각(`lastRunDate + 7일`)을 `timeIntervalSinceNow`로 변환해 넘기는 쪽이 더 맞는 방식이었다.
 

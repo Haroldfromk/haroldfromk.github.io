@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cascade Delete Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --mark-bg:#e8effc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --mark-bg:#14203a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--bad); border-color:var(--bad); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+
+  .store { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:11px 12px; }
+  .store h2 { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 10px; font-weight:500; }
+  .flight { border:1px solid var(--line); border-radius:8px; background:var(--bg); padding:9px 10px; margin-bottom:7px; }
+  .flight.gone { opacity:.28; }
+  .flight .ttl { display:flex; justify-content:space-between; align-items:center;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:600; margin-bottom:7px; }
+  .kids { display:flex; flex-wrap:wrap; gap:4px; }
+  .kid { width:13px; height:13px; border-radius:3px; background:var(--mark); }
+  .kid.orphan { background:var(--bad); }
+  .kid.gone { background:var(--line); }
+  .tag { font-family:'Fira Code',monospace; font-size:9.5px; padding:2px 6px; border-radius:4px;
+    border:1px solid var(--line); color:var(--faint); }
+  .tag.bad { border-color:var(--bad); color:var(--bad); }
+
+  .legend { display:flex; gap:13px; flex-wrap:wrap; margin-top:9px; font-size:10.5px; color:var(--dim); font-family:'Fira Code',monospace; }
+  .legend i { display:inline-block; width:11px; height:11px; border-radius:3px; vertical-align:-1px; margin-right:5px; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>러닝 하나를 지우면 딸린 것들은 어떻게 되나</h1>
+<p class="lead">러닝 기록 하나에는 경고 이력과 GPS 좌표 수백 개가 딸려 있다. <code>deleteRule</code>은 <b>부모를 지울 때 자식을 어떻게 할지</b>를 정하는 규칙이다. 아무것도 안 정하면 자식은 부모를 잃은 채로 저장소에 그냥 남는다.</p>
+
+<div class="bar">
+  <span>deleteRule</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-r="nullify" aria-pressed="true">기본값 (자식은 그대로 둠)</button>
+    <button type="button" data-r="cascade" aria-pressed="false">.cascade (같이 지움)</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn primary" id="del">러닝 하나 지우기</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">남은 러닝 기록</div><div class="v" id="v-f">--</div></div>
+  <div class="cell"><div class="k">저장소에 남은 좌표·경고</div><div class="v" id="v-c">--</div></div>
+  <div class="cell"><div class="k">주인 없는 데이터</div><div class="v" id="v-o">--</div></div>
+</div>
+
+<div class="store">
+  <h2>저장소</h2>
+  <div id="list"></div>
+  <div class="legend">
+    <span><i style="background:var(--mark)"></i>러닝에 딸린 데이터</span>
+    <span><i style="background:var(--bad)"></i>주인 없이 남은 데이터</span>
+    <span><i style="background:var(--line)"></i>같이 지워진 데이터</span>
+  </div>
+</div>
+<div class="note" id="note">"러닝 하나 지우기"를 눌러보자.</div>
+
+<script>
+(function () {
+  "use strict";
+  var FLIGHTS = [
+    { name: "6월 9일 러닝", kids: 18 },
+    { name: "6월 11일 러닝", kids: 24 },
+    { name: "6월 13일 러닝", kids: 14 }
+  ];
+  var rule = "nullify", deleted = 0;
+
+  function render() {
+    var alive = FLIGHTS.length - deleted;
+    var orphan = 0, kept = 0;
+    FLIGHTS.forEach(function (f, i) {
+      var gone = i < deleted;
+      if (!gone) kept += f.kids;
+      else if (rule === "nullify") { orphan += f.kids; }
+    });
+
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-f", alive + "개");
+    set("v-c", (kept + orphan) + "개");
+    set("v-o", orphan + "개", orphan ? "alarm" : "good");
+
+    document.getElementById("list").innerHTML = FLIGHTS.map(function (f, i) {
+      var gone = i < deleted;
+      var kidCls = !gone ? "kid" : (rule === "nullify" ? "kid orphan" : "kid gone");
+      var kids = "";
+      for (var k = 0; k < f.kids; k++) kids += '<div class="' + kidCls + '"></div>';
+      var tag = !gone ? '<span class="tag">' + f.kids + '개 딸림</span>'
+        : (rule === "nullify" ? '<span class="tag bad">지웠는데 ' + f.kids + '개가 남음</span>' : '<span class="tag">같이 지워짐</span>');
+      return '<div class="flight' + (gone ? " gone" : "") + '"><div class="ttl"><span>' +
+        (gone ? "<s>" + f.name + "</s>" : f.name) + '</span>' + tag + '</div><div class="kids">' + kids + '</div></div>';
+    }).join("");
+
+    var note = document.getElementById("note");
+    if (!deleted) { note.className = "note"; note.textContent = '"러닝 하나 지우기"를 눌러보자.'; return; }
+    if (rule === "nullify") {
+      note.className = "note alarm";
+      note.innerHTML = "러닝 " + deleted + "개를 지웠는데 거기 딸려 있던 <b>" + orphan + "개가 저장소에 그대로 남아 있다.</b> " +
+        "화면 어디에서도 안 보이는데 용량만 차지한다. 지우면 지울수록 이 찌꺼기가 쌓인다.";
+    } else {
+      note.className = "note fine";
+      note.innerHTML = "러닝을 지우면 거기 딸린 것들도 <b>같이 정리된다.</b> 남은 " + (kept) + "개는 전부 살아 있는 러닝에 붙어 있는 것들이다. " +
+        "러닝 기록 하나에 좌표가 수백 개씩 붙는 걸 생각하면, 이 규칙을 안 정해두는 건 나중에 감당이 안 된다.";
+    }
+  }
+
+  document.getElementById("del").addEventListener("click", function () { if (deleted < FLIGHTS.length) deleted++; render(); });
+  document.getElementById("reset").addEventListener("click", function () { deleted = 0; render(); });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      rule = b.dataset.r; deleted = 0;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

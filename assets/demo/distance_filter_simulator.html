@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>distanceFilter Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --run:#2563eb; --stop:#b3790a; --grid:#eceff2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --run:#60a5fa; --stop:#fbbf24; --grid:#1c1c20;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:64ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:14px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:4px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 14px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+
+  .case { border:1px solid var(--line); border-radius:9px; background:var(--panel); margin-bottom:9px; overflow:hidden; }
+  .case-head { display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:9px 13px; border-bottom:1px solid var(--line); }
+  .case-name { font-size:13px; font-weight:600; }
+  .case-name em { font-style:normal; font-family:'Fira Code',monospace; font-size:10.5px; color:var(--faint); margin-left:7px; }
+  .verdict { font-family:'Fira Code',monospace; font-size:11px; font-weight:600; padding:4px 10px; border-radius:999px; white-space:nowrap; }
+  .verdict.no { background:var(--bad-bg); color:var(--bad); }
+  .verdict.yes { background:var(--ok-bg); color:var(--ok); }
+  .case-body { padding:10px 12px 12px; overflow-x:auto; }
+  .case-body svg { display:block; width:100%; min-width:440px; height:auto; }
+
+  .cmp { border:1px solid var(--line); border-radius:9px; padding:12px 14px; margin-top:12px; }
+  .cmp.no { border-color:var(--bad); background:var(--bad-bg); }
+  .cmp.yes { border-color:var(--ok); background:var(--ok-bg); }
+  .cmp > b { display:block; font-size:13px; font-weight:700; margin-bottom:4px; }
+  .cmp p { margin:0; font-size:12.5px; line-height:1.65; color:var(--dim); }
+  .cmp.no > b { color:var(--bad); } .cmp.yes > b { color:var(--ok); }
+
+  .legend { display:flex; flex-wrap:wrap; gap:14px; margin-top:10px;
+    font-family:'Fira Code',monospace; font-size:10px; color:var(--dim); }
+  .legend i { display:inline-block; width:9px; height:9px; border-radius:50%; vertical-align:-1px; margin-right:5px; }
+</style>
+</head>
+<body>
+
+<h1>멈춘 것과 신호가 끊긴 것을 구분할 수 있는가</h1>
+<p class="lead"><code>distanceFilter</code>는 위치가 최소 몇 m 이상 움직여야 새로 알려줄지 정하는 값이다. 5m로 두면 제자리에 서 있는 동안엔 GPS가 멀쩡해도 새 위치가 아예 안 들어온다.</p>
+
+<div class="bar">
+  <span>위치 수신 설정</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-mode="filter" aria-pressed="true">distanceFilter 5m (기존)</button>
+    <button type="button" data-mode="none" aria-pressed="false">제한 없음 (수정)</button>
+  </div>
+</div>
+
+<div id="cases"></div>
+
+<div class="cmp" id="cmp"></div>
+
+<div class="legend">
+  <span><i style="background:var(--run)"></i>달리는 중 수신</span>
+  <span><i style="background:var(--stop)"></i>멈춘 채 수신</span>
+  <span><i style="border:1px dashed var(--faint);background:none"></i>수신 없음</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var DUR = 26, RUN_UNTIL = 6, RUN_SPD = 3.3, STOP_SPD = 0.15;
+  var mode = "filter";
+
+  // 두 상황 모두 6초까지는 똑같이 달린다. 그 뒤가 갈린다.
+  var CASES = [
+    { id:"stop",   name:"신호등에서 멈춤",   sub:"GPS는 멀쩡함",     signal:true  },
+    { id:"tunnel", name:"터널을 지나감",     sub:"계속 달리는 중",   signal:false }
+  ];
+
+  // 수신 시각 계산: 필터가 있으면 그 거리를 채워야 새 위치가 온다
+  function receipts(c) {
+    var out = [], moved = 0, t = 0;
+    for (t = 0; t < DUR; t++) {
+      var running = t < RUN_UNTIL;
+      var spd = running ? RUN_SPD : (c.id === "tunnel" ? RUN_SPD : STOP_SPD);
+      if (!running && !c.signal) continue;              // 터널: 신호 자체가 없다
+      if (mode === "none") { out.push({ t:t, spd:spd, running:running }); continue; }
+      moved += spd;
+      if (moved >= 5) { moved = 0; out.push({ t:t, spd:spd, running:running }); }
+    }
+    return out;
+  }
+
+  // 코드가 내리는 판단
+  function verdict(c, rec) {
+    if (mode === "filter") {
+      // "데이터가 8초 이상 안 들어오면 멈춘 것으로 본다"
+      var last = rec.length ? rec[rec.length - 1].t : 0;
+      var at = last + 8;
+      return { text: at < DUR ? at + "초에 일시정지 판정" : "판정 못 함", ok:false, at: at };
+    }
+    // raw 속도가 0.5 미만으로 2초 지속되면 정지
+    var low = 0, at2 = null;
+    rec.forEach(function (r) {
+      if (r.spd < 0.5) { low++; if (low >= 2 && at2 === null) at2 = r.t; } else low = 0;
+    });
+    if (at2 !== null) return { text: at2 + "초에 정지 확정", ok:true, at: at2 };
+    var last2 = rec.length ? rec[rec.length - 1].t : 0;
+    return { text: (last2 + 15) + "초에 안전망 작동", ok:true, at: last2 + 15 };
+  }
+
+  function draw(c, rec, v) {
+    var W = 720, H = 62, PL = 8, PR = 8, Y = 26;
+    var X = function (t) { return PL + t * (W - PL - PR) / (DUR - 1); };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + c.name + ' 위치 수신 타임라인">';
+    s += '<line x1="' + PL + '" y1="' + Y + '" x2="' + (W - PR) + '" y2="' + Y + '" stroke="var(--grid)" stroke-width="2"/>';
+    // 달리는 구간 표시
+    s += '<rect x="' + X(0) + '" y="' + (Y - 13) + '" width="' + (X(RUN_UNTIL - 1) - X(0)) + '" height="26" fill="var(--run)" opacity="0.08"/>';
+    s += '<text x="' + X(0) + '" y="' + (Y - 17) + '" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">달리는 중</text>';
+    s += '<text x="' + X(RUN_UNTIL) + '" y="' + (Y - 17) + '" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + (c.id === "tunnel" ? "계속 달림 (신호 없음)" : "멈춤") + '</text>';
+
+    for (var t = 0; t < DUR; t++) {
+      var hit = rec.filter(function (r) { return r.t === t; })[0];
+      if (hit) {
+        var col = hit.running ? "var(--run)" : "var(--stop)";
+        s += '<circle cx="' + X(t).toFixed(1) + '" cy="' + Y + '" r="4.5" fill="' + col + '"/>';
+        if (!hit.running && mode === "none")
+          s += '<text x="' + X(t).toFixed(1) + '" y="' + (Y + 19) + '" text-anchor="middle" font-size="8" font-family="Fira Code,monospace" fill="var(--stop)">' + hit.spd.toFixed(2) + '</text>';
+      } else {
+        s += '<circle cx="' + X(t).toFixed(1) + '" cy="' + Y + '" r="2.6" fill="none" stroke="var(--faint)" stroke-width="1" stroke-dasharray="1.5 1.5" opacity="0.5"/>';
+      }
+    }
+    if (v.at < DUR) {
+      s += '<line x1="' + X(v.at).toFixed(1) + '" y1="' + (Y - 15) + '" x2="' + X(v.at).toFixed(1) + '" y2="' + (Y + 13) + '" stroke="' + (v.ok ? "var(--ok)" : "var(--bad)") + '" stroke-width="1.5" stroke-dasharray="3 2"/>';
+    }
+    [0, 6, 12, 18, 24].forEach(function (t) {
+      s += '<text x="' + X(t).toFixed(1) + '" y="' + (H - 3) + '" text-anchor="middle" font-size="8.5" font-family="Fira Code,monospace" fill="var(--faint)">' + t + '초</text>';
+    });
+    s += '</svg>';
+    return s;
+  }
+
+  function render() {
+    var html = "", sigs = [];
+    CASES.forEach(function (c) {
+      var rec = receipts(c), v = verdict(c, rec);
+      // 6초 이후 수신 패턴을 문자열로 만들어 두 상황이 같은지 비교한다
+      sigs.push(rec.filter(function (r) { return r.t >= RUN_UNTIL; }).map(function (r) { return r.t; }).join(","));
+      html += '<div class="case"><div class="case-head">' +
+        '<span class="case-name">' + c.name + '<em>' + c.sub + '</em></span>' +
+        '<span class="verdict ' + (v.ok ? "yes" : "no") + '">' + v.text + '</span></div>' +
+        '<div class="case-body">' + draw(c, rec, v) + '</div></div>';
+    });
+    document.getElementById("cases").innerHTML = html;
+
+    var same = sigs[0] === sigs[1];
+    var cmp = document.getElementById("cmp");
+    cmp.className = "cmp " + (same ? "no" : "yes");
+    cmp.innerHTML = same
+      ? '<b>두 상황이 코드에게 똑같이 보인다</b><p>멈춘 뒤로는 5m를 못 채우니 위치가 안 들어오고, 터널에서도 신호가 없어 안 들어온다. ' +
+        '코드가 받는 정보는 <b style="color:var(--ink)">양쪽 다 "데이터 없음"</b>이라 구분할 방법이 없다. ' +
+        '그래서 실제로 멈췄든 신호만 끊겼든 똑같이 8초를 기다린 뒤에야 일시정지로 판정했다.</p>'
+      : '<b>두 상황이 다르게 보인다</b><p>멈춰 있어도 위치는 계속 들어오고, 그 안에 실린 속도값이 0.5 미만이라는 걸로 <b style="color:var(--ink)">2초 만에</b> 정지를 확정한다. ' +
+        '터널은 여전히 아무것도 안 들어오니 별도 안전망이 15초까지 기다린다. ' +
+        '<b style="color:var(--ink)">"데이터가 오냐"가 아니라 "실제로 움직이냐"</b>를 보게 되면서 둘이 갈라졌다.</p>';
+  }
+
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.dataset.mode;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

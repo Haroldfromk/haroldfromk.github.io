@@ -56,6 +56,8 @@ Delegate를 설정하는 이유는 내가 이 프로토콜이 가지고있는 �
 
 여기선 그걸 `LocationService`라는 우리가 만든 클래스에게 위임을 해주는것.
 
+말을 조금 풀면 이렇다. `CLLocationManager`는 GPS 위치가 새로 잡힐 때마다 "새 위치 나왔어"라고 누군가에게 알려주고 싶은데, 그 알림을 받을 상대를 자기가 정할 수는 없다. 그래서 `delegate`라는 자리를 하나 비워두고, 거기에 등록된 쪽에게 알려준다. `locationManager.delegate = self`는 그 빈 자리에 우리 클래스를 앉히는 한 줄이다. 이 자리를 안 채우면 GPS는 멀쩡히 돌아도 우리 쪽으로는 아무것도 안 온다.
+
 ```swift
 final class LocationService: NSObject, CLLocationManagerDelegate {
     
@@ -87,6 +89,19 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 5. `accuracyAuthorization` - 사용자가 정확한 위치를 허용했는지 대략적 위치만 허용했는지 확인. 대략적 위치면 경로 추적이 의미없으니 안내가 필요하다.
 6. `allowsBackgroundLocationUpdates = true` - 러닝 중 화면이 꺼지거나 다른 앱으로 전환돼도 GPS 수집을 유지한다.
 7. `pausesLocationUpdatesAutomatically = false` - iOS가 자동으로 위치 업데이트를 멈추는 걸 방지한다. 러닝 중 갑자기 끊기면 안 되니까.
+
+이 중에 `distanceFilter`는 값 하나로 배터리와 정확도를 맞바꾸는 설정이라, 얼마로 잡느냐가 생각보다 중요하다. 값을 바꿔가며 경로가 어떻게 달라지는지 볼 수 있게 만들어봤다.
+
+<iframe
+  src="/assets/demo/distance_filter_path_simulator.html"
+  width="100%"
+  height="600px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+600m짜리 코스 기준으로, 5m면 위치를 116개만 받고도 오차가 0.2%다. 50m로 벌리면 13개로 줄어드는 대신 곡선을 직선으로 잘라 먹어서 **27m(4.4%)가 그냥 사라진다.** 10km를 뛰면 400m 넘게 손해 보는 셈이라, 러닝 앱에서는 이 값을 크게 잡을 수가 없다. 일단 5로 두고 시작한다.
 
 ---
 
@@ -302,6 +317,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate {}
 
 하지만 6부터는 class에 대해서 별도의 언급이 없는이상 `MainActor`가 암묵적으로 사용되어서 이런 위치관련기능또한 MainThread에서 실행된다.
 
+여기서 `MainActor`는 "화면을 그리는 쪽 담당"이라고 보면 된다. 화면 관련 값은 아무 데서나 건드리면 화면이 깨지니까, 그 값들은 이 담당 하나만 만지도록 묶어두는 것이다. Swift 6는 별말이 없으면 클래스를 일단 이쪽 소속으로 취급하는데, GPS를 받는 일은 화면 그리는 일과는 성격이 다르다. 계속 들어오는 위치를 굳이 화면 담당한테 줄 세울 이유가 없다.
+
 <img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/45b6d0c6-fc4e-4046-97a6-89bd7bd1f7d3.png" />
 
 물론. `@preconcurrency`쓰면 되긴하지만, 어차피 위에서도 바꿔서 해보기로 결정했기에 해당 attribute는 그냥 언급만하고 쓰지는 않는다.
@@ -440,6 +457,8 @@ func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:
 처음엔 `nonisolated`로 선언했으니 백그라운드에서 호출될 거라 생각했는데 예상과 달랐다.
 
 이유는 간단하다. `nonisolated`는 Actor Isolation을 제거할 뿐, 실행 스레드를 바꾸는 키워드가 아니다.
+
+이 둘은 아예 다른 질문에 대한 답이다. `nonisolated`가 답하는 건 **"누가 이 값을 만져도 되는가"**이고, 스레드가 답하는 건 **"실제로 어느 일꾼이 이 코드를 실행하는가"**다. 소속을 뗐다고 해서 일하는 자리가 같이 옮겨지지는 않는다.
 
 [Core Location Docs](https://developer.apple.com/documentation/corelocation/cllocationmanager){:target="_blank"}를 보면 Delegate Callback은 `CLLocationManager`가 생성된 스레드의 RunLoop에서 호출된다고 명시되어 있다.
 

@@ -21,14 +21,13 @@ Actor의 경우 [Swift Concurrency & 격리(Isolation) 핵심 개념 정리](htt
 
 RunWay에서는 GPS, HealthKit, CoreMotion 데이터가 동시에 병렬로 들어온다. 이를 ViewModel에서 직접 처리하면 데이터 레이스 위험이 생기고 ViewModel이 비대해진다.
 
-그래서 `RunningCenter`를 `actor`로 선언하여 모든 러닝 데이터 처리를 단일 격리 영역에서 담당하도록 한다. `actor`는 내부적으로 serial queue를 보장하기 때문에 여러 데이터가 동시에 들어와도 상태 무결성이 유지된다.
+여기서 데이터 레이스는 **두 갈래가 같은 값을 동시에 고치려다 값이 깨지는 상황**을 말한다. 누적 거리를 예로 들면, GPS 쪽에서 "지금 값을 읽고 + 5를 더해서 다시 넣는" 동작을 하는 중에 다른 쪽이 끼어들어 같은 일을 하면, 두 번 더했는데 한 번만 반영되는 식으로 값이 틀어진다.
+
+그래서 `RunningCenter`를 `actor`로 선언하여 모든 러닝 데이터 처리를 단일 격리 영역에서 담당하도록 한다. 여기서 격리는 **"이 값은 이 안에서만 만질 수 있다"고 울타리를 치는 것**이라고 보면 된다. 울타리 밖에서 값을 바꾸려면 안쪽에 부탁해야 하고, 그 부탁들은 한 줄로 서서 차례를 기다린다. `actor`는 들어온 요청을 한 줄로 세워 하나씩만 처리해주기 때문에, 여러 데이터가 동시에 들어와도 값이 섞이지 않는다. 창구가 하나뿐인 은행 창구라고 보면 된다.
 
 다만 `RunningCenter`는 서비스 객체를 직접 들고 있지 않는다. 대신 ViewModel이 서비스에서 받은 데이터를 Actor로 전달하고, Actor는 그 데이터를 가공하여 다시 ViewModel로 내보내는 구조다.
 
-```text
-LocationService  → ViewModel → RunningCenter Actor → AsyncStream → ViewModel → View
-HealthKitService ↗
-```
+![GPS와 건강 데이터가 뷰모델을 거쳐 Actor로 모였다가 스트림으로 화면까지 흐르는 구조](/assets/img/runway/dataflow-core.svg){: width="720" height="250"}
 
 이 구조에서 `RunningCenter`가 담당할 것들은 아래와 같다.
 
@@ -248,6 +247,8 @@ init() {
 
 `cancellables`는 구독을 메모리에서 유지하기 위한 컨테이너다. 여기에 저장하지 않으면 구독이 즉시 해제되어 데이터가 전달되지 않는다.
 
+그리고 위 코드의 `.sink { ... }`처럼 중괄호로 묶어서 넘기는 코드 덩어리를 클로저라고 부른다. **지금 실행하는 게 아니라 "나중에 이런 일이 생기면 이걸 해줘"라고 미리 건네두는 것**이다. 여기서는 "위치가 들어오면 Actor에 넘겨줘"를 미리 적어서 맡겨둔 셈이다.
+
 이로써 기존에 만들었던 `processingData()`와 `currentLocation` 변수는 더 이상 필요하지 않아 제거했다. (start의 processingData부분도 삭제)
 
 이제 실행해서 테스트 해보기 전
@@ -272,7 +273,7 @@ init() {
 }
 ```
 
-`distance`는 `@Observable`에 의해 View가 자동으로 감지하므로 별도의 polling 없이 실시간으로 업데이트된다.
+`distance`는 `@Observable`에 의해 View가 자동으로 감지한다. 화면이 주기적으로 "값 바뀌었어?"라고 되묻지 않아도, 값이 바뀌는 순간 화면 쪽에 알아서 알려주는 구조다.
 
 `MapTestView`에서도 `@State private var distance`를 제거하고 `runViewModel.distance`로 교체한다.
 
@@ -422,6 +423,19 @@ Combine에서는 `sink`를 한 번만 설정하고 Publisher가 값을 방출할
 
 마치 이건 [GitExplorer(4)](https://haroldfromk.github.io/posts/GitExplorer(4)/){:target="_blank"}에서 구독 중첩문제와 상황이 같다는 것.
 
+이게 왜 문제인지가 잘 안 와닿을 수 있는 게, **화면에 보이는 거리는 두 방식 다 똑같이 잘 나오기 때문**이다. 눈에 안 보이는 쪽에서 뭐가 쌓이는지 볼 수 있게 만들었다.
+
+<iframe
+  src="/assets/demo/asyncstream_continuation_simulator.html"
+  width="100%"
+  height="795px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+위치를 16개 받는 동안 파이프도 16개, Task도 16개가 만들어진다. 거리는 73.6m로 둘 다 똑같이 맞다. 한 번만 열어두는 쪽은 위치가 몇 개가 들어와도 파이프와 Task가 계속 하나다. 5m마다 위치를 받는데 10km를 뛰면 이게 2000개 단위가 된다는 얘기다.
+
 이 문제를 해결하려면 스트림을 한 번만 열어두고 `continuation`을 프로퍼티로 저장하여, 위치 업데이트가 올 때마다 그 저장된 `continuation`으로 `yield`하는 구조로 변경해야 한다.
 
 ---
@@ -482,7 +496,7 @@ Actor-isolated property 'continuation' can not be mutated from a Sendable closur
 
 `Sendable`은 데이터 레이스 없이 동시성 컨텍스트 간에 값을 안전하게 전달할 수 있음을 나타내는 프로토콜이다.
 
-컴파일 타임에 요구사항을 강제하기 때문에 단순히 채택만 한다고 되는 게 아니라, 타입이 실제로 안전한 구조여야 한다.
+이건 앱을 돌려보기 전 단계에서 강제되기 때문에, 단순히 이름만 붙인다고 되는 게 아니라 타입이 실제로 안전한 구조여야 한다.
 
 Swift Concurrency Docs 에서는 이렇게 설명한다.
 

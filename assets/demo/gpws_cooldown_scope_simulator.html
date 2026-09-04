@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPWS Cooldown Scope Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --panel: #f7f8fa; --line: #e3e6ea; --ink: #16181d; --dim: #6b7280;
+    --faint: #9aa1ab; --sink: #d0392b; --sink-bg: #fbeae8; --over: #b3790a; --over-bg: #fbf2de;
+    --ok: #0d9276; --ok-bg: #e2f4ef; --grid: #eceff2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #09090b; --panel: #141417; --line: #27272a; --ink: #f4f4f5; --dim: #a1a1aa;
+      --faint: #71717a; --sink: #f87171; --sink-bg: #331416; --over: #fbbf24; --over-bg: #33260b;
+      --ok: #34d399; --ok-bg: #0d2b23; --grid: #1c1c20;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 16px; background: var(--bg); color: var(--ink);
+    font-family: 'Inter', -apple-system, 'Apple SD Gothic Neo', sans-serif;
+    user-select: none; -webkit-user-select: none;
+  }
+  .head { margin-bottom: 14px; }
+  .head h1 { font-size: 15px; font-weight: 700; margin: 0 0 5px; }
+  .head p { font-size: 12.5px; line-height: 1.6; color: var(--dim); margin: 0; max-width: 62ch; }
+  .head code { font-family: 'Fira Code', monospace; font-size: 11.5px; background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 14px; }
+  .ctl { display: flex; flex-direction: column; gap: 5px; }
+  .ctl > span { font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: .04em; color: var(--faint); text-transform: uppercase; }
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+  .seg button {
+    border: none; background: var(--bg); color: var(--dim); cursor: pointer;
+    font-family: 'Fira Code', monospace; font-size: 11.5px; font-weight: 500;
+    padding: 8px 13px; border-right: 1px solid var(--line); transition: background .13s, color .13s;
+  }
+  .seg button:last-child { border-right: none; }
+  .seg button[aria-pressed="true"] { background: var(--ok); color: var(--bg); font-weight: 600; }
+  .seg button.warn[aria-pressed="true"] { background: var(--sink); }
+
+  .result { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 11px 12px; min-width: 0; }
+  .stat .n { font-family: 'Fira Code', monospace; font-size: 24px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+  @media (max-width: 520px) {
+    .stat { padding: 9px 10px; }
+    .stat .n { font-size: 19px; }
+    .stat .s { display: none; }
+  }
+  .stat .n.bad { color: var(--sink); }
+  .stat .n.good { color: var(--ok); }
+  .stat .l { font-family: 'Fira Code', monospace; font-size: 9.5px; color: var(--faint); text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
+  .stat .s { font-size: 11.5px; color: var(--dim); margin-top: 3px; }
+
+  .chart { border: 1px solid var(--line); border-radius: 9px; background: var(--panel); padding: 12px 10px 6px; overflow-x: auto; }
+  .chart svg { display: block; width: 100%; min-width: 520px; height: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 9px; font-family: 'Fira Code', monospace; font-size: 10px; color: var(--dim); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 5px; }
+
+  .note { margin-top: 12px; font-size: 12.5px; line-height: 1.65; color: var(--dim); border-left: 2px solid var(--line); padding-left: 12px; }
+  .note b { color: var(--ink); font-weight: 600; }
+  .note.alarm { border-left-color: var(--sink); }
+  .note.fine { border-left-color: var(--ok); }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>경고 종류별로 쿨다운을 재면 어떻게 되는가</h1>
+  <p>목표 페이스 경계에 붙어 달리면 SINK RATE와 OVERSPEED가 번갈아 뜬다. 쿨다운을 <code>[String: Date]</code>로 종류별로 나눠 두면 각자 자기 시각만 보기 때문에, 번갈아 뜨는 동안엔 조건이 한 번도 걸리지 않는다.</p>
+</div>
+
+<div class="controls">
+  <div class="ctl">
+    <span>쿨다운 기록 방식</span>
+    <div class="seg" id="seg-scope">
+      <button type="button" class="warn" data-scope="type" aria-pressed="true">종류별 (버그)</button>
+      <button type="button" data-scope="any" aria-pressed="false">통합 (수정)</button>
+    </div>
+  </div>
+  <div class="ctl">
+    <span>페이스 반영 비율</span>
+    <div class="seg" id="seg-alpha">
+      <button type="button" data-alpha="0.15" aria-pressed="true">0.15 (현재)</button>
+      <button type="button" data-alpha="0.18" aria-pressed="false">0.18 (수정)</button>
+    </div>
+  </div>
+</div>
+
+<div class="result">
+  <div class="stat"><div class="n bad" id="n-total">0</div><div class="l">Alerts 기록</div><div class="s" id="s-split">SINK 0 · OVER 0</div></div>
+  <div class="stat"><div class="n" id="n-blocked">0</div><div class="l">쿨다운이 막은 횟수</div><div class="s" id="s-blocked">조건에 걸려 저장 안 됨</div></div>
+  <div class="stat"><div class="n" id="n-recover">0</div><div class="l">평균 해제 지연</div><div class="s">경고가 풀리기까지</div></div>
+</div>
+
+<div class="chart">
+  <div id="plot"></div>
+  <div class="legend">
+    <span><i style="background:var(--sink)"></i>SINK RATE</span>
+    <span><i style="background:var(--over)"></i>OVERSPEED</span>
+    <span><i style="background:var(--ok);opacity:.35"></i>허용 범위</span>
+    <span>↓ 기록된 경고</span>
+  </div>
+</div>
+
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+  var SPLITS = [6.50, 5.43, 5.52, 5.45, 5.48, 5.44, 5.50, 5.47];   // 실제 러닝 스플릿 (분/km)
+  var TARGET = 5.75, DEV = 10 / 60, COOLDOWN = 20, RHO = 0.75, NOISE = 0.35;
+  var TOTAL = 7870;
+
+  var state = { scope: "type", alpha: 0.15 };
+
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function gauss(r) { var u = 1 - r(), v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  var pace2spd = function (p) { return 1000 / (p * 60); };
+  var spd2pace = function (v) { return v > 0.05 ? 1000 / (v * 60) : 99; };
+
+  function run() {
+    var r = rng(20260904), a = state.alpha;
+    var sf = 0, ss = 0, err = 0, dist = 0, t = 0;
+    var cur = "normal", clearedAt = {}, series = [], marks = [];
+    var blocked = 0, gaps = [], sinceSink = null;
+
+    while (dist < TOTAL && t < 4200) {
+      var base = pace2spd(SPLITS[Math.min(Math.floor(dist / 1000), SPLITS.length - 1)]);
+      err = RHO * err + NOISE * Math.sqrt(1 - RHO * RHO) * gauss(r);
+      var raw = Math.max(base + err, 0);
+      if (sf === 0 && raw > 0) { sf = raw; ss = raw; }
+      sf = (1 - a) * sf + a * raw;
+      ss = (1 - a) * ss + a * sf;
+      dist += raw; t += 1;
+
+      var pace = spd2pace(ss);
+      var next = pace >= TARGET + DEV ? "sinkRate" : pace <= TARGET - DEV ? "overspeed" : "normal";
+
+      if (next !== cur) {
+        if (cur === "sinkRate" || cur === "overspeed") {
+          clearedAt[state.scope === "any" ? "_" : cur] = t;
+          if (cur === "sinkRate" && sinceSink !== null) { gaps.push(t - sinceSink); sinceSink = null; }
+        }
+        cur = next;
+        if (cur === "sinkRate") sinceSink = t;
+        if (cur === "sinkRate" || cur === "overspeed") {
+          var key = state.scope === "any" ? "_" : cur;
+          var last = clearedAt[key];
+          if (last !== undefined && t - last < COOLDOWN) blocked++;
+          else marks.push({ t: t, type: cur });
+        }
+      }
+      series.push({ pace: pace, state: cur });
+    }
+    return {
+      series: series, marks: marks, blocked: blocked, minutes: t / 60,
+      recover: gaps.length ? gaps.reduce(function (x, y) { return x + y; }, 0) / gaps.length : 0
+    };
+  }
+
+  function draw(sim) {
+    var W = 880, H = 190, PL = 44, PR = 12, PT = 20, PB = 40, RIB = 16;
+    var lo = 4.7, hi = 7.2, n = sim.series.length;
+    var X = function (i) { return PL + i * (W - PL - PR) / (n - 1); };
+    var Y = function (v) { var c = Math.max(lo, Math.min(v, hi)); return PT + (H - PT - PB) * ((c - lo) / (hi - lo)); };
+    var step = Math.max(1, Math.floor(n / 800));
+
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="페이스 추이와 GPWS 상태">';
+    [5.0, 5.5, 6.0, 6.5, 7.0].forEach(function (v) {
+      s += '<line x1="' + PL + '" y1="' + Y(v).toFixed(1) + '" x2="' + (W - PR) + '" y2="' + Y(v).toFixed(1) + '" stroke="var(--grid)"/>';
+      var m = Math.floor(v), sec = Math.round((v - m) * 60);
+      s += '<text x="' + (PL - 7) + '" y="' + (Y(v) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9.5" font-family="Fira Code, monospace" fill="var(--faint)">' + m + "'" + (sec < 10 ? '0' + sec : sec) + '"</text>';
+    });
+    s += '<rect x="' + PL + '" y="' + Y(TARGET - DEV).toFixed(1) + '" width="' + (W - PL - PR) + '" height="' + Math.max(Y(TARGET + DEV) - Y(TARGET - DEV), 1).toFixed(1) + '" fill="var(--ok)" opacity="0.16"/>';
+
+    var d = '';
+    for (var i = 0; i < n; i += step) d += (d ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(sim.series[i].pace).toFixed(1);
+    s += '<path d="' + d + '" fill="none" stroke="var(--ink)" stroke-width="1.3" opacity="0.75"/>';
+
+    var ribY = H - PB + 14, st = sim.series[0].state, from = 0;
+    for (var j = 1; j <= n; j++) {
+      var cs = j < n ? sim.series[j].state : null;
+      if (cs !== st) {
+        if (st !== 'normal') {
+          s += '<rect x="' + X(from).toFixed(1) + '" y="' + ribY + '" width="' + Math.max(X(j - 1) - X(from), 0.8).toFixed(1) + '" height="' + RIB + '" fill="var(--' + (st === 'sinkRate' ? 'sink' : 'over') + ')"/>';
+        }
+        from = j; st = cs;
+      }
+    }
+    s += '<rect x="' + PL + '" y="' + ribY + '" width="' + (W - PL - PR) + '" height="' + RIB + '" fill="none" stroke="var(--line)"/>';
+
+    sim.marks.forEach(function (m) {
+      var x = X(Math.min(m.t, n - 1)), c = 'var(--' + (m.type === 'sinkRate' ? 'sink' : 'over') + ')';
+      s += '<line x1="' + x.toFixed(1) + '" y1="' + PT + '" x2="' + x.toFixed(1) + '" y2="' + (ribY + RIB) + '" stroke="' + c + '" stroke-width="1" opacity="0.3"/>';
+      s += '<path d="M' + (x - 3.5).toFixed(1) + ' ' + (PT - 8) + ' L' + (x + 3.5).toFixed(1) + ' ' + (PT - 8) + ' L' + x.toFixed(1) + ' ' + (PT - 2) + ' Z" fill="' + c + '"/>';
+    });
+
+    var mins = Math.round(sim.minutes);
+    for (var mm = 0; mm <= mins; mm += 10) {
+      var xi = Math.min(Math.round(mm * 60), n - 1);
+      s += '<text x="' + X(xi).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="9.5" font-family="Fira Code, monospace" fill="var(--faint)">' + mm + '분</text>';
+    }
+    s += '</svg>';
+    document.getElementById('plot').innerHTML = s;
+  }
+
+  function render() {
+    var sim = run();
+    var sink = sim.marks.filter(function (m) { return m.type === 'sinkRate'; }).length;
+    var over = sim.marks.length - sink;
+
+    var total = document.getElementById('n-total');
+    total.textContent = sim.marks.length;
+    total.className = 'n ' + (state.scope === 'type' ? 'bad' : 'good');
+    document.getElementById('s-split').textContent = 'SINK ' + sink + ' · OVER ' + over;
+    document.getElementById('n-blocked').textContent = sim.blocked;
+    document.getElementById('n-recover').textContent = Math.round(sim.recover) + '초';
+
+    draw(sim);
+
+    var note = document.getElementById('note');
+    if (state.scope === 'type') {
+      note.className = 'note alarm';
+      note.innerHTML = '종류별로 재고 있다. 경고가 <b>' + sim.marks.length + '건</b> 기록됐고 SINK와 OVER가 거의 반반이다. ' +
+        '쿨다운이 막은 건 <b>' + sim.blocked + '번</b>뿐이다. 두 경고가 번갈아 뜨는 동안엔 각자 자기 시각만 보기 때문에 ' +
+        '<b>20초 조건이 사실상 발동하지 않는다.</b>';
+    } else {
+      note.className = 'note fine';
+      note.innerHTML = '통합해서 재고 있다. 어떤 경고가 풀렸든 그 시각 하나만 기억하므로, SINK가 풀린 직후 OVER가 떠도 ' +
+        '같은 사건이 이어지는 것으로 본다. 기록이 <b>' + sim.marks.length + '건</b>으로 줄고 쿨다운이 <b>' + sim.blocked + '번</b> 실제로 동작했다.';
+    }
+  }
+
+  document.querySelectorAll('#seg-scope button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.scope = b.dataset.scope;
+      document.querySelectorAll('#seg-scope button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      render();
+    });
+  });
+  document.querySelectorAll('#seg-alpha button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.alpha = parseFloat(b.dataset.alpha);
+      document.querySelectorAll('#seg-alpha button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      render();
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

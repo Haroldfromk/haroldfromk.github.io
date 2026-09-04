@@ -60,6 +60,21 @@ func allSplits() -> [Split] {
 
 방법 자체는 어렵지 않아 보인다. `recordSplitSample(at:)`의 `while` 루프 안, `Split`이 만들어진 바로 그 줄에서 이 값을 밖으로 한 번 흘려보내는 함수 하나만 추가하면 된다. 저장용 `completedSplits`는 그대로 쌓이고, 음성 안내는 이 신호를 받는 쪽에서 별개로 처리하는 식이다.
 
+말로만 하면 잘 안 와닿아서, 두 방식을 나란히 돌려볼 수 있게 만들었다. 왼쪽은 실제로 저장될 스플릿 목록이고 오른쪽은 귀에 들리는 안내다.
+
+<iframe
+  src="/assets/demo/split_announce_channel_simulator.html"
+  width="100%"
+  height="810px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+`allSplits()`를 계속 부르는 쪽으로 두고 끝까지 돌리면, 4.33km를 뛴 시점에 안내가 이미 "15킬로미터"라고 말하고 있다. 확인만 하려고 부른 함수가 매번 자투리를 진짜 스플릿으로 확정해버리고, 그때마다 번호를 하나씩 써버리기 때문이다. 더 나쁜 건 안내만 이상해지는 게 아니라 **저장되는 기록까지 같이 망가진다**는 점이다.
+
+여기서 배운 건, 값을 꺼내는 함수와 값이 만들어졌다고 알려주는 통로는 서로 다른 물건이라는 거다. `allSplits()`는 "지금까지의 결과를 정리해서 내놔"라는 뜻이고, 안내에 필요한 건 "방금 하나가 완성됐다"는 사실뿐이다. 앞의 것으로 뒤의 것을 대신하려니 정리하는 동작이 부작용으로 딸려온 것이다.
+
 ---
 
 ## AVSpeechSynthesizer ?

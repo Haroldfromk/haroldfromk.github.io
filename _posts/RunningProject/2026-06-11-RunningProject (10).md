@@ -507,6 +507,8 @@ timestamp/accuracy 필터를 적용했음에도 실기기 테스트에서 페이
 
 이 문제를 해결하기 위해 [Software Correction of Speed Measurement Determined by Phone GNSS Modules in Applications for Runners](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10007219/) 논문을 참고했다. 논문에서는 스마트폰 환경의 연산 비용을 고려해 FIR 필터 대신 2차 IIR 필터 2개를 직렬로 연결하는 방식을 제안한다.
 
+이름은 거창한데 하는 일은 단순하다. **새 값을 통째로 쓰지 않고 직전 결과에 조금만 섞는 것**이다. 직전 결과 안에는 그 전 결과가, 그 안에는 또 그 전이 들어 있어서 과거가 옅어지면서 계속 남는다. IIR이라는 이름이 붙은 게 이 "계속 남는다"는 성질 때문이다. 이걸 두 번 겹치면 한 번 겹칠 때보다 더 매끈해지는 대신 반응은 더 느려진다.
+
 ```text
 The proposed solution uses simple logic to establish the runner activity state and two IIR filters to correct the speed and acceleration calculated by the GNSS receiver. The effectiveness of the proposed method for amateur GNSS devices (sports watches and smartphones) has been verified by comparing the achieved results with professional GNSS signal recorders.
 ```
@@ -562,6 +564,28 @@ RS2 = (1 - β) × RS2prev + β × RS1
 
 인간의 달리기 속도는 자동차처럼 급변하지 않기 때문에, 러닝 앱에서는 반응성을 조금 양보하더라도 노이즈를 확실히 잡아주는 낮은 β 값이 정석이다. 이 부분은 AI의 도움을 받아 정리했다.
 
+말로만 하면 감이 안 와서, β를 직접 움직여볼 수 있게 만들었다. 20초 지점에서 실제로 속도를 올린 상황이다.
+
+<iframe
+  src="/assets/demo/iir_beta_simulator.html"
+  width="100%"
+  height="685px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+| β | 90%까지 따라잡는 시간 | 남는 흔들림 |
+|---|---|---|
+| 0.05 | 76초 | 원본의 1% |
+| 0.15 | 24초 | 원본의 13% |
+| 0.18 | 20초 | 원본의 16% |
+| 0.50 | 6초 | 원본의 37% |
+
+0.50으로 두면 6초 만에 따라잡지만 흔들림이 원본의 37%나 그대로 넘어온다. 0.05는 흔들림을 거의 다 잡는 대신 76초가 걸리는데, 이건 1분 넘게 화면이 거짓말을 한다는 뜻이라 쓸 수 없다. 0.15는 그 사이 어디쯤이다.
+
+**이 24초라는 숫자가 나중에 발목을 잡는다.** 지금은 페이스를 부드럽게 보여주는 것만 생각했는데, 이 값으로 경고까지 판정하게 되면 "속도를 올렸는데 경고가 안 풀린다"는 문제가 된다. 실제로 1.3.2 버전에서 이 계수를 0.18로 올리게 된다.
+
 ---
 
 다시 돌아와서 
@@ -612,6 +636,10 @@ smoothingSpeedSecond = location.speed
 즉 rawPace에는 location.speed가 들어가게된다.
 
 하지만 이후부터는 값이 바뀌면서 필터링이 되기 시작한다.
+
+위 시뮬레이터의 "첫 샘플 보정"을 꺼보면 이게 왜 필요한지 바로 보인다. 보정 없이 0에서 출발하면 이미 뛰고 있는데 계산된 속도는 0에 가깝고, 페이스는 그 값을 뒤집은 거라 시작하자마자 말도 안 되는 숫자가 찍힌다.
+
+다만 여기서 "값이 0이면 아직 시작 전"이라고 판단하는 방식을 썼는데, 이게 통하는 건 **속도는 0이 실제 값으로 잘 안 나오기 때문**이다. 나중에 고도에도 같은 필터를 붙이게 되는데, 고도는 0이 "출발점과 같은 높이"라는 멀쩡한 값이라 이 방식을 그대로 못 쓴다. 그때는 별도 표시를 하나 더 두게 된다.
 
 그리고 리셋할때는 당연히 새롭게 만든 두 값들도 초기화가 되어야 하므로
 

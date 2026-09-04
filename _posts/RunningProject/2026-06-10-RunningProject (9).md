@@ -190,6 +190,8 @@ func stop() {
 
 즉 Actor의 coordinateArray가 초기화된 뒤에 좌표를 읽게 되는 레이스가 발생할 수 있다.
 
+이런 걸 레이스 컨디션이라고 부른다. [이전글](https://haroldfromk.github.io/posts/RunningProject-(5)/){:target="_blank"}에 나온 데이터 레이스가 "같은 값을 동시에 고치다가 값이 깨지는 것"이라면, 이건 **"누가 먼저 끝나느냐에 따라 결과가 달라지는 것"**이다. 값 자체는 안 깨지는데 순서가 매번 다를 수 있어서, 잘 되다가 어느 날 갑자기 틀리는 식으로 나타난다.
+
 그래서 좌표 조회와 초기화를 하나의 Task 안에서 순차적으로 실행하도록 변경했다.
 
 ```swift
@@ -209,6 +211,21 @@ func stop() {
 이미지로 이해를 해보면 아래와 같다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/task.png){: width="50%" height="50%"}
+
+실행 순서를 한 걸음씩 따라가볼 수 있게 만들었다.
+
+<iframe
+  src="/assets/demo/task_ordering_simulator.html"
+  width="100%"
+  height="720px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+핵심은 **순서를 보장하는 게 함수를 나눴는지 합쳤는지가 아니라 기다렸는지 아닌지**라는 점이다. `Task { }`는 일을 맡겨놓고 곧바로 다음 줄로 넘어가기 때문에, 코드에 위아래로 써 있다고 해서 그 순서대로 끝나지 않는다.
+
+그리고 이 버그가 고약한 건 **에러가 하나도 안 난다**는 점이다. 좌표 412개가 통째로 사라져도 앱은 멀쩡히 돌아가고, 지도만 안 그려진다. 앞의 [4번 글](https://haroldfromk.github.io/posts/RunningProject-(4)/){:target="_blank"}에서 인스턴스가 두 개였던 것도 그랬는데, 조용히 틀리는 종류의 문제가 제일 찾기 어렵다.
 
 ---
 

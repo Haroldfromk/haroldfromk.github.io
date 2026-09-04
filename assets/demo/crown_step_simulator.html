@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crown Step Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --mark-bg:#e8effc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --mark-bg:#14203a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn:active { background:var(--line); }
+  .sp { flex:1 1 6px; }
+
+  .stage { display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:center;
+    border:1px solid var(--line); border-radius:10px; background:var(--panel); padding:14px; }
+  @media (max-width:560px){ .stage{grid-template-columns:1fr; justify-items:center; gap:10px;} }
+
+  .crown { display:flex; flex-direction:column; align-items:center; gap:7px; }
+  .crown .dial { width:74px; height:74px; border-radius:50%; border:2px solid var(--line);
+    display:flex; align-items:center; justify-content:center; background:var(--bg); position:relative; }
+  .crown .dial i { position:absolute; width:3px; height:13px; border-radius:2px; background:var(--mark);
+    top:5px; left:50%; margin-left:-1.5px; transform-origin:50% 32px; transition:transform .18s ease; }
+  .crown .dial span { font-family:'Fira Code',monospace; font-size:9px; color:var(--faint); }
+  .crown .keys { display:flex; gap:6px; }
+  .crown .keys button { width:38px; }
+
+  .read { text-align:center; }
+  .read .big { font-family:'Fira Code',monospace; font-size:34px; font-weight:600; letter-spacing:-.01em; font-variant-numeric:tabular-nums; }
+  .read .sub { font-family:'Fira Code',monospace; font-size:11px; color:var(--faint); margin-top:2px; }
+
+  .strip { display:flex; gap:5px; flex-wrap:wrap; margin-top:12px; }
+  .chip { font-family:'Fira Code',monospace; font-size:11px; padding:5px 8px; border-radius:6px;
+    border:1px solid var(--line); background:var(--panel); color:var(--dim); font-variant-numeric:tabular-nums; }
+  .chip.on { background:var(--mark); border-color:var(--mark); color:var(--bg); font-weight:600; }
+  .chip.round { border-color:var(--ok); color:var(--ok); }
+
+  .presets { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; align-items:center; }
+  .presets > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em; color:var(--faint); text-transform:uppercase; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>크라운 한 칸이 만드는 눈금</h1>
+<p class="lead">디지털 크라운으로 목표 거리를 고르는 화면이다. 처음엔 최소값 100m에서 0.5km씩 더하게 짰는데, 시작점 자체가 0.5의 배수가 아니라서 <b>그 뒤의 모든 값이 통째로 밀렸다.</b></p>
+
+<div class="bar">
+  <span>눈금 방식</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-mode="add" aria-pressed="true">0.1에서 0.5씩 더하기</button>
+    <button type="button" data-mode="index" aria-pressed="false">정해둔 목록에서 고르기</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+</div>
+
+<div class="stage">
+  <div class="crown">
+    <div class="dial"><i id="tick"></i><span>CROWN</span></div>
+    <div class="keys">
+      <button type="button" class="btn" id="down">−</button>
+      <button type="button" class="btn" id="up">+</button>
+    </div>
+  </div>
+  <div class="read">
+    <div class="big" id="v-dist">--</div>
+    <div class="sub" id="v-sub">--</div>
+  </div>
+</div>
+
+<div class="presets" style="margin-top:12px"><span id="strip-cap">크라운 눈금</span></div>
+<div class="strip" id="strip"></div>
+
+<div class="presets">
+  <span>프리셋</span>
+  <button type="button" class="btn" data-preset="3">3K</button>
+  <button type="button" class="btn" data-preset="5">5K</button>
+  <button type="button" class="btn" data-preset="10">10K</button>
+  <button type="button" class="btn" data-preset="21.1">HALF</button>
+</div>
+
+<div class="note" id="note">+ 를 눌러 크라운을 돌려보자.</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STEPS = (function () {
+    var s = [0.1], v = 0.5;
+    while (v < 21.1) { s.push(v); v += 0.5; }
+    s.push(21.1);
+    v = 21.5;
+    while (v < 42.2) { s.push(v); v += 0.5; }
+    s.push(42.2);
+    return s;
+  })();
+
+  var mode = "add";
+  var crown = 0.1;      // 수정 전: 크라운이 들고 있는 값
+  var dist = 0.1;       // 수정 전: 화면에 보이는 거리 (프리셋은 이것만 바꿨다)
+  var idx = 0;          // 수정 후: 크라운 값이 목록의 자리 번호
+  var turns = 0;        // 프리셋을 누른 뒤 크라운을 돌렸는지 보기 위한 값
+  var jumped = false;
+
+  function distance() { return mode === "add" ? dist : STEPS[idx]; }
+  function fmt(km) { return km < 1 ? Math.round(km * 1000) + " m" : (Math.round(km * 10) / 10).toFixed(1) + " km"; }
+  function isRound(km) { return Math.abs(km * 2 - Math.round(km * 2)) < 1e-9; }
+
+  function neighbours() {
+    var out = [];
+    if (mode === "add") {
+      for (var k = -3; k <= 3; k++) {
+        var v = Math.round((crown + k * 0.5) * 10) / 10;
+        if (v >= 0.1 && v <= 42.2) out.push({ v: v, on: k === 0 });
+      }
+    } else {
+      for (var j = Math.max(0, idx - 3); j <= Math.min(STEPS.length - 1, idx + 3); j++) {
+        out.push({ v: STEPS[j], on: j === idx });
+      }
+    }
+    return out;
+  }
+
+  function render() {
+    document.getElementById("v-dist").textContent = fmt(distance());
+    document.getElementById("v-sub").textContent = mode === "add"
+      ? "크라운이 들고 있는 값 " + crown.toFixed(1)
+      : "목록의 " + (idx + 1) + "번째 값";
+    document.getElementById("tick").style.transform = "rotate(" + (turns * 32 % 360) + "deg)";
+
+    document.getElementById("strip-cap").textContent = mode === "add"
+      ? "크라운이 오갈 수 있는 값들" : "목록에 정해둔 값들";
+    document.getElementById("strip").innerHTML = neighbours().map(function (n) {
+      return '<span class="chip' + (n.on ? " on" : (isRound(n.v) ? " round" : "")) + '">' + fmt(n.v) + '</span>';
+    }).join("");
+
+    var note = document.getElementById("note");
+    if (jumped) {
+      note.className = "note alarm";
+      note.innerHTML = "프리셋을 누르면 거리만 바뀌고 <b>크라운은 원래 자리에 그대로 있다.</b> 그래서 한 칸만 돌려도 방금 고른 값과 상관없는 곳으로 튄다.";
+      return;
+    }
+    if (mode === "add") {
+      note.className = "note alarm";
+      note.innerHTML = "0.1에서 0.5씩 더하니 <b>100m, 600m, 1.1km, 1.6km…</b>가 된다. 5km나 10km 같은 값에는 아무리 돌려도 닿을 수 없다.";
+    } else {
+      note.className = "note fine";
+      note.innerHTML = "크라운은 <b>목록의 자리 번호만</b> 오간다. 100m는 맨 앞에 예외로 하나 두고 그 뒤는 0.5km 단위로 채웠기 때문에, 100m 다음 칸이 바로 500m이고 그 뒤로 1.0km, 1.5km로 이어진다. 하프(21.1km)와 풀(42.2km)만 격자 사이에 따로 끼워 넣었다.";
+    }
+  }
+
+  function turn(dir) {
+    jumped = false; turns += dir;
+    if (mode === "add") {
+      crown = Math.min(42.2, Math.max(0.1, Math.round((crown + dir * 0.5) * 10) / 10));
+      dist = crown;   // onChange(of: crownValue) 가 거리를 크라운 값으로 덮어쓴다
+    } else {
+      idx = Math.min(STEPS.length - 1, Math.max(0, idx + dir));
+    }
+    render();
+  }
+
+  document.getElementById("up").addEventListener("click", function(){ turn(1); });
+  document.getElementById("down").addEventListener("click", function(){ turn(-1); });
+  document.getElementById("reset").addEventListener("click", function(){
+    crown = 0.1; dist = 0.1; idx = 0; turns = 0; jumped = false; render();
+  });
+  document.querySelectorAll("[data-preset]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var p = parseFloat(b.dataset.preset);
+      if (mode === "add") {
+        dist = p;             // 거리만 세팅하고 크라운 값은 손대지 않던 예전 방식
+        jumped = true;
+      } else {
+        idx = STEPS.indexOf(p);
+        jumped = false;
+      }
+      render();
+    });
+  });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.dataset.mode; crown = 0.1; dist = 0.1; idx = 0; turns = 0; jumped = false;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

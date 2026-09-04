@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch Data Lifecycle Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --mark-bg:#e8effc; --warn:#b45309;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --mark-bg:#14203a; --warn:#fbbf24;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin:12px 0; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 10px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:12.5px; font-weight:600; margin-top:5px; }
+  .cell.on { background:var(--ok-bg); border-color:var(--ok); }
+  .cell.on .v { color:var(--ok); }
+  .cell.off .v { color:var(--faint); }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  @media (max-width:560px){ .row{grid-template-columns:repeat(2,1fr);} }
+
+  .steps { display:flex; flex-direction:column; gap:5px; }
+  .st { display:flex; gap:9px; align-items:flex-start; padding:7px 10px; border-radius:7px;
+    border:1px solid var(--line); background:var(--panel); font-size:12px; line-height:1.5; color:var(--faint); }
+  .st .n { font-family:'Fira Code',monospace; font-size:10px; font-weight:600; min-width:15px;
+    padding-top:2px; color:var(--faint); }
+  .st.done { color:var(--dim); }
+  .st.done .n { color:var(--mark); }
+  .st.now { background:var(--mark-bg); border-color:var(--mark); color:var(--ink); }
+  .st.now .n { color:var(--mark); }
+  .st.skip { opacity:.5; }
+  .st.fail { background:var(--bad-bg); border-color:var(--bad); color:var(--ink); }
+  .st.fail .n { color:var(--bad); }
+  .st b { font-weight:600; color:var(--ink); }
+  .st code { font-family:'Fira Code',monospace; font-size:11px; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>화면이 한 번도 안 떴는데 기록이 저장되려면</h1>
+<p class="lead">워치가 <code>transferUserInfo</code>로 기록을 보내면, 아이폰 앱이 꺼져 있어도 iOS가 앱을 잠깐 실행시켜 그 기록을 넘겨준다. 문제는 이때 <b>화면(<code>HomeView</code>)은 한 번도 안 뜬다</b>는 것이다.</p>
+
+<div class="bar">
+  <span>저장 통로</span>
+  <div class="seg" id="seg-mode">
+    <button type="button" class="danger" data-mode="before" aria-pressed="true">수정 전 (화면이 저장)</button>
+    <button type="button" data-mode="after" aria-pressed="false">수정 후 (받는 즉시 저장)</button>
+  </div>
+</div>
+<div class="bar">
+  <span>아이폰 상태</span>
+  <div class="seg" id="seg-state">
+    <button type="button" data-state="terminated" aria-pressed="true">완전히 종료됨</button>
+    <button type="button" data-state="suspended" aria-pressed="false">백그라운드 정지</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn" id="step">한 걸음</button>
+  <button type="button" class="btn primary" id="play">재생</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">앱 프로세스</div><div class="v" id="v-proc">--</div></div>
+  <div class="cell"><div class="k">modelContext</div><div class="v" id="v-ctx">--</div></div>
+  <div class="cell"><div class="k">메모리 대기열</div><div class="v" id="v-mem">--</div></div>
+  <div class="cell"><div class="k">디스크에 저장</div><div class="v" id="v-disk">--</div></div>
+</div>
+
+<div class="steps" id="steps"></div>
+<div class="note" id="note">한 걸음씩 눌러 무슨 일이 벌어지는지 따라가 보자.</div>
+
+<script>
+(function () {
+  "use strict";
+  var mode = "before", appState = "terminated", i = -1, timer = null;
+
+  function plan() {
+    var terminated = appState === "terminated";
+    var s = [];
+    s.push({ t: "워치가 러닝을 끝내고 <code>transferUserInfo</code>로 기록을 보낸다. 이 통로는 아이폰 앱이 꺼져 있어도 시스템 큐에 남는다." });
+
+    if (terminated) {
+      s.push({ t: "아이폰 앱이 메모리에 없다. iOS가 <b>프로세스를 새로 만들어</b> <code>RunWayApp.init()</code>부터 실행한다." });
+      s.push({
+        t: mode === "after"
+          ? "<code>init()</code>에서 <code>RunViewModel</code>을 만들고 <b><code>modelContext</code>까지 그 자리에서 넣어준다.</b>"
+          : "<code>init()</code>에서 <code>RunViewModel</code>은 만들어지지만, <code>modelContext</code>는 <code>HomeView</code>가 떠야 들어간다. <b>지금은 비어 있다.</b>",
+        ctx: mode === "after"
+      });
+    } else {
+      s.push({ t: "앱 프로세스가 메모리에 그대로 남아 있다. 예전에 앱을 열었을 때 준비된 것들이 그대로 얼어 있다." });
+      s.push({ t: "<code>RunViewModel</code>도 <code>modelContext</code>도 그때 이미 채워져 있다.", ctx: true });
+    }
+
+    s.push({ t: "<code>WCSession.activate()</code>가 끝나고, iOS가 <code>didReceiveUserInfo</code> 콜백을 부른다." });
+
+    var hasCtx = terminated ? (mode === "after") : true;
+    if (mode === "after") {
+      s.push({
+        t: hasCtx
+          ? "<code>saveIncomingWatchFlight()</code>가 곧바로 <code>insert</code> + <code>save()</code>를 한다. <b>이 순간 디스크에 들어간다.</b>"
+          : "<code>modelContext</code>가 없어 안전망인 메모리 대기열로 빠진다.",
+        disk: hasCtx, mem: !hasCtx
+      });
+    } else {
+      s.push({ t: "받은 기록을 <code>pendingWatchDataQueue</code>라는 <b>메모리 배열에만</b> 담아둔다. 아직 디스크에는 아무것도 안 썼다.", mem: true });
+    }
+
+    s.push({ t: "여기서 <code>HomeView</code>가 뜨기를 기다려야 저장이 이어진다. 그런데 <b>백그라운드로만 깨운 실행이라 화면은 뜨지 않는다.</b>" });
+    if (terminated) {
+      s.push({ t: "iOS가 할 일이 끝났다고 보고 <b>프로세스를 정리한다.</b> 메모리에만 있던 건 전부 사라진다.", kill: true });
+    } else {
+      s.push({ t: "앱은 다시 정지 상태로 돌아간다. <b>프로세스가 메모리에 남아 있으니</b> 대기열도 같이 살아남는다.", park: true });
+    }
+    return s;
+  }
+
+  function stateAt(upto) {
+    var st = { proc: appState === "terminated" ? "없음" : "살아 있음", ctx: appState === "terminated" ? "비어 있음" : "준비됨",
+               mem: 0, disk: 0, killed: false };
+    var steps = plan();
+    for (var k = 0; k <= upto && k < steps.length; k++) {
+      var s = steps[k];
+      if (k === 1 && appState === "terminated") st.proc = "새로 시작됨";
+      if (s.ctx) st.ctx = "준비됨";
+      if (s.mem) st.mem = 1;
+      if (s.disk) st.disk = 1;
+      if (s.kill) {
+        st.proc = "정리됨"; st.ctx = "사라짐";
+        if (st.mem) { st.mem = 0; st.lost = true; }
+      }
+      if (s.park) { st.parked = true; }
+    }
+    return st;
+  }
+
+  function render() {
+    var steps = plan();
+    var st = i >= 0 ? stateAt(i) : stateAt(-1);
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-proc", st.proc, (st.proc === "정리됨" || st.proc === "없음") ? "off" : "on");
+    set("v-ctx", st.ctx, st.ctx === "준비됨" ? "on" : "off");
+    set("v-mem", st.mem ? "기록 1건" : (st.lost ? "잃어버림" : "없음"), st.lost ? "alarm" : (st.mem ? "" : "off"));
+    set("v-disk", st.disk ? "기록 1건" : "없음", st.disk ? "on" : ((i >= steps.length - 1 && !st.mem) ? "alarm" : "off"));
+
+    document.getElementById("steps").innerHTML = steps.map(function (s, k) {
+      var cls = "st";
+      if (k < i) cls += " done";
+      else if (k === i) cls += " now";
+      else cls += " skip";
+      if (k === i && s.kill && st.lost) cls = "st fail";
+      return '<div class="' + cls + '"><span class="n">' + (k + 1) + '</span><span>' + s.t + '</span></div>';
+    }).join("");
+
+    var note = document.getElementById("note");
+    if (i < 0) { note.className = "note"; note.textContent = "한 걸음씩 눌러 무슨 일이 벌어지는지 따라가 보자."; return; }
+    if (i < steps.length - 1) {
+      note.className = "note";
+      note.innerHTML = "아직 진행 중이다. <b>디스크에 저장</b> 칸이 언제 채워지는지를 눈여겨보자.";
+      return;
+    }
+    if (st.disk) {
+      note.className = "note fine";
+      note.innerHTML = "화면이 한 번도 안 떴는데 기록은 <b>이미 디스크에 있다.</b> 저장이 <code>HomeView</code>가 아니라 기록을 받는 그 자리에서 일어났기 때문이다. 나중에 앱을 열면 로그북에 그냥 들어와 있다.";
+    } else if (st.lost) {
+      note.className = "note alarm";
+      note.innerHTML = "전송은 성공했는데 <b>기록이 사라졌다.</b> 저장을 <code>HomeView</code>에 맡겨뒀는데 그 화면이 뜰 일이 없었기 때문이다. 유저 입장에서는 아무 에러도 없이 그냥 기록이 없다.";
+    } else if (st.mem) {
+      note.className = "note";
+      note.innerHTML = "이 경우엔 사라지지는 않았다. 프로세스가 살아 있어서 대기열도 남아 있고, <b>다음에 앱을 직접 열면</b> 그때 <code>HomeView</code>가 뜨면서 저장된다. 원래 버그가 <b>완전히 종료된 상태에서만</b> 터졌던 이유가 이거다.";
+    } else {
+      note.className = "note alarm";
+      note.innerHTML = "디스크에 아무것도 안 남았다.";
+    }
+  }
+
+  function stop(){ if(timer){clearInterval(timer);timer=null;} document.getElementById("play").textContent="재생"; }
+  function step(){ var n=plan().length; if(i>=n-1){stop();return;} i++; render(); }
+  document.getElementById("step").addEventListener("click",function(){stop();step();});
+  document.getElementById("reset").addEventListener("click",function(){stop();i=-1;render();});
+  document.getElementById("play").addEventListener("click",function(){
+    if(timer){stop();return;}
+    if(i>=plan().length-1) i=-1;
+    this.textContent="일시정지"; step(); timer=setInterval(step,1500);
+  });
+  function wire(sel, key) {
+    document.querySelectorAll(sel + " button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (key === "mode") mode = b.dataset.mode; else appState = b.dataset.state;
+        document.querySelectorAll(sel + " button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+        stop(); i = -1; render();
+      });
+    });
+  }
+  wire("#seg-mode", "mode"); wire("#seg-state", "state");
+  render();
+})();
+</script>
+</body>
+</html>

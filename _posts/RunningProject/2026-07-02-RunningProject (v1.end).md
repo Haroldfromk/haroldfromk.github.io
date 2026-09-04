@@ -97,7 +97,7 @@ iOS 26부터 `HKLiveWorkoutBuilder`가 지원되면서 iPhone도 직접 워크�
 
 iPhone 주도 미러링을 실제로 붙이면서 여러 문제가 연쇄적으로 터졌다.
 
-- `@WKApplicationDelegateAdaptor`가 자체적으로 `HealthKitService` 인스턴스를 새로 만들어서, 기존 DI 방식으로는 인스턴스가 어긋났다. Apple 샘플처럼 싱글톤으로 전환하면서, 이참에 iPhone/Watch에 따로 있던 `HealthKitService`를 하나로 합치고 공통/+iOS/+watchOS 파일로 나눴다.
+- `@WKApplicationDelegateAdaptor`가 자체적으로 `HealthKitService` 인스턴스를 새로 만들어서, 기존 DI 방식으로는 인스턴스가 어긋났다. Apple 샘플처럼 싱글턴으로 전환하면서, 이참에 iPhone/Watch에 따로 있던 `HealthKitService`를 하나로 합치고 공통/+iOS/+watchOS 파일로 나눴다.
 - `NavigationViewModel` 분리를 롤백했다. 애초에 watchOS NavigationStack 경고를 잡으려고 분리했던 건데, 경고 자체는 안 잡히고 구조만 복잡해져서, `WatchViewModel`이 다시 `navigationPath`를 직접 갖는 구조로 되돌렸다.
 - iOS 26으로 올리고 나니 iPhone이 직접 워크아웃을 시작해도 Watch에 운동 링이 자동으로 뜨는 시스템 동작이 새로 생겼다. 기존 `isRemoted` 플래그가 신호의 출처(Watch 미러링인지 iPhone 직접 시작인지)를 구분 못 해서, iPhone 단독 러닝에서도 종료 시 자동으로 홈으로 튕기는 문제가 생겼다.
 

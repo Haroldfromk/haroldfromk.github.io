@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Altitude Guard Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --raw:#9aa1ab; --sm:#2563eb; --grid:#eceff2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --raw:#52525b; --sm:#60a5fa; --grid:#1c1c20;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:14px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+  @media (max-width:520px){ .row{grid-template-columns:repeat(2,1fr);} }
+
+  .track { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:10px 10px 4px; overflow-x:auto; }
+  .track svg { display:block; width:100%; min-width:440px; height:auto; }
+  .legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:8px; font-size:11px; color:var(--dim); font-family:'Fira Code',monospace; }
+  .legend i { display:inline-block; width:15px; height:2.5px; border-radius:2px; vertical-align:middle; margin-right:5px; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>고도가 갑자기 튈 때 무엇을 버리고 무엇을 남기나</h1>
+<p class="lead">기압계가 알려주는 상대 고도는 잔노이즈가 늘 섞여 있고, 워치 운동 세션이 일시정지되면 값이 통째로 튀는 애플 쪽 문제도 있다. 그래서 <b>1초에 3m 넘게 변한 샘플은 버리고</b>, 통과한 값만 부드럽게 다듬는다.</p>
+
+<div class="bar">
+  <span>튀는 값</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-guard="0" aria-pressed="true">그대로 받기</button>
+    <button type="button" data-guard="1" aria-pressed="false">초당 3m 넘으면 버리기</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn" id="step">한 걸음</button>
+  <button type="button" class="btn primary" id="play">재생</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">기압계 원본</div><div class="v" id="v-raw">--</div></div>
+  <div class="cell"><div class="k">다듬은 값 (시작 대비)</div><div class="v" id="v-now">--</div></div>
+  <div class="cell"><div class="k">버린 샘플</div><div class="v" id="v-drop">--</div></div>
+  <div class="cell"><div class="k">상승고도</div><div class="v" id="v-gain">--</div></div>
+</div>
+
+<div class="track">
+  <div id="plot"></div>
+  <div class="legend">
+    <span><i style="background:var(--raw)"></i>기압계가 준 값</span>
+    <span><i style="background:var(--sm)"></i>다듬은 값 (화면에 쓰는 값)</span>
+    <span><i style="background:var(--bad)"></i>일시정지로 값이 튄 구간</span>
+  </div>
+</div>
+<div class="note" id="note">재생을 누르면 샘플이 하나씩 들어온다.</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // 언덕 하나를 올라갔다 거의 내려오고, 마지막에 조금 더 오른다.
+  // 중간에 워치가 일시정지되며 값이 통째로 튄다. 샘플 간격은 0.5초.
+  var N = 90, SPIKE_FROM = 56, SPIKE_TO = 66;
+  var RAW = (function () {
+    function ramp(t, a, b, t0, t1) {
+      if (t <= t0) return a;
+      if (t >= t1) return b;
+      var u = (t - t0) / (t1 - t0);
+      return a + (b - a) * (u * u * (3 - 2 * u));   // 부드럽게 오르내리는 언덕 모양
+    }
+    var out = [], seed = 7;
+    for (var k = 0; k < N; k++) {
+      var v;
+      if (k <= 28) v = ramp(k, 0, 8, 0, 28);
+      else if (k <= 55) v = ramp(k, 8, 1, 28, 55);
+      else v = ramp(k, 1, 5, 55, 89);
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      v += (seed / 2147483648 - 0.5) * 0.36;         // 센서 자체 잔떨림
+      if (k >= SPIKE_FROM && k <= SPIKE_TO) v += 21.5;   // 일시정지 순간 기준점이 어긋난다
+      out.push(v);
+    }
+    return out;
+  })();
+  var DT = 0.5;   // 샘플 간격 0.5초
+
+  var guard = false, i = -1, timer = null;
+
+  function simulate(upto) {
+    var last = null, sf = 0, ss = 0, init = false, cur = 0, gain = 0, drop = 0;
+    var series = [];
+    for (var k = 0; k <= upto; k++) {
+      var raw = RAW[k], dropped = false;
+      if (guard && last !== null && Math.abs(raw - last) / DT > 3.0) {
+        dropped = true; drop++;
+      } else {
+        last = raw;
+        var was = init;
+        if (!init) { sf = raw; ss = raw; init = true; }
+        var prev = cur;
+        sf = 0.8 * sf + 0.2 * raw;
+        ss = 0.8 * ss + 0.2 * sf;
+        cur = ss;
+        if (was && cur - prev > 0) gain += cur - prev;
+      }
+      series.push({ raw: raw, sm: cur, dropped: dropped, spike: k >= SPIKE_FROM && k <= SPIKE_TO });
+    }
+    return { series: series, cur: cur, gain: gain, drop: drop, delta: cur - series[0].sm };
+  }
+
+  function draw(st) {
+    var W = 760, H = 210, PL = 40, PR = 10, PT = 12, PB = 26;
+    var lo = -1, hi = guard ? 10 : 30;
+    var X = function (k) { return PL + k / (N - 1) * (W - PL - PR); };
+    var Y = function (v) { return PT + (hi - v) / (hi - lo) * (H - PT - PB); };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="상대 고도 그래프">';
+
+    var stepY = guard ? 2 : 6;
+    for (var g = 0; g <= hi; g += stepY) {
+      s += '<line x1="' + PL + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - PR) + '" y2="' + Y(g).toFixed(1) + '" stroke="var(--grid)" stroke-width="1"/>';
+      s += '<text x="' + (PL - 6) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + g + 'm</text>';
+    }
+
+    // 일시정지 구간 음영
+    if (st.series.length > SPIKE_FROM) {
+      var x1 = X(SPIKE_FROM), x2 = X(Math.min(SPIKE_TO, st.series.length - 1));
+      s += '<rect x="' + x1.toFixed(1) + '" y="' + PT + '" width="' + Math.max(2, x2 - x1).toFixed(1) + '" height="' + (H - PT - PB) + '" fill="var(--bad)" opacity="0.09"/>';
+      s += '<text x="' + ((x1 + x2) / 2).toFixed(1) + '" y="' + (H - PB - 6) + '" text-anchor="middle" font-size="9" font-family="Fira Code,monospace" fill="var(--bad)">일시정지</text>';
+    }
+
+    var rawPts = st.series.map(function (p, k) { return X(k).toFixed(1) + ',' + Y(Math.min(p.raw, hi)).toFixed(1); }).join(' ');
+    s += '<polyline points="' + rawPts + '" fill="none" stroke="var(--raw)" stroke-width="1.4" stroke-dasharray="3 2.5"/>';
+
+    var smPts = st.series.map(function (p, k) { return X(k).toFixed(1) + ',' + Y(Math.min(p.sm, hi)).toFixed(1); }).join(' ');
+    s += '<polyline points="' + smPts + '" fill="none" stroke="var(--sm)" stroke-width="2.4" stroke-linejoin="round"/>';
+
+    st.series.forEach(function (p, k) {
+      if (p.dropped) {
+        s += '<circle cx="' + X(k).toFixed(1) + '" cy="' + Y(Math.min(p.raw, hi)).toFixed(1) + '" r="3.4" fill="none" stroke="var(--bad)" stroke-width="1.4"/>';
+      }
+    });
+    var lastK = st.series.length - 1;
+    s += '<circle cx="' + X(lastK).toFixed(1) + '" cy="' + Y(Math.min(st.cur, hi)).toFixed(1) + '" r="4.5" fill="var(--sm)"/>';
+    s += '<text x="' + PL + '" y="' + (H - 8) + '" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">0초</text>';
+    s += '<text x="' + (W - PR) + '" y="' + (H - 8) + '" text-anchor="end" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + Math.round((N - 1) * DT) + '초</text>';
+    s += '</svg>';
+    document.getElementById("plot").innerHTML = s;
+  }
+
+  function sign(v) { return (v > 0 ? "+" : "") + v.toFixed(1); }
+
+  function render() {
+    if (i < 0) {
+      document.getElementById("plot").innerHTML = "";
+      ["v-raw", "v-now", "v-drop", "v-gain"].forEach(function (id) {
+        var e = document.getElementById(id); e.textContent = "--"; e.parentElement.className = "cell";
+      });
+      var n0 = document.getElementById("note");
+      n0.className = "note"; n0.textContent = "재생을 누르면 샘플이 하나씩 들어온다.";
+      return;
+    }
+    var st = simulate(i);
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    var bad = !guard && i >= SPIKE_FROM;
+    var inSpike = i >= SPIKE_FROM && i <= SPIKE_TO;
+    set("v-raw", sign(RAW[i]) + " m", inSpike ? "alarm" : "");
+    set("v-now", sign(st.cur) + " m", bad ? "alarm" : "");
+    set("v-drop", st.drop + "개", st.drop ? "good" : "");
+    set("v-gain", "+" + st.gain.toFixed(1) + " m", bad ? "alarm" : "");
+    draw(st);
+
+    var note = document.getElementById("note");
+    if (i >= SPIKE_FROM && i <= SPIKE_TO) {
+      if (guard) {
+        note.className = "note fine";
+        note.innerHTML = "값이 <b>1초 만에 20m 넘게</b> 뛰었다. 사람이 낼 수 있는 변화가 아니라 그대로 버렸다. 다듬은 값은 <b>직전 상태 그대로</b> 남아 있다.";
+      } else {
+        note.className = "note alarm";
+        note.innerHTML = "튄 값이 그대로 들어와서 다듬은 값이 딸려 올라간다. 이 오르막은 실제로 오른 게 아닌데 <b>상승고도에 그대로 더해진다.</b>";
+      }
+    } else if (i > SPIKE_TO) {
+      if (guard) {
+        note.className = "note fine";
+        note.innerHTML = "튄 구간을 통째로 건너뛰었으니 <b>상승고도는 실제로 오른 만큼만</b> 쌓였다. 지금 고도(" + sign(st.cur) + "m)보다 상승고도(+" + st.gain.toFixed(1) + "m)가 훨씬 큰 건, 언덕을 올라갔다 내려온 몫이 <b>지금 고도에서는 상쇄되지만 상승고도에는 남기</b> 때문이다.";
+      } else {
+        note.className = "note alarm";
+        note.innerHTML = "값이 제자리로 돌아왔는데도 상승고도는 <b>+" + st.gain.toFixed(1) + "m</b>로 남았다. 한 번 더한 건 되돌릴 방법이 없다.";
+      }
+    } else if (i > 28) {
+      note.className = "note";
+      note.innerHTML = "언덕을 내려오는 중이다. 상승고도는 <b>오른 만큼만 더하고 내려간 건 무시</b>하므로 여기서는 늘지 않는다.";
+    } else {
+      note.className = "note";
+      note.innerHTML = "언덕을 올라가는 중이다. 점선(기압계 원본)이 잘게 떨리는데 실선(다듬은 값)은 그 떨림을 따라가지 않는다.";
+    }
+  }
+
+  function stop(){ if(timer){clearInterval(timer);timer=null;} document.getElementById("play").textContent="재생"; }
+  function step(){ if(i>=N-1){stop();return;} i++; render(); }
+  document.getElementById("step").addEventListener("click",function(){stop();step();});
+  document.getElementById("reset").addEventListener("click",function(){stop();i=-1;render();});
+  document.getElementById("play").addEventListener("click",function(){
+    if(timer){stop();return;}
+    if(i>=N-1) i=-1;
+    this.textContent="일시정지"; step(); timer=setInterval(step,110);
+  });
+  document.querySelectorAll("#seg button").forEach(function(b){
+    b.addEventListener("click",function(){
+      guard = b.dataset.guard === "1";
+      document.querySelectorAll("#seg button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

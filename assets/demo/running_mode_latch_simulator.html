@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Running Mode Latch Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --grid:#eceff2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --grid:#1c1c20;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:14px; font-weight:600; margin-top:4px; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+
+  .track { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:10px 10px 4px; overflow-x:auto; }
+  .track svg { display:block; width:100%; min-width:460px; height:auto; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>지금 닿는가와 어떻게 시작했는가는 다르다</h1>
+<p class="lead"><code>isReachable</code>은 <b>지금 이 순간 아이폰과 통신이 되는가</b>다. 주머니에서 꺼내기만 해도 바뀐다. 반면 이 러닝이 워치 단독인지 미러링인지는 <b>시작할 때 정해지고 끝날 때까지 안 바뀌어야 하는 값</b>이다. 이 둘을 같은 걸로 두면 뛰는 도중에 모드가 뒤집힌다.</p>
+
+<div class="bar">
+  <span>runningMode</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-m="follow" aria-pressed="true">isReachable을 계속 따라감</button>
+    <button type="button" data-m="latch" aria-pressed="false">시작할 때 한 번만 정함</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn primary" id="play">워치 단독으로 뛰어보기</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">isReachable</div><div class="v" id="v-reach">--</div></div>
+  <div class="cell"><div class="k">runningMode</div><div class="v" id="v-mode">--</div></div>
+  <div class="cell"><div class="k">워치가 GPS를 켜는가</div><div class="v" id="v-gps">--</div></div>
+</div>
+
+<div class="track"><div id="plot"></div></div>
+<div class="note" id="note">시작 버튼을 눌러보자. 워치만 차고 나갔는데 중간에 아이폰을 잠깐 꺼내 보는 상황이다.</div>
+
+<script>
+(function () {
+  "use strict";
+  var DUR = 600;                 // 10분짜리 러닝
+  var POCKET = [[180, 300]];     // 아이폰을 꺼내 들고 있던 구간(초)
+  var mode = "follow", t = -1, timer = null;
+
+  function reachAt(s) {
+    return POCKET.some(function (r) { return s >= r[0] && s <= r[1]; });
+  }
+  function modeAt(s) {
+    if (s < 0) return null;
+    if (mode === "latch") return reachAt(0) ? "mirrored" : "standalone";  // 시작 시점에 확정
+    return reachAt(s) ? "mirrored" : "standalone";
+  }
+
+  function render() {
+    var reach = t >= 0 ? reachAt(t) : false;
+    var m = modeAt(t);
+    var gpsOn = m === null ? null : (m === "standalone");
+
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-reach", t < 0 ? "--" : (reach ? "true (꺼내 듦)" : "false (주머니)"));
+    set("v-mode", m === null ? "--" : "." + m, (m === "mirrored") ? "alarm" : (m ? "good" : ""));
+    set("v-gps", gpsOn === null ? "--" : (gpsOn ? "켠다" : "끈다 (아이폰이 할 거라 믿음)"), gpsOn === false ? "alarm" : (gpsOn ? "good" : ""));
+
+    var W = 680, H = 148, PL = 14, PR = 14;
+    var X = function (s) { return PL + s / DUR * (W - PL - PR); };
+    var s2 = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="러닝 중 상태 변화">';
+
+    function lane(y, label, spans, color) {
+      var t2 = '<text x="' + PL + '" y="' + (y - 8) + '" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + label + '</text>';
+      t2 += '<rect x="' + PL + '" y="' + y + '" width="' + (W - PL - PR) + '" height="16" rx="4" fill="var(--grid)"/>';
+      spans.forEach(function (sp) {
+        t2 += '<rect x="' + X(sp[0]).toFixed(1) + '" y="' + y + '" width="' + Math.max(2, X(sp[1]) - X(sp[0])).toFixed(1) + '" height="16" rx="4" fill="' + color + '" opacity="0.55"/>';
+      });
+      return t2;
+    }
+    s2 += lane(24, "아이폰을 꺼내 든 구간 (isReachable = true)", POCKET, "var(--mark)");
+
+    // runningMode 가 mirrored 인 구간
+    var mir = [];
+    if (mode === "follow") mir = POCKET.slice();
+    s2 += lane(66, "runningMode 가 .mirrored 인 구간", mir, "var(--bad)");
+
+    // 워치가 GPS를 끄는 구간 = mirrored 인 구간
+    s2 += lane(108, "워치가 GPS를 끄는 구간", mir, "var(--bad)");
+
+    if (t >= 0) {
+      s2 += '<line x1="' + X(t).toFixed(1) + '" y1="10" x2="' + X(t).toFixed(1) + '" y2="' + (H - 8) + '" stroke="var(--ink)" stroke-width="1.4"/>';
+    }
+    s2 += '</svg>';
+    document.getElementById("plot").innerHTML = s2;
+
+    var note = document.getElementById("note");
+    if (t < 0) { note.className = "note"; note.textContent = "시작 버튼을 눌러보자. 워치만 차고 나갔는데 중간에 아이폰을 잠깐 꺼내 보는 상황이다."; return; }
+    if (mode === "follow") {
+      if (reach) {
+        note.className = "note alarm";
+        note.innerHTML = "아이폰을 꺼내 봤을 뿐인데 <code>runningMode</code>가 <b>.mirrored로 뒤집혔다.</b> " +
+          "워치는 이제 아이폰이 GPS를 담당한다고 믿고 자기 GPS를 끈다. 그런데 아이폰 앱은 러닝을 시작한 적이 없다. <b>양쪽 다 아무도 GPS를 안 보는 구간</b>이 생긴다.";
+      } else {
+        note.className = "note";
+        note.innerHTML = "지금은 주머니에 있어서 <code>.standalone</code>이다. 계속 재생해보면 아이폰을 꺼내 드는 순간 모드가 뒤집힌다.";
+      }
+    } else {
+      note.className = "note fine";
+      note.innerHTML = "시작할 때 <code>.standalone</code>으로 정해두고 끝까지 유지한다. 중간에 아이폰을 꺼내 들어도 <code>isReachable</code>만 바뀔 뿐 " +
+        "<b>이 러닝이 어떻게 시작됐는지는 변하지 않는다.</b> 두 값이 답하는 질문이 다르다는 걸 구분한 게 전부다.";
+    }
+  }
+
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  document.getElementById("play").addEventListener("click", function () {
+    stop(); t = 0; render();
+    timer = setInterval(function () { t += 8; if (t >= DUR) { t = DUR; stop(); } render(); }, 40);
+  });
+  document.getElementById("reset").addEventListener("click", function () { stop(); t = -1; render(); });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      stop(); mode = b.dataset.m; t = -1;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -25,7 +25,22 @@ published: true
 
 ## 방향 전환: startOrigin 기준으로 정리하기
 
+말로만 보면 "늦게 따라오는 것" 정도인데, 실제로 두 기기 숫자가 어떻게 벌어지는지 보면 좀 다르다.
+
+<iframe
+  src="/assets/demo/mirroring_owner_simulator.html"
+  width="100%"
+  height="650px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+위성 잡느라 늦은 만큼이 그대로 차이로 남고, 그 뒤로도 기기마다 계산이 미세하게 달라서 차이가 **줄지 않고 유지된다.** 손목과 손에 든 화면이 다른 숫자를 보여주는 것도 문제지만, 진짜 곤란한 건 저장할 때다. **둘 중 뭐가 맞는지 정할 근거가 없다.**
+
 생각해보면 굳이 양쪽이 각자 GPS를 돌릴 필요가 없다. 미러링을 주도한 기기가 위치 계산을 전부 처리하고, 그 결과를 상대 기기로 전달하는 방식이 더 자연스럽다. 그래서 `startOrigin`을 기준으로 데이터 흐름 방향을 정리하기로 했다.
+
+**값을 만드는 곳을 하나로 두면 어긋날 일 자체가 없어진다.** [이전글](https://haroldfromk.github.io/posts/RunningProject-(15)/){:target="_blank"}에서 `runningMode`를 시작 시점에 확정한 것과 같은 이야기다. 그때는 "언제 정할 것인가"였고, 이번엔 "어디서 정할 것인가"다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/mirroring_after.png){: width="50%" height="50%"}
 
@@ -357,6 +372,7 @@ nonisolated func session(_ session: WCSession, didReceiveMessage message: [Strin
         // heartRate, cadence, activeEnergy 파싱
     }
 }
+```
 
 ```swift
 // after
@@ -401,7 +417,7 @@ nonisolated func session(_ session: WCSession, didReceiveMessage message: [Strin
 }
 ```
 
-`nonisolated` 컨텍스트에서 `viewModel`에 직접 접근하면 race condition이 발생할 수 있어서, 함수 진입 시점에 `let vm = viewModel`로 한 번 캡처해두는 방식을 쓰고 있다. 기존 iOS 쪽 `didReceiveMessage`에서도 동일하게 쓰던 패턴이라 그대로 따랐다.
+`nonisolated` 컨텍스트에서 `viewModel`에 직접 접근하면 값이 섞일 위험이 있어서, 함수 진입 시점에 `let vm = viewModel`로 한 번 캡처해두는 방식을 쓰고 있다. 기존 iOS 쪽 `didReceiveMessage`에서도 동일하게 쓰던 패턴이라 그대로 따랐다.
 
 Watch에서 보낸 FlightData를 iPhone이 받아서 `vm?.flightData`에 직접 넣는 방식으로, watchOS 쪽 기존 로직과 완전히 동일한 구조다.
 

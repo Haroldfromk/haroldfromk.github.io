@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>speedAccuracy Gate Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --warn:#b3790a; --grid:#eceff2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --warn:#fbbf24; --grid:#1c1c20;
+    }
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none;
+  }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:64ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end; margin-bottom:14px; }
+  .grp { display:flex; flex-direction:column; gap:5px; }
+  .grp > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em; color:var(--faint); text-transform:uppercase; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:8px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:8px 14px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .spacer { flex:1 1 8px; }
+
+  .row { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 10px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+  @media (max-width:560px) {
+    .row { grid-template-columns:repeat(3,1fr); }
+    .cell .v { font-size:14px; }
+  }
+
+  .chart { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:12px 10px 4px; overflow-x:auto; }
+  .chart svg { display:block; width:100%; min-width:480px; height:auto; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; margin-top:8px; font-family:'Fira Code',monospace; font-size:10px; color:var(--dim); }
+  .legend i { display:inline-block; width:14px; height:2px; vertical-align:3px; margin-right:5px; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>못 믿을 속도값이 들어왔을 때</h1>
+<p class="lead">오버스피드에 반응해 속도를 줄이는 구간은 GPS도 속도를 가늠하기 애매해서 <code>speedAccuracy</code>가 음수로 찍히는 일이 흔하다. 이때 정지 판단은 건너뛰는데 페이스용 속도값은 그대로 갱신되고 있었다.</p>
+
+<div class="bar">
+  <div class="grp">
+    <span>코드 버전</span>
+    <div class="seg" id="seg-mode">
+      <button type="button" class="danger" data-mode="bug" aria-pressed="true">수정 전 (1.3)</button>
+      <button type="button" data-mode="fix" aria-pressed="false">수정 후 (1.3.1)</button>
+    </div>
+  </div>
+  <span class="spacer"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn" id="step">한 걸음</button>
+  <button type="button" class="btn primary" id="play">재생</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">GPS 신뢰도</div><div class="v" id="v-acc">--</div></div>
+  <div class="cell"><div class="k">실제 속도</div><div class="v" id="v-raw">--</div></div>
+  <div class="cell"><div class="k">계산용 속도</div><div class="v" id="v-sm">--</div></div>
+  <div class="cell"><div class="k">화면 페이스</div><div class="v" id="v-pace">--</div></div>
+  <div class="cell"><div class="k">목표와 차이</div><div class="v" id="v-dev">--</div></div>
+</div>
+
+<div class="chart">
+  <div id="plot"></div>
+  <div class="legend">
+    <span><i style="background:var(--bad)"></i>수정 전</span>
+    <span><i style="background:var(--ok)"></i>수정 후</span>
+    <span><i style="background:var(--faint);opacity:.6"></i>목표 5'45"</span>
+    <span>회색 구간 = 신뢰도 음수</span>
+  </div>
+</div>
+
+<div class="note" id="note">재생을 누르면 GPS 샘플이 1초에 하나씩 들어온다.</div>
+
+<script>
+(function () {
+  "use strict";
+  var TARGET = 5.75, A = 0.15, CAP = 30;
+
+  // [속도(m/s), 신뢰도] · 앞에서 빠르게 달리다 감속하는 동안 신뢰도가 음수로 떨어진다
+  var S = [
+    [4.20,1.5],[4.25,1.5],[4.18,1.5],[4.22,1.5],
+    [3.40,-1],[2.60,-1],[1.90,-1],[1.40,-1],[1.00,-1],[0.70,-1],[0.45,-1],[0.28,-1],
+    [0.15,-1],[0.08,-1],[0.03,-1],[0.00,-1],[0.00,-1],[0.00,-1],[0.00,-1],[0.00,-1],
+    [3.30,1.5],[3.45,1.5],[3.38,1.5],[3.42,1.5],[3.40,1.5],[3.44,1.5]
+  ];
+
+  function simulate(mode) {
+    var sf=0, ss=0, out=[];
+    S.forEach(function (s) {
+      var cs = Math.max(s[0],0), open = s[1] >= 0;
+      function smooth(){
+        if (sf===0 && cs>0){ sf=cs; ss=cs; }
+        sf=(1-A)*sf+A*cs; ss=(1-A)*ss+A*sf;
+      }
+      if (open) smooth();            // 게이트 안 (두 버전 공통)
+      else if (mode==="bug") smooth(); // 수정 전에는 게이트 밖에서도 갱신됐다
+      var pace = ss>0 ? 1000/(ss*60) : Infinity;
+      out.push({ acc:s[1], raw:cs, ss:ss, pace:pace, open:open });
+    });
+    return out;
+  }
+
+  var BUG = simulate("bug"), FIX = simulate("fix");
+  var mode="bug", i=-1, timer=null;
+
+  function fmtPace(p){
+    if(!isFinite(p) || p>CAP) return "∞";
+    var m=Math.floor(p), s=Math.round((p-m)*60);
+    if(s===60){m++;s=0;}
+    return m+"'"+(s<10?"0"+s:s)+'"';
+  }
+  function fmtDev(p){
+    if(!isFinite(p) || p>CAP) return "∞";
+    var d = Math.round((p-TARGET)*60);
+    if (d === 0) return "0초";
+    return (d>0 ? "+" : "") + d + "초";
+  }
+
+  function draw(){
+    var W=880,H=180,PL=46,PR=14,PT=16,PB=30, n=S.length;
+    var lo=3.5, hi=CAP;
+    var X=function(k){return PL+k*(W-PL-PR)/(n-1);};
+    var Y=function(v){
+      var c=Math.max(lo,Math.min(isFinite(v)?v:hi,hi));
+      // 위쪽이 느린 페이스. 큰 값이 위로 가도록 뒤집는다
+      return PT+(H-PT-PB)*(1-(Math.log(c)-Math.log(lo))/(Math.log(hi)-Math.log(lo)));
+    };
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="페이스가 발산하는 과정">';
+    // 신뢰도 음수 구간
+    var from=null;
+    S.forEach(function(p,k){
+      if(p[1]<0 && from===null) from=k;
+      if((p[1]>=0||k===n-1) && from!==null){
+        s+='<rect x="'+X(from).toFixed(1)+'" y="'+PT+'" width="'+(X(k)-X(from)).toFixed(1)+'" height="'+(H-PT-PB)+'" fill="var(--faint)" opacity="0.13"/>';
+        from=null;
+      }
+    });
+    [4,6,10,20,30].forEach(function(v){
+      s+='<line x1="'+PL+'" y1="'+Y(v).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(v).toFixed(1)+'" stroke="var(--grid)"/>';
+      s+='<text x="'+(PL-7)+'" y="'+(Y(v)+3.5).toFixed(1)+'" text-anchor="end" font-size="9.5" font-family="Fira Code,monospace" fill="var(--faint)">'+(v>=CAP?"∞":v+"'")+'</text>';
+    });
+    s+='<line x1="'+PL+'" y1="'+Y(TARGET).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(TARGET).toFixed(1)+'" stroke="var(--faint)" stroke-width="1" stroke-dasharray="5 4" opacity="0.7"/>';
+
+    function path(arr,upto){
+      var d="";
+      for(var k=0;k<=upto;k++) d+=(k?"L":"M")+X(k).toFixed(1)+" "+Y(arr[k].pace).toFixed(1);
+      return d;
+    }
+    if(i>=0){
+      var other = mode==="bug" ? FIX : BUG;
+      var oc = mode==="bug" ? "var(--ok)" : "var(--bad)";
+      var mc = mode==="bug" ? "var(--bad)" : "var(--ok)";
+      s+='<path d="'+path(other,i)+'" fill="none" stroke="'+oc+'" stroke-width="1.4" opacity="0.4" stroke-dasharray="3 3"/>';
+      s+='<path d="'+path(mode==="bug"?BUG:FIX,i)+'" fill="none" stroke="'+mc+'" stroke-width="2.2"/>';
+      var cur=(mode==="bug"?BUG:FIX)[i];
+      s+='<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(cur.pace).toFixed(1)+'" r="4" fill="'+mc+'"/>';
+    }
+    s+='<text x="'+PL+'" y="'+(H-8)+'" font-size="9.5" font-family="Fira Code,monospace" fill="var(--faint)">0초</text>';
+    s+='<text x="'+(W-PR)+'" y="'+(H-8)+'" text-anchor="end" font-size="9.5" font-family="Fira Code,monospace" fill="var(--faint)">'+(n-1)+'초</text>';
+    s+='</svg>';
+    document.getElementById("plot").innerHTML=s;
+  }
+
+  function render(){
+    var arr = mode==="bug"?BUG:FIX;
+    var f = i>=0 ? arr[i] : null;
+    var set=function(id,v,cls){
+      var e=document.getElementById(id); e.textContent=v;
+      e.parentElement.className="cell"+(cls?" "+cls:"");
+    };
+    if(!f){
+      ["v-acc","v-raw","v-sm","v-pace","v-dev"].forEach(function(id){ set(id,"--"); });
+    } else {
+      set("v-acc", f.open? f.acc.toFixed(1) : "음수", f.open?"":"alarm");
+      set("v-raw", f.raw.toFixed(2)+" m/s");
+      var frozen = !f.open && mode==="fix";
+      set("v-sm", f.ss.toFixed(3)+" m/s", frozen?"good":(f.ss<0.5?"alarm":""));
+      var big = !isFinite(f.pace)||f.pace>CAP;
+      set("v-pace", fmtPace(f.pace), big?"alarm":"");
+      set("v-dev", fmtDev(f.pace), big||f.pace-TARGET>5?"alarm":"");
+    }
+    draw();
+
+    var note=document.getElementById("note");
+    if(!f){ note.className="note"; note.textContent="재생을 누르면 GPS 샘플이 1초에 하나씩 들어온다."; return; }
+    if(f.open && i<4){
+      note.className="note"; note.innerHTML="신뢰할 수 있는 값이라 정상 처리된다. 목표보다 빠르게 달리는 중이다.";
+    } else if(!f.open && mode==="bug"){
+      note.className="note alarm";
+      note.innerHTML="신뢰도가 음수라 <b>정지 판단은 건너뛴다.</b> 그런데 계산용 속도는 게이트 밖에 있어서 <b>이 못 믿을 값이 그대로 반영</b>됐다. 멈췄다고 확정된 게 아니니 페이스는 계속 새로 계산되고, 나누는 값이 0에 가까워질수록 결과가 커진다.";
+    } else if(!f.open){
+      note.className="note fine";
+      note.innerHTML="신뢰도가 음수면 <b>정지 판단도 페이스 계산도 둘 다 건너뛴다.</b> 계산용 속도가 "+f.ss.toFixed(3)+"에서 그대로 멈춰 있어 페이스도 흔들리지 않는다.";
+    } else if(mode==="bug"){
+      note.className="note alarm";
+      note.innerHTML="다시 제대로 뛰기 시작했는데도 <b>오염된 값이 천천히 회복되느라 페이스가 아직 돌아오지 않았다.</b> 화면에는 계속 SINK RATE가 떠 있다.";
+    } else {
+      note.className="note fine";
+      note.innerHTML="신뢰도가 돌아오자 멈춰 있던 값에서 자연스럽게 이어진다.";
+    }
+  }
+
+  function stop(){ if(timer){clearInterval(timer);timer=null;} document.getElementById("play").textContent="재생"; }
+  function step(){ if(i>=S.length-1){stop();return;} i++; render(); }
+  document.getElementById("step").addEventListener("click",function(){stop();step();});
+  document.getElementById("reset").addEventListener("click",function(){stop();i=-1;render();});
+  document.getElementById("play").addEventListener("click",function(){
+    if(timer){stop();return;}
+    if(i>=S.length-1) i=-1;
+    this.textContent="일시정지"; step(); timer=setInterval(step,620);
+  });
+  document.querySelectorAll("#seg-mode button").forEach(function(b){
+    b.addEventListener("click",function(){
+      mode=b.dataset.mode;
+      document.querySelectorAll("#seg-mode button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});
+      render();
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

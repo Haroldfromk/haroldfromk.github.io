@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Split Boundary Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --grid:#eceff2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --grid:#1c1c20;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:64ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:14px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 14px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 14px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+  @media (max-width:520px){ .row{grid-template-columns:repeat(2,1fr);} }
+
+  .track { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:12px 10px 6px; overflow-x:auto; }
+  .track svg { display:block; width:100%; min-width:460px; height:auto; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>신호가 끊긴 사이 1km를 훌쩍 넘겼다면</h1>
+<p class="lead">누적 거리가 1km 경계를 넘을 때마다 스플릿을 하나 만든다. 그런데 위치가 한 번에 크게 뛰면 <b>한 번의 업데이트 안에서 경계를 두 개 넘을 수도</b> 있다. 그때 <code>if</code>로 검사하면 하나만 만들고 끝난다.</p>
+
+<div class="bar">
+  <span>경계 검사</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-mode="if" aria-pressed="true">if 로 한 번</button>
+    <button type="button" data-mode="while" aria-pressed="false">while 로 반복</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn" id="step">한 걸음</button>
+  <button type="button" class="btn primary" id="play">재생</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">이번 이동</div><div class="v" id="v-move">--</div></div>
+  <div class="cell"><div class="k">누적 거리</div><div class="v" id="v-dist">--</div></div>
+  <div class="cell"><div class="k">다음 경계</div><div class="v" id="v-next">--</div></div>
+  <div class="cell"><div class="k">만든 스플릿</div><div class="v" id="v-made">--</div></div>
+</div>
+
+<div class="track"><div id="plot"></div></div>
+<div class="note" id="note">재생을 누르면 위치가 하나씩 들어온다.</div>
+
+<script>
+(function () {
+  "use strict";
+  var UNIT = 1000;
+  // 4번째에서 신호가 끊겼다 돌아오며 1.4km를 한 번에 이동한다
+  var MOVES = [400, 500, 600, 400, 1400, 200, 300, 250, 300];
+  var GAP_AT = 4;
+
+  var mode = "if", i = -1, timer = null;
+
+  function simulate(upto) {
+    var dist = 0, nextAt = UNIT, made = 0, lost = 0, marks = [];
+    for (var k = 0; k <= upto; k++) {
+      dist += MOVES[k];
+      if (mode === "while") {
+        while (dist >= nextAt) { made++; marks.push({ at: nextAt, n: made }); nextAt += UNIT; }
+      } else {
+        if (dist >= nextAt) {
+          made++; marks.push({ at: nextAt, n: made }); nextAt += UNIT;
+          // if 는 한 번만 검사하므로 남은 경계는 그냥 지나쳐버린다
+          while (dist >= nextAt) { lost++; nextAt += UNIT; }
+        }
+      }
+    }
+    return { dist: dist, nextAt: nextAt, made: made, lost: lost, marks: marks };
+  }
+
+  function draw(st, upto) {
+    var W = 780, H = 108, PL = 14, PR = 14, Y = 52;
+    var maxD = 4600;
+    var X = function (d) { return PL + Math.min(d, maxD) / maxD * (W - PL - PR); };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="누적 거리와 스플릿 경계">';
+    // 1km 경계선
+    for (var b = UNIT; b <= maxD; b += UNIT) {
+      s += '<line x1="' + X(b).toFixed(1) + '" y1="' + (Y - 22) + '" x2="' + X(b).toFixed(1) + '" y2="' + (Y + 16) + '" stroke="var(--grid)" stroke-width="2"/>';
+      s += '<text x="' + X(b).toFixed(1) + '" y="' + (Y + 30) + '" text-anchor="middle" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + (b / 1000) + 'km</text>';
+    }
+    // 지나온 거리 막대
+    s += '<rect x="' + PL + '" y="' + (Y - 7) + '" width="' + (X(st.dist) - PL).toFixed(1) + '" height="14" rx="7" fill="var(--mark)" opacity="0.22"/>';
+    // 신호 끊긴 구간
+    if (upto >= GAP_AT) {
+      var before = MOVES.slice(0, GAP_AT).reduce(function (a, b2) { return a + b2; }, 0);
+      s += '<rect x="' + X(before).toFixed(1) + '" y="' + (Y - 7) + '" width="' + (X(before + MOVES[GAP_AT]) - X(before)).toFixed(1) + '" height="14" rx="7" fill="var(--faint)" opacity="0.3"/>';
+      s += '<text x="' + ((X(before) + X(before + MOVES[GAP_AT])) / 2).toFixed(1) + '" y="' + (Y - 14) + '" text-anchor="middle" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">신호 끊김</text>';
+    }
+    // 현재 위치
+    s += '<circle cx="' + X(st.dist).toFixed(1) + '" cy="' + Y + '" r="6" fill="var(--mark)"/>';
+    // 만들어진 스플릿
+    st.marks.forEach(function (m) {
+      s += '<circle cx="' + X(m.at).toFixed(1) + '" cy="' + (Y - 22) + '" r="8" fill="var(--ok)"/>';
+      s += '<text x="' + X(m.at).toFixed(1) + '" y="' + (Y - 19) + '" text-anchor="middle" font-size="9" font-weight="700" font-family="Fira Code,monospace" fill="var(--bg)">' + m.n + '</text>';
+    });
+    // 놓친 경계
+    if (st.lost > 0) {
+      var missed = [], b3 = UNIT;
+      while (b3 < st.nextAt) {
+        if (!st.marks.some(function (m) { return m.at === b3; }) && b3 <= st.dist) missed.push(b3);
+        b3 += UNIT;
+      }
+      missed.forEach(function (d) {
+        s += '<circle cx="' + X(d).toFixed(1) + '" cy="' + (Y - 22) + '" r="8" fill="none" stroke="var(--bad)" stroke-width="1.6" stroke-dasharray="2.5 2"/>';
+        s += '<text x="' + X(d).toFixed(1) + '" y="' + (Y - 19) + '" text-anchor="middle" font-size="10" font-weight="700" font-family="Fira Code,monospace" fill="var(--bad)">×</text>';
+      });
+    }
+    s += '</svg>';
+    document.getElementById("plot").innerHTML = s;
+  }
+
+  function render() {
+    var st = i >= 0 ? simulate(i) : { dist: 0, nextAt: UNIT, made: 0, lost: 0, marks: [] };
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-move", i >= 0 ? MOVES[i] + " m" : "--", i === GAP_AT ? "alarm" : "");
+    set("v-dist", (st.dist / 1000).toFixed(2) + " km");
+    set("v-next", (st.nextAt / 1000).toFixed(0) + " km");
+    set("v-made", st.made + "개" + (st.lost ? " (" + st.lost + "개 놓침)" : ""), st.lost ? "alarm" : (st.made ? "good" : ""));
+    draw(st, i);
+
+    var note = document.getElementById("note");
+    if (i < 0) { note.className = "note"; note.textContent = "재생을 누르면 위치가 하나씩 들어온다."; return; }
+    if (i === GAP_AT) {
+      if (mode === "if") {
+        note.className = "note alarm";
+        note.innerHTML = "신호가 끊긴 사이 <b>1.4km를 한 번에 이동</b>했다. 경계를 두 개 넘었는데 <code>if</code>는 <b>한 번만 검사</b>하니 스플릿을 하나만 만들고 나머지는 그냥 지나쳤다.";
+      } else {
+        note.className = "note fine";
+        note.innerHTML = "같은 상황인데 <code>while</code>이라 <b>넘긴 경계 수만큼 반복</b>한다. 이번 한 번의 업데이트 안에서 스플릿이 두 개 만들어졌다.";
+      }
+    } else if (st.lost > 0) {
+      note.className = "note alarm";
+      note.innerHTML = "놓친 경계는 되돌아오지 않는다. <b>다음 경계 기준이 " + st.lost + "km씩 밀린 채로</b> 남은 러닝 내내 이어진다.";
+    } else if (st.made > 0) {
+      note.className = "note fine";
+      note.innerHTML = st.made + "번째 경계까지 정상적으로 기록됐다. 다음 경계는 " + (st.nextAt / 1000) + "km다.";
+    } else {
+      note.className = "note";
+      note.innerHTML = "아직 1km 전이다. 심박과 케이던스 샘플만 쌓이고 있다.";
+    }
+  }
+
+  function stop(){ if(timer){clearInterval(timer);timer=null;} document.getElementById("play").textContent="재생"; }
+  function step(){ if(i>=MOVES.length-1){stop();return;} i++; render(); }
+  document.getElementById("step").addEventListener("click",function(){stop();step();});
+  document.getElementById("reset").addEventListener("click",function(){stop();i=-1;render();});
+  document.getElementById("play").addEventListener("click",function(){
+    if(timer){stop();return;}
+    if(i>=MOVES.length-1) i=-1;
+    this.textContent="일시정지"; step(); timer=setInterval(step,900);
+  });
+  document.querySelectorAll("#seg button").forEach(function(b){
+    b.addEventListener("click",function(){
+      mode=b.dataset.mode;
+      document.querySelectorAll("#seg button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

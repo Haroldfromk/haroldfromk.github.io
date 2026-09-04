@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 250" width="720" height="250" role="img" aria-label="러닝을 저장할 때마다 7일 리마인더 예약이 다시 잡히는 흐름">
+<style>
+  :root { color-scheme: light dark; }
+  .bg   { fill: #ffffff; }
+  .rail { stroke: #e3e6ea; }
+  .ttl  { fill: #16181d; font-weight: 700; }
+  .sub  { fill: #6b7280; }
+  .dim  { fill: #9aa1ab; }
+  .run  { fill: #0d9276; }
+  .runl { stroke: #0d9276; }
+  .plan { fill: #2563eb; }
+  .planl{ stroke: #2563eb; }
+  .gone { fill: #d0392b; }
+  .gonel{ stroke: #d0392b; }
+  text  { font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace; }
+  @media (prefers-color-scheme: dark) {
+    .bg   { fill: #0d0e11; }
+    .rail { stroke: #27272a; }
+    .ttl  { fill: #f4f4f5; }
+    .sub  { fill: #a1a1aa; }
+    .dim  { fill: #71717a; }
+    .run  { fill: #34d399; }
+    .runl { stroke: #34d399; }
+    .plan { fill: #60a5fa; }
+    .planl{ stroke: #60a5fa; }
+    .gone { fill: #f87171; }
+    .gonel{ stroke: #f87171; }
+  }
+</style>
+<rect class="bg" x="0" y="0" width="720" height="250" rx="10"/>
+
+<text class="dim" x="24" y="30" font-size="11">러닝을 저장할 때마다 예약을 지우고 다시 잡는다</text>
+
+<!-- 시간 축 -->
+<line class="rail" x1="40" y1="120" x2="690" y2="120" stroke-width="2"/>
+<text class="dim" x="40" y="150" font-size="10">1일차</text>
+<text class="dim" x="690" y="150" font-size="10" text-anchor="end">16일차</text>
+
+<!-- 러닝 1: 3일차 -->
+<circle class="run" cx="118" cy="120" r="6"/>
+<text class="sub" x="118" y="106" font-size="10" text-anchor="middle">러닝</text>
+<text class="dim" x="118" y="164" font-size="9.5" text-anchor="middle">3일차</text>
+<!-- 예약 1: 10일차 -->
+<line class="planl" x1="118" y1="120" x2="378" y2="120" stroke-width="2.5" stroke-dasharray="5 4" opacity="0.5"/>
+<circle class="gone" cx="378" cy="120" r="5" opacity="0.45"/>
+<text class="gone" x="378" y="88" font-size="9.5" text-anchor="middle" opacity="0.75">예약 취소됨</text>
+<text class="dim" x="378" y="164" font-size="9.5" text-anchor="middle">10일차</text>
+
+<!-- 러닝 2: 6일차 -->
+<circle class="run" cx="205" cy="120" r="6"/>
+<text class="sub" x="205" y="106" font-size="10" text-anchor="middle">러닝</text>
+<text class="dim" x="205" y="164" font-size="9.5" text-anchor="middle">6일차</text>
+<!-- 예약 2: 13일차 -->
+<line class="planl" x1="205" y1="120" x2="465" y2="120" stroke-width="2.5" stroke-dasharray="5 4" opacity="0.5"/>
+<circle class="gone" cx="465" cy="120" r="5" opacity="0.45"/>
+<text class="gone" x="465" y="88" font-size="9.5" text-anchor="middle" opacity="0.75">예약 취소됨</text>
+<text class="dim" x="465" y="164" font-size="9.5" text-anchor="middle">13일차</text>
+
+<!-- 러닝 3: 9일차 (마지막) -->
+<circle class="run" cx="292" cy="120" r="7"/>
+<text class="ttl" x="292" y="104" font-size="10.5" text-anchor="middle">마지막 러닝</text>
+<text class="dim" x="292" y="164" font-size="9.5" text-anchor="middle">9일차</text>
+<!-- 예약 3: 16일차, 살아남음 -->
+<line class="planl" x1="292" y1="120" x2="640" y2="120" stroke-width="3"/>
+<circle class="plan" cx="640" cy="120" r="8"/>
+<text class="plan" x="640" y="98" font-size="10.5" text-anchor="middle" font-weight="700">알림이 울린다</text>
+<text class="dim" x="640" y="164" font-size="9.5" text-anchor="middle">16일차</text>
+<text class="sub" x="466" y="140" font-size="10" text-anchor="middle">7일</text>
+
+<line class="rail" x1="24" y1="188" x2="696" y2="188" stroke-width="1" stroke-dasharray="3 3"/>
+<text class="sub" x="24" y="210" font-size="11">예약 이름을 하나로 고정해두고, 새로 잡기 전에 같은 이름의 예약을 먼저 지운다.</text>
+<text class="dim" x="24" y="228" font-size="10.5">그래서 러닝을 몇 번 하든 살아남는 예약은 항상 하나뿐이고, 기준은 늘 마지막 러닝이다.</text>
+</svg>

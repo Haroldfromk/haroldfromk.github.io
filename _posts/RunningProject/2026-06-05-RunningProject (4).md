@@ -82,6 +82,17 @@ Button { runViewModel.stop() }
 
 원인은 객체가 서로 달랐기 때문이다. `MapTestView`에 `@State private var locationService`가 따로 선언되어 있어서 `runViewModel` 내부의 `locationService`와 전혀 다른 인스턴스였다. 버튼은 `runViewModel.start()`를 호출하지만 로그는 `MapTestView`의 `locationService.logs`를 보고 있으니 당연히 출력이 안 되는 구조였다.
 
+여기서 말하는 인스턴스는 **설계도를 보고 실제로 찍어낸 물건 하나**를 뜻한다. `LocationService`라는 설계도가 하나여도, 그걸로 두 번 만들면 물건은 두 개다. 같은 타입으로 두 번 만들면 이름만 같을 뿐 서로 남남인 물건 두 개가 된다. 하나를 켜도 다른 하나는 아무것도 모른다. 이게 눈으로 보이면 훨씬 빠른데, 실제로는 **에러도 안 나고 그냥 조용해서** 원인을 찾는 데 시간을 썼다.
+
+<iframe
+  src="/assets/demo/instance_identity_simulator.html"
+  width="100%"
+  height="770px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
 해결 방법은 `MapTestView`의 `@State private var locationService`를 제거하고, `RunViewModel`에서 `locationService`의 프로퍼티를 노출하여 하나의 인스턴스만 사용하도록 수정했다.
 
 ```swift
@@ -93,6 +104,8 @@ var logs: [String] { locationService.logs }
 ```
 
 이렇게 하면 View는 `runViewModel`만 바라보고, 서비스 인스턴스도 하나로 통일된다.
+
+정리하면 규칙은 하나다. **켜는 쪽과 읽는 쪽이 같은 물건을 봐야 한다.** 화면이 자기 몫을 따로 만들어두는 순간 이 규칙이 깨진다. 이 문제는 뒤에서 화면이 여러 개로 늘어날 때 또 나오는데, 그때는 앱 시작 지점에서 하나만 만들어 내려보내는 방식으로 정리하게 된다.
 
 ---
 

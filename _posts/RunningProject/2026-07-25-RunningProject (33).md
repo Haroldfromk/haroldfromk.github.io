@@ -128,6 +128,19 @@ if let start = runStartTime {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/while.png){: width="50%" height="50%"}
 
+한 번만 검사하는 것과 넘긴 만큼 반복하는 것이 실제로 얼마나 다른지 돌려볼 수 있게 만들었다. 중간에 회색으로 칠한 구간이 신호가 끊겼다 돌아오는 지점이다.
+
+<iframe
+  src="/assets/demo/split_boundary_simulator.html"
+  width="100%"
+  height="530px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+`if`로 두고 끝까지 돌리면 4.35km를 뛰었는데 스플릿이 3개만 나온다. 더 나쁜 건 개수가 하나 모자란 것으로 끝나지 않는다는 점이다. 놓친 경계 이후로 **3번 스플릿이 실제로는 4km 지점에 찍혀 있다.** 한 번 어긋난 기준이 러닝이 끝날 때까지 그대로 밀린 채로 간다. `while`로 바꾸면 같은 데이터에서 4개가 다 나오고 번호도 실제 km와 맞는다.
+
 ---
 
 ## SwiftDataSplit 모델링
@@ -469,6 +482,21 @@ func processAltitude(_ rawAltitude: Double, timestamp: TimeInterval) {
 두 스무딩을 나란히 놓고 보면 공식 자체는 완전히 같고, "첫 샘플을 언제 시드할지" 판단하는 방법만 다르다는 게 더 잘 보인다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/smoothing_init_compare.svg){: width="700" height="373"}
+
+가드와 스무딩이 실제로 뭘 걸러내는지도 돌려볼 수 있게 만들었다. 언덕을 하나 올라갔다 내려온 뒤 조금 더 오르는 코스인데, 중간에 일시정지가 걸려서 값이 통째로 튀는 상황이다.
+
+<iframe
+  src="/assets/demo/altitude_guard_simulator.html"
+  width="100%"
+  height="660px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+가드를 끄면 튄 값이 그대로 흘러 들어가서, 값이 제자리로 돌아온 뒤에도 흔적이 남는다. 가드를 켜면 그 구간 샘플 11개를 통째로 버리고 다듬은 값은 직전 상태에 머문다.
+
+여기서 한 가지가 더 보인다. 마지막에 다듬은 값은 +4m대인데 이 글 뒤쪽에서 만들 상승고도는 +9m대가 나온다. 언덕을 올라갔다 내려온 몫이 **지금 높이에서는 상쇄되지만 올라간 총량에는 그대로 남기** 때문이다. 이 차이가 나중에 스플릿 지표를 구간 차이에서 상승고도로 바꾸게 되는 이유가 된다.
 
 원래 `FlightData.altitude`는 GPS 절대 고도(`location.altitude`)를 그대로 담고 있었는데, 아무 화면에서도 안 쓰고 있어서 이번에 스무딩된 상대 고도로 바꿔치기했다.
 

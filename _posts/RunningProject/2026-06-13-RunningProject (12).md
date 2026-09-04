@@ -761,6 +761,25 @@ Watch에서 iPhone으로 보내는 데이터는 두 가지 시나리오로 나�
 
 유튜브를 보다가 간략하게 정리해준 영상을 보고 캡쳐를 해뒀다가 여기에 다시 정리를 해보았다.
 
+표로 보면 다 알 것 같은데 막상 고를 때 헷갈려서, 직접 보내볼 수 있게 만들었다. 아이폰 앱을 꺼놓고 보내보면 방식마다 결과가 갈린다.
+
+<iframe
+  src="/assets/demo/wc_transfer_method_simulator.html"
+  width="100%"
+  height="890px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+정리하면 갈리는 기준은 하나다. **받는 쪽 앱이 지금 살아 있어야 하는가.**
+
+- `sendMessage`: 살아 있어야만 도착한다. 꺼져 있으면 5개 보낸 게 5개 다 사라진다. 대신 제일 빠르다.
+- `transferUserInfo`: 꺼져 있어도 큐에 쌓였다가 나중에 순서대로 다 도착한다.
+- `updateApplicationContext`: 5번 보내도 마지막 하나만 남는다. 덮어쓰기라서 그렇다.
+
+그래서 **심박처럼 1초 뒤에 또 보낼 값**은 `sendMessage`로, **러닝 기록처럼 한 번뿐이고 반드시 도착해야 하는 값**은 `transferUserInfo`로 나눈 것이다. 이 구분을 잘못하면 조용히 데이터가 사라지는데, 나중에 실제로 그런 일이 생긴다.
+
 ---
 
 #### ViewModel 의존성 주입
@@ -770,6 +789,8 @@ Watch에서 iPhone으로 보내는 데이터는 두 가지 시나리오로 나�
 그전에 `WatchConnectivityService`는 `NSObject` 서브클래스라 SwiftUI를 import하지 않으므로 `@Environment`로 ViewModel을 가져올 수 없다. 
 
 대신 `weak var`로 참조를 만들고, `WatchViewModel.init()`에서 직접 주입하는 방식으로 해결한다. `weak`를 쓰는 이유는 VM과 Service가 서로를 참조할 때 생기는 순환 참조를 방지하기 위해서다.
+
+순환 참조를 좀 풀어서 쓰면, 스위프트는 **아무도 안 쓰는 물건은 알아서 치우는데** 그 판단을 "이걸 붙잡고 있는 쪽이 있나"로 한다. VM이 Service를 붙잡고 Service도 VM을 붙잡고 있으면, 밖에서 둘 다 안 쓰게 돼도 서로가 서로를 붙잡고 있어서 영영 안 치워진다. `weak`는 "붙잡지는 않고 보기만 한다"는 표시라 이 고리를 끊어준다.
 
 ```swift
 final class WatchConnectivityService: NSObject, WCSessionDelegate {

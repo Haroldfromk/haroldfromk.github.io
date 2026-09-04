@@ -412,6 +412,8 @@ try await store.requestAuthorization(toShare: healthTypes as! Set<HKSampleType>,
 
 실시간으로 변화하는 데이터와 누적되는 데이터를 구분해야 하기 때문이다.
 
+여기서 말하는 쿼리는 건강 저장소에 "이런 조건에 맞는 데이터 좀 줘"라고 던지는 요청서라고 보면 된다. 무엇을 물어보느냐에 따라 요청서 종류가 다르다. "심박이 새로 들어올 때마다 알려줘"와 "지난 7일 걸음 수를 다 더해서 알려줘"는 성격이 완전히 다른 요청이다.
+
 [HKAnchoredObjectQuery Docs](https://developer.apple.com/documentation/HealthKit/HKAnchoredObjectQuery){:target="_blank"}, [HKStatisticsQuery Docs](https://developer.apple.com/documentation/healthkit/hkstatisticsquery){:target="_blank"}를 참고하여 간단하게 정리하면,
 
 - **HKAnchoredObjectQuery** - HealthKit 저장소의 변경사항을 반환하는 쿼리. 스냅샷과 함께 장기 실행 쿼리로 지속적인 모니터링이 가능하다.
@@ -453,6 +455,21 @@ try await store.requestAuthorization(toShare: healthTypes as! Set<HKSampleType>,
 - 이전 쿼리의 `anchor` 값 → 그 이후 추가된 데이터만 가져옴
 
 현재는 MockData 확인 목적이므로 `nil`로 설정하여 전체를 가져온다. 추후 실시간 모니터링 구현 시 `anchor` 값을 저장하여 변경된 데이터만 가져오도록 최적화할 수 있다.
+
+이 책갈피가 있고 없고가 실제로 뭘 바꾸는지 눌러보면서 확인할 수 있게 만들었다.
+
+<iframe
+  src="/assets/demo/healthkit_anchor_simulator.html"
+  width="100%"
+  height="660px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+책갈피 없이 7번 물어보면 저장소에 39개밖에 없는데 총 181개를 받아온다. **142개가 이미 받았던 걸 또 받은 것**이다. 책갈피를 들고 가면 총 39개, 딱 있는 만큼만 받는다.
+
+지금은 7일치 목업 데이터라 티가 안 나지만, 러닝 중에 심박을 계속 받아야 하는 상황이 되면 이 차이가 그대로 배터리와 반응 속도로 돌아온다. 그래서 지금은 `nil`로 두더라도 나중에 실시간으로 바꿀 때 반드시 손봐야 하는 자리라는 걸 기억해둔다.
 
 ```swift
 func fetchHeartRate() async {

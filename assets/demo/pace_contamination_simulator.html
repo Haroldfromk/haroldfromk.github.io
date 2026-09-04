@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pace Contamination Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --grid:#eceff2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --grid:#1c1c20;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; min-width:52px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; flex-wrap:wrap; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11px; font-weight:500; padding:9px 11px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11px; padding:9px 11px; border-radius:7px; }
+  .btn.bad { border-color:var(--bad); color:var(--bad); }
+
+  .row { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin:12px 0; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+
+  .track { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:10px 10px 4px; overflow-x:auto; }
+  .track svg { display:block; width:100%; min-width:440px; height:auto; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>기록 하나가 이번 달 전체를 망가뜨린다</h1>
+<p class="lead">거리가 0인 채로 종료하면 페이스는 <code>0으로 나누기</code>라 무한대가 된다. 화면에는 방어 코드가 있어서 <code>--'--"</code>로 얌전히 보이는데, <b>저장되는 값에는 그 방어가 없었다.</b> 그 값 하나가 월 평균에 섞이면 어떻게 되는지 보자.</p>
+
+<div class="bar">
+  <span>저장 가드</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-g="none" aria-pressed="true">없음</button>
+    <button type="button" data-g="finite" aria-pressed="false">isFinite만</button>
+    <button type="button" data-g="full" aria-pressed="false">isFinite + 최소 거리 + 상한</button>
+  </div>
+</div>
+<div class="bar">
+  <span>기록 추가</span>
+  <button type="button" class="btn bad" id="add-inf">거리 0으로 종료</button>
+  <button type="button" class="btn bad" id="add-big">몇 초 만에 종료</button>
+  <button type="button" class="btn" id="reset">처음으로</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">이번 달 기록</div><div class="v" id="v-n">--</div></div>
+  <div class="cell"><div class="k">집계에 들어간 값</div><div class="v" id="v-use">--</div></div>
+  <div class="cell"><div class="k">이번 달 평균 페이스</div><div class="v" id="v-avg">--</div></div>
+</div>
+
+<div class="track"><div id="plot"></div></div>
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+  var BASE = [
+    { label: "3일", pace: 5.72, dist: 5.2 },
+    { label: "5일", pace: 5.45, dist: 7.1 },
+    { label: "8일", pace: 6.10, dist: 4.0 },
+    { label: "11일", pace: 5.60, dist: 8.4 },
+    { label: "14일", pace: 5.88, dist: 6.3 }
+  ];
+  var guard = "none", extra = [];
+
+  function stored(rec) {
+    // 저장 시점에 어떤 값이 들어가는가
+    var raw = rec.raw;
+    if (guard === "none") return raw;
+    if (guard === "finite") return isFinite(raw) ? raw : 0;
+    return (isFinite(raw) && rec.dist >= 0.05) ? raw : 0;
+  }
+
+  function all() {
+    var out = BASE.map(function (b) { return { label: b.label, pace: b.pace, dist: b.dist, bad: false }; });
+    extra.forEach(function (e) {
+      out.push({ label: e.label, pace: stored(e), dist: e.dist, bad: true });
+    });
+    return out;
+  }
+
+  function fmt(p) {
+    if (!isFinite(p)) return "무한대";
+    if (p <= 0) return "0";
+    if (p > 999) return Math.round(p) + "'";
+    var t = Math.round(p * 60);
+    return (t / 60 | 0) + "'" + String(t % 60).padStart(2, "0") + '"';
+  }
+
+  function render() {
+    var list = all();
+    var used = list.filter(function (r) {
+      if (guard === "full") return isFinite(r.pace) && r.pace > 0 && r.pace < 30;
+      return true;   // 집계 쪽 가드는 "full"에서만 켠다
+    });
+    var sum = used.reduce(function (a, r) { return a + r.pace; }, 0);
+    var avg = used.length ? sum / used.length : 0;
+
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-n", list.length + "개");
+    set("v-use", used.length + "개", used.length < list.length ? "good" : "");
+    set("v-avg", fmt(avg), (!isFinite(avg) || avg > 30 || avg <= 0) ? "alarm" : "good");
+
+    // 막대 그래프: 축이 눌리는 걸 보여준다
+    var W = 640, H = 158, PL = 34, PR = 10, PT = 12, PB = 30;
+    var maxP = Math.max.apply(null, list.map(function (r) { return isFinite(r.pace) ? r.pace : 1200; }).concat([7]));
+    var bw = (W - PL - PR) / list.length;
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="기록별 페이스 막대">';
+    s += '<line x1="' + PL + '" y1="' + (H - PB) + '" x2="' + (W - PR) + '" y2="' + (H - PB) + '" stroke="var(--grid)" stroke-width="1.5"/>';
+    s += '<text x="' + (PL - 6) + '" y="' + (PT + 8) + '" text-anchor="end" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' +
+         (maxP >= 1200 ? "∞" : Math.round(maxP)) + "'</text>";
+    list.forEach(function (r, k) {
+      var p = isFinite(r.pace) ? r.pace : maxP;
+      var h = Math.max(1.5, p / maxP * (H - PT - PB));
+      s += '<rect x="' + (PL + k * bw + bw * 0.2).toFixed(1) + '" y="' + (H - PB - h).toFixed(1) +
+           '" width="' + (bw * 0.6).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="2" fill="' +
+           (r.bad ? "var(--bad)" : "var(--mark)") + '" opacity="' + (r.bad ? 0.85 : 0.6) + '"/>';
+      s += '<text x="' + (PL + k * bw + bw / 2).toFixed(1) + '" y="' + (H - PB + 13) +
+           '" text-anchor="middle" font-size="8.5" font-family="Fira Code,monospace" fill="var(--faint)">' + r.label + '</text>';
+      s += '<text x="' + (PL + k * bw + bw / 2).toFixed(1) + '" y="' + (H - PB + 24) +
+           '" text-anchor="middle" font-size="8" font-family="Fira Code,monospace" fill="' + (r.bad ? "var(--bad)" : "var(--faint)") + '">' + fmt(r.pace) + '</text>';
+    });
+    s += '</svg>';
+    document.getElementById("plot").innerHTML = s;
+
+    var note = document.getElementById("note");
+    if (!extra.length) {
+      note.className = "note";
+      note.innerHTML = "정상 기록 5개다. 평균도 멀쩡하고 막대 높이도 서로 비교가 된다. 위에서 <b>이상한 기록을 하나 추가</b>해보자.";
+      return;
+    }
+    if (!isFinite(avg)) {
+      note.className = "note alarm";
+      note.innerHTML = "무한대가 하나 섞이는 순간 <b>더하기 결과 자체가 무한대</b>가 된다. 나머지 5개가 다 멀쩡해도 소용없다. " +
+        "이번 달 평균이 통째로 <code>--:--</code>로 나오는 게 이 이유다.";
+    } else if (avg > 30) {
+      note.className = "note alarm";
+      note.innerHTML = "이번엔 무한대가 아니라 <b>그냥 아주 큰 값</b>이라 <code>isFinite</code>로는 안 걸린다. " +
+        "평균이 " + fmt(avg) + "로 튀었고, 막대 그래프는 이 하나 때문에 축이 눌려서 <b>나머지 기록이 전부 바닥에 붙어버렸다.</b>";
+    } else if (guard === "full") {
+      note.className = "note fine";
+      note.innerHTML = "저장할 때 최소 거리를 확인하고, 집계할 때 사람이 낼 수 있는 범위(30분/km 미만)로 한 번 더 걸렀다. " +
+        "이상한 기록 " + (list.length - used.length) + "개가 집계에서 빠지고 평균은 <b>" + fmt(avg) + "</b>로 돌아왔다.";
+    } else {
+      note.className = "note";
+      note.innerHTML = "무한대는 0으로 바뀌어 저장됐다. 다만 0도 평균에 그대로 들어가서 평균을 아래로 끌어내린다. 집계 쪽에도 거르는 조건이 필요하다.";
+    }
+  }
+
+  document.getElementById("add-inf").addEventListener("click", function () {
+    extra.push({ label: "0m", raw: Infinity, dist: 0 }); render();
+  });
+  document.getElementById("add-big").addEventListener("click", function () {
+    extra.push({ label: "20초", raw: (20 / 60) / 0.001, dist: 0.001 }); render();   // 20초 동안 1m
+  });
+  document.getElementById("reset").addEventListener("click", function () { extra = []; render(); });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      guard = b.dataset.g;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

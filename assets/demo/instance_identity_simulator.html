@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instance Identity Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --mark-bg:#e8effc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --mark-bg:#14203a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:14px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .wire { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:12px; }
+  .wire svg { display:block; width:100%; height:auto; }
+
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+  @media (max-width:600px){ .cols{grid-template-columns:1fr;} }
+  .box { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:11px 12px; }
+  .box h2 { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 9px; font-weight:500; }
+  .box.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .log { display:flex; flex-direction:column; gap:4px; min-height:92px; }
+  .log div { font-family:'Fira Code',monospace; font-size:11px; color:var(--dim);
+    background:var(--bg); border:1px solid var(--line); border-radius:5px; padding:4px 8px; }
+  .log .none { color:var(--faint); border-style:dashed; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>버튼은 눌리는데 화면엔 아무것도 안 뜬다</h1>
+<p class="lead">화면이 <code>LocationService</code>를 자기 것으로 하나 만들어두고, 뷰모델도 안에서 또 하나를 만들면 <b>같은 이름의 서로 다른 물건이 두 개</b> 생긴다. 버튼은 뷰모델 것을 켜는데 화면은 자기 것을 보고 있으니 아무 일도 안 일어난 것처럼 보인다.</p>
+
+<div class="bar">
+  <span>구조</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-mode="two" aria-pressed="true">각자 하나씩 만듦</button>
+    <button type="button" data-mode="one" aria-pressed="false">뷰모델 것 하나만 씀</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn primary" id="start">START 누르기</button>
+</div>
+
+<div class="wire"><div id="plot"></div></div>
+
+<div class="cols">
+  <div class="box" id="box-screen">
+    <h2>화면이 보고 있는 로그</h2>
+    <div class="log" id="log-screen"></div>
+  </div>
+  <div class="box">
+    <h2>실제로 켜진 쪽에 쌓인 로그</h2>
+    <div class="log" id="log-real"></div>
+  </div>
+</div>
+<div class="note" id="note">START를 눌러보자.</div>
+
+<script>
+(function () {
+  "use strict";
+  var mode = "two", presses = 0;
+
+  function draw() {
+    var W = 620, H = 132, two = mode === "two";
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="객체 연결 구조">';
+    function box(x, y, w, h, label, sub, tone) {
+      var stroke = tone === "hot" ? "var(--mark)" : (tone === "dead" ? "var(--bad)" : "var(--line)");
+      var fill = tone === "hot" ? "var(--mark-bg)" : (tone === "dead" ? "var(--bad-bg)" : "var(--bg)");
+      var t = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8" fill="' + fill + '" stroke="' + stroke + '" stroke-width="1.4"/>';
+      t += '<text x="' + (x + w / 2) + '" y="' + (y + 20) + '" text-anchor="middle" font-size="11" font-weight="600" font-family="Fira Code,monospace" fill="var(--ink)">' + label + '</text>';
+      if (sub) t += '<text x="' + (x + w / 2) + '" y="' + (y + 34) + '" text-anchor="middle" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + sub + '</text>';
+      return t;
+    }
+    function arrow(x1, y1, x2, y2, label, tone) {
+      var c = tone === "hot" ? "var(--mark)" : (tone === "dead" ? "var(--bad)" : "var(--faint)");
+      var dash = tone === "dead" ? ' stroke-dasharray="4 3"' : '';
+      var t = '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + c + '" stroke-width="1.6"' + dash + ' marker-end="url(#ah' + (tone || 'n') + ')"/>';
+      if (label) t += '<text x="' + ((x1 + x2) / 2) + '" y="' + ((y1 + y2) / 2 - 6) + '" text-anchor="middle" font-size="9" font-family="Fira Code,monospace" fill="' + c + '">' + label + '</text>';
+      return t;
+    }
+    ["n", "hot", "dead"].forEach(function (t) {
+      var c = t === "hot" ? "var(--mark)" : (t === "dead" ? "var(--bad)" : "var(--faint)");
+      s += '<defs><marker id="ah' + t + '" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">' +
+           '<path d="M0,0 L6,3 L0,6 z" fill="' + c + '"/></marker></defs>';
+    });
+
+    s += box(10, 44, 132, 44, "화면", "MapTestView");
+    s += box(240, 10, 150, 44, "뷰모델", "RunViewModel", presses ? "hot" : null);
+
+    if (two) {
+      s += box(240, 78, 150, 44, "LocationService", "화면이 만든 것", presses ? "dead" : null);
+      s += box(452, 10, 158, 44, "LocationService", "뷰모델이 만든 것", presses ? "hot" : null);
+      s += arrow(142, 58, 236, 36, "start()", presses ? "hot" : null);
+      s += arrow(142, 74, 236, 98, "로그를 읽음", presses ? "dead" : null);
+      s += arrow(390, 32, 448, 32, "켬", presses ? "hot" : null);
+    } else {
+      s += box(452, 10, 158, 44, "LocationService", "하나뿐", presses ? "hot" : null);
+      s += arrow(142, 58, 236, 36, "start()", presses ? "hot" : null);
+      s += arrow(390, 32, 448, 32, "켬", presses ? "hot" : null);
+      s += arrow(452, 60, 150, 76, "이 값을 그대로 화면에 노출", presses ? "hot" : null);
+    }
+    s += '</svg>';
+    document.getElementById("plot").innerHTML = s;
+  }
+
+  function render() {
+    draw();
+    var real = [], screen = [];
+    for (var k = 0; k < presses; k++) {
+      real.push("didUpdateLocations #" + (k + 1));
+    }
+    screen = mode === "one" ? real.slice() : [];
+
+    function fill(el, arr) {
+      el.innerHTML = arr.length
+        ? arr.slice(-4).map(function (x) { return "<div>" + x + "</div>"; }).join("")
+        : '<div class="none">비어 있음</div>';
+    }
+    fill(document.getElementById("log-screen"), screen);
+    fill(document.getElementById("log-real"), real);
+    document.getElementById("box-screen").className = "box" + (presses && !screen.length ? " alarm" : "");
+
+    var note = document.getElementById("note");
+    if (!presses) { note.className = "note"; note.textContent = "START를 눌러보자."; return; }
+    if (mode === "two") {
+      note.className = "note alarm";
+      note.innerHTML = "위치가 <b>" + real.length + "번</b> 들어왔는데 화면은 여전히 비어 있다. 켜진 건 뷰모델이 들고 있는 물건이고, 화면이 보고 있는 건 <b>화면이 따로 만들어둔 다른 물건</b>이기 때문이다. 에러도 안 나고 아무 일도 안 일어난 것처럼 보여서 원인을 찾기가 더 어렵다.";
+    } else {
+      note.className = "note fine";
+      note.innerHTML = "화면이 자기 것을 따로 만들지 않고 <b>뷰모델이 들고 있는 값만 꺼내 쓰게</b> 하면, 물건이 하나뿐이라 켠 쪽과 보는 쪽이 어긋날 수가 없다.";
+    }
+  }
+
+  document.getElementById("start").addEventListener("click", function () { if (presses < 9) presses++; render(); });
+  document.getElementById("reset").addEventListener("click", function () { presses = 0; render(); });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.dataset.mode; presses = 0;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AsyncStream Continuation Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --mark-bg:#e8effc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --mark-bg:#14203a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+  @media (max-width:520px){ .row{grid-template-columns:repeat(2,1fr);} }
+
+  .stage { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:11px 12px; }
+  .stage h2 { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 10px; font-weight:500; }
+  .pipes { display:flex; flex-wrap:wrap; gap:6px; min-height:96px; align-content:flex-start; }
+  .pipe { border:1px solid var(--line); border-radius:7px; background:var(--bg); padding:6px 9px;
+    font-family:'Fira Code',monospace; font-size:10.5px; color:var(--dim); }
+  .pipe b { display:block; color:var(--ink); font-size:11px; font-weight:600; }
+  .pipe.live { border-color:var(--ok); background:var(--ok-bg); }
+  .pipe.live b { color:var(--ok); }
+  .pipe.stale { border-color:var(--bad); background:var(--bad-bg); color:var(--bad); }
+  .pipe.stale b { color:var(--bad); }
+  .empty { font-family:'Fira Code',monospace; font-size:11px; color:var(--faint); }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>파이프를 새로 깔 것인가, 한 번만 깔 것인가</h1>
+<p class="lead"><code>AsyncStream</code>은 값이 흘러 나오는 파이프다. 위치가 들어올 때마다 <code>streamFlightData(location)</code>을 부르면 그때마다 <b>파이프를 새로 하나씩 깐다.</b> 값 하나 흘려보내고 버려지는 파이프가 계속 쌓인다.</p>
+
+<div class="bar">
+  <span>스트림</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-mode="each" aria-pressed="true">업데이트마다 새로 만들기</button>
+    <button type="button" data-mode="once" aria-pressed="false">한 번 만들고 계속 흘리기</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn primary" id="tick">위치 하나 들어옴</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">받은 위치</div><div class="v" id="v-loc">--</div></div>
+  <div class="cell"><div class="k">만든 스트림</div><div class="v" id="v-stream">--</div></div>
+  <div class="cell"><div class="k">만든 Task</div><div class="v" id="v-task">--</div></div>
+  <div class="cell"><div class="k">화면 거리</div><div class="v" id="v-dist">--</div></div>
+</div>
+
+<div class="stage">
+  <h2>지금까지 만들어진 파이프</h2>
+  <div class="pipes" id="pipes"></div>
+</div>
+<div class="note" id="note">"위치 하나 들어옴"을 눌러보자.</div>
+
+<script>
+(function () {
+  "use strict";
+  var STEP = 4.6;   // 위치 하나당 늘어나는 거리(m)
+  var mode = "each", n = 0;
+
+  function render() {
+    var streams = mode === "each" ? n : Math.min(n, 1);
+    var tasks = mode === "each" ? n : Math.min(n, 1);
+    var dist = n * STEP;
+
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-loc", n + "개");
+    set("v-stream", streams + "개", mode === "each" && n > 1 ? "alarm" : (n ? "good" : ""));
+    set("v-task", tasks + "개", mode === "each" && n > 1 ? "alarm" : (n ? "good" : ""));
+    set("v-dist", dist.toFixed(1) + " m");
+
+    var host = document.getElementById("pipes");
+    if (!n) { host.innerHTML = '<span class="empty">아직 없음</span>'; }
+    else if (mode === "each") {
+      var html = "";
+      var from = Math.max(0, streams - 11);
+      if (from > 0) html += '<span class="empty">앞의 ' + from + '개 생략</span>';
+      for (var k = from; k < streams; k++) {
+        var live = k === streams - 1;
+        html += '<div class="pipe ' + (live ? "live" : "stale") + '"><b>스트림 #' + (k + 1) + '</b>값 1개 흘리고 ' + (live ? "방금 열림" : "버려짐") + '</div>';
+      }
+      host.innerHTML = html;
+    } else {
+      host.innerHTML = '<div class="pipe live" style="min-width:220px"><b>스트림 #1</b>계속 열려 있음 · 지금까지 ' + n + '개 흘려보냄</div>';
+    }
+
+    var note = document.getElementById("note");
+    if (!n) { note.className = "note"; note.textContent = '"위치 하나 들어옴"을 눌러보자.'; return; }
+    if (mode === "each") {
+      note.className = "note alarm";
+      note.innerHTML = "위치 " + n + "개를 받는 동안 파이프를 <b>" + streams + "개</b> 깔았고, 그걸 읽으려고 만든 Task도 <b>" + tasks + "개</b>다. " +
+        "화면의 거리는 멀쩡히 늘어나니까 <b>겉으로는 잘 되는 것처럼 보인다.</b> 값을 하나 흘리고 버려지는 파이프가 계속 쌓이는 게 문제다. " +
+        "10km를 뛰면 이게 수천 개가 된다.";
+    } else {
+      note.className = "note fine";
+      note.innerHTML = "파이프는 <b>처음 한 번만</b> 깔았다. 그 뒤로는 위치가 들어올 때마다 이미 열려 있는 파이프로 값만 흘려보낸다. " +
+        "위치가 " + n + "개 들어왔는데 파이프도 Task도 여전히 하나뿐이다.";
+    }
+  }
+
+  document.getElementById("tick").addEventListener("click", function () { if (n < 40) n++; render(); });
+  document.getElementById("reset").addEventListener("click", function () { n = 0; render(); });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.dataset.mode; n = 0;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

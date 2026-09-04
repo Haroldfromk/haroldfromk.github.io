@@ -29,6 +29,8 @@ published: true
 
 `horizontalAccuracy` 기준으로 신호 강도를 판단하는 방식은 아래와 같다. Apple 공식 문서에 따르면 `horizontalAccuracy`는 위치의 반경 오차(미터)를 나타내며, 값이 음수면 유효하지 않은 위치다.
 
+이름이 "정확도"라서 클수록 좋을 것 같은데 반대다. 이 값은 **"지금 알려준 위치가 이 정도 반경 안 어딘가에 있다"는 뜻**이라, 작을수록 좁게 짚었다는 의미다. 5m면 반경 5m 원 안, 50m면 반경 50m 원 안이다. 그래서 10 미만을 STRONG으로 잡았다.
+
 [CLLocation.horizontalAccuracy Docs](https://developer.apple.com/documentation/corelocation/cllocation/horizontalaccuracy)
 
 ```swift

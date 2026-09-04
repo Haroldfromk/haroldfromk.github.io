@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Ordering Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --mark-bg:#e8effc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --mark-bg:#14203a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:16px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+
+  .steps { display:flex; flex-direction:column; gap:5px; }
+  .st { display:grid; grid-template-columns:22px 74px 1fr; gap:9px; align-items:flex-start;
+    padding:7px 10px; border-radius:7px; border:1px solid var(--line); background:var(--panel);
+    font-size:12px; line-height:1.5; color:var(--faint); }
+  .st .n { font-family:'Fira Code',monospace; font-size:10px; font-weight:600; color:var(--faint); padding-top:2px; }
+  .st .who { font-family:'Fira Code',monospace; font-size:9.5px; padding:2px 6px; border-radius:4px;
+    border:1px solid var(--line); text-align:center; color:var(--faint); white-space:nowrap; }
+  .st.done { color:var(--dim); }
+  .st.now { background:var(--mark-bg); border-color:var(--mark); color:var(--ink); }
+  .st.now .n, .st.now .who { color:var(--mark); border-color:var(--mark); }
+  .st.skip { opacity:.45; }
+  .st.fail { background:var(--bad-bg); border-color:var(--bad); color:var(--ink); }
+  .st.fail .n, .st.fail .who { color:var(--bad); border-color:var(--bad); }
+  .st b { font-weight:600; color:var(--ink); }
+  .st code { font-family:'Fira Code',monospace; font-size:11px; }
+  @media (max-width:520px){ .st{grid-template-columns:20px 1fr; } .st .who{display:none;} }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>어느 쪽이 먼저 끝나는지 아무도 보장해주지 않는다</h1>
+<p class="lead"><code>Task { }</code>는 <b>일을 맡겨놓고 곧바로 다음 줄로 넘어간다.</b> 맡긴 일이 끝나기를 기다려주지 않는다. 그래서 "좌표를 꺼낸 뒤에 초기화"라고 코드에 써놔도, 실제로는 초기화가 먼저 끝날 수 있다.</p>
+
+<div class="bar">
+  <span>코드 모양</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-mode="split" aria-pressed="true">함수 안에서 각자 Task</button>
+    <button type="button" data-mode="one" aria-pressed="false">하나의 Task 안에서 await</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn" id="step">한 걸음</button>
+  <button type="button" class="btn primary" id="play">TOUCHDOWN 누르기</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">Actor가 들고 있는 좌표</div><div class="v" id="v-actor">--</div></div>
+  <div class="cell"><div class="k">뷰모델이 받아온 좌표</div><div class="v" id="v-vm">--</div></div>
+  <div class="cell"><div class="k">저장된 좌표</div><div class="v" id="v-saved">--</div></div>
+</div>
+
+<div class="steps" id="steps"></div>
+<div class="note" id="note">TOUCHDOWN을 눌러 무슨 순서로 실행되는지 보자.</div>
+
+<script>
+(function () {
+  "use strict";
+  var N = 412;   // 러닝 중 쌓인 좌표 개수
+  var mode = "split", i = -1, timer = null;
+
+  function plan() {
+    if (mode === "split") {
+      return [
+        { who: "버튼", t: "<code>saveRunningData()</code>를 부른다." },
+        { who: "뷰모델", t: "<code>getCoordinates()</code>를 부른다. 안에서 <code>Task</code>를 <b>시작만 하고 곧바로 반환</b>한다." },
+        { who: "버튼", t: "다음 줄인 <code>resetState()</code>가 그대로 실행된다. 맡긴 일이 끝났는지는 아무도 안 본다.", reset: true },
+        { who: "Actor", t: "초기화가 먼저 끝나서 <b>좌표 배열이 비워졌다.</b>" },
+        { who: "Task", t: "이제서야 맡긴 일이 실행된다. Actor에게 좌표를 달라고 한다.", fetch: true },
+        { who: "Task", t: "받아온 건 <b>빈 배열</b>이다. 이미 비워진 뒤였으니까.", fail: true },
+        { who: "저장", t: "좌표 0개가 저장된다. 에러는 안 난다. 지도만 안 그려진다." }
+      ];
+    }
+    return [
+      { who: "버튼", t: "<code>Task</code> 하나를 열고 그 안에서 순서대로 진행한다." },
+      { who: "Task", t: "<code>await</code>로 Actor에게 좌표를 달라고 하고, <b>받을 때까지 기다린다.</b>", fetch: true },
+      { who: "Task", t: "좌표 " + N + "개를 받았다." },
+      { who: "저장", t: "받아둔 좌표를 <code>SwiftDataCoordinate</code>로 바꿔 저장한다.", save: true },
+      { who: "Task", t: "저장이 끝난 뒤에야 <code>resetState()</code>를 부른다.", reset: true },
+      { who: "Actor", t: "이제 좌표 배열을 비운다. 필요한 값은 이미 다 꺼낸 뒤다." }
+    ];
+  }
+
+  function stateAt(upto) {
+    var st = { actor: N, vm: 0, saved: 0, lost: false };
+    var steps = plan();
+    for (var k = 0; k <= upto && k < steps.length; k++) {
+      var s = steps[k];
+      if (s.reset) st.actor = 0;
+      if (s.fetch) st.vm = st.actor;
+      if (s.fail) st.lost = true;
+      if (s.save) st.saved = st.vm;
+    }
+    if (mode === "split" && upto >= steps.length - 1) st.saved = st.vm;
+    return st;
+  }
+
+  function render() {
+    var steps = plan();
+    var st = stateAt(i);
+    var set = function (id, v, cls) {
+      var e = document.getElementById(id); e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    };
+    set("v-actor", st.actor + "개", i >= 0 && st.actor === 0 ? "" : "");
+    set("v-vm", st.vm + "개", st.lost ? "alarm" : "");
+    set("v-saved", (i >= steps.length - 1 ? st.saved : "-") + (i >= steps.length - 1 ? "개" : ""),
+        i >= steps.length - 1 ? (st.saved ? "good" : "alarm") : "");
+
+    document.getElementById("steps").innerHTML = steps.map(function (s, k) {
+      var cls = "st";
+      if (k < i) cls += " done";
+      else if (k === i) cls += (s.fail ? " fail" : " now");
+      else cls += " skip";
+      return '<div class="' + cls + '"><span class="n">' + (k + 1) + '</span><span class="who">' + s.who + '</span><span>' + s.t + '</span></div>';
+    }).join("");
+
+    var note = document.getElementById("note");
+    if (i < 0) { note.className = "note"; note.textContent = "TOUCHDOWN을 눌러 무슨 순서로 실행되는지 보자."; return; }
+    if (i < steps.length - 1) { note.className = "note"; note.innerHTML = "진행 중이다. <b>저장된 좌표</b> 칸이 마지막에 몇 개가 되는지를 보자."; return; }
+    if (mode === "split") {
+      note.className = "note alarm";
+      note.innerHTML = "코드에는 <b>좌표를 꺼내고 나서 초기화</b>라고 써 있는데, 실제로는 초기화가 먼저 끝났다. " +
+        "<code>Task</code>가 일을 맡겨놓고 바로 다음 줄로 넘어가기 때문이다. 좌표 " + N + "개가 통째로 사라졌는데 에러 하나 안 난다.";
+    } else {
+      note.className = "note fine";
+      note.innerHTML = "같은 <code>Task</code> 안에서 <code>await</code>로 기다렸다가 다음 줄로 갔다. " +
+        "순서를 보장하는 건 함수를 나눴는지 합쳤는지가 아니라, <b>기다렸는지 아닌지</b>다.";
+    }
+  }
+
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  function step(){ if(i>=plan().length-1){stop();return;} i++; render(); }
+  document.getElementById("step").addEventListener("click", function(){ stop(); step(); });
+  document.getElementById("reset").addEventListener("click", function(){ stop(); i=-1; render(); });
+  document.getElementById("play").addEventListener("click", function(){
+    stop(); i=-1; render(); timer=setInterval(step, 950);
+  });
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      stop(); mode = b.dataset.mode; i = -1;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

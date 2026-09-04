@@ -670,6 +670,21 @@ func updatePhase(_ phase: FlightPhase) {
 
 하지만 여기서 문제가 생긴다. 현재 `FlightData`는 `processLocation()` 내부에서만 yield되는 구조라, `updatePhase()`를 호출해도 다음 위치 업데이트가 오기 전까지는 View에 반영되지 않는다.
 
+이 지연이 얼마나 되는지 직접 보면 이렇다.
+
+<iframe
+  src="/assets/demo/phase_stream_simulator.html"
+  width="100%"
+  height="535px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+상태는 바로 바뀌는데 화면은 다음 GPS가 들어와야 바뀐다. 더 나쁜 건 이 간격이 **일정하지 않다**는 점이다. 위치는 `distanceFilter`만큼 실제로 움직여야 들어오니까, 빨리 뛰면 짧고 걸으면 길어진다. 하필 MINIMUMS는 목표 거리에 다 와서 속도를 줄일 만한 시점에 뜨는 경고라 더 나쁘다.
+
+결국 **위치 데이터와 상태는 바뀌는 계기가 다르다.** 위치는 GPS가 정하고, 상태는 사람이 버튼을 누르거나 조건이 충족될 때 바뀐다. 계기가 다른 두 값을 같은 통로에 태워두면 느린 쪽에 맞춰지게 된다.
+
 Dynamic Island에서 실시간으로 반영하려면 즉각적인 업데이트가 필요하다. 그런데 그러자니 `FlightData` 전체를 건드려서 값을 전달해야 한다.
 
 ---

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haptic Pattern Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --amber:#b45309; --ok:#0d9276; --mark:#2563eb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --amber:#fbbf24; --ok:#34d399; --mark:#60a5fa;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:8px 12px; border-radius:7px; white-space:nowrap; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .btn:disabled { opacity:.45; cursor:default; }
+
+  .bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+  .bar .hint { font-size:11.5px; color:var(--faint); font-family:'Fira Code',monospace; }
+
+  .lane { border:1px solid var(--line); border-radius:9px; background:var(--panel);
+    padding:11px 12px; margin-bottom:9px; }
+  .lane .top { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-bottom:9px; }
+  .lane .name { font-family:'Fira Code',monospace; font-size:12px; font-weight:600; }
+  .lane .name em { font-style:normal; font-weight:400; color:var(--faint); margin-left:7px; font-size:11px; }
+  .lane.sink .name { color:var(--ok); }
+  .lane.before .name { color:var(--amber); }
+  .lane.after .name { color:var(--bad); }
+  .lane .track { position:relative; height:34px; border-radius:6px; background:var(--bg);
+    border:1px solid var(--line); overflow:hidden; }
+  .lane .track .sec { position:absolute; top:0; bottom:0; width:1px; background:var(--line); }
+  .lane .track .pulse { position:absolute; top:6px; width:5px; height:22px; border-radius:3px;
+    background:currentColor; opacity:.32; transition:opacity .06s, transform .06s; }
+  .lane .track .pulse.hit { opacity:1; transform:scaleY(1.28); }
+  .lane.sink .track { color:var(--ok); }
+  .lane.before .track { color:var(--amber); }
+  .lane.after .track { color:var(--bad); }
+  .lane .axis { display:flex; justify-content:space-between; margin-top:4px;
+    font-family:'Fira Code',monospace; font-size:9px; color:var(--faint); }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+</style>
+</head>
+<body>
+
+<h1>손목에서 두 경고를 구분할 수 있는가</h1>
+<p class="lead">화면을 안 보고도 SINK RATE와 OVERSPEED를 구분하려면 진동 리듬 자체가 달라야 한다. 아래 세 줄이 각각의 패턴이고, 가로축은 실제 시간(0.9초)이다.</p>
+
+<div class="bar">
+  <button type="button" class="btn primary" id="all">세 줄 이어서 재생</button>
+  <span class="hint">재생하면 리듬을 소리로도 들려준다</span>
+</div>
+
+<div id="lanes"></div>
+<div class="note" id="note">방향만 다르고 횟수와 간격이 비슷하면, 손목에서는 거의 같은 진동으로 느껴진다.</div>
+
+<script>
+(function () {
+  "use strict";
+  var SPAN = 0.9;   // 가로축 전체 길이(초)
+
+  var LANES = [
+    { key:"sink",   cls:"sink",   name:"SINK RATE",       meta:"위로 2회 · 0.45초 간격", count:2, gap:0.45, freq:520 },
+    { key:"before", cls:"before", name:"OVERSPEED 수정 전", meta:"아래로 3회 · 0.2초 간격", count:3, gap:0.20, freq:300 },
+    { key:"after",  cls:"after",  name:"OVERSPEED 수정 후", meta:"아래로 4회 · 0.15초 간격", count:4, gap:0.15, freq:300 }
+  ];
+
+  var host = document.getElementById("lanes");
+  host.innerHTML = LANES.map(function (L) {
+    var pulses = "";
+    for (var k = 0; k < L.count; k++) {
+      var t = k * L.gap;
+      pulses += '<div class="pulse" data-lane="' + L.key + '" data-i="' + k + '" style="left:' + (t / SPAN * 100).toFixed(2) + '%"></div>';
+    }
+    var secs = "";
+    for (var m = 1; m < 3; m++) secs += '<div class="sec" style="left:' + (m * 0.3 / SPAN * 100).toFixed(2) + '%"></div>';
+    return '<div class="lane ' + L.cls + '">' +
+      '<div class="top"><div class="name">' + L.name + '<em>' + L.meta + '</em></div>' +
+      '<button type="button" class="btn" data-play="' + L.key + '">재생</button></div>' +
+      '<div class="track">' + secs + pulses + '</div>' +
+      '<div class="axis"><span>0초</span><span>0.3초</span><span>0.6초</span><span>0.9초</span></div>' +
+      '</div>';
+  }).join("");
+
+  var ctx = null;
+  function blip(freq, at) {
+    if (!ctx) return;
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = "sine"; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.exponentialRampToValueAtTime(0.16, at + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, at + 0.075);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(at); o.stop(at + 0.09);
+  }
+
+  var timers = [];
+  function clearAll() {
+    timers.forEach(clearTimeout); timers = [];
+    document.querySelectorAll(".pulse.hit").forEach(function (p) { p.classList.remove("hit"); });
+  }
+
+  function playLane(L, offsetMs) {
+    if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { ctx = null; } }
+    var base = ctx ? ctx.currentTime + offsetMs / 1000 + 0.04 : 0;
+    for (var k = 0; k < L.count; k++) {
+      (function (k) {
+        var ms = offsetMs + k * L.gap * 1000;
+        blip(L.freq, base + k * L.gap);
+        timers.push(setTimeout(function () {
+          var el = document.querySelector('.pulse[data-lane="' + L.key + '"][data-i="' + k + '"]');
+          if (!el) return;
+          el.classList.add("hit");
+          timers.push(setTimeout(function () { el.classList.remove("hit"); }, 130));
+        }, ms));
+      })(k);
+    }
+    return L.count * L.gap * 1000;
+  }
+
+  document.querySelectorAll("[data-play]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      clearAll();
+      var L = LANES.filter(function (x) { return x.key === b.dataset.play; })[0];
+      playLane(L, 0);
+    });
+  });
+
+  document.getElementById("all").addEventListener("click", function () {
+    clearAll();
+    var off = 0;
+    LANES.forEach(function (L) {
+      playLane(L, off);
+      off += Math.max(700, L.count * L.gap * 1000 + 500);
+    });
+    var note = document.getElementById("note");
+    note.innerHTML = "SINK RATE는 <b>두 번을 천천히</b>, 수정 후 OVERSPEED는 <b>네 번을 몰아서</b> 친다. 전체 길이는 0.45초로 거의 같은데 그 안에 들어가는 개수가 두 배라, 손목에서 느껴지는 급한 정도가 확실히 갈린다. 수정 전(3회 0.2초)은 그 중간이라 SINK RATE와 헷갈렸다.";
+  });
+})();
+</script>
+</body>
+</html>

@@ -206,6 +206,19 @@ GeometryReader { proxy in
 
 배지/지도 카드/통계 박스는 원래 크기 그대로 두고, `SplitsChartView`에만 `.frame(maxHeight: .infinity)`를 줬다. `VStack`의 높이가 `proxy.size.height`로 고정돼 있으니까, 다른 항목들이 자기 크기만큼 차지하고 남는 공간을 이 스플릿 박스 하나가 전부 가져간다. `SplitsChartView` 내부의 `ScrollView`도 원래 있던 `.frame(maxHeight: 260)` 고정값 대신 똑같이 `.frame(maxHeight: .infinity)`로 바꿔서, 밖에서 받은 공간만큼만 채우고 그 안에서 스플릿이 넘치면 내부적으로 스크롤되게 했다. 이러면 스플릿이 3개든 24개든 전체 화면 크기 자체는 절대 안 바뀌고, 스플릿 목록만 자기한테 주어진 공간 안에서 늘었다 줄었다 하면서 필요할 때만 그 안에서 스크롤된다. 탭바를 가릴 일 자체가 구조적으로 없어진다.
 
+두 방식이 어떻게 다른지 눈으로 볼 수 있게 만들었다. 스플릿 개수와 화면 크기를 바꿔가며 비교할 수 있다.
+
+<iframe
+  src="/assets/demo/summary_layout_simulator.html"
+  width="100%"
+  height="855px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+수정 전으로 두고 스플릿을 24개까지 늘리면 화면 밖으로 300pt 넘게 밀려나고, 스플릿 17줄과 GO TO DECK 버튼이 통째로 손이 안 닿는 곳으로 간다. 화면을 큰 기종으로 바꿔도 밀려나는 양만 줄어들 뿐 문제 자체는 그대로다. **화면 크기로는 해결되지 않는 문제**라는 게 여기서 드러난다. 수정 후로 바꾸면 어떤 조합에서도 밀려나는 게 0이다.
+
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/after.png){: width="50%" height="50%"}
 
 ---
