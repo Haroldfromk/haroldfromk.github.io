@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" width="720" height="300" role="img" aria-label="러닝을 시작할 때 부르는 reset이 방금 설정한 미션 데이터까지 지워서 GPWS가 계속 normal만 반환하던 구조와, 그것을 분리한 뒤의 모습">
+<style>
+  :root { color-scheme: light dark; }
+  .bg{fill:#ffffff}.card{fill:#f7f8fa;stroke:#e3e6ea}
+  .ok{fill:#e2f4ef;stroke:#0d9276}.no{fill:#fbeae8;stroke:#d0392b}
+  .ttl{fill:#16181d;font-weight:700}.sub{fill:#6b7280}.dim{fill:#9aa1ab}
+  .okt{fill:#0d9276}.not{fill:#d0392b}.ln{stroke:#9aa1ab}
+  text{font-family:'Fira Code',ui-monospace,SFMono-Regular,Menlo,monospace}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0d0e11}.card{fill:#141417;stroke:#27272a}
+    .ok{fill:#0d2b23;stroke:#34d399}.no{fill:#331416;stroke:#f87171}
+    .ttl{fill:#f4f4f5}.sub{fill:#a1a1aa}.dim{fill:#71717a}
+    .okt{fill:#34d399}.not{fill:#f87171}.ln{stroke:#52525b}
+  }
+</style>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" class="dim"/></marker></defs>
+<rect class="bg" x="0" y="0" width="720" height="300" rx="10"/>
+
+<!-- 단계 -->
+<rect class="card" x="24" y="30" width="196" height="48" rx="8" stroke-width="1.3"/>
+<text class="ttl" x="42" y="52" font-size="11">① ModeAView</text>
+<text class="dim" x="42" y="68" font-size="9.5">PRE-FLIGHT CHECK → getModeData()</text>
+<line class="ln" x1="222" y1="54" x2="256" y2="54" stroke-width="1.3" marker-end="url(#a)"/>
+
+<rect class="card" x="262" y="30" width="196" height="48" rx="8" stroke-width="1.3"/>
+<text class="ttl" x="280" y="52" font-size="11">② TakeoffView</text>
+<text class="dim" x="280" y="68" font-size="9.5">ROTATE → start() → reset()</text>
+<line class="ln" x1="460" y1="54" x2="494" y2="54" stroke-width="1.3" marker-end="url(#a)"/>
+
+<rect class="card" x="500" y="30" width="196" height="48" rx="8" stroke-width="1.3"/>
+<text class="ttl" x="518" y="52" font-size="11">③ PFDView</text>
+<text class="dim" x="518" y="68" font-size="9.5">GPS 들어옴 → GPWS 판정</text>
+
+<!-- before 레인 -->
+<text class="not" x="24" y="112" font-size="10.5" font-weight="700">수정 전 · modeAData</text>
+<rect class="ok" x="24" y="122" width="196" height="34" rx="7" stroke-width="1.4"/>
+<text class="okt" x="122" y="143" font-size="11" text-anchor="middle">설정됨</text>
+<rect class="no" x="262" y="122" width="196" height="34" rx="7" stroke-width="1.4"/>
+<text class="not" x="360" y="143" font-size="11" text-anchor="middle">reset() 이 nil 로 지움</text>
+<rect class="no" x="500" y="122" width="196" height="34" rx="7" stroke-width="1.4"/>
+<text class="not" x="598" y="143" font-size="11" text-anchor="middle">nil</text>
+<text class="not" x="598" y="172" font-size="10" text-anchor="middle">→ 항상 .normal 반환</text>
+
+<!-- after 레인 -->
+<text class="okt" x="24" y="212" font-size="10.5" font-weight="700">수정 후 · modeAData</text>
+<rect class="ok" x="24" y="222" width="672" height="34" rx="7" stroke-width="1.4"/>
+<text class="okt" x="360" y="243" font-size="11" text-anchor="middle">러닝이 끝날 때까지 그대로 유지된다</text>
+
+<line class="ln" x1="24" y1="274" x2="696" y2="274" stroke-width="1" stroke-dasharray="3 3"/>
+<text class="sub" x="24" y="294" font-size="11">reset() 에서 modeAData 만 빼내 clearModeAData() 로 분리했다. 지워도 되는 시점은 러닝이 끝난 뒤뿐이다.</text>
+</svg>

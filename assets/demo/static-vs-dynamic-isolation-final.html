@@ -158,7 +158,12 @@
         .btn-static-err { background: #4a5568; }
         .btn-static-ok { background: var(--success-color); }
         .btn-dynamic-run { background: #ff9500; }
-    </style>
+    
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .card { min-width: 0; }
+  }
+</style>
 </head>
 <body>
 

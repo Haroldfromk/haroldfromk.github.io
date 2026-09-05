@@ -976,7 +976,9 @@ private func determineGPWSStatus(pace: Double) async -> GPWSState {
 2. TakeoffView → ROTATE → `start()` → `reset()` → `modeAData`가 다시 nil로
 3. PFDView 진입, GPS가 들어오기 시작 → `determineGPWSStatus`는 매번 `modeAData`가 없어서 `.normal`만 반환
 
-미션을 설정한 직후에 러닝이 시작되면서, 방금 설정한 그 미션 데이터를 자기가 지워버리는 구조였다. `reset()`은 러닝 시작 전(`start()`)과 러닝 종료 후(`resetState()`) 양쪽에서 다 호출되는데, `modeAData`를 지워도 되는 시점은 종료 후뿐이었다.
+미션을 설정한 직후에 러닝이 시작되면서, 방금 설정한 그 미션 데이터를 자기가 지워버리는 구조였다.
+
+![러닝을 시작할 때 부르는 reset이 방금 설정한 미션 데이터까지 지워서 GPWS가 계속 normal만 반환하던 구조와, 그것을 분리한 뒤의 모습](/assets/img/runway/modedata-wiped-by-reset.svg){: width="720" height="300"} `reset()`은 러닝 시작 전(`start()`)과 러닝 종료 후(`resetState()`) 양쪽에서 다 호출되는데, `modeAData`를 지워도 되는 시점은 종료 후뿐이었다.
 
 `start()`가 왜 굳이 이런 방어적 리셋을 하나 더 하고 있었는지도 짚이는 게 있다. 예전에 워치가 주도하고 아이폰이 미러링만 하던 시절, 이전 러닝의 거리/좌표 같은 잔여 상태가 새 러닝에 섞여 들어오는 문제가 있었다. 그때 만든 방어 코드일 텐데, 그 대상이 원래는 `totalDistance`, `coordinateArray` 같은 위치 데이터 쪽이었지 미션 설정(`modeAData`)까지 같이 지울 이유는 없었다. 같은 `reset()` 함수 안에 다 같이 들어있다 보니 나중에 심박 모드가 `modeAData`에 의존하게 되면서 이 부분이 드러난 거다.
 

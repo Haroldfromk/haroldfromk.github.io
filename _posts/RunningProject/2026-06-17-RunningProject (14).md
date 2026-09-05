@@ -84,6 +84,10 @@ distance: (distance / 1000),
 
 ---
 
+---
+
+#### 좌표와 경고가 애초에 안 실려 있었다
+
 워치에서 러닝 종료 후 경로가 지도에 나타나지 않는 이유도 같은 곳에서 찾을 수 있다. `PFDView`의 `saveRunningData()`를 보면 된다.
 
 ```swift
@@ -127,6 +131,10 @@ func sendRunningData() {
 지금 당장 문제가 안 보이는 건 러닝을 끝내는 시점엔 보통 아이폰이 근처에 있어서 대체로 통과하기 때문이다. 테스트할 때도 기록을 확인해야 하니 늘 아이폰을 같이 들고 다녔다.
 
 그래서 이때는 그냥 넘어갔는데, 나중에 아이폰을 집에 두고 워치만 차고 나갔다가 **기록 두 개를 통째로 잃어버리고 나서야** 이 줄을 다시 보게 된다. 그 이야기는 [28번 글](https://haroldfromk.github.io/posts/RunningProject-(28)/){:target="_blank"}에 있다.
+
+---
+
+#### 워치 쪽에서 담아 보내기
 
 워치에서 이 함수가 어느 시점에 호출되는지 확인해보면 `WatchSummaryView`에서 `resetState()`가 호출될 때다.
 
@@ -261,6 +269,10 @@ distance / 1000
 // After
 distance
 ```
+
+---
+
+#### 받는 쪽에서 꺼내기
 
 그리고 좌표와 alerts를 받는 쪽인 앱의 `didReceiveUserInfo`도 함께 수정해야 한다. 보낼 때 `[[Double]]`, `[[String: Any]]` 형태로 직렬화했으니 받을 때도 동일하게 파싱해서 `SwiftDataFlight`에 채워줘야 한다.
 

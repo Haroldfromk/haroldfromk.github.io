@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Swift Concurrency Await Suspension Simulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Swift Concurrency Await Suspension Simulator</title>
     <style>
         body { font-family: -apple-system, sans-serif; background: #f5f5f7; padding: 15px; color: #1d1d1f; display: flex; flex-direction: column; align-items: center; }
         .container { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 550px; width: 100%; box-sizing: border-box; }
@@ -33,7 +34,14 @@
         
         .action-btn { width: 100%; background: #1d1d1f; color: white; border: none; padding: 14px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; }
         .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    </style>
+    
+  /* 앱은 항상 어두운 화면이라, 페이지 자체의 밝은 부분만 맞춰준다.
+     색 있는 배지 위의 흰 글자와 일부러 어둡게 그린 목업은 그대로 둔다. */
+  @media (prefers-color-scheme: dark) {
+    body { background: #0B0E14; color: #E6EDF3; }
+    h1, h2, h3 { color: #E6EDF3; }
+  }
+</style>
 </head>
 <body>
 

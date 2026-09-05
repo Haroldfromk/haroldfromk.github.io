@@ -82,7 +82,7 @@
   </div>
   <span class="sp"></span>
   <button type="button" class="btn" id="reset">처음으로</button>
-  <button type="button" class="btn primary" id="tick">위치 하나 들어옴</button>
+  <button type="button" class="btn primary" id="tick">위치 하나 더</button>
 </div>
 
 <div class="row">
@@ -96,7 +96,7 @@
   <h2>지금까지 만들어진 파이프</h2>
   <div class="pipes" id="pipes"></div>
 </div>
-<div class="note" id="note">"위치 하나 들어옴"을 눌러보자.</div>
+<div class="note" id="note">"위치 하나 더"를 눌러보자.</div>
 
 <script>
 (function () {
@@ -134,7 +134,7 @@
     }
 
     var note = document.getElementById("note");
-    if (!n) { note.className = "note"; note.textContent = '"위치 하나 들어옴"을 눌러보자.'; return; }
+    if (!n) { note.className = "note"; note.textContent = '"위치 하나 더"를 눌러보자.'; return; }
     if (mode === "each") {
       note.className = "note alarm";
       note.innerHTML = "위치 " + n + "개를 받는 동안 파이프를 <b>" + streams + "개</b> 깔았고, 그걸 읽으려고 만든 Task도 <b>" + tasks + "개</b>다. " +

@@ -212,7 +212,7 @@ func stop() {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/task.png){: width="50%" height="50%"}
 
-실행 순서를 한 걸음씩 따라가볼 수 있게 만들었다.
+실행 순서를 한 줄씩 따라가볼 수 있게 만들었다.
 
 <iframe
   src="/assets/demo/task_ordering_simulator.html"

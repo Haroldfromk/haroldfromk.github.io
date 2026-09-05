@@ -206,7 +206,27 @@
         .btn-prob { background: var(--sendable-color); }
         .btn-sol { background: var(--actor-color); }
         h2 { font-size: 16px; margin: 0 0 10px 0; }
-    </style>
+    
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-color: #0B0E14;
+      --card-bg: #161A22;
+      --text-color: #E6EDF3;
+      --border-color: #252D3A;
+    }
+  }
+
+  /* 950px 규칙만으로는 폰에서 카드가 여전히 화면보다 넓다. */
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .card { padding: 14px; border-radius: 12px; }
+  }
+
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .card { min-width: 0; }
+  }
+</style>
 </head>
 <body>
 

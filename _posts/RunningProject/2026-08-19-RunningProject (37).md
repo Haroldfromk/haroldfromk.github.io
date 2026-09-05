@@ -43,7 +43,7 @@ Watch에서 CUSTOM 거리를 Digital Crown으로 조절하다가 이상한 걸 �
 Crown 값을 거리 자체가 아니라, 미리 정해둔 거리 배열의 인덱스로 바꿨다. 100m는 배열 맨 앞에 예외로 두고, 그 다음부터는 0.5km 단위로 채우되 하프/풀마라톤(21.1km, 42.2km)만 격자 중간에 따로 끼워 넣었다.
 
 ```swift
-// after
+// 새로 만든 눈금 배열
 private let distanceSteps: [Double] = {
     var steps: [Double] = [0.1]
     var v = 0.5
@@ -82,6 +82,16 @@ Crown은 이 배열의 인덱스만 오가고, 실제 거리는 인덱스로 배
 ```
 
 프리셋 버튼(3K/5K/10K/HALF/FULL)도 거리 대신 인덱스를 찾아서 설정하도록 같이 고쳤다.
+
+```swift
+// before
+Button {
+    distance = preset.value
+    crownValue = preset.value
+} label: {
+    // 생략
+}
+```
 
 ```swift
 // after
@@ -233,9 +243,17 @@ enum RunReminderService {
 
 그림으로 보면 이 방식의 핵심이 **살아남는 예약이 항상 하나뿐**이라는 점이다. 러닝을 세 번 하면 예약도 세 번 잡히는데, 앞의 두 개는 새로 잡을 때 같이 지워진다. 그래서 알림 기준은 언제나 마지막 러닝이 된다.
 
+---
+
+### 트리거와 가드를 고른 기준
+
 트리거는 [`UNCalendarNotificationTrigger`](https://developer.apple.com/documentation/usernotifications/uncalendarnotificationtrigger) 대신 [`UNTimeIntervalNotificationTrigger`](https://developer.apple.com/documentation/usernotifications/untimeintervalnotificationtrigger)를 썼다. 매주 같은 요일/시각에 반복되는 알림이 아니라 "마지막 러닝으로부터 정확히 7일 뒤"라는 상대적인 시점만 필요해서, 절대 시각(`lastRunDate + 7일`)을 `timeIntervalSinceNow`로 변환해 넘기는 쪽이 더 맞는 방식이었다.
 
 `fireDate > .now` 가드도 그냥 넣은 방어 코드가 아니다. 앱을 오래 안 켜서 예약 시점이 이미 지나버린 경우, 앱을 켜자마자 알림이 즉시 뜨는 걸 막는 역할을 한다. 이 경우엔 그냥 아무 알림도 새로 잡지 않고 넘어가는데, 다음 러닝을 저장하는 시점에 `reschedule`이 다시 호출되면서 정상적인 7일 뒤 시점으로 재계산된다.
+
+---
+
+### 어디서 다시 예약을 잡는가
 
 이 재예약을 호출하는 지점이 세 곳이다. 아이폰이 러닝을 저장할 때(`RunViewModel.saveRunningData()`), 워치 단독 기록이 아이폰에 동기화될 때(`HomeView.drainPendingWatchData()`), 그리고 앱을 켤 때(`HomeView.onAppear`). 마지막 건 재설치나 첫 실행처럼 예약이 아예 없던 경우를 보정하기 위해서다.
 
@@ -246,6 +264,10 @@ enum RunReminderService {
 | KO | 관제탑에서 호출 중 | 일주일째 활주로가 비어있어요. 오늘 다시 이륙해볼까요? |
 | EN | Tower calling | The runway's been quiet for a week. Ready for takeoff again? |
 | JA | 管制塔より呼び出し | 滑走路が1週間静かです。そろそろ離陸しませんか？ |
+
+---
+
+### 권한을 언제 물어볼 것인가
 
 권한 요청은 언제 할지도 고민했다. 온보딩이 이미 HealthKit, 모션 권한까지 요청하는 게 많은 편이라, 페이지마다 따로 묻는 대신 기존에 있던 마지막 페이지(개인정보 동의) 완료 시점의 배치 요청에 [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:)) 호출을 그대로 얹었다. 이미 허용/거부가 결정된 상태에서 다시 호출해도 시스템이 조용히 무시하기 때문에, 온보딩 도중 놓쳤더라도 다음에 `HomeView.onAppear`에서 자연스럽게 다시 시도된다.
 

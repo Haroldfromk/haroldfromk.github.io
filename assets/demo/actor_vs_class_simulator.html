@@ -77,6 +77,12 @@
         border-radius: 10px; padding: 10px; font-family: monospace; font-size: 10px;
         border: 1px solid rgba(255,255,255,0.05); line-height: 1.5; flex-shrink: 0;
     }
+
+  /* 폰 폭에서 헤더의 버튼 줄이 안 접혀 옆으로 밀린다. */
+  @media (max-width: 480px) {
+    .header { flex-wrap: wrap; }
+    .buttons { flex-wrap: wrap; }
+  }
 </style>
 </head>
 <body>

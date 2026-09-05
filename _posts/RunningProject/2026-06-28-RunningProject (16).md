@@ -87,6 +87,10 @@ if hasCompletedOnboarding {
 @Query(sort: \SwiftDataFlight.date, order: .reverse) private var flights: [SwiftDataFlight]
 ```
 
+---
+
+### 건강 앱 데이터 대신 우리 기록을 쓰기로
+
 4일차였는지 기억이 안 나는데, 그때 아마 `HealthKitService`에 fetch 목적으로 만들어둔 게 있었다.
 
 ```swift
@@ -111,6 +115,10 @@ func fetchDistance() async {
 일단은 `HealthKitService` 내의 fetch 함수들은 혹시 다른 데 쓰일지도 모르니 지우지는 않고 킵해두기로 했다.
 
 대신 RunWay 앱으로 직접 기록한 러닝만 정확히 보여줘야 하니, SwiftData의 `SwiftDataFlight`를 그대로 쓰는 방향으로 갔다.
+
+---
+
+### 달력 그리드를 그리는 로직
 
 캘린더 작업은 크게 두 부분으로 나뉜다. 하나는 "이 달의 합계/평균을 계산하는 로직"이고, 다른 하나는 "달력 그리드를 어떻게 구성할지 결정하는 로직"이다.
 
@@ -209,9 +217,9 @@ LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
 
 ---
 
-이제 `HomeView`에도 하드코딩되어 있던 부분을 고쳐보도록 한다.
+### 홈 화면 주간 차트로 넘어가기
 
-여기서의 포인트는 ComputedProperty라고 생각한다.
+이제 `HomeView`에도 하드코딩되어 있던 부분을 고쳐보도록 한다. 여기서의 포인트는 ComputedProperty라고 생각한다.
 
 ```swift
 var weeklyDistances: [Double] {
@@ -242,6 +250,10 @@ var weeklyTotalKm: Double {
 ```
 
 `weeklyTotalKm`은 그 7일치 배열을 그냥 다 더한 값이다. "21.4 km total this week" 같은 하단 텍스트에 쓰인다.
+
+---
+
+### 일요일에 뛴 기록이 통째로 빠지던 문제
 
 ```swift
 // before
@@ -284,7 +296,9 @@ var weeklyAvgPace: String {
 
 ---
 
-그리고 요일 텍스트에 토요일(인덱스 5)만 항상 초록색으로 표시하던 하드코딩도 남아 있었다. 
+### 오늘 요일 강조가 토요일에 고정돼 있던 것
+
+요일 텍스트에 토요일(인덱스 5)만 항상 초록색으로 표시하던 하드코딩도 남아 있었다. 
 
 디자인 목업 때 `오늘`을 표시하려고 고정 인덱스를 썼던 거였는데, 이제 요일이 실제 날짜 기반으로 바뀌었으니 오늘에 해당하는 요일을 동적으로 계산해서 강조해야 했다.
 

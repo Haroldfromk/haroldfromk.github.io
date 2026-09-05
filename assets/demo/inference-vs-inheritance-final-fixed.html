@@ -168,7 +168,12 @@
         }
         .btn:hover { opacity: 0.9; }
         .btn:disabled { background: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
-    </style>
+    
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .card { min-width: 0; }
+  }
+</style>
 </head>
 <body>
 

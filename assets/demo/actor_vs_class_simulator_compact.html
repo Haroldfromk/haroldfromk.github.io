@@ -77,6 +77,11 @@
         border-radius: 10px; padding: 10px; font-family: monospace; font-size: 10px;
         border: 1px solid rgba(255,255,255,0.05); line-height: 1.5; flex-shrink: 0;
     }
+
+  /* 폰 폭에서는 버튼 줄이 넘쳐서 가로로 밀린다. 줄바꿈을 허용한다. */
+  @media (max-width: 480px) {
+    .buttons { flex-wrap: wrap; }
+  }
 </style>
 </head>
 <body>

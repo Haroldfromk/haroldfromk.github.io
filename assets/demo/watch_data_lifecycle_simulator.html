@@ -93,7 +93,7 @@
   </div>
   <span class="sp"></span>
   <button type="button" class="btn" id="reset">처음으로</button>
-  <button type="button" class="btn" id="step">한 걸음</button>
+  <button type="button" class="btn" id="step">다음 단계</button>
   <button type="button" class="btn primary" id="play">재생</button>
 </div>
 
@@ -105,7 +105,7 @@
 </div>
 
 <div class="steps" id="steps"></div>
-<div class="note" id="note">한 걸음씩 눌러 무슨 일이 벌어지는지 따라가 보자.</div>
+<div class="note" id="note">"다음 단계"를 눌러 무슨 일이 벌어지는지 따라가 보자.</div>
 
 <script>
 (function () {
@@ -194,7 +194,7 @@
     }).join("");
 
     var note = document.getElementById("note");
-    if (i < 0) { note.className = "note"; note.textContent = "한 걸음씩 눌러 무슨 일이 벌어지는지 따라가 보자."; return; }
+    if (i < 0) { note.className = "note"; note.textContent = "\"다음 단계\"를 눌러 무슨 일이 벌어지는지 따라가 보자."; return; }
     if (i < steps.length - 1) {
       note.className = "note";
       note.innerHTML = "아직 진행 중이다. <b>디스크에 저장</b> 칸이 언제 채워지는지를 눈여겨보자.";

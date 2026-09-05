@@ -88,6 +88,10 @@ private func recordSplitSample(at timestamp: Date) async {
 }
 ```
 
+---
+
+### 평균을 왜 마지막에 한 번만 내는가
+
 심박/케이던스 평균은 그때그때 나눠서 계산하지 않고, 합(`splitHeartRateSum`)과 개수(`splitHeartRateCount`)만 계속 쌓아뒀다가 구간이 끝나는 순간에 딱 한 번 나눈다. 
 
 `count`가 따로 필요한 이유는, `sum`만 쌓아두면 나중에 그걸 몇 개로 나눠야 진짜 평균인지 알 방법이 없기 때문이다. `recordSplitSample`은 GPS 위치가 들어올 때마다 `currentHeartRate`를 한 번씩 관찰하는 셈인데, 이 관찰 하나하나를 똑같은 무게로 쳐서 평균에 반영하는 방식이라 유효한 관찰이 들어올 때마다 `sum`엔 값을 더하고 `count`는 1 늘린다. 
@@ -96,6 +100,8 @@ private func recordSplitSample(at timestamp: Date) async {
 
 ---
 
+### if가 아니라 while을 쓴 이유
+
 `if`가 아니라 `while`을 쓴 이유는 GPS 업데이트 한 번에 1km를 훌쩍 넘겨버리는 경우 때문이다. 
 
 예를 들어 신호가 잠깐 끊겼다가 몇 초 뒤에 다시 들어오면, 그 사이 실제로는 1.3km를 이동했는데 위치 업데이트는 한 번만 오는 상황이 생길 수 있다. 
@@ -103,6 +109,8 @@ private func recordSplitSample(at timestamp: Date) async {
 `if`로 짜면 이런 경우 스플릿 하나를 통째로 놓치는데, `while`로 돌리면 이 한 번의 업데이트 안에서도 경계를 넘을 때마다 스플릿을 하나씩 만들어서 빠짐없이 챙긴다. `splitStartDistance`는 항상 "다음 스플릿이 시작되는 지점"을 가리키는데, 스플릿을 하나 만들 때마다 여기에 1000을 더해서 `while` 조건이 다음 1km 경계를 기준으로 다시 평가되게 한다.
 
 ---
+
+### 경과 시간을 GPS 시각으로 재는 이유
 
 경과 시간을 별도 타이머로 재지 않고 `CLLocation.timestamp`끼리 뺀 이유는, `RunViewModel`/`WatchViewModel`에 이미 있는 1초 타이머는 화면 갱신용이라 GPS 업데이트 시점과 정확히 맞아떨어지지 않기 때문이다. GPS 위치 자체에 찍혀 있는 시각을 그대로 쓰면 스플릿 시각이 항상 실제 위치 데이터와 동기화된 채로 남는다.
 
@@ -316,6 +324,10 @@ func finalizePendingSplit(at timestamp: Date = Date()) -> Split? {
 
 이걸 위해 `Split`과 `SwiftDataSplit`에 `distance` 필드를 하나씩 추가했다. 1km마다 자동으로 끊기는 기존 스플릿들은 어차피 항상 정확히 1.0이라 굳이 저장 안 해도 됐지만, 이 마지막 자투리 스플릿은 매번 실제 거리가 달라지니 꼭 있어야 했다.
 
+---
+
+### 자투리 스플릿만 다르게 표시하기
+
 화면에 보여줄 때도 이 자투리 스플릿만 다르게 표시해야 했다. 나머지 스플릿은 다 "KM"이라고 붙어 있는데, 이 마지막 스플릿에까지 "KM"이라고 써버리면 실제로는 700m만 뛰고도 1키로를 채운 것처럼 보인다. 그래서 1키로에 못 미치면 실제 거리를 미터 단위 그대로 보여주게 했다.
 
 ```swift
@@ -323,6 +335,10 @@ private var distanceLabel: String {
     split.distance >= 0.95 ? "KM" : "\(Int(split.distance * 1000))M"
 }
 ```
+
+---
+
+### 스플릿이 하나도 안 뜨던 버그
 
 구현해두고 시뮬레이터에서 확인하다가 진짜 버그를 하나 발견했다. 위치를 빠르게 이동시켜서 1.06km짜리 러닝을 만들어봤는데, 요약 화면에 스플릿이 하나도 안 뜨는 거였다. 1km는 이미 넘겼으니 최소한 1번 스플릿은 나와야 하는데 그것마저 없었다.
 
@@ -372,6 +388,10 @@ runningData.splits.append(contentsOf: splits.map {
     SwiftDataSplit(order: $0.order, pace: $0.pace, heartRate: $0.heartRate, cadence: $0.cadence, elapsedTime: $0.elapsedTime, distance: $0.distance)
 })
 ```
+
+---
+
+### 기준값이 서로 안 맞던 것
 
 그런데 100m 기준을 정해놓고 보니, 정작 러닝 전체를 저장할지 말지 가르는 기준은 예전부터 50m로 따로 있었다. 러닝은 50m부터 기록되는데 스플릿은 100m부터 기록되면 기준이 서로 안 맞는 셈이라, 이번 참에 러닝 저장 기준도 100m로 같이 올렸다.
 

@@ -471,7 +471,9 @@ enum CloudSyncStatusService {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/icloud_status.png){: width="50%" height="50%"}
 
-**버그 1. 두 번째 백업부터 조용히 0개 처리됨**
+---
+
+#### 버그 1. 두 번째 백업부터 조용히 0개 처리됨
 
 백업 버튼을 눌러보니 CloudKit Dashboard에 `Flight` 레코드 타입까지는 잘 생겼는데, 두 번째로 누르니 "0개 백업했습니다"라고 떴다. [`modifyRecords(saving:deleting:savePolicy:)`](https://developer.apple.com/documentation/cloudkit/ckmodifyrecordsoperation/recordsavepolicy)의 기본 저장 정책은 `.ifServerRecordUnchanged`인데, 이미 같은 `id`로 레코드가 한 번 올라가 있는 상태에서 "서버에 있는 버전이랑 내가 지금 보내는 버전이 같은 건지"를 비교하다가, 새로 만든 레코드엔 그 비교에 필요한 정보(변경 태그, `recordChangeTag`)가 없으니 충돌로 보고 저장을 실패시킨 거였다. 게다가 이 실패가 에러를 던지는 게 아니라 레코드별 결과(`Result<CKRecord, Error>`) 안에 실패로만 담겨서, 겉으로는 아무 문제 없어 보였다.
 
@@ -487,7 +489,9 @@ let (saveResults, _) = try await database.modifyRecords(
 
 ---
 
-**버그 2. 백업은 되는데 대시보드에서 조회가 안 됨**
+---
+
+#### 버그 2. 백업은 되는데 대시보드에서 조회가 안 됨
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/dashboarderror.png){: width="50%" height="50%"}
 
@@ -615,6 +619,10 @@ FlightSummaryView는 원래부터 탭바를 숨기는 코드가 없어서 손대
 
 실기기에서 겪은 문제다. 미러링 중에 워치로 러닝을 종료했는데 그 순간 아이폰은 아직 살아있었다. 그 상태에서 워치로 러닝을 다시 시작하니 워치와 아이폰이 각자 위치 정보를 쌓는 상태가 겹쳤고, 워치 러닝을 마저 종료하니 로그에 값이 세 번 찍혔다. 워치에서 처음 종료했을 때 값, 겹친 상태에서 종료한 값, 그리고 아이폰을 마저 종료해서 저장된 값.
 
+---
+
+### 같은 러닝인지 알 방법이 없었다
+
 원인은 두 기기가 "이건 같은 러닝이다"를 서로 알 방법이 없었다는 거였다. `RunViewModel`과 `WatchViewModel` 둘 다에 `runSessionID`라는 문자열 프로퍼티를 추가해서, 러닝을 시작하는 쪽에서 새 UUID를 발급하고(`resetState()`에서 비움) 이 값을 `flightData`와 최종 저장 메시지에 매번 실어 보냈다. 저장할 때도 이 값을 그대로 `SwiftDataFlight.id`로 썼다.
 
 ```swift
@@ -655,6 +663,10 @@ private func drainPendingWatchData(_ queue: [SwiftDataFlight]) {
 }
 ```
 
+---
+
+### 상대가 보내는 예전 데이터를 무시하기
+
 id를 맞추는 것만으론 부족했다. 미러링은 항상 아이폰만 주도할 수 있어서, 워치가 러닝을 종료했다가 다시 시작한 건 미러링과 상관없이 워치 혼자 새 러닝을 도는 것뿐이다. 그런데 아직 죽지 않은 아이폰은 예전 미러링 세션이 계속되고 있는 줄 알고 자기 쪽 `flightData`를 워치로 계속 흘려보내고 있었다. 그래서 워치가 `flightData`를 받는 쪽에서 "지금 내가 실제로 미러링을 받는 입장일 때만" 반영하게 가드를 추가했다. 아이폰 쪽에도 대칭으로 같은 가드를 넣어서, 서로 자기 러닝을 새로 도는 중일 땐 상대가 보내는 예전 데이터를 무시하게 했다.
 
 ```swift
@@ -668,6 +680,10 @@ Task { @MainActor in
     viewModel?.isPaused = false
 }
 ```
+
+---
+
+### retrieveRemoteSession()은 실제로 뭘 하고 있었나
 
 여기까지 고치고 나서 `HealthKitService+iOS.swift`의 `retrieveRemoteSession()`이라는 함수를 다시 들여다봤다. 워치가 `startMirroringToCompanionDevice()`로 자기 세션을 아이폰에 흘려보내면 이 함수가 받아서 아이폰의 `startOrigin`을 `.remote`로 바꾸는데, `HealthKitService.swift`를 보니 워치는 `startOrigin != .local`일 때만(아이폰이 주도해서 워치가 따라가는 경우에만) 그 호출 자체를 한다. 즉 `retrieveRemoteSession()`은 "워치주도 미러링"을 받는 코드가 아니라 "아이폰주도 미러링"에서 워치가 자기 세션을 다시 흘려보내주는 걸 받는 자리였다.
 
@@ -685,6 +701,10 @@ Task { @MainActor in
   scrolling="no"
   loading="lazy"
 ></iframe>
+
+---
+
+### 리스너를 끄니 종료 신호가 안 가던 문제
 
 실제 워치+아이폰 조합으로 겪었던 상황이라 시뮬레이터만으로는 완전히 재현이 안 됐는데, 실기기로 직접 종료→재개 순서를 다시 해보니 문제가 하나 더 있었다. 아이폰이 `startWatchApp`으로 워치 앱을 직접 실행시키면서 미러링하는 경우, 워치에서 러닝을 종료해도 아이폰 쪽 러닝이 전혀 끝나지 않았다.
 

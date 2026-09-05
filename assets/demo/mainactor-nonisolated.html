@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>MainActor Nonisolated Simulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MainActor Nonisolated Simulator</title>
     <style>
         body { font-family: -apple-system, sans-serif; background: #f5f5f7; padding: 15px; color: #1d1d1f; display: flex; flex-direction: column; align-items: center; }
         .container { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 550px; width: 100%; box-sizing: border-box; }
@@ -44,7 +45,14 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
         .thread-log { background: #f5f5f7; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 12px; min-height: 52px; border: 1px dashed #d2d2d7; color: #3a3a3c; box-sizing: border-box; }
-    </style>
+    
+  @media (prefers-color-scheme: dark) {
+    body { background: #0B0E14; color: #E6EDF3; }
+    h1, h2, h3 { color: #E6EDF3; }
+    .mode-btn { border-color: #252D3A; color: #E6EDF3; }
+    .thread-log { background: #161A22; border-color: #252D3A; color: #C9D1D9; }
+  }
+</style>
 </head>
 <body>
 

@@ -49,7 +49,12 @@
 
         /* Flow Connections (Visual only) */
         .flow-arrow { font-size: 1.5rem; color: #555; align-self: center; margin-top: 40px;}
-    </style>
+    
+  /* 계층 카드가 가로로만 늘어서 화면 밖으로 나간다. */
+  @media (max-width: 560px) {
+    .arch-container { flex-wrap: wrap; }
+  }
+</style>
 </head>
 <body>
 

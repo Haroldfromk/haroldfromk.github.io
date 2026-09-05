@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPWS Proposal Tuner</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --amber:#b45309; --amber-bg:#fdf1dc; --grid:#eceff2; --raw:#c3c8ce;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --amber:#fbbf24; --amber-bg:#2e2410; --grid:#1c1c20; --raw:#3f4650;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 10px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+  .caveat { font-size:11.5px; color:var(--faint); margin:0 0 14px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; min-width:60px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; flex-wrap:wrap; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11px; font-weight:500; padding:9px 11px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; text-align:left; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  input[type=range]{ flex:1 1 150px; min-width:120px; accent-color:var(--ok); height:26px; }
+  output { font-family:'Fira Code',monospace; font-size:12px; font-weight:600; min-width:44px; }
+
+  .row { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin:12px 0; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:17px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .cell .d { font-family:'Fira Code',monospace; font-size:9.5px; margin-top:3px; }
+  .up { color:var(--bad); } .down { color:var(--ok); } .same { color:var(--faint); }
+
+  .track { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:10px 10px 4px; overflow-x:auto; }
+  .track svg { display:block; width:100%; min-width:460px; height:auto; }
+  .legend { display:flex; gap:13px; flex-wrap:wrap; margin-top:8px; font-size:10.5px; color:var(--dim); font-family:'Fira Code',monospace; }
+  .legend i { display:inline-block; width:14px; height:2.5px; border-radius:2px; vertical-align:middle; margin-right:5px; }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>제안을 하나씩 켜보면</h1>
+<p class="lead">실제 km별 페이스(6'30", 5'26", 5'31")를 뼈대로 삼고 GPS 속도가 흔들리는 정도를 얹어 1초 간격으로 재현한다. 목표 5'45"에 허용 오차 ±10초, 계수 0.15인 <b>지금 코드가 기준선</b>이다.</p>
+<p class="caveat">흔들리는 정도는 실제 측정값이 아니라 내가 정한 값이다. 그래서 아래 숫자는 절대값이 아니라 <b>제안끼리 비교하는 용도</b>다.</p>
+
+<div class="bar">
+  <span>돌려볼 안</span>
+  <div class="seg" id="seg">
+    <button type="button" data-m="base" aria-pressed="true">지금 코드</button>
+    <button type="button" class="danger" data-m="fast" aria-pressed="false">제안 1. 판정용 페이스만 빠르게</button>
+    <button type="button" class="danger" data-m="hyst" aria-pressed="false">제안 2. 켜짐·꺼짐 기준 다르게</button>
+  </div>
+</div>
+<div class="bar">
+  <span>흔들림</span>
+  <input type="range" id="sg" min="15" max="45" value="35">
+  <output id="o-sg">0.35</output>
+  <span style="min-width:0;text-transform:none;letter-spacing:0;font-size:11px">m/s</span>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">경고 한 번이 이어진 평균 시간</div><div class="v" id="v-rel">--</div><div class="d" id="d-rel">&nbsp;</div></div>
+  <div class="cell"><div class="k">켜졌다 꺼진 횟수</div><div class="v" id="v-flip">--</div><div class="d" id="d-flip">&nbsp;</div></div>
+  <div class="cell"><div class="k">기록된 경고</div><div class="v" id="v-rec">--</div><div class="d" id="d-rec">&nbsp;</div></div>
+</div>
+
+<div class="track">
+  <div id="plot"></div>
+  <div class="legend">
+    <span><i style="background:var(--raw)"></i>GPS 원본 페이스</span>
+    <span><i style="background:var(--mark)"></i>화면에 보이는 페이스</span>
+    <span><i style="background:var(--ok);opacity:.4"></i>허용 범위</span>
+    <span><i style="background:var(--bad)"></i>경고가 켜진 구간</span>
+  </div>
+</div>
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+  var TARGET = 5.75;          // 목표 5'45" (분/km)
+  var DEV = 10 / 60;          // 허용 오차 ±10초
+  var ALPHA = 0.15;           // 지금 코드의 계수
+  var COOLDOWN = 20;          // 초
+  var HOLD = 8;               // 제안 2에서 같이 쓴 "8초 이상 유지" 조건
+  var KM_PACE = [6.5, 5.4333, 5.5167];   // 실제 km별 페이스
+  var TOTAL_KM = 7.87;
+
+  // 1초 간격 목표 속도 프로파일
+  var TRUE_SPEED = (function () {
+    var out = [], km = 0, i = 0;
+    while (km < TOTAL_KM) {
+      var pace = KM_PACE[i % KM_PACE.length];
+      var secs = Math.round(pace * 60 * Math.min(1, TOTAL_KM - km));
+      var sp = 1000 / (pace * 60);
+      for (var t = 0; t < secs; t++) out.push(sp);
+      km += 1; i++;
+    }
+    return out;
+  })();
+
+  function noiseSeries(sigma) {
+    // 시드 고정 + AR(1). 실제 GPS 속도는 한 샘플만 튀는 게 아니라 잠깐씩 몰려서 흔들린다.
+    var seed = 20260905, phi = 0.6, prev = 0, out = [];
+    var k = Math.sqrt(1 - phi * phi);
+    for (var t = 0; t < TRUE_SPEED.length; t++) {
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      var u1 = (seed / 2147483648) || 1e-6;
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      var u2 = seed / 2147483648;
+      var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+      prev = phi * prev + k * z;
+      out.push(prev * sigma);
+    }
+    return out;
+  }
+
+  function run(mode, sigma) {
+    var noise = noiseSeries(sigma);
+    var d1 = 0, d2 = 0, j1 = 0, j2 = 0, init = false;
+    var judgeAlpha = mode === "fast" ? 0.25 : ALPHA;
+    var state = "normal", reached = false;
+    var flips = 0, records = 0;
+    var lastClearedAt = {}, pendingSince = null;
+    var relSum = 0, relN = 0, sinkStart = null;
+    var disp = [], raw = [], band = [];
+
+    for (var t = 0; t < TRUE_SPEED.length; t++) {
+      var sp = Math.max(0.1, TRUE_SPEED[t] + noise[t]);
+      if (!init) { d1 = d2 = j1 = j2 = sp; init = true; }
+      d1 = (1 - ALPHA) * d1 + ALPHA * sp;          // 화면용
+      d2 = (1 - ALPHA) * d2 + ALPHA * d1;
+      j1 = (1 - judgeAlpha) * j1 + judgeAlpha * sp; // 판정용
+      j2 = (1 - judgeAlpha) * j2 + judgeAlpha * j1;
+
+      var dispPace = 1000 / (d2 * 60);
+      var judgePace = 1000 / ((mode === "fast" ? j2 : d2) * 60);
+      raw.push(1000 / (sp * 60));
+      disp.push(dispPace);
+
+      if (!reached && judgePace <= TARGET + DEV) reached = true;
+
+      // 켜짐/꺼짐 기준. 제안 2는 꺼질 때 더 안쪽까지 들어와야 한다.
+      var onDev = DEV, offDev = mode === "hyst" ? DEV * 0.6 : DEV;
+      var next = state;
+      if (!reached) next = "normal";
+      else if (state === "normal") {
+        if (judgePace > TARGET + onDev) next = "sink";
+        else if (judgePace < TARGET - onDev) next = "over";
+      } else {
+        var inside = judgePace <= TARGET + offDev && judgePace >= TARGET - offDev;
+        if (inside) next = "normal";
+        else if (state === "sink" && judgePace < TARGET - onDev) next = "over";
+        else if (state === "over" && judgePace > TARGET + onDev) next = "sink";
+      }
+
+      if (next !== state) {
+        flips++;
+        if (state !== "normal") {
+          lastClearedAt[state] = t;
+          if (state === "sink" && sinkStart !== null) { relSum += t - sinkStart; relN++; sinkStart = null; }
+        }
+        if (next !== "normal") {
+          if (next === "sink") sinkStart = t;
+          pendingSince = t;
+        } else pendingSince = null;
+        state = next;
+      }
+
+      // 기록 판정
+      if (state !== "normal" && pendingSince !== null) {
+        var held = mode === "hyst" ? (t - pendingSince >= HOLD) : (t === pendingSince);
+        if (held) {
+          var last = lastClearedAt[state];
+          if (last === undefined || t - last >= COOLDOWN) { records++; lastClearedAt[state] = t; }
+          pendingSince = mode === "hyst" ? null : pendingSince;
+          if (mode !== "hyst") pendingSince = -1;
+        }
+      }
+      band.push(state);
+    }
+    return { flips: flips, records: records,
+             release: relN ? relSum / relN : 0,
+             disp: disp, raw: raw, band: band };
+  }
+
+  var mode = "base";
+
+  function fmt(p) {
+    if (!isFinite(p) || p <= 0) return "--";
+    var t = Math.round(p * 60);
+    return (t / 60 | 0) + "'" + String(t % 60).padStart(2, "0") + '"';
+  }
+
+  function render() {
+    var sigma = +document.getElementById("sg").value / 100;
+    document.getElementById("o-sg").textContent = sigma.toFixed(2);
+    var base = run("base", sigma);
+    var cur = run(mode, sigma);
+
+    function set(id, did, v, curv, basev, lowerIsBetter) {
+      document.getElementById(id).textContent = v;
+      var d = document.getElementById(did);
+      if (mode === "base") { d.textContent = "기준선"; d.className = "d same"; return; }
+      var diff = curv - basev;
+      if (Math.abs(diff) < 0.5) { d.textContent = "기준선과 비슷"; d.className = "d same"; return; }
+      var worse = lowerIsBetter ? diff > 0 : diff < 0;
+      d.textContent = (diff > 0 ? "▲ " : "▼ ") + Math.abs(Math.round(diff)) + (id === "v-rel" ? "초" : (id === "v-flip" ? "회" : "건"));
+      d.className = "d " + (worse ? "up" : "down");
+    }
+    set("v-rel", "d-rel", Math.round(cur.release) + "초", cur.release, base.release, true);
+    set("v-flip", "d-flip", cur.flips + "회", cur.flips, base.flips, true);
+    set("v-rec", "d-rec", cur.records + "건", cur.records, base.records, true);
+
+    // 그래프
+    var W = 700, H = 190, PL = 40, PR = 10, PT = 12, PB = 24;
+    var N = cur.disp.length, lo = 4.6, hi = 7.4;
+    var X = function (t) { return PL + t / (N - 1) * (W - PL - PR); };
+    var Y = function (p) { return PT + (Math.min(Math.max(p, lo), hi) - lo) / (hi - lo) * (H - PT - PB); };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="페이스와 경고 구간">';
+    s += '<rect x="' + PL + '" y="' + Y(TARGET - DEV).toFixed(1) + '" width="' + (W - PL - PR) +
+         '" height="' + (Y(TARGET + DEV) - Y(TARGET - DEV)).toFixed(1) + '" fill="var(--ok)" opacity="0.22"/>';
+    [5.0, 5.75, 6.5, 7.0].forEach(function (p) {
+      s += '<line x1="' + PL + '" y1="' + Y(p).toFixed(1) + '" x2="' + (W - PR) + '" y2="' + Y(p).toFixed(1) + '" stroke="var(--grid)" stroke-width="1"/>';
+      s += '<text x="' + (PL - 6) + '" y="' + (Y(p) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + fmt(p) + '</text>';
+    });
+    // 경고 구간 음영
+    var st = null;
+    for (var t = 0; t <= N; t++) {
+      var on = t < N && cur.band[t] !== "normal";
+      if (on && st === null) st = t;
+      if (!on && st !== null) {
+        s += '<rect x="' + X(st).toFixed(1) + '" y="' + PT + '" width="' + Math.max(0.6, X(t) - X(st)).toFixed(1) +
+             '" height="' + (H - PT - PB) + '" fill="var(--bad)" opacity="0.16"/>';
+        st = null;
+      }
+    }
+    function line(arr, color, w, op) {
+      var pts = [];
+      for (var k = 0; k < arr.length; k += 3) pts.push(X(k).toFixed(1) + ',' + Y(arr[k]).toFixed(1));
+      return '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="' + w + '" opacity="' + op + '"/>';
+    }
+    s += line(cur.raw, "var(--raw)", 0.9, 0.75);
+    s += line(cur.disp, "var(--mark)", 1.9, 1);
+    s += '<text x="' + PL + '" y="' + (H - 7) + '" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">0분</text>';
+    s += '<text x="' + (W - PR) + '" y="' + (H - 7) + '" text-anchor="end" font-size="9" font-family="Fira Code,monospace" fill="var(--faint)">' + Math.round(N / 60) + '분 · 7.87km</text>';
+    s += '</svg>';
+    document.getElementById("plot").innerHTML = s;
+
+    var note = document.getElementById("note");
+    if (mode === "base") {
+      note.className = "note";
+      note.innerHTML = "지금 코드다. 허용 범위가 좁아서 페이스가 그 언저리를 계속 넘나들고, 경고가 <b>" + base.flips + "번</b> 켜졌다 꺼진다. " +
+        "위에서 제안을 하나씩 켜보면 이 숫자들이 어떻게 움직이는지 볼 수 있다.";
+    } else if (mode === "fast") {
+      note.className = "note alarm";
+      note.innerHTML = "판정용만 빠르게 만드니 경고 한 번이 이어지는 시간은 <b>" + Math.round(base.release) + "초에서 " + Math.round(cur.release) + "초로</b> 줄었다. " +
+        "노린 대로다. 그런데 켜졌다 꺼진 횟수가 <b>" + base.flips + "번에서 " + cur.flips + "번으로</b> 늘었다. " +
+        "빠르게 반응한다는 건 GPS가 흔들리는 것까지 그대로 따라간다는 뜻이니 당연한 결과다. 기록도 " + base.records + "건에서 " + cur.records + "건으로 같이 늘었다.";
+    } else {
+      note.className = "note alarm";
+      note.innerHTML = "켜졌다 꺼진 횟수는 <b>" + base.flips + "번에서 " + cur.flips + "번으로</b> 줄었다. 여기까지는 의도대로다. " +
+        "그런데 정작 줄이려던 <b>기록이 " + base.records + "건에서 " + cur.records + "건으로 오히려 늘었다.</b> " +
+        "꺼지는 기준을 조이면 경고가 더 오래 켜져 있게 되고, 그러면 8초를 채우는 경고가 늘어난다. 두 장치가 노리는 게 겹쳐서 서로를 깎는 것이다.";
+    }
+  }
+
+  document.getElementById("sg").addEventListener("input", render);
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.dataset.m;
+      document.querySelectorAll("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>
