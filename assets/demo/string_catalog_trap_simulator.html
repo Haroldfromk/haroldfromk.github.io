@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>String Catalog Trap Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --kw:#8a3fb0; --str:#1868c4; --com:#8894a0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --kw:#c792ea; --str:#6cb0ff; --com:#6b7684;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:70ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; flex:0 0 46px; align-self:center; }
+  .seg { display:flex; flex-wrap:wrap; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11px; font-weight:500; padding:8px 11px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+
+  pre { margin:0; background:var(--panel); border:1px solid var(--line); border-radius:9px;
+    padding:11px 13px; overflow-x:auto; font-family:'Fira Code',monospace; font-size:11.5px; line-height:1.7; }
+  .kw { color:var(--kw); } .st { color:var(--str); } .cm { color:var(--com); font-style:italic; }
+  .hl { background:var(--bad-bg); border-radius:3px; padding:0 3px; }
+
+  .row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin:12px 0; }
+  @media (max-width:520px){ .row{grid-template-columns:1fr;} }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:13px; font-weight:600; margin-top:4px; line-height:1.35; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); } .cell.alarm .v { color:var(--bad); }
+  .cell.good .v { color:var(--ok); }
+
+  .screens { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+  @media (max-width:520px){ .screens{grid-template-columns:1fr;} }
+  .scr { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:10px 11px; }
+  .scr .lang { font-family:'Fira Code',monospace; font-size:9px; letter-spacing:.05em; text-transform:uppercase; color:var(--faint); }
+  .scr .txt { font-size:13.5px; font-weight:600; margin-top:6px; line-height:1.4; }
+  .scr.wrong { border-color:var(--bad); background:var(--bad-bg); }
+  .scr.wrong .txt { color:var(--bad); }
+  .scr.right .txt { color:var(--ok); }
+
+  .note { margin-top:13px; font-size:12.5px; line-height:1.68; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>번역이 조용히 안 먹는 자리</h1>
+<p class="lead">String Catalog는 소스에서 <b>문자열이 그대로 적힌 자리만</b> 훑어서 번역 목록을 채운다. 리터럴이 일단 변수에 담겼다가 화면으로 흘러가면 <b>카탈로그를 아예 안 본다.</b> 에러가 나는 게 아니라 조용히 원문이 나온다.</p>
+
+<div class="bar">
+  <span>타입</span>
+  <div class="seg" id="seg">
+    <button type="button" class="danger" data-v="string" aria-pressed="true">String 프로퍼티</button>
+    <button type="button" data-v="key" aria-pressed="false">LocalizedStringKey</button>
+  </div>
+</div>
+
+<pre id="code"></pre>
+
+<div class="row">
+  <div class="cell"><div class="k">카탈로그 등록</div><div class="v" id="v1">--</div></div>
+  <div class="cell"><div class="k">빌드</div><div class="v" id="v2">--</div></div>
+  <div class="cell"><div class="k">번역 적용</div><div class="v" id="v3">--</div></div>
+</div>
+
+<div class="screens" id="screens"></div>
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+  var mode = "string";
+
+  var CODE = {
+    string: [
+      '<span class="cm">// 알림 문구를 만들어 두는 자리</span>',
+      '<span class="kw">struct</span> AlertContext {',
+      '    <span class="kw">static let</span> weatherFailed = AlertItem(',
+      '        message: <span class="hl"><span class="st">"날씨를 불러오지 못했습니다"</span></span>',
+      '    )',
+      '}',
+      '',
+      '<span class="kw">struct</span> AlertItem {',
+      '    <span class="kw">let</span> message: <span class="hl">String</span>   <span class="cm">// 여기가 문제</span>',
+      '}',
+      '',
+      '<span class="cm">// 화면에서는 변수를 거쳐 들어간다</span>',
+      'Text(item.message)'
+    ],
+    key: [
+      '<span class="cm">// 알림 문구를 만들어 두는 자리</span>',
+      '<span class="kw">struct</span> AlertContext {',
+      '    <span class="kw">static let</span> weatherFailed = AlertItem(',
+      '        message: <span class="st">"날씨를 불러오지 못했습니다"</span>',
+      '    )',
+      '}',
+      '',
+      '<span class="kw">struct</span> AlertItem {',
+      '    <span class="kw">let</span> message: LocalizedStringKey   <span class="cm">// 타입만 바꿨다</span>',
+      '}',
+      '',
+      '<span class="cm">// 화면 코드는 그대로다</span>',
+      'Text(item.message)'
+    ]
+  };
+
+  var DATA = {
+    string: {
+      v: ["안 됨", "성공", "안 먹음"],
+      cls: ["alarm", "good", "alarm"],
+      scr: [["한국어", "날씨를 불러오지 못했습니다", "right"],
+            ["English", "날씨를 불러오지 못했습니다", "wrong"],
+            ["日本語", "날씨를 불러오지 못했습니다", "wrong"]],
+      note: ["alarm", "리터럴이 <code>String</code> 프로퍼티에 담긴 뒤 변수를 거쳐 <code>Text</code>로 들어간다. 이러면 카탈로그에 항목 자체가 안 생기고, <b>번역을 아무리 채워도 적용될 자리가 없다.</b> <b>빌드는 성공하고 경고도 안 뜬다.</b> 한국어로 테스트하면 멀쩡해 보여서, 언어를 바꿔 켜보기 전까지는 모른다."]
+    },
+    key: {
+      v: ["됨", "성공", "적용됨"],
+      cls: ["good", "good", "good"],
+      scr: [["한국어", "날씨를 불러오지 못했습니다", "right"],
+            ["English", "Could not load the weather", "right"],
+            ["日本語", "天気を取得できませんでした", "right"]],
+      note: ["fine", "타입을 <code>LocalizedStringKey</code>로 바꾸면 같은 리터럴이 <b>번역 대상으로 인식된다.</b> 화면 코드는 한 글자도 안 바뀌었다. <b>고칠 곳이 화면이 아니라 그 문자열을 담고 있던 타입이었다는 게 이 문제의 핵심</b>이다. 이런 자리를 찾으려면 언어를 바꿔가며 화면을 훑는 수밖에 없다."]
+    }
+  };
+
+  function render() {
+    document.getElementById("code").innerHTML = CODE[mode].join("\n");
+    var d = DATA[mode];
+    ["v1", "v2", "v3"].forEach(function (id, i) {
+      var e = document.getElementById(id);
+      e.textContent = d.v[i];
+      e.parentElement.className = "cell" + (d.cls[i] ? " " + d.cls[i] : "");
+    });
+    document.getElementById("screens").innerHTML = d.scr.map(function (s) {
+      return '<div class="scr ' + s[2] + '"><div class="lang">' + s[0] + '</div><div class="txt">' + s[1] + '</div></div>';
+    }).join("");
+    var n = document.getElementById("note");
+    n.className = "note " + d.note[0];
+    n.innerHTML = d.note[1];
+  }
+
+  document.querySelectorAll("#seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.dataset.v;
+      document.querySelectorAll("#seg button").forEach(function (x) {
+        x.setAttribute("aria-pressed", String(x === b));
+      });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

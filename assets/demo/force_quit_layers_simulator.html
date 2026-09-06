@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Force Quit Layers Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --warn:#9a6b0a; --warn-bg:#f9eeda; --cold:#5566a8; --cold-bg:#e8ebf7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --warn:#f3bc55; --warn-bg:#33260b; --cold:#8fa0e0; --cold-bg:#161c33;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:70ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; flex:0 0 52px; align-self:center; }
+  .seg { display:flex; flex-wrap:wrap; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11px; font-weight:500; padding:8px 12px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+
+  .steps { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0 12px; }
+  .step { flex:1 1 auto; border:1px solid var(--line); border-radius:8px; background:var(--panel);
+    color:var(--dim); cursor:pointer; font-family:'Inter',sans-serif; font-size:11.5px; font-weight:600;
+    padding:9px 8px; text-align:center; transition:all .13s; }
+  .step[aria-pressed="true"] { border-color:var(--ink); background:var(--bg); color:var(--ink); }
+  .step i { display:block; font-family:'Fira Code',monospace; font-size:9px; font-weight:500;
+    font-style:normal; color:var(--faint); margin-bottom:3px; }
+
+  .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
+  @media (max-width:430px){ .grid{grid-template-columns:1fr;} }
+  .cell { background:var(--panel); border:1px solid var(--line); border-left-width:3px; border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:9px; letter-spacing:.03em; color:var(--faint); }
+  .cell .v { font-size:12.8px; font-weight:600; margin-top:3px; line-height:1.4; }
+  .cell .why { font-size:11.3px; line-height:1.5; color:var(--dim); margin-top:4px; }
+  .cell.ok   { border-left-color:var(--ok); }   .cell.ok .v   { color:var(--ok); }
+  .cell.warn { border-left-color:var(--warn); background:var(--warn-bg); } .cell.warn .v { color:var(--warn); }
+  .cell.bad  { border-left-color:var(--bad); background:var(--bad-bg); }   .cell.bad .v  { color:var(--bad); }
+  .cell.cold { border-left-color:var(--cold); } .cell.cold .v { color:var(--cold); }
+  .cell.none { border-left-color:var(--line); } .cell.none .v { color:var(--faint); }
+
+  .note { margin-top:13px; font-size:12.5px; line-height:1.68; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+  .tag { display:inline-block; font-family:'Fira Code',monospace; font-size:9px; padding:1px 6px;
+    border-radius:999px; background:var(--panel); color:var(--faint); border:1px solid var(--line); margin-left:5px; vertical-align:1px; }
+</style>
+</head>
+<body>
+
+<h1>강제 종료 이후, 층마다 다른 일이 벌어진다</h1>
+<p class="lead">앱 주도 미러링으로 뛰다가 아이폰 앱을 강제 종료했을 때, 일곱 개 층이 각각 어떻게 되는지를 시점별로 본다. <b>한 덩어리로 보면 안 풀리고, 층을 나눠야 어디를 고칠 수 있는지 보인다.</b> <code>지금</code>은 v1.3.2 기준이고 <code>제안</code>은 아직 구현하지 않은 설계다.</p>
+
+<div class="bar">
+  <span>구조</span>
+  <div class="seg" id="seg-mode">
+    <button type="button" data-v="now" aria-pressed="true">지금 (v1.3.2)</button>
+    <button type="button" data-v="plan" aria-pressed="false">제안 (1.4 이후)</button>
+  </div>
+</div>
+
+<div class="steps" id="steps"></div>
+<div class="grid" id="grid"></div>
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LAYERS = [
+    ["아이폰 앱 프로세스", "app"],
+    ["아이폰 워크아웃 세션", "isession"],
+    ["워치 워크아웃 세션", "wsession"],
+    ["워치 화면", "wscreen"],
+    ["다이나믹 아일랜드", "island"],
+    ["앱 Logbook", "logbook"],
+    ["애플 건강 앱", "health"]
+  ];
+
+  var LIVE = { c: "ok", v: "실행 중", w: "" };
+
+  var DATA = {
+    now: [
+      {
+        label: "러닝 중", when: "0",
+        s: {
+          app: LIVE,
+          isession: { c: "ok", v: ".running", w: "아이폰이 만든 자기 세션" },
+          wsession: { c: "ok", v: ".running", w: "미러링으로 받은 세션" },
+          wscreen: { c: "ok", v: "아이폰 값으로 갱신", w: "워치는 GPS도 타이머도 안 돌린다" },
+          island: { c: "ok", v: "실시간 갱신", w: "" },
+          logbook: { c: "none", v: "아직 없음", w: "종료 시 저장한다" },
+          health: { c: "none", v: "아직 없음", w: "" }
+        },
+        note: ["", "앱 주도 미러링에서 <b>워치는 표시 장치다.</b> 거리와 시간을 아이폰이 계산해 보내주고 워치는 받아서 그리기만 한다. 워치의 <code>start()</code>는 워치 주도로 시작할 때만 불리기 때문에, 이 상태의 워치에는 <b>1초 타이머도 GPS도 없다.</b>"]
+      },
+      {
+        label: "강제 종료 직후", when: "+0초",
+        s: {
+          app: { c: "bad", v: "죽음", w: "정리 콜백이 하나도 안 불린다" },
+          isession: { c: "warn", v: ".running으로 남음", w: "healthd가 들고 있다" },
+          wsession: { c: "warn", v: ".running 계속", w: "워치는 아무것도 모른다" },
+          wscreen: { c: "warn", v: "마지막 값에서 굳음", w: "일시정지가 아니다. 다음 값이 안 온다" },
+          island: { c: "warn", v: "마지막 값 그대로", w: "" },
+          logbook: { c: "none", v: "없음", w: "" },
+          health: { c: "none", v: "없음", w: "" }
+        },
+        note: ["alarm", "여기서 <b>워치 화면이 굳는 게 이 문제의 얼굴</b>이다. 사용자는 일시정지인지 고장인지 구분할 수 없다. 워치에는 <b>값이 안 온다는 걸 감지하는 장치가 없다.</b> 15초 GPS 유실 안전망이 있긴 한데 그건 <code>start()</code> 안에 있어서 미러링에서는 아예 돌지 않는다."]
+      },
+      {
+        label: "그대로 몇 분", when: "+수 분",
+        s: {
+          app: { c: "bad", v: "죽어 있음", w: "" },
+          isession: { c: "warn", v: "여전히 남음", w: "" },
+          wsession: { c: "bad", v: "시간만 계속 쌓임", w: "안 뛰는 동안에도 흐른다" },
+          wscreen: { c: "warn", v: "굳은 채", w: "" },
+          island: { c: "warn", v: "굳은 채", w: "" },
+          logbook: { c: "none", v: "없음", w: "" },
+          health: { c: "none", v: "없음", w: "" }
+        },
+        note: ["alarm", "화면은 멈췄지만 <b>워치의 워크아웃 세션은 계속 돈다.</b> 화면에 보이는 시간과 세션이 아는 시간이 이 순간부터 벌어진다. 방치할수록 격차가 커진다."]
+      },
+      {
+        label: "워치에서 END FLIGHT", when: "사용자",
+        s: {
+          app: { c: "bad", v: "죽어 있음", w: "" },
+          isession: { c: "warn", v: "여전히 남음", w: "" },
+          wsession: { c: "ok", v: "종료 및 저장", w: "endCollection + finishWorkout" },
+          wscreen: { c: "ok", v: "요약 화면", w: "" },
+          island: { c: "warn", v: "굳은 채", w: "" },
+          logbook: { c: "bad", v: "저장 안 됨", w: "saveRunningData()에 startOrigin == .local 가드" },
+          health: { c: "warn", v: "워치 기록 1건", w: "시간이 방치한 만큼 부풀어 있다" }
+        },
+        note: ["alarm", "여기가 <b>결과가 어긋나는 지점</b>이다. 건강 앱에는 남는데 앱 Logbook에는 안 남는다. 워치의 <code>saveRunningData()</code> 첫 줄에 <code>guard startOrigin == .local</code>이 있어서, 미러링 러닝은 워치가 기록을 <b>만들지도 않는다.</b> 게다가 저장된 시간은 실제 뛴 시간이 아니라 방치한 시간까지 포함한 값이다."]
+      },
+      {
+        label: "아이폰 앱 재실행", when: "나중",
+        s: {
+          app: LIVE,
+          isession: { c: "warn", v: "시스템이 마감", w: "저장까지 된다" },
+          wsession: { c: "none", v: "이미 종료됨", w: "" },
+          wscreen: { c: "none", v: "홈", w: "" },
+          island: { c: "ok", v: "사라짐", w: "시스템이 정리한다" },
+          logbook: { c: "bad", v: "끝내 없음", w: "" },
+          health: { c: "bad", v: "아이폰 기록도 추가될 수 있음", w: "미확인. 그러면 한 러닝에 두 건" }
+        },
+        note: ["alarm", "다이나믹 아일랜드는 앱을 다시 켜면 시스템이 알아서 치운다. 그래서 <b>이건 고칠 게 없었다.</b> 문제는 아이폰의 남은 세션이다. v1.3.2에서 넣은 <code>discardWorkout()</code>은 정상 종료 경로에 있어서 <b>강제 종료에는 안 걸린다.</b> 그러면 이 러닝도 건강 앱에 두 건이 될 수 있다. <span class=\"tag\">미확인</span>"]
+      }
+    ],
+    plan: [
+      {
+        label: "러닝 중", when: "0",
+        s: {
+          app: LIVE,
+          isession: { c: "ok", v: ".running", w: "" },
+          wsession: { c: "ok", v: ".running", w: "" },
+          wscreen: { c: "ok", v: "아이폰 값으로 갱신", w: "받을 때마다 lastReceivedTime 갱신" },
+          island: { c: "ok", v: "실시간 갱신", w: "staleDate를 계속 밀어둔다" },
+          logbook: { c: "none", v: "아직 없음", w: "" },
+          health: { c: "none", v: "아직 없음", w: "" }
+        },
+        note: ["", "달라지는 건 두 가지다. 워치가 <b>값을 받을 때마다 시각을 기록</b>하고, Live Activity에 <b>유효 기한을 걸어둔다.</b> 평상시에는 둘 다 아무 일도 하지 않는다."]
+      },
+      {
+        label: "강제 종료 직후", when: "+0초",
+        s: {
+          app: { c: "bad", v: "죽음", w: "" },
+          isession: { c: "warn", v: ".running으로 남음", w: "여기는 그대로다" },
+          wsession: { c: "ok", v: ".running 계속", w: "" },
+          wscreen: { c: "warn", v: "마지막 값", w: "아직 감지 전" },
+          island: { c: "warn", v: "마지막 값", w: "아직 기한 전" },
+          logbook: { c: "none", v: "없음", w: "" },
+          health: { c: "none", v: "없음", w: "" }
+        },
+        note: ["", "이 시점은 <b>지금과 완전히 같다.</b> 앱이 죽어 있는 동안 아이폰에서 할 수 있는 일은 없다. 달라지는 건 다음 칸부터다."]
+      },
+      {
+        label: "N초 경과", when: "+N초",
+        s: {
+          app: { c: "bad", v: "죽어 있음", w: "" },
+          isession: { c: "warn", v: "여전히 남음", w: "" },
+          wsession: { c: "ok", v: ".running 계속", w: "" },
+          wscreen: { c: "ok", v: "신호 없음 오버레이", w: "종료 버튼을 함께 띄운다" },
+          island: { c: "ok", v: "끊김 표시", w: "staleDate 경과, isStale로 분기" },
+          logbook: { c: "none", v: "없음", w: "" },
+          health: { c: "none", v: "없음", w: "" }
+        },
+        note: ["fine", "<b>자동으로 끝내지는 않는다.</b> 블루투스가 잠깐 흔들린 것과 앱이 죽은 것을 구분할 방법이 없어서, 잘못 판단하면 멀쩡히 뛰는 사람의 기록을 날린다. 그래서 <b>판단을 사용자에게 넘긴다.</b> 오검출이 나도 손해는 잘못 뜬 오버레이 하나뿐이다."]
+      },
+      {
+        label: "오버레이에서 종료", when: "사용자",
+        s: {
+          app: { c: "bad", v: "죽어 있음", w: "" },
+          isession: { c: "warn", v: "여전히 남음", w: "" },
+          wsession: { c: "ok", v: "마지막 수신 시각으로 마감", w: "finishWatchWorkout(at: lastReceivedTime)" },
+          wscreen: { c: "ok", v: "요약 화면", w: "" },
+          island: { c: "ok", v: "끊김 표시", w: "" },
+          logbook: { c: "cold", v: "전송 큐에 적재", w: "transferUserInfo는 상대가 죽어도 쌓인다" },
+          health: { c: "ok", v: "워치 기록 1건", w: "실제 뛴 만큼만" }
+        },
+        note: ["fine", "두 가지가 바뀐다. 마감 시각을 <b>지금이 아니라 마지막으로 값을 받은 시각</b>으로 잡아서 부풀림을 없애고, 그 기록을 <code>transferUserInfo</code>로 보낸다. 이 전송은 <b>아이폰 앱이 죽어 있어도 큐에 쌓였다가 나중에 전달된다.</b> 워치 단독 러닝용으로 이미 있는 경로다."]
+      },
+      {
+        label: "아이폰 앱 재실행", when: "나중",
+        s: {
+          app: LIVE,
+          isession: { c: "cold", v: "회수해서 버린다", w: "recoverActiveWorkoutSession + discardWorkout" },
+          wsession: { c: "none", v: "이미 종료됨", w: "" },
+          wscreen: { c: "none", v: "홈", w: "" },
+          island: { c: "ok", v: "사라짐", w: "" },
+          logbook: { c: "ok", v: "1건 저장", w: "큐가 전달되며 저장된다" },
+          health: { c: "ok", v: "1건", w: "앱 기록과 시간이 맞는다" }
+        },
+        note: ["fine", "여기서 앱과 건강 앱이 <b>같은 러닝 하나</b>로 맞는다. 아이폰의 남은 세션은 회수해서 저장하지 않고 버린다. 다만 <b>회수가 실제로 되는지, 시스템이 마감하기 전에 손이 닿는지는 확인하지 못했다.</b> <span class=\"tag\">미검증</span>"]
+      }
+    ]
+  };
+
+  var mode = "now", step = 0;
+
+  function renderSteps() {
+    document.getElementById("steps").innerHTML = DATA[mode].map(function (d, i) {
+      return '<button type="button" class="step" data-i="' + i + '" aria-pressed="' + (i === step) + '">' +
+             '<i>' + d.when + '</i>' + d.label + '</button>';
+    }).join("");
+    document.querySelectorAll(".step").forEach(function (b) {
+      b.addEventListener("click", function () { step = +b.dataset.i; renderSteps(); renderBody(); });
+    });
+  }
+
+  function renderBody() {
+    var d = DATA[mode][step];
+    document.getElementById("grid").innerHTML = LAYERS.map(function (L) {
+      var s = d.s[L[1]];
+      return '<div class="cell ' + s.c + '"><div class="k">' + L[0] + '</div>' +
+             '<div class="v">' + s.v + '</div>' +
+             (s.w ? '<div class="why">' + s.w + '</div>' : '') + '</div>';
+    }).join("");
+    var n = document.getElementById("note");
+    n.className = "note" + (d.note[0] ? " " + d.note[0] : "");
+    n.innerHTML = d.note[1];
+  }
+
+  document.querySelectorAll("#seg-mode button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.dataset.v; step = 0;
+      document.querySelectorAll("#seg-mode button").forEach(function (x) {
+        x.setAttribute("aria-pressed", String(x === b));
+      });
+      renderSteps(); renderBody();
+    });
+  });
+
+  renderSteps(); renderBody();
+})();
+</script>
+</body>
+</html>

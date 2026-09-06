@@ -515,3 +515,249 @@ if result.state == .running {
 
 ---
 
+## 미러링 범위를 줄이고 나서 다시 보기 (9.5 update)
+
+여기까지가 v1.0을 준비하던 시점의 기록이다. 이후 26번 글에서 워치 주도 미러링을 통째로 들어냈고, 워치는 단독 실행으로만 돌게 됐다. 그러고 나서 이 문제를 다시 열어보니 **내가 붙잡고 있던 문제가 이미 다른 문제로 바뀌어 있었다.**
+
+지금 남아 있는 강제 종료 시나리오는 하나뿐이다. 앱 주도 미러링으로 뛰다가 아이폰 앱을 강제 종료하는 경우다. 워치 주도는 미러링을 아예 안 하니 이 문제와 무관하다.
+
+---
+
+### 남는 세션의 주인이 바뀌었다
+
+`startWorkout()`을 다시 보면, 아이폰은 미러링 세션을 받아오는 게 아니라 **자기 세션을 직접 만든다.**
+
+```swift
+// HealthKitService.swift
+func startWorkout(workoutConfiguration: HKWorkoutConfiguration) async throws {
+    runningMode = .standalone
+    session = try HKWorkoutSession(healthStore: store, configuration: workoutConfiguration)
+    builder = session?.associatedWorkoutBuilder()
+    // 생략
+    session?.startActivity(with: startDate)
+    try await builder?.beginCollection(at: startDate)
+
+#if os(iOS)
+    do {
+        try await store.startWatchApp(toHandle: workoutConfiguration)
+        runningMode = .mirrored
+    } catch {
+        // 생략
+    }
+#endif
+}
+```
+
+아이폰이 세션을 만들어 시작한 뒤에 워치를 깨운다. 그러니 앱 주도로 뛰다가 강제 종료하면, 데몬에 남는 건 워치 것이 아니라 **아이폰이 주인인 세션**이다.
+
+| | 이 글을 쓸 때 | 지금 |
+|---|---|---|
+| 남는 세션의 주인 | 워치 | 아이폰 |
+| 아이폰이 세션을 얻는 경로 | 미러링 핸들러로 건네받음 | 자기가 직접 만듦 |
+| 재실행 시 PFD 직행 | 발생 | 핸들러를 꺼둬서 발생하지 않음 |
+
+세 가지 시도가 전부 막혔던 이유가 여기 있었다. 판별이 부정확해서가 아니라 **남의 세션을 정리하려 했기 때문**이다. `appLaunchTime` 방식은 좀비를 정확히 짚어냈는데도 그다음에 할 수 있는 게 없었다. 그게 방법의 문제가 아니라 권한의 문제였다는 뜻이다.
+
+같은 강제 종료라도 세션 주인이 누구냐에 따라 결과가 어떻게 갈리는지 눌러볼 수 있게 만들었다. 구조와 정리 방식을 바꿔가며 재실행 이후를 따라가면 된다.
+
+<iframe
+  src="/assets/demo/zombie_session_ownership_simulator.html"
+  width="100%"
+  height="950px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+워치 주도로 두고 세 가지 정리 방식을 차례로 돌려보면 전부 막힌다. 앱 주도로 바꾸면 같은 `end()` 호출인데 결과가 달라진다. **정리 방식이 좋아진 게 아니라 끝내려는 세션의 주인이 바뀐 것뿐이다.**
+
+---
+
+## recoverActiveWorkoutSession으로 자기 세션 회수하기
+
+강제 종료된 뒤에 남은 자기 세션을 다시 붙잡는 API가 HealthKit에 있다. Xcode SDK의 `HKHealthStore.h` 헤더를 보면 이렇게 적혀 있다.
+
+```text
+@method        recoverActiveWorkoutSessionWithCompletion:
+@abstract      Recovers an active workout session after a client crash. If no session is available
+               to be re-attached, nil will be returned. If an error occurs, session will be nil and
+               error will be set appropriately.
+```
+
+가용 버전은 `API_AVAILABLE(ios(26.0), watchos(5.0))`이다. 이 프로젝트의 iOS 배포 타겟이 26.0이니 그대로 쓸 수 있다.
+
+이 API가 이전 시도들과 다른 점은 하나다. **회수 대상이 자기가 만든 세션**이라는 것. 거울을 들고 남의 세션을 끝내려던 것과 달리, 주인이 자기 것을 되찾아 끝내는 요청이라 데몬 입장에서 정상적인 흐름이다.
+
+---
+
+### 앱 시작 시점에 남은 세션을 확인하기
+
+지금은 앱이 켜질 때 남은 세션을 확인하는 코드가 아예 없다.
+
+```swift
+// before (RunViewModel.swift)
+init() {
+    // 생략
+    watchConnectivityService.viewModel = self
+    // HealthKitService.shared.retrieveRemoteSession()
+    HealthKitService.shared.sessionStatePublisher
+        .sink { [weak self] result in
+            // 생략
+        }
+        .store(in: &cancellables)
+}
+```
+
+앱이 시작될 때 한 번 회수를 시도하고, 돌아온 게 있으면 정리하는 흐름을 넣는다.
+
+```swift
+// after (RunViewModel.swift)
+init() {
+    // 생략
+    watchConnectivityService.viewModel = self
+    // HealthKitService.shared.retrieveRemoteSession()
+    HealthKitService.shared.sessionStatePublisher
+        .sink { [weak self] result in
+            // 생략
+        }
+        .store(in: &cancellables)
+
+    Task { await HealthKitService.shared.discardOrphanedSession() }
+}
+```
+
+정리 자체는 `HealthKitService`에 둔다.
+
+```swift
+// after (HealthKitService+iOS.swift)
+/// 강제 종료로 남은 자기 세션을 회수해서 끝낸다.
+///
+/// 사용자가 앱 스위처에서 직접 종료하면 어떤 정리 콜백도 오지 않아,
+/// 세션이 `healthd`에 `.running`으로 남는다. 앱 주도 미러링에서는 이 세션의
+/// 주인이 아이폰이라 회수해서 끝낼 수 있다.
+func discardOrphanedSession() async {
+    guard session == nil else { return }   // 이미 진행 중인 러닝이면 건드리지 않는다
+
+    let recovered: HKWorkoutSession?
+    do {
+        recovered = try await store.recoverActiveWorkoutSession()
+    } catch {
+        ZombieSessionLogger.shared.error("recover failed: \(error.localizedDescription, privacy: .public)")
+        return
+    }
+
+    guard let recovered else { return }    // 남은 게 없으면 정상 시작이다
+
+    ZombieSessionLogger.shared.info("orphaned session recovered, state=\(recovered.state.rawValue, privacy: .public)")
+    if recovered.state != .ended {
+        recovered.end()
+    }
+}
+```
+
+`session == nil` 가드가 중요하다. 정상적으로 러닝을 시작한 직후에 이게 돌면 방금 만든 세션을 끝내버린다. 회수는 앱이 켜지는 시점, 그러니까 아직 아무 러닝도 시작하지 않은 상태에서만 의미가 있다.
+
+그리고 회수한 세션에 대해 화면을 복원하지 않는다는 점도 이전 시도들과 다르다. 사용자가 직접 강제 종료한 것이니 이어서 뛸 의사가 없다고 보는 게 맞다. `sessionStatePublisher`로 이벤트를 흘려보내지 않으니 `navigationPath`도 건드려지지 않는다.
+
+---
+
+### 아이폰에는 워크아웃을 마무리하는 호출이 없다
+
+이걸 정리하다가 별개로 걸리는 걸 하나 발견했다. 프로젝트 전체에서 `endCollection`과 `finishWorkout`을 찾아보면 워치 쪽에만 있다.
+
+```swift
+// HealthKitService+watch.swift
+try await builder?.endCollection(at: date)
+workout = try await builder?.finishWorkout()
+```
+
+아이폰은 `beginCollection`으로 수집을 시작해놓고 마무리를 안 한다. 정리할 때도 그냥 버린다.
+
+```swift
+// HealthKitService+iOS.swift
+func resetWorkout() {
+    if let session, session.state != .ended {
+        session.end()
+    }
+    builder = nil
+    workout = nil
+    session = nil
+    // 생략
+}
+```
+
+처음에는 애플 헬스 저장을 워치가 전담하니 아이폰은 **쓰지도 않을 데이터를 모으고 있는 셈**이라고 봤다. 그런데 실기기에서 확인해보니 반대였다. 마무리를 안 불러도 **시스템이 그때까지 모인 데이터로 워크아웃을 마감해 저장한다.** 그래서 아이폰과 워치가 같은 러닝을 각각 저장하고 있었다. 이건 이 글의 좀비 세션과는 별개 문제라 1.3.2에서 따로 고쳤다.
+
+그렇다고 아이폰 세션을 없애면 되는 문제도 아니다. `PFDView`가 화면 이탈 정리를 판단할 때 이 세션의 존재 여부를 기준으로 쓰고 있다.
+
+```swift
+// PFDView.swift
+guard HealthKitService.shared.session != nil else { return }
+```
+
+`stopped` 이벤트도 이 세션의 델리게이트에서 나온다. 세션이 상태의 앵커 노릇을 하고 있어서 걷어내는 건 생각보다 큰 수술이다. 지금은 아이폰 쪽 빌더 생성이 정말 불필요한지부터 확인할 문제로 남겨둔다.
+
+---
+
+## 실기기에서 확인한 것
+
+여기까지 쓰고 나서 실기기로 확인했다. 워치 전원을 끄고 아이폰만으로 러닝을 시작한 뒤 앱 스위처에서 강제 종료하고, 곧바로 새 러닝을 시작해보는 순서다.
+
+**다음 러닝은 막히지 않았다.** 강제 종료 뒤 앱을 다시 켜면 홈 화면이 뜨고, 러닝 시작도 정상적으로 된다. 미러링 수신 핸들러를 꺼두면서 재실행 시 PFD로 튀는 증상이 사라졌고, 데몬에 남은 세션은 다음 러닝을 방해하지 않았다.
+
+**남은 세션은 영원히 남지도 않았다.** 강제 종료한 러닝이 건강 앱에 워크아웃으로 저장돼 있었다. 어느 시점엔가 시스템이 세션을 마감하면서 저장까지 했다는 뜻이다.
+
+**다이나믹 아일랜드도 남는다.** 앱을 강제 종료하면 Live Activity가 그대로 떠 있고, 눌러도 홈 화면만 뜬다. `endActivity()` 호출부가 전부 정상 종료 흐름에만 있어서 강제 종료 때는 불리지 않는다. 다만 이건 손댈 필요가 없었다. **앱을 다시 켜면 시스템이 알아서 정리한다.** 확인하는 데 시간이 좀 걸렸는데, 앱이 전경에 있는 동안에는 자기 Live Activity가 다이나믹 아일랜드에 표시되지 않아서 언제 보느냐에 따라 답이 정반대로 나오기 때문이다.
+
+그러니까 이 글 내내 걱정한 "세션이 살아남아 다음 러닝을 막는다"는 지금 구조에서는 일어나지 않는다. `recoverActiveWorkoutSession`을 넣을 이유도 그만큼 약해졌다.
+
+---
+
+### 대신 다른 게 남는다
+
+문제가 사라진 게 아니라 모양이 바뀌었다.
+
+강제 종료한 러닝은 **앱에는 안 남고 건강 앱에만 남는다.** 앱의 기록은 `saveRunningData()`가 SwiftData에 저장하는데, 이건 정상 종료 흐름에서만 불린다. 게다가 100m 미만이면 저장하지 않는다.
+
+```swift
+// RunViewModel.swift
+let minimumValidDistance = 0.1
+guard totalDistance >= minimumValidDistance else { return }
+```
+
+실제로 가다가 강제 종료한 30m짜리는 앱 어디에도 없는데 건강 앱에는 Running 기록으로 들어가 있었다. **사용자가 버린 러닝이 건강 기록에는 쌓인다.**
+
+여기서 `recoverActiveWorkoutSession`의 쓸모가 바뀐다. 막힌 걸 뚫는 용도가 아니라, **원치 않는 기록이 남는 걸 막는 용도**다. 앱 시작 때 남은 세션을 회수해서 `end()`가 아니라 `discardWorkout()`으로 버리면 시스템이 마감해 저장하기 전에 정리할 수 있다.
+
+```swift
+// 앞에서 쓴 코드의 마지막 부분을 이렇게 바꾼다
+guard let recovered else { return }
+
+if recovered.state != .ended {
+    recovered.end()          // before: 끝내기만 한다. 기록은 그대로 저장된다
+}
+```
+
+```swift
+guard let recovered else { return }
+
+// after: 사용자가 버린 러닝이니 저장하지 않고 버린다
+recovered.associatedWorkoutBuilder().discardWorkout()
+if recovered.state != .ended {
+    recovered.end()
+}
+```
+
+다만 이건 아직 넣지 않았다. 회수한 세션에서 빌더를 다시 얻을 수 있는지, 시스템이 마감하기 전에 손이 닿는지를 확인하지 못했다. 그리고 강제 종료된 러닝이 건강 앱에 남는 게 정말 잘못인지도 생각해볼 문제다. 뛴 건 사실이니까.
+
+---
+
+## 정리
+
+이 글을 쓸 때는 "healthd가 들고 있어서 앱 코드로는 불가능하다"로 끝냈다. 지금 보면 그 문장은 절반만 맞다. 정확히는 **그 세션의 주인이 아이폰이 아니어서 불가능했다.**
+
+미러링 범위를 줄인 건 좀비 세션과 상관없는 결정이었다. 문제가 몰려 있던 조합 하나를 들어낸 것뿐인데, 그 과정에서 세션의 소유권이 아이폰으로 옮겨오면서 막혀 있던 이유가 같이 사라졌다. 기능을 줄이는 결정이 못 고치던 문제의 전제를 바꿔놓은 셈이다.
+
+그때 더 좋은 판별 방법을 찾았어도 이 문제는 안 풀렸을 것이다. **문제를 틀린 층에서 보고 있었다는 걸 한참 뒤에야 알았다.**
+
+그리고 확인하러 나갔다가 정작 발견한 건 다른 것이었다. 좀비 세션은 다음 러닝을 막지 않았고, 대신 미러링으로 뛴 러닝이 건강 앱에 두 번씩 저장되고 있었다. 한 번을 안 열어봐서 몰랐던 문제다. **못 고친 문제를 오래 붙잡는 동안, 확인만 했으면 보였을 문제가 옆에 있었다.**

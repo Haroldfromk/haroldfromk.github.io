@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zombie Session Ownership Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --warn:#a06800; --warn-bg:#fdf3dd; --mark:#2563eb; --mark-bg:#e8effc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --warn:#fbbf55; --warn-bg:#33260b; --mark:#60a5fa; --mark-bg:#14203a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:70ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 12px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .sp { flex:1 1 6px; }
+
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin:12px 0; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; min-width:0; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--faint); }
+  .cell .v { font-family:'Fira Code',monospace; font-size:13px; font-weight:600; margin-top:4px; }
+  .cell.alarm { background:var(--bad-bg); border-color:var(--bad); }
+  .cell.alarm .v { color:var(--bad); }
+  .cell.good { background:var(--ok-bg); border-color:var(--ok); }
+  .cell.good .v { color:var(--ok); }
+  .cell.warn { background:var(--warn-bg); border-color:var(--warn); }
+  .cell.warn .v { color:var(--warn); }
+  @media (max-width:560px){ .row{grid-template-columns:repeat(2,1fr);} }
+
+  .steps { display:flex; flex-direction:column; gap:5px; }
+  .st { display:grid; grid-template-columns:22px 66px 1fr; gap:9px; align-items:flex-start;
+    padding:8px 10px; border-radius:7px; border:1px solid var(--line); background:var(--panel);
+    font-size:12px; line-height:1.55; color:var(--faint); }
+  .st .n { font-family:'Fira Code',monospace; font-size:10px; font-weight:600; padding-top:2px; }
+  .st .who { font-family:'Fira Code',monospace; font-size:9.5px; padding:2px 5px; border-radius:4px;
+    border:1px solid var(--line); text-align:center; white-space:nowrap; }
+  .st.done { color:var(--dim); }
+  .st.now { background:var(--mark-bg); border-color:var(--mark); color:var(--ink); }
+  .st.now .n, .st.now .who { color:var(--mark); border-color:var(--mark); }
+  .st.fail { background:var(--bad-bg); border-color:var(--bad); color:var(--ink); }
+  .st.fail .n, .st.fail .who { color:var(--bad); border-color:var(--bad); }
+  .st.skip { opacity:.42; }
+  .st b { font-weight:600; color:var(--ink); }
+  .st code { font-family:'Fira Code',monospace; font-size:11px; }
+  @media (max-width:560px){
+    .st { grid-template-columns:20px 1fr; padding:7px 9px; font-size:11.5px; line-height:1.5; }
+    .st .who { display:none; }
+    .steps { gap:4px; }
+    .lead { font-size:12px; margin-bottom:10px; }
+    .cell { padding:8px 9px; }
+    .cell .v { font-size:12px; }
+    .note { font-size:12px; }
+  }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.65; color:var(--dim);
+    border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+  .note.warn { border-left-color:var(--warn); }
+  .tag { display:inline-block; font-family:'Fira Code',monospace; font-size:9.5px;
+    padding:2px 6px; border-radius:4px; margin-left:6px; vertical-align:1px; }
+  .tag.guess { background:var(--warn-bg); color:var(--warn); }
+  .tag.fact { background:var(--ok-bg); color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>세션의 주인이 누구인지가 결과를 가른다</h1>
+<p class="lead">미러링 중 아이폰 앱을 강제 종료하면 <code>HKWorkoutSession</code>이 시스템에 남는다. 같은 증상 같아도 <b>그 세션을 누가 만들었느냐</b>에 따라 정리할 수 있는지가 갈린다. 구조와 정리 방식을 바꿔가며 재실행 뒤에 무슨 일이 벌어지는지 따라가 보자.</p>
+
+<div class="bar">
+  <span>구조</span>
+  <div class="seg" id="seg-arch">
+    <button type="button" data-arch="old" aria-pressed="true">17번 당시 · 워치 주도</button>
+    <button type="button" data-arch="now" aria-pressed="false">지금 · 앱 주도</button>
+  </div>
+</div>
+<div class="bar">
+  <span>정리 방식</span>
+  <div class="seg" id="seg-fix">
+    <button type="button" data-fix="none" aria-pressed="true">그냥 둔다</button>
+    <button type="button" data-fix="end" aria-pressed="false">end() 호출</button>
+    <button type="button" data-fix="recover" aria-pressed="false">회수 후 end()</button>
+  </div>
+  <span class="sp"></span>
+  <button type="button" class="btn" id="reset">처음으로</button>
+  <button type="button" class="btn primary" id="step">다음 단계</button>
+</div>
+
+<div class="row">
+  <div class="cell"><div class="k">세션 주인</div><div class="v" id="v-owner">--</div></div>
+  <div class="cell"><div class="k">healthd 상태</div><div class="v" id="v-daemon">--</div></div>
+  <div class="cell"><div class="k">아이폰 화면</div><div class="v" id="v-screen">--</div></div>
+  <div class="cell"><div class="k">다음 러닝</div><div class="v" id="v-next">--</div></div>
+</div>
+
+<div class="steps" id="steps"></div>
+<div class="note" id="note">"다음 단계"를 눌러 강제 종료 이후를 따라가 보자.</div>
+
+<script>
+(function () {
+  "use strict";
+  var arch = "old", fix = "none", i = -1;
+
+  function plan() {
+    var s = [];
+    var ownerIsPhone = arch === "now";
+
+    if (ownerIsPhone) {
+      s.push({ w: "아이폰", t: "아이폰에서 러닝을 시작한다. <code>startWorkout()</code>이 <b>아이폰의 세션을 직접 만들고</b> 시작한 뒤 <code>startWatchApp(toHandle:)</code>으로 워치를 깨운다." });
+      s.push({ w: "워치", t: "워치가 깨어나 자기 세션을 따로 만든다. 아이폰 세션과 워치 세션이 각각 존재한다." });
+    } else {
+      s.push({ w: "워치", t: "워치에서 러닝을 시작하고 <code>startMirroringToCompanionDevice()</code>로 아이폰에 미러링을 건다. <b>세션의 주인은 워치다.</b>" });
+      s.push({ w: "아이폰", t: "<code>workoutSessionMirroringStartHandler</code>가 워치의 세션을 건네받는다. 아이폰이 든 건 <b>거울일 뿐</b>이다." });
+    }
+
+    s.push({ w: "사용자", t: "앱 스위처에서 아이폰 앱을 강제 종료한다. iOS는 프로세스를 즉시 죽이고 <b>어떤 정리 콜백도 부르지 않는다.</b>", kill: true });
+    s.push({ w: "healthd", t: "앱은 죽었지만 세션은 시스템 데몬이 들고 있어 <code>.running</code>으로 남는다. <b>여기까지는 두 구조가 똑같다.</b>" });
+
+    if (ownerIsPhone) {
+      s.push({ w: "아이폰", t: "앱을 다시 켠다. 미러링 수신 핸들러는 꺼져 있어서 <b>화면이 러닝으로 튀지 않는다.</b> 남은 세션을 아무도 붙잡지 않는다." });
+    } else {
+      s.push({ w: "아이폰", t: "앱을 다시 켠다. 핸들러가 살아있는 세션을 감지해 <code>.running</code>으로 처리하고, <b>켜자마자 PFD로 직행한다.</b>", pfd: true });
+    }
+
+    if (fix === "end") {
+      if (ownerIsPhone) {
+        s.push({ w: "아이폰", t: "남은 세션에 <code>end()</code>를 부른다. <b>자기가 만든 세션</b>이라 데몬 입장에서 정상 요청이다.", endOK: true, guess: true });
+      } else {
+        s.push({ w: "아이폰", t: "거울에 <code>end()</code>를 부른다. 공유된 세션이 영구히 끝나 <b>워치 쪽 러닝까지 같이 죽는다.</b> 데몬은 핸들러를 수십 번 재트리거한다.", endBad: true });
+      }
+    } else if (fix === "recover") {
+      if (ownerIsPhone) {
+        s.push({ w: "아이폰", t: "<code>recoverActiveWorkoutSession</code>으로 <b>자기 세션을 되찾는다.</b> 강제 종료로 끊긴 세션을 주인이 다시 붙잡는 용도의 API다.", guess: true });
+        s.push({ w: "아이폰", t: "되찾은 세션에 <code>end()</code>를 부른다. 남의 것이 아니라 <b>자기 것을 끝내는</b> 요청이다.", endOK: true, guess: true });
+      } else {
+        s.push({ w: "아이폰", t: "회수를 시도하지만 돌려받을 게 없다. 이 API는 <b>자기가 만든 세션</b>을 돌려주는 것이고, 아이폰은 이 세션을 만든 적이 없다.", noRecover: true });
+      }
+    } else {
+      s.push({ w: "아이폰", t: "아무것도 하지 않는다. 세션은 데몬에 그대로 남는다." });
+    }
+
+    s.push({ w: "사용자", t: "새 러닝을 시작해본다.", tryNext: true });
+    return s;
+  }
+
+  function stateAt(upto) {
+    var st = {
+      owner: arch === "now" ? "아이폰" : "워치",
+      daemon: "없음", screen: "홈", next: "--",
+      pfd: false, killed: false, cleared: false, broke: false, noRecover: false
+    };
+    var steps = plan();
+    for (var k = 0; k <= upto && k < steps.length; k++) {
+      var s = steps[k];
+      if (k === 0) st.daemon = "running";
+      if (k <= 1 && arch !== "now") st.screen = "러닝";
+      if (k <= 1 && arch === "now") st.screen = "러닝";
+      if (s.kill) { st.killed = true; st.screen = "종료됨"; }
+      if (s.pfd) { st.pfd = true; st.screen = "러닝(오작동)"; }
+      else if (st.killed && !s.kill) { st.screen = st.pfd ? "러닝(오작동)" : "홈"; }
+      if (s.endOK) { st.daemon = "ended"; st.cleared = true; }
+      if (s.endBad) { st.daemon = "ended(연쇄)"; st.broke = true; }
+      if (s.noRecover) st.noRecover = true;
+      if (s.tryNext) {
+        if (st.cleared) st.next = "정상";
+        else if (st.broke) st.next = "미러링 불가";
+        else st.next = arch === "now" ? "미확인" : "미러링 안 옴";
+      }
+    }
+    return st;
+  }
+
+  function render() {
+    var steps = plan(), st = stateAt(i);
+    function set(id, v, cls) {
+      var e = document.getElementById(id);
+      e.textContent = v;
+      e.parentElement.className = "cell" + (cls ? " " + cls : "");
+    }
+    set("v-owner", st.owner, st.owner === "아이폰" ? "good" : "");
+    set("v-daemon", i < 0 ? "--" : st.daemon,
+        st.daemon === "running" && i >= 3 ? "alarm" : (st.cleared ? "good" : (st.broke ? "alarm" : "")));
+    set("v-screen", i < 0 ? "--" : st.screen, st.pfd ? "alarm" : "");
+    set("v-next", st.next,
+        st.next === "정상" ? "good" : (st.next === "미확인" ? "warn" : (st.next === "--" ? "" : "alarm")));
+
+    document.getElementById("steps").innerHTML = steps.map(function (s, k) {
+      var cls = "st";
+      if (k < i) cls += " done";
+      else if (k === i) cls += (s.endBad || s.pfd || s.noRecover ? " fail" : " now");
+      else cls += " skip";
+      var tag = s.guess ? '<span class="tag guess">추정</span>' : "";
+      return '<div class="' + cls + '"><span class="n">' + (k + 1) + '</span>' +
+             '<span class="who">' + s.w + '</span><span>' + s.t + tag + '</span></div>';
+    }).join("");
+
+    var note = document.getElementById("note");
+    if (i < 0) {
+      note.className = "note";
+      note.textContent = '"다음 단계"를 눌러 강제 종료 이후를 따라가 보자.';
+      return;
+    }
+    if (i < steps.length - 1) {
+      note.className = "note";
+      note.innerHTML = "진행 중이다. <b>세션 주인</b> 칸과 <b>다음 러닝</b> 칸이 어떻게 연결되는지를 보자.";
+      return;
+    }
+    if (st.cleared) {
+      note.className = "note fine";
+      note.innerHTML = "세션이 정리돼서 다음 러닝이 정상으로 시작된다. 되는 이유는 정리 방식이 똑똑해서가 아니라 <b>끝내려는 세션의 주인이 아이폰이기 때문</b>이다. " +
+        "다만 이 경로는 <b>아직 실기기에서 확인하지 않았다.</b> 표시가 붙은 단계가 추정이다.";
+    } else if (st.broke) {
+      note.className = "note alarm";
+      note.innerHTML = "거울에 <code>end()</code>를 부른 결과다. 공유 세션이 영구히 끝나서 <b>워치의 러닝까지 죽고</b>, 데몬은 핸들러를 반복해서 다시 부른다. " +
+        "정리한 게 아니라 남의 러닝을 끝낸 것이다.";
+    } else if (st.noRecover) {
+      note.className = "note alarm";
+      note.innerHTML = "회수할 세션이 없다. 이 API는 <b>자기가 만든 세션</b>을 돌려주는 것이라, 거울만 들고 있던 아이폰에게는 돌려줄 것이 없다. " +
+        "판별을 아무리 정확히 해도 그다음에 할 수 있는 게 없던 이유가 이것이다.";
+    } else if (arch === "now") {
+      note.className = "note warn";
+      note.innerHTML = "화면은 더 이상 튀지 않는다. 미러링 수신 핸들러를 꺼두면서 그 경로가 사라졌기 때문이다. " +
+        "다만 세션은 데몬에 남아 있고, <b>그게 다음 러닝을 막는지는 확인하지 않았다.</b> 막지 않는다면 고칠 것이 없고, 막는다면 회수해서 끝내면 된다.";
+    } else {
+      note.className = "note alarm";
+      note.innerHTML = "재실행하자마자 러닝 화면으로 튀고, 세션은 그대로 남아 다음 미러링도 오지 않는다. " +
+        "17번 글에서 세 가지 방법으로 막아보려 했던 상태가 이것이다.";
+    }
+  }
+
+  document.getElementById("step").addEventListener("click", function () {
+    if (i < plan().length - 1) i++;
+    render();
+  });
+  document.getElementById("reset").addEventListener("click", function () { i = -1; render(); });
+  document.querySelectorAll("#seg-arch button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      arch = b.dataset.arch; i = -1;
+      document.querySelectorAll("#seg-arch button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  document.querySelectorAll("#seg-fix button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      fix = b.dataset.fix; i = -1;
+      document.querySelectorAll("#seg-fix button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

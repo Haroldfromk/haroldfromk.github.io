@@ -218,6 +218,144 @@ km별 페이스는 실제 값이지만, **초당 속도가 얼마나 흔들리�
 
 ---
 
+## 건강 앱에 같은 러닝이 두 번 저장되고 있었다
+
+1.3.2를 실기기에서 확인하러 나가면서, 겸사겸사 다른 것도 하나 보기로 했다. 워치 전원을 끄고 아이폰만 들고 뛰어보는 것이다. 앱 코드에는 아이폰이 Apple Health에 워크아웃을 저장하는 호출이 없어서, 워치가 없으면 건강 앱에 아무것도 안 남을 거라고 생각했다.
+
+**남았다.** 그것도 강제 종료한 것까지 남았다.
+
+거기서 의심이 하나 생겼다. 아이폰이 저장한다면, 워치를 같이 차고 뛴 날은 두 번 저장된 것 아닌가.
+
+---
+
+### 같은 시각에 시작한 러닝이 두 개
+
+건강 앱에서 예전 기록을 열어보니 그대로였다.
+
+| | 기록 A | 기록 B |
+|---|---|---|
+| 시작 | 20:30:36 | 20:30:36 |
+| 종료 | 21:42:48 | 21:42:44 |
+| 소요 | 1h 12m 12.09s | 1h 12m 7.92s |
+| Source | RunWay | RunWay |
+| Device | iPhone | Apple Watch |
+
+시작 시각이 초 단위까지 같고, 종료만 4초 차이다. 한 번 뛴 러닝이 두 건으로 들어가 있다. 이런 쌍이 여러 날에 걸쳐 있었다.
+
+주간 합계에는 두 배로 반영되지 않았다. 겹치는 시간대의 운동을 건강 앱이 합산에서 걸러주는 것으로 보인다.(추정) 그래서 여태 몰랐다. **건강 앱의 운동 목록을 직접 열어보기 전까지는 드러나지 않는 종류의 문제였다.**
+
+---
+
+### 아이폰은 저장하지 않는다고 적어뒀었다
+
+코드에는 이렇게 적혀 있었다.
+
+```swift
+// HealthKitService+iOS.swift
+// 앱은 항상 러닝의 origin이라 iPhone이 이 세션을 받을 일이 없다. 등록하면 오히려
+// iPhone의 startOrigin이 .remote로 덮어써져서(saveRunningData()가 막힘), 심박수/케이던스는
+// 이미 sendMessage로 따로 오고 있고 Apple Health 저장도 Watch의 builder로만 이뤄지는 걸
+// 확인해서 호출을 끊었다.
+```
+
+"Apple Health 저장도 Watch의 builder로만 이뤄지는 걸 확인해서"라고 써놨다. 이 전제가 틀렸다.
+
+아이폰 쪽에는 `finishWorkout()`도 `store.save()`도 없다. 그건 맞다. 그런데 저장은 된다. 아이폰은 러닝을 시작할 때 자기 세션을 만들고 거기에 빌더를 붙여 수집을 시작한다.
+
+```swift
+// HealthKitService.swift
+session = try HKWorkoutSession(healthStore: store, configuration: workoutConfiguration)
+builder = session?.associatedWorkoutBuilder()
+// 생략
+builder?.dataSource = HKLiveWorkoutDataSource(healthStore: store, workoutConfiguration: workoutConfiguration)
+try await builder?.beginCollection(at: startDate)
+```
+
+그리고 종료할 때는 세션만 끝내고 빌더는 손대지 않는다. **마무리를 안 해도 시스템이 그때까지 모인 데이터로 워크아웃을 마감해 저장한다.** 그래서 앱이 저장을 지시한 적이 없는데도 Source가 RunWay로 찍힌다.
+
+워치는 워치대로 `finishWatchWorkout()`에서 `endCollection()`과 `finishWorkout()`을 부른다. 저장하는 쪽이 둘이니 기록도 둘이다.
+
+---
+
+### 미러링일 때는 아이폰 것을 버린다
+
+`HKWorkoutBuilder`에는 모은 데이터를 저장하지 않고 마감하는 `discardWorkout()`이 있다. 미러링일 때만 이걸 부르면 된다.
+
+```swift
+// before (HealthKitService+iOS.swift)
+if toState == .stopped {
+    session?.end()
+    let event = SessionStateEvent(state: state, runningMode: runningMode, stopOrigin: stopOrigin, startOrigin: nil)
+    updateAndSendState(event)
+}
+```
+
+```swift
+// after
+if toState == .stopped {
+    // 미러링 중이면 Apple Health 저장은 Watch의 builder가 한다. iPhone의 builder를
+    // 그대로 두면 시스템이 이것까지 마감해 저장해서, 같은 러닝이 건강 앱에 두 번 남는다.
+    if runningMode == .mirrored {
+        builder?.discardWorkout()
+    }
+    session?.end()
+    let event = SessionStateEvent(state: state, runningMode: runningMode, stopOrigin: stopOrigin, startOrigin: nil)
+    updateAndSendState(event)
+}
+```
+
+무조건 버리지 않고 `runningMode == .mirrored`를 붙인 이유가 있다. **워치를 안 차고 아이폰만으로 뛰면 아이폰이 유일한 저장 주체다.** 조건 없이 버리면 그 경우 건강 앱에 아무것도 남지 않는다. 오늘 워치를 끄고 뛴 기록이 남은 게 바로 그 경우였다.
+
+세션이 정상 흐름을 타지 않고 정리되는 경로에도 같은 처리를 넣었다.
+
+```swift
+// before (resetWorkout)
+if let session, session.state != .ended {
+    session.end()
+}
+```
+
+```swift
+// after
+if let session, session.state != .ended {
+    if runningMode == .mirrored {
+        builder?.discardWorkout()
+    }
+    session.end()
+}
+```
+
+`session.state != .ended` 조건 안에 넣었기 때문에 정상 종료 흐름에서는 여기까지 오지 않는다. 앞에서 이미 세션이 끝나 있어서 `discardWorkout()`이 두 번 불릴 일은 없다.
+
+조건을 왜 붙였는지는 눌러보는 쪽이 빠르다. 구성과 정리 방식을 바꿔가며 건강 앱에 무엇이 남는지 보면 된다.
+
+<iframe
+  src="/assets/demo/health_duplicate_save_simulator.html"
+  width="100%"
+  height="710px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+"워치 꺼둠"에 "조건 없이 버린다"를 걸어보면 기록이 아예 사라진다. **중복을 없애는 것과 기록을 없애는 건 다른 얘기**라는 게 여기서 보인다.
+
+---
+
+### 왜 이걸 몰랐나
+
+세 가지가 겹쳤다.
+
+첫째, **저장 코드를 안 썼으니 저장이 안 될 거라고 생각했다.** 시스템이 대신 마감해준다는 걸 몰랐다.
+
+둘째, **주간 합계가 정상이었다.** 숫자가 두 배로 튀었으면 진작 알았을 텐데 겹치는 운동이 걸러지면서 조용히 넘어갔다.
+
+셋째, **워치를 늘 같이 들고 테스트했다.** 워치를 끄고 한 번만 뛰어봤어도 아이폰이 저장한다는 걸 알았을 것이다. 오늘 그걸 처음 해봤다.
+
+원래 확인하려던 건 강제 종료된 세션이 남는 문제였다. 그것 때문에 워치를 끄고 나갔는데, 나온 건 전혀 다른 문제였다.
+
+---
+
 ## 남은 것
 
 `SwiftDataCoordinate`에 시각을 같이 저장할까 고민 중이다. 지금은 저장 직전에 지도에 그릴 만큼만 좌표를 솎아내기 때문에 남은 좌표들 사이의 시간 간격도 제각각이다. 좌표마다 시각이 있으면 실제 러닝 데이터를 시뮬레이터에 그대로 넣을 수 있어서 이런 조정이 훨씬 정확해진다.
