@@ -242,6 +242,67 @@ km별 페이스는 실제 값이지만, **초당 속도가 얼마나 흔들리�
 
 시작 시각이 초 단위까지 같고, 종료만 4초 차이다. 한 번 뛴 러닝이 두 건으로 들어가 있다. 이런 쌍이 여러 날에 걸쳐 있었다.
 
+그림으로 보면 이렇다. 저장하는 쪽이 둘이라 기록도 둘이 된다.
+
+<svg viewBox="0 0 420 436" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="건강 앱 중복 저장 수정 전후 비교" style="width:100%;height:auto;color:inherit">
+  <defs>
+    <marker id="ar" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="currentColor" opacity=".4"/>
+    </marker>
+    <marker id="arR" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="#e05c4f"/>
+    </marker>
+    <marker id="arG" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="#2fa37c"/>
+    </marker>
+  </defs>
+
+  <text x="0" y="12" font-size="11.5" fill="currentColor" opacity=".55" font-family="monospace">수정 전</text>
+
+  <rect x="0" y="22" width="198" height="56" rx="8" fill="none" stroke="#e05c4f" stroke-width="1.2"/>
+  <text x="14" y="42" font-size="11" fill="currentColor" opacity=".55" font-family="monospace">iPhone</text>
+  <text x="14" y="62" font-size="13" fill="#e05c4f" font-weight="600">시스템이 builder 마감</text>
+
+  <rect x="222" y="22" width="198" height="56" rx="8" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3"/>
+  <text x="236" y="42" font-size="11" fill="currentColor" opacity=".55" font-family="monospace">Apple Watch</text>
+  <text x="236" y="62" font-size="13" fill="currentColor" font-weight="600">finishWorkout()</text>
+
+  <line x1="99" y1="78" x2="99" y2="104" stroke="#e05c4f" stroke-width="1.2" marker-end="url(#arR)"/>
+  <line x1="321" y1="78" x2="321" y2="104" stroke="currentColor" stroke-width="1.2" opacity=".4" marker-end="url(#ar)"/>
+
+  <rect x="0" y="110" width="420" height="84" rx="8" fill="none" stroke="currentColor" stroke-width="1" opacity=".25" stroke-dasharray="4 3"/>
+  <text x="14" y="128" font-size="10.5" fill="currentColor" opacity=".5" font-family="monospace">Apple Health · 운동 목록</text>
+  <rect x="14" y="136" width="392" height="22" rx="5" fill="none" stroke="#e05c4f" stroke-width="1"/>
+  <text x="26" y="151" font-size="11.5" fill="#e05c4f" font-family="monospace">Running · Device iPhone · 심박 없음</text>
+  <rect x="14" y="164" width="392" height="22" rx="5" fill="none" stroke="#e05c4f" stroke-width="1"/>
+  <text x="26" y="179" font-size="11.5" fill="#e05c4f" font-family="monospace">Running · Device Apple Watch · 심박 있음</text>
+
+  <line x1="0" y1="216" x2="420" y2="216" stroke="currentColor" stroke-width="1" opacity=".18"/>
+
+  <text x="0" y="242" font-size="11.5" fill="currentColor" opacity=".55" font-family="monospace">수정 후</text>
+
+  <rect x="0" y="252" width="198" height="56" rx="8" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".22" stroke-dasharray="4 3"/>
+  <text x="14" y="272" font-size="11" fill="currentColor" opacity=".4" font-family="monospace">iPhone</text>
+  <text x="14" y="292" font-size="13" fill="currentColor" opacity=".45" font-weight="600">discardWorkout()</text>
+  <line x1="168" y1="266" x2="182" y2="280" stroke="currentColor" stroke-width="1.6" opacity=".4"/>
+  <line x1="182" y1="266" x2="168" y2="280" stroke="currentColor" stroke-width="1.6" opacity=".4"/>
+
+  <rect x="222" y="252" width="198" height="56" rx="8" fill="none" stroke="#2fa37c" stroke-width="1.4"/>
+  <text x="236" y="272" font-size="11" fill="currentColor" opacity=".55" font-family="monospace">Apple Watch</text>
+  <text x="236" y="292" font-size="13" fill="#2fa37c" font-weight="600">finishWorkout()</text>
+
+  <line x1="321" y1="308" x2="321" y2="334" stroke="#2fa37c" stroke-width="1.4" marker-end="url(#arG)"/>
+
+  <rect x="0" y="340" width="420" height="62" rx="8" fill="none" stroke="currentColor" stroke-width="1" opacity=".25" stroke-dasharray="4 3"/>
+  <text x="14" y="358" font-size="10.5" fill="currentColor" opacity=".5" font-family="monospace">Apple Health · 운동 목록</text>
+  <rect x="14" y="366" width="392" height="22" rx="5" fill="none" stroke="#2fa37c" stroke-width="1"/>
+  <text x="26" y="381" font-size="11.5" fill="#2fa37c" font-family="monospace">Running · Device Apple Watch · 심박 있음</text>
+
+  <text x="0" y="424" font-size="11.5" fill="currentColor" opacity=".6">저장하는 쪽을 센서 가진 기기 하나로 고정한다</text>
+</svg>
+
+
 주간 합계에는 두 배로 반영되지 않았다. 겹치는 시간대의 운동을 건강 앱이 합산에서 걸러주는 것으로 보인다.(추정) 그래서 여태 몰랐다. **건강 앱의 운동 목록을 직접 열어보기 전까지는 드러나지 않는 종류의 문제였다.**
 
 ---
@@ -353,6 +414,148 @@ if let session, session.state != .ended {
 셋째, **워치를 늘 같이 들고 테스트했다.** 워치를 끄고 한 번만 뛰어봤어도 아이폰이 저장한다는 걸 알았을 것이다. 오늘 그걸 처음 해봤다.
 
 원래 확인하려던 건 강제 종료된 세션이 남는 문제였다. 그것 때문에 워치를 끄고 나갔는데, 나온 건 전혀 다른 문제였다.
+
+---
+
+## 고쳤다고 생각했는데 종료 주체에 따라 갈렸다
+
+앞의 수정을 실기기에서 확인했다. **결과가 종료 버튼을 어디서 눌렀느냐에 따라 달랐다.** 앱에서 끝냈을 때와 워치에서 끝냈을 때가 다르게 나왔다.
+
+원인이 둘이었고, 둘 다 처음 수정할 때 못 본 것이다.
+
+---
+
+### 첫째, 순서가 뒤바뀌어 있었다
+
+`resetWorkout()`에도 같은 처리를 넣어뒀는데, 그게 도는 시점에는 이미 조건이 깨져 있었다.
+
+```swift
+// RunViewModel.swift - resetState()
+HealthKitService.shared.runningMode = .standalone   // 먼저 초기화하고
+await runningCenter.reset()
+await runningCenter.clearModeAData()
+HealthKitService.shared.resetWorkout()              // 그 다음에 부른다
+```
+
+`resetWorkout()` 안의 판단이 `runningMode == .mirrored`인데, **그 값을 바로 위에서 `.standalone`으로 되돌려버린 뒤였다.** 그래서 버리는 분기를 한 번도 못 탔다.
+
+```swift
+// after
+await runningCenter.reset()
+await runningCenter.clearModeAData()
+// resetWorkout()이 미러링 여부를 보고 iPhone builder를 버릴지 정하므로,
+// runningMode 초기화는 그 뒤여야 한다.
+HealthKitService.shared.resetWorkout()
+HealthKitService.shared.runningMode = .standalone
+```
+
+한 줄을 아래로 내린 게 전부인데, **조건을 보는 코드와 그 조건을 지우는 코드가 세 줄 떨어져 있었다.** 워치에서 종료하는 경로가 이쪽을 타기 때문에 그때만 결과가 달랐다.
+
+---
+
+### 둘째, 워치가 마무리를 안 하고 있었다
+
+더 큰 건 이쪽이다. **앱에서 종료하면 워치는 자기 워크아웃을 끝내지 않는다.**
+
+```swift
+// WatchViewModel.swift - iPhone 이 끝냈다는 신호를 받는 자리
+if result.stopOrigin == .remote {
+    guard !self.isHandlingRemoteStop else { return }
+    self.isHandlingRemoteStop = true
+    Task {
+        await self.saveRunningData()
+        await self.resetState()
+        self.isHandlingRemoteStop = false
+    }
+}
+```
+
+`saveRunningData()`는 앱 Logbook용이고 미러링일 때는 가드에 걸려 바로 빠져나온다. `resetState()`는 워치의 `resetWorkout()`을 부르는데 **그건 참조만 비우고 `session.end()`를 부르지 않는다.**
+
+그래서 워치의 세션은 `.stopped`가 되지 않고, `finishWatchWorkout()`도 불리지 않는다. **Apple Health에 워치 기록이 안 남고, 끝나지 않은 세션이 그대로 남는다.** 강제 종료 얘기를 하면서 봤던 것과 같은 모양인데, 이건 정상 종료에서도 매번 생기고 있었다.
+
+---
+
+## 그래서 규칙을 먼저 정했다
+
+코드를 더 고치기 전에 물음이 하나 남아 있었다. **애초에 누가 저장해야 하는가.**
+
+후보가 둘이었다. 하나는 **종료한 기기가 저장한다.** 대칭적이고 예외가 없다. 앱에서 끝내면 아이폰이, 워치에서 끝내면 워치가 쓴다. 지금 코드에서 가장 적게 바꿔도 되는 길이기도 하다.
+
+다른 하나는 **센서를 가진 기기가 저장한다.** 앱 주도 미러링에서 손목에 있는 건 워치다.
+
+<iframe
+  src="/assets/demo/health_save_owner_simulator.html"
+  width="100%"
+  height="620px"
+  style="border: 1px solid rgba(120, 113, 108, 0.2); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+
+첫 번째 규칙으로 두 종료 경로를 돌려보면 문제가 보인다. **개수가 아니라 내용이 다르다.**
+
+미러링 중에 심박을 재는 건 워치다. 워치가 심박을 아이폰으로 보내주긴 하지만 그건 앱 화면에서 쓰는 값이고, **아이폰의 워크아웃 빌더로는 들어가지 않는다.** 아이폰 빌더에는 심박 센서에서 온 데이터가 없다.
+
+| 종료한 곳 | 남는 기록 | 심박 |
+|---|---|---|
+| 워치 | Apple Watch | 있음 |
+| 앱 | iPhone | 없음 |
+
+**같은 러닝인데 종료 버튼을 어디서 눌렀느냐로 기록의 내용이 달라진다.** 사용자는 그 둘을 다른 선택이라고 생각하지 않는다. 건강 앱에서 운동을 열면 심박 그래프가 나오는 게 기본인데, 앱에서 끝낸 날만 비어 있으면 이상하게 보인다.
+
+그래서 **센서를 가진 기기가 저장한다**로 정했다. 어디서 끝내든 남는 기록이 같다.
+
+---
+
+### 워치가 원격 종료에서도 마무리하게
+
+규칙을 정하고 나니 고칠 곳이 분명해졌다. 아이폰에서 끝냈을 때 워치가 자기 워크아웃을 마감하게 만들면 된다.
+
+```swift
+// after (WatchViewModel.swift)
+Task {
+    // iPhone 이 끝냈어도 Watch 세션은 자기가 만든 것이라 저절로 끝나지 않는다.
+    // 여기서 마무리하지 않으면 두 가지가 같이 어긋난다.
+    // 1. Apple Health 에 아무 기록도 안 남는다. 미러링 중에는 iPhone 이
+    //    자기 builder 를 버리기 때문에 Watch 마저 마무리를 안 하면 저장하는 쪽이 없다.
+    // 2. resetWorkout() 은 session 을 nil 로만 비우고 end() 는 부르지 않아서,
+    //    끝나지 않은 세션이 healthd 에 그대로 남는다.
+    await HealthKitService.shared.finishWatchWorkout(at: Date())
+    await self.saveRunningData()
+    await self.resetState()
+    self.isHandlingRemoteStop = false
+}
+```
+
+`finishWatchWorkout(at:)`이 `endCollection`, `finishWorkout`, `session.end()`를 순서대로 처리한다. 이미 있던 함수인데 **정상 종료 경로 한쪽에서만 불리고 있었다.**
+
+워치의 `resetWorkout()`에도 주의 문구를 달았다. 이 함수가 `session.end()`를 부르지 않는다는 걸 모르면, 다음에 종료 경로를 추가할 때 같은 일이 반복된다.
+
+---
+
+### 정리하면 이렇게 된다
+
+| 시작 | 종료 | 저장하는 쪽 | 건강 앱 |
+|---|---|---|---|
+| 앱 주도 | 앱 | 워치 | 1건 (Apple Watch) |
+| 앱 주도 | 워치 | 워치 | 1건 (Apple Watch) |
+| 앱 주도, 워치 꺼둠 | 앱 | 아이폰 | 1건 (iPhone) |
+| 워치 주도 | 워치 | 워치 | 1건 (Apple Watch) |
+
+마지막 줄은 이번 수정과 무관하다. **워치 주도는 미러링을 아예 시도하지 않아서** 아이폰에 세션이 생기지 않는다. 저장 주체가 처음부터 하나뿐이라 구조적으로 중복이 불가능하다.
+
+세 번째 줄 때문에 조건을 붙였다. 워치를 꺼두고 뛰면 아이폰이 유일한 저장 주체다. 조건 없이 버리면 그 경우 기록이 통째로 사라진다.
+
+---
+
+### 배운 것
+
+처음 고쳤을 때 나는 **저장하는 쪽을 하나로 줄이는 문제**라고 봤다. 그래서 아이폰 것을 버리는 코드만 넣고 끝냈다.
+
+실제로는 **누가 저장할 것인지 정하는 문제**였다. 그걸 안 정하고 한쪽을 막으니, 막힌 경로에서는 아무도 저장하지 않고 안 막힌 경로에서는 둘 다 저장했다. 규칙을 먼저 세우고 나니 고칠 곳이 두 군데로 분명해졌다.
+
+**중복을 없애는 것과 주체를 정하는 것은 다른 일이었다.**
 
 ---
 

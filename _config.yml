@@ -208,6 +208,12 @@ exclude:
   - LICENSE
   - rollup.config.js
   - package*.json
+  - node_modules
+  - .git
+  - .github
+  - .sass-cache
+  - .jekyll-cache
+  - _site
 
 jekyll-archives:
   enabled: [categories, tags]

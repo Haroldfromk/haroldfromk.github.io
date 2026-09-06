@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Save Owner Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --warn:#9a6b0a; --warn-bg:#f9eeda;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --warn:#f3bc55; --warn-bg:#33260b;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 13px; max-width:70ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:9px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; flex:0 0 56px; align-self:center; }
+  .seg { display:flex; flex-wrap:wrap; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11px; font-weight:500; padding:8px 11px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .seg button.danger[aria-pressed="true"] { background:var(--bad); }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:8px 14px; border-radius:7px; }
+  .btn.primary { background:var(--ok); border-color:var(--ok); color:var(--bg); font-weight:600; }
+  .btn:disabled { opacity:.45; cursor:not-allowed; }
+
+  .stage { margin-top:13px; border:1px solid var(--line); border-radius:11px; background:var(--panel); padding:14px 13px; }
+  .devs { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .dev { border:1px solid var(--line); border-radius:9px; background:var(--bg); padding:10px 11px;
+    transition:border-color .3s, background .3s, opacity .3s; }
+  .dev.act { border-color:var(--ok); background:var(--ok-bg); }
+  .dev.kill { border-color:var(--bad); background:var(--bad-bg); }
+  .dev.idle { opacity:.45; }
+  .dev .n { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em; color:var(--faint); }
+  .dev .s { font-size:12.5px; font-weight:600; margin-top:4px; line-height:1.4; min-height:34px; }
+  .dev.act .s { color:var(--ok); }
+  .dev.kill .s { color:var(--bad); }
+
+  .pipe { height:26px; position:relative; margin:4px 0; }
+  .pipe .track { position:absolute; left:12%; right:12%; top:12px; height:1px; background:var(--line); }
+  .pipe .dot { position:absolute; top:7px; width:11px; height:11px; border-radius:50%;
+    background:var(--ok); opacity:0; transition:left .7s linear, opacity .25s; }
+  .pipe .dot.go { opacity:1; }
+  .pipe .lbl { position:absolute; left:0; right:0; top:-2px; text-align:center;
+    font-family:'Fira Code',monospace; font-size:9.5px; color:var(--faint); background:var(--panel); padding:0 6px; }
+
+  .health { margin-top:11px; border:1px dashed var(--line); border-radius:9px; padding:10px 11px; background:var(--bg); }
+  .health .n { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em; color:var(--faint); margin-bottom:7px; }
+  .recs { display:flex; flex-direction:column; gap:6px; min-height:40px; }
+  .rec { border:1px solid var(--line); border-radius:7px; padding:7px 10px;
+    font-family:'Fira Code',monospace; font-size:11px; color:var(--dim);
+    display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline;
+    animation:pop .35s ease both; }
+  .rec b { color:var(--ink); font-size:11.5px; }
+  .rec .hr { margin-left:auto; font-size:10px; }
+  .rec.dup { border-color:var(--bad); background:var(--bad-bg); color:var(--bad); }
+  .rec.dup b, .rec.dup .hr { color:var(--bad); }
+  .rec.thin { border-color:var(--warn); background:var(--warn-bg); color:var(--warn); }
+  .rec.thin b, .rec.thin .hr { color:var(--warn); }
+  .none { font-family:'Fira Code',monospace; font-size:11px; color:var(--faint); }
+  @keyframes pop { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:none; } }
+
+  .note { margin-top:12px; font-size:12.5px; line-height:1.68; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+</style>
+</head>
+<body>
+
+<h1>누가 건강 앱에 저장할 것인가</h1>
+<p class="lead">앱 주도 미러링에서 러닝을 끝냈을 때, 어느 기기가 Apple Health에 기록을 쓰는지를 본다. <b>종료 버튼을 누른 기기가 쓸 것인가, 센서를 차고 있는 기기가 쓸 것인가.</b> 재생을 눌러 흐름을 따라가면 된다.</p>
+
+<div class="bar">
+  <span>규칙</span>
+  <div class="seg" id="seg-rule">
+    <button type="button" class="danger" data-v="ender" aria-pressed="true">종료한 기기가 저장</button>
+    <button type="button" data-v="sensor" aria-pressed="false">센서 가진 기기가 저장</button>
+  </div>
+</div>
+<div class="bar">
+  <span>종료</span>
+  <div class="seg" id="seg-end">
+    <button type="button" data-v="phone" aria-pressed="true">앱에서 종료</button>
+    <button type="button" data-v="watch" aria-pressed="false">워치에서 종료</button>
+  </div>
+  <button type="button" class="btn primary" id="play">재생</button>
+</div>
+
+<div class="stage">
+  <div class="devs">
+    <div class="dev" id="d-phone"><div class="n">iPhone</div><div class="s" id="s-phone">러닝 중</div></div>
+    <div class="dev" id="d-watch"><div class="n">Apple Watch</div><div class="s" id="s-watch">러닝 중</div></div>
+  </div>
+  <div class="pipe"><div class="track"></div><div class="lbl" id="p-lbl"></div><div class="dot" id="dot"></div></div>
+  <div class="health">
+    <div class="n">Apple Health · 운동 목록</div>
+    <div class="recs" id="recs"><span class="none">아직 없음</span></div>
+  </div>
+</div>
+<div class="note" id="note"></div>
+
+<script>
+(function () {
+  "use strict";
+  var rule = "ender", ender = "phone", timers = [];
+
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+
+  function setDev(which, text, cls) {
+    document.getElementById("s-" + which).textContent = text;
+    document.getElementById("d-" + which).className = "dev" + (cls ? " " + cls : "");
+  }
+  function signal(from, label) {
+    var dot = document.getElementById("dot");
+    document.getElementById("p-lbl").textContent = label;
+    dot.style.transition = "none";
+    dot.style.left = from === "phone" ? "12%" : "88%";
+    dot.classList.remove("go");
+    at(30, function () {
+      dot.style.transition = "left .7s linear, opacity .25s";
+      dot.classList.add("go");
+      dot.style.left = from === "phone" ? "88%" : "12%";
+    });
+    at(820, function () { dot.classList.remove("go"); });
+  }
+  function addRec(dev, hr, cls) {
+    var host = document.getElementById("recs");
+    if (host.querySelector(".none")) host.innerHTML = "";
+    var d = document.createElement("div");
+    d.className = "rec" + (cls ? " " + cls : "");
+    d.innerHTML = "<b>Running</b><span>Source RunWay</span><span>Device " + dev +
+                  "</span><span class='hr'>" + hr + "</span>";
+    host.appendChild(d);
+  }
+  function note(cls, html) {
+    var n = document.getElementById("note");
+    n.className = "note" + (cls ? " " + cls : "");
+    n.innerHTML = html;
+  }
+
+  function reset() {
+    clearTimers();
+    setDev("phone", "러닝 중", "");
+    setDev("watch", "러닝 중", "");
+    document.getElementById("p-lbl").textContent = "";
+    document.getElementById("dot").classList.remove("go");
+    document.getElementById("recs").innerHTML = '<span class="none">아직 없음</span>';
+    note("", "재생을 누르면 종료부터 저장까지 따라간다.");
+  }
+
+  function play() {
+    reset();
+    var btn = document.getElementById("play");
+    btn.disabled = true;
+    var last = 0;
+    function step(ms, fn) { last = ms; at(ms, fn); }
+
+    step(200, function () {
+      if (ender === "phone") setDev("phone", "종료 버튼", "act");
+      else setDev("watch", "종료 버튼", "act");
+    });
+    step(700, function () {
+      signal(ender, ender === "phone" ? "종료 신호 →" : "← 종료 신호");
+    });
+
+    if (rule === "ender") {
+      if (ender === "phone") {
+        step(1600, function () {
+          setDev("phone", "builder 마감 · 저장", "act");
+          setDev("watch", "마무리 안 함", "idle");
+        });
+        step(2100, function () { addRec("iPhone", "심박 없음", "thin"); });
+        step(2400, function () {
+          note("alarm", "종료한 기기가 저장하니 <b>iPhone 기록 한 건</b>이 남는다. 개수는 맞는데 내용이 다르다. " +
+            "미러링 중에 <b>심박을 재는 건 손목에 있는 워치</b>이고, 워치가 보내주는 심박은 앱 안에서 쓰는 값이라 " +
+            "<code>iPhone</code>의 워크아웃 빌더로는 들어가지 않는다. 그래서 이 기록에는 심박 그래프가 비어 있다.");
+        });
+      } else {
+        step(1600, function () {
+          setDev("watch", "builder 마감 · 저장", "act");
+          setDev("phone", "자동 종료 · 저장", "act");
+        });
+        step(2100, function () { addRec("Apple Watch", "심박 있음", ""); });
+        step(2350, function () { addRec("iPhone", "심박 없음", "dup"); });
+        step(2650, function () {
+          note("alarm", "워치에서 끝내면 워치가 저장하는데, <b>같은 신호로 iPhone도 자동 종료되면서 같이 저장한다.</b> " +
+            "한 번 뛰었는데 두 건이 남는다. 시작 시각은 초 단위까지 같고 종료만 몇 초 차이라, " +
+            "<b>건강 앱 운동 목록을 직접 열어보기 전에는 드러나지 않는다.</b>");
+        });
+      }
+    } else {
+      if (ender === "phone") {
+        step(1600, function () {
+          setDev("phone", "builder 버림", "kill");
+          setDev("watch", "builder 마감 · 저장", "act");
+        });
+        step(2100, function () { addRec("Apple Watch", "심박 있음", ""); });
+        step(2400, function () {
+          note("fine", "앱에서 끝냈지만 <b>저장은 워치가 한다.</b> iPhone은 자기 builder를 <code>discardWorkout()</code>으로 버리고, " +
+            "워치는 종료 신호를 받아 <code>finishWatchWorkout()</code>으로 마감한다. " +
+            "<b>종료 버튼을 어디서 눌렀든 남는 기록은 같다.</b>");
+        });
+      } else {
+        step(1600, function () {
+          setDev("watch", "builder 마감 · 저장", "act");
+          setDev("phone", "builder 버림", "kill");
+        });
+        step(2100, function () { addRec("Apple Watch", "심박 있음", ""); });
+        step(2400, function () {
+          note("fine", "워치에서 끝내도 결과가 같다. iPhone은 <b>미러링 중일 때만</b> 자기 builder를 버린다. " +
+            "워치를 꺼두고 폰만으로 뛰면 iPhone이 유일한 저장 주체라 그때는 버리지 않는다.");
+        });
+      }
+    }
+    at(last + 200, function () { btn.disabled = false; });
+  }
+
+  function wire(id, set) {
+    document.querySelectorAll("#" + id + " button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        set(b.dataset.v);
+        document.querySelectorAll("#" + id + " button").forEach(function (x) {
+          x.setAttribute("aria-pressed", String(x === b));
+        });
+        reset();
+      });
+    });
+  }
+  wire("seg-rule", function (v) { rule = v; });
+  wire("seg-end", function (v) { ender = v; });
+  document.getElementById("play").addEventListener("click", play);
+  reset();
+})();
+</script>
+</body>
+</html>
