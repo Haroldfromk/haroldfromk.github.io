@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 312" width="720" height="312" role="img" aria-label="앱과 서버 양쪽 아래에 소켓이라는 창구가 있고, 그 위에 HTTP와 WebSocket이라는 대화 규칙이 얹혀 있는 층 구조">
+<style>
+  :root { color-scheme: light dark; }
+  .bg{fill:#ffffff}
+  .card{fill:#f7f8fa;stroke:#e3e6ea}
+  .rule{fill:#e8effc;stroke:#2563eb}
+  .sock{fill:#e2f4ef;stroke:#0d9276}
+  .ttl{fill:#16181d;font-weight:700}.sub{fill:#6b7280}.dim{fill:#9aa1ab}
+  .ok{fill:#0d9276}.acc{fill:#2563eb}
+  .okl{stroke:#0d9276}.ln{stroke:#c9ced4}.dash{stroke:#c9ced4}
+  text{font-family:'Fira Code',ui-monospace,SFMono-Regular,Menlo,monospace}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0d0e11}
+    .card{fill:#141417;stroke:#27272a}
+    .rule{fill:#14203a;stroke:#60a5fa}
+    .sock{fill:#0d2b23;stroke:#34d399}
+    .ttl{fill:#f4f4f5}.sub{fill:#a1a1aa}.dim{fill:#71717a}
+    .ok{fill:#34d399}.acc{fill:#60a5fa}
+    .okl{stroke:#34d399}.ln{stroke:#3f3f46}.dash{stroke:#3f3f46}
+  }
+</style>
+<defs>
+  <marker id="s1" markerWidth="8" markerHeight="8" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" class="ok"/></marker>
+  <marker id="s2" markerWidth="8" markerHeight="8" refX="1.5" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 z" class="ok"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="720" height="312" rx="10"/>
+
+<text class="sub" x="24" y="30" font-size="11" font-weight="700">소켓은 원래 밑에 깔려 있던 것이다</text>
+<text class="dim" x="24" y="46" font-size="9">위층에서 어떤 규칙으로 말할지가 REST냐 WebSocket이냐의 차이다</text>
+
+<text class="dim" x="126" y="76" font-size="10" text-anchor="middle">앱 (또는 브라우저)</text>
+<text class="dim" x="594" y="76" font-size="10" text-anchor="middle">서버</text>
+
+<!-- 위층: 내 코드 -->
+<rect class="card" x="24" y="86" width="204" height="44" rx="9" stroke-width="1.3"/>
+<text class="ttl" x="126" y="106" font-size="11" text-anchor="middle">내가 쓴 코드</text>
+<text class="dim" x="126" y="120" font-size="9" text-anchor="middle">보낼 말과 받은 말을 다룬다</text>
+
+<rect class="card" x="492" y="86" width="204" height="44" rx="9" stroke-width="1.3"/>
+<text class="ttl" x="594" y="106" font-size="11" text-anchor="middle">라우터와 처리 코드</text>
+<text class="dim" x="594" y="120" font-size="9" text-anchor="middle">받은 말에 무엇을 할지 정한다</text>
+
+<!-- 가운데층: 대화 규칙 -->
+<rect class="rule" x="24" y="142" width="204" height="44" rx="9" stroke-width="1.4"/>
+<text class="ttl" x="126" y="162" font-size="11" text-anchor="middle">대화 규칙</text>
+<text class="acc" x="126" y="176" font-size="9" text-anchor="middle">HTTP 또는 WebSocket</text>
+
+<rect class="rule" x="492" y="142" width="204" height="44" rx="9" stroke-width="1.4"/>
+<text class="ttl" x="594" y="162" font-size="11" text-anchor="middle">대화 규칙</text>
+<text class="acc" x="594" y="176" font-size="9" text-anchor="middle">HTTP 또는 WebSocket</text>
+
+<line class="dash" x1="234" y1="164" x2="486" y2="164" stroke-width="1.2" stroke-dasharray="4 5"/>
+<text class="dim" x="360" y="158" font-size="9" text-anchor="middle">양쪽이 같은 규칙을 써야 통한다</text>
+
+<!-- 아래층: 소켓 -->
+<rect class="sock" x="24" y="198" width="204" height="44" rx="9" stroke-width="1.6"/>
+<text class="ttl" x="126" y="218" font-size="11" text-anchor="middle">소켓</text>
+<text class="ok" x="126" y="232" font-size="9" text-anchor="middle">글자를 넣고 빼는 창구</text>
+
+<rect class="sock" x="492" y="198" width="204" height="44" rx="9" stroke-width="1.6"/>
+<text class="ttl" x="594" y="218" font-size="11" text-anchor="middle">소켓</text>
+<text class="ok" x="594" y="232" font-size="9" text-anchor="middle">글자를 넣고 빼는 창구</text>
+
+<!-- 층 사이 세로선 -->
+<line class="ln" x1="126" y1="130" x2="126" y2="142" stroke-width="1.2"/>
+<line class="ln" x1="126" y1="186" x2="126" y2="198" stroke-width="1.2"/>
+<line class="ln" x1="594" y1="130" x2="594" y2="142" stroke-width="1.2"/>
+<line class="ln" x1="594" y1="186" x2="594" y2="198" stroke-width="1.2"/>
+
+<!-- 소켓끼리 연결 -->
+<text class="ok" x="360" y="213" font-size="9.5" text-anchor="middle">글자가 실제로 오가는 곳</text>
+<line class="okl" x1="234" y1="221" x2="486" y2="221" stroke-width="2" marker-start="url(#s2)" marker-end="url(#s1)"/>
+<text class="dim" x="360" y="238" font-size="8.5" text-anchor="middle">이 창구를 매번 정리하면 REST,</text>
+<text class="dim" x="360" y="251" font-size="8.5" text-anchor="middle">열어둔 채로 쓰면 WebSocket</text>
+
+<text class="sub" x="360" y="284" font-size="9.5" text-anchor="middle">REST를 만들 때도 이 창구는 계속 쓰고 있었다. 다만 볼일이 끝날 때마다 정리했을 뿐이다</text>
+</svg>

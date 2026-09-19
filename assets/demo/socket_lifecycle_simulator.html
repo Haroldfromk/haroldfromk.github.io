@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Socket Lifecycle Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --mark:#2563eb; --mark-bg:#e8effc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --mark:#60a5fa; --mark-bg:#14203a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none; }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:14px; }
+  .bar > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em;
+    color:var(--faint); text-transform:uppercase; margin-right:2px; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:9px 13px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; padding:9px 13px; border-radius:7px;
+    transition:opacity .13s; }
+  .btn.primary { background:var(--mark); border-color:var(--mark); color:#fff; font-weight:600; }
+  .btn:disabled { opacity:.35; cursor:default; }
+
+  .stage { position:relative; display:grid; grid-template-columns:1fr 150px 1fr; gap:0;
+    align-items:center; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:14px; margin-bottom:12px; }
+  .node { border:1px solid var(--line); background:var(--bg); border-radius:9px; padding:10px 12px; min-height:104px; }
+  .node h2 { font-size:11.5px; margin:0 0 7px; font-weight:700; }
+  .node .slot { font-family:'Fira Code',monospace; font-size:10.5px; color:var(--dim);
+    line-height:1.7; min-height:52px; }
+  .msg { display:block; padding:2px 0; }
+  .msg.new { color:var(--ok); font-weight:500; }
+  .empty { color:var(--faint); }
+
+  .wire { position:relative; height:104px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:6px; }
+  .pipe { width:100%; height:3px; border-radius:2px; background:var(--line); position:relative; }
+  .pipe.open { background:var(--ok); }
+  .pipe.dashed { background:repeating-linear-gradient(90deg,var(--line) 0 5px,transparent 5px 10px); }
+  .dot { position:absolute; top:-3.5px; width:10px; height:10px; border-radius:50%;
+    background:var(--mark); opacity:0; transition:left .5s linear, opacity .15s; }
+  .wlabel { font-family:'Fira Code',monospace; font-size:10px; color:var(--faint); text-align:center; }
+  .wlabel.on { color:var(--ok); font-weight:500; }
+
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:12px; }
+  .cell { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; }
+  .cell .k { font-family:'Fira Code',monospace; font-size:9.5px; color:var(--faint);
+    text-transform:uppercase; letter-spacing:.04em; }
+  .cell .v { font-family:'Fira Code',monospace; font-size:17px; font-weight:600; margin-top:3px; }
+  .cell .v.warn { color:var(--bad); }
+  .cell .v.good { color:var(--ok); }
+
+  .log { background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:10px 12px; height:142px; overflow:hidden; }
+  .log .line { font-family:'Fira Code',monospace; font-size:11px; line-height:1.75;
+    color:var(--dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .log .line b { color:var(--ink); font-weight:600; }
+  .log .line.ok b { color:var(--ok); }
+  .log .line.bad b { color:var(--bad); }
+  .log .line.mark b { color:var(--mark); }
+</style>
+</head>
+<body>
+
+<h1>창구를 닫는 방식과 열어두는 방식</h1>
+<p class="lead">소켓은 두 프로그램이 글자를 넣고 빼는 창구다. 아래에서 방식을 바꿔가며 눌러보면, 같은 창구를 매번 새로 여는 것과 한 번 열고 그대로 두는 것이 어떻게 다른지 볼 수 있다.</p>
+
+<div class="bar">
+  <span>방식</span>
+  <div class="seg">
+    <button id="mHttp" aria-pressed="true">요청할 때마다 (REST)</button>
+    <button id="mWs" aria-pressed="false">열어두기 (WebSocket)</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="node">
+    <h2>앱 화면</h2>
+    <div class="slot" id="appSlot"><span class="empty">아직 받은 메시지 없음</span></div>
+  </div>
+  <div class="wire">
+    <div class="wlabel" id="wireTop">창구 닫힘</div>
+    <div class="pipe dashed" id="pipe"><div class="dot" id="dot"></div></div>
+    <div class="wlabel" id="wireBottom">&nbsp;</div>
+  </div>
+  <div class="node">
+    <h2>서버</h2>
+    <div class="slot" id="srvSlot"><span class="empty">보관 중인 메시지 없음</span></div>
+  </div>
+</div>
+
+<div class="bar">
+  <button class="btn" id="btnIncoming">다른 사람이 메시지를 보냈다</button>
+  <button class="btn primary" id="btnAct">새 메시지 있나 물어보기</button>
+  <button class="btn" id="btnReset">처음으로</button>
+</div>
+
+<div class="stats">
+  <div class="cell"><div class="k">창구를 연 횟수</div><div class="v" id="sOpen">0</div></div>
+  <div class="cell"><div class="k">헛걸음</div><div class="v" id="sWaste">0</div></div>
+  <div class="cell"><div class="k">앱이 모르고 있는 메시지</div><div class="v" id="sLag">0</div></div>
+</div>
+
+<div class="log" id="log"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let mode = 'http';
+let isOpen = false;
+let opens = 0, waste = 0;
+let pending = [];   // 서버가 들고 있는, 앱이 아직 못 받은 메시지
+let received = [];  // 앱이 받은 메시지
+let seq = 0;
+let busy = false;
+
+const NAMES = ['곰돌이', '너구리', '수달', '올빼미'];
+const TEXTS = ['안녕하세요', '지금 뭐해요?', '오늘 날씨 좋네요', '저도 왔어요'];
+
+function log(text, kind) {
+  const line = document.createElement('div');
+  line.className = 'line' + (kind ? ' ' + kind : '');
+  line.innerHTML = text;
+  $('log').prepend(line);
+  while ($('log').children.length > 6) $('log').lastChild.remove();
+}
+
+function render() {
+  $('sOpen').textContent = opens;
+  $('sWaste').textContent = waste;
+  $('sWaste').className = 'v' + (waste > 0 ? ' warn' : '');
+  $('sLag').textContent = pending.length;
+  $('sLag').className = 'v' + (pending.length > 0 ? ' warn' : ' good');
+
+  $('appSlot').innerHTML = received.length
+    ? received.slice(-3).map(m => `<span class="msg">${m}</span>`).join('')
+    : '<span class="empty">아직 받은 메시지 없음</span>';
+  $('srvSlot').innerHTML = pending.length
+    ? pending.map(m => `<span class="msg new">${m}</span>`).join('')
+    : '<span class="empty">보관 중인 메시지 없음</span>';
+
+  const pipe = $('pipe');
+  pipe.className = 'pipe' + (isOpen ? ' open' : ' dashed');
+  $('wireTop').textContent = isOpen ? '창구 열림' : '창구 닫힘';
+  $('wireTop').className = 'wlabel' + (isOpen ? ' on' : '');
+
+  if (mode === 'http') {
+    $('btnAct').textContent = '새 메시지 있나 물어보기';
+    $('btnAct').disabled = busy;
+    $('wireBottom').innerHTML = '&nbsp;';
+  } else {
+    $('btnAct').textContent = isOpen ? '연결됨' : '연결하기';
+    $('btnAct').disabled = busy || isOpen;
+    $('wireBottom').innerHTML = isOpen ? '계속 열려 있음' : '&nbsp;';
+    $('wireBottom').className = 'wlabel' + (isOpen ? ' on' : '');
+  }
+  $('btnIncoming').disabled = busy;
+}
+
+function travel(dir, done) {
+  const dot = $('dot');
+  dot.style.transition = 'none';
+  dot.style.left = dir === 'right' ? '0%' : '100%';
+  dot.style.opacity = '1';
+  void dot.offsetWidth; // 시작 위치를 지금 확정시킨다
+  dot.style.transition = 'left .45s linear';
+  dot.style.left = dir === 'right' ? '100%' : '0%';
+  setTimeout(function () { dot.style.opacity = '0'; if (done) done(); }, 470);
+}
+
+$('btnIncoming').onclick = () => {
+  const m = `${NAMES[seq % 4]}: ${TEXTS[seq % 4]}`;
+  seq++;
+  if (mode === 'ws' && isOpen) {
+    busy = true; render();
+    log(`서버에 <b>${m}</b> 도착. 열린 창구로 바로 밀어넣는다`, 'ok');
+    travel('left', () => {
+      received.push(m);
+      busy = false;
+      log('앱이 <b>묻지 않았는데</b> 받았다', 'ok');
+      render();
+    });
+  } else {
+    pending.push(m);
+    log(`서버에 <b>${m}</b> 도착. 창구가 닫혀 있어 앱은 모른다`, 'bad');
+    render();
+  }
+};
+
+$('btnAct').onclick = () => {
+  if (mode === 'http') {
+    busy = true;
+    opens++;
+    isOpen = true;
+    log('창구를 <b>새로 열었다</b>', 'mark');
+    render();
+    travel('right', () => {
+      travel('left', () => {
+        if (pending.length) {
+          received.push(...pending);
+          log(`<b>${pending.length}개</b> 받아왔다`, 'ok');
+          pending = [];
+        } else {
+          waste++;
+          log('<b>없어요.</b> 헛걸음이었다', 'bad');
+        }
+        isOpen = false;
+        busy = false;
+        log('볼일이 끝나서 <b>창구를 정리했다</b>', 'mark');
+        render();
+      });
+    });
+  } else {
+    busy = true;
+    opens++;
+    log('창구를 열고 <b>그대로 둔다</b>', 'mark');
+    render();
+    travel('right', () => {
+      isOpen = true;
+      busy = false;
+      if (pending.length) {
+        received.push(...pending);
+        log(`밀려 있던 <b>${pending.length}개</b>가 들어왔다`, 'ok');
+        pending = [];
+      }
+      log('이제 <b>서버도 먼저 말을 걸 수 있다</b>', 'ok');
+      render();
+    });
+  }
+};
+
+function reset(keepMode) {
+  isOpen = false; opens = 0; waste = 0; pending = []; received = []; seq = 0; busy = false;
+  $('log').innerHTML = '';
+  render();
+  log(mode === 'http'
+    ? '요청을 보내야만 답이 오는 방식이다'
+    : '한 번 연결하면 창구가 계속 열려 있는 방식이다', 'mark');
+}
+
+$('mHttp').onclick = () => {
+  mode = 'http';
+  $('mHttp').setAttribute('aria-pressed', 'true');
+  $('mWs').setAttribute('aria-pressed', 'false');
+  reset();
+};
+$('mWs').onclick = () => {
+  mode = 'ws';
+  $('mWs').setAttribute('aria-pressed', 'true');
+  $('mHttp').setAttribute('aria-pressed', 'false');
+  reset();
+};
+$('btnReset').onclick = () => reset();
+
+reset();
+</script>
+</body>
+</html>

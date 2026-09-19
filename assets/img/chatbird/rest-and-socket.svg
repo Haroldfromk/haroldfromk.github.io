@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" width="720" height="300" role="img" aria-label="REST는 앱이 물어볼 때만 답이 오고, WebSocket은 한 번 연결하면 서버도 먼저 말을 거는 구조 비교">
+<style>
+  :root { color-scheme: light dark; }
+  .bg{fill:#ffffff}.card{fill:#f7f8fa;stroke:#e3e6ea}
+  .srv{fill:#e2f4ef;stroke:#0d9276}.open{fill:#e2f4ef;opacity:.45}
+  .ttl{fill:#16181d;font-weight:700}.sub{fill:#6b7280}.dim{fill:#9aa1ab}
+  .ok{fill:#0d9276}.acc{fill:#2563eb}
+  .ln{stroke:#9aa1ab}.okl{stroke:#0d9276}.acl{stroke:#2563eb}
+  .life{stroke:#d4d8dd}.sep{stroke:#e3e6ea}
+  text{font-family:'Fira Code',ui-monospace,SFMono-Regular,Menlo,monospace}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0d0e11}.card{fill:#141417;stroke:#27272a}
+    .srv{fill:#0d2b23;stroke:#34d399}.open{fill:#0d2b23;opacity:.55}
+    .ttl{fill:#f4f4f5}.sub{fill:#a1a1aa}.dim{fill:#71717a}
+    .ok{fill:#34d399}.acc{fill:#60a5fa}
+    .ln{stroke:#52525b}.okl{stroke:#34d399}.acl{stroke:#60a5fa}
+    .life{stroke:#2e2e33}.sep{stroke:#27272a}
+  }
+</style>
+<defs>
+  <marker id="a1" markerWidth="8" markerHeight="8" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" class="dim"/></marker>
+  <marker id="a2" markerWidth="8" markerHeight="8" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" class="ok"/></marker>
+  <marker id="a3" markerWidth="8" markerHeight="8" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" class="acc"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="720" height="300" rx="10"/>
+<line class="sep" x1="360" y1="24" x2="360" y2="276" stroke-width="1"/>
+
+<!-- 왼쪽: REST -->
+<text class="sub" x="24" y="30" font-size="11" font-weight="700">지금까지 쓰던 방식</text>
+<text class="dim" x="24" y="45" font-size="9">요청을 보내야 답이 온다</text>
+
+<rect class="card" x="26" y="58" width="88" height="32" rx="8" stroke-width="1.3"/>
+<text class="ttl" x="70" y="78" font-size="10.5" text-anchor="middle">iOS 앱</text>
+<rect class="card" x="250" y="58" width="88" height="32" rx="8" stroke-width="1.3"/>
+<text class="ttl" x="294" y="78" font-size="10.5" text-anchor="middle">서버</text>
+
+<line class="life" x1="70" y1="92" x2="70" y2="246" stroke-width="1" stroke-dasharray="3 4"/>
+<line class="life" x1="294" y1="92" x2="294" y2="246" stroke-width="1" stroke-dasharray="3 4"/>
+
+<text class="dim" x="182" y="112" font-size="8.5" text-anchor="middle">새 메시지 있어요?</text>
+<line class="ln" x1="70" y1="118" x2="290" y2="118" stroke-width="1.3" marker-end="url(#a1)"/>
+<text class="dim" x="182" y="134" font-size="8.5" text-anchor="middle">없어요</text>
+<line class="ln" x1="294" y1="140" x2="74" y2="140" stroke-width="1.3" marker-end="url(#a1)"/>
+
+<text class="dim" x="182" y="164" font-size="8.5" text-anchor="middle">새 메시지 있어요?</text>
+<line class="ln" x1="70" y1="170" x2="290" y2="170" stroke-width="1.3" marker-end="url(#a1)"/>
+<text class="dim" x="182" y="186" font-size="8.5" text-anchor="middle">없어요</text>
+<line class="ln" x1="294" y1="192" x2="74" y2="192" stroke-width="1.3" marker-end="url(#a1)"/>
+
+<text class="dim" x="182" y="216" font-size="8.5" text-anchor="middle">새 메시지 있어요?</text>
+<line class="ln" x1="70" y1="222" x2="290" y2="222" stroke-width="1.3" marker-end="url(#a1)"/>
+<text class="ok" x="182" y="238" font-size="8.5" text-anchor="middle">하나 있어요</text>
+<line class="okl" x1="294" y1="244" x2="74" y2="244" stroke-width="1.3" marker-end="url(#a2)"/>
+
+<text class="sub" x="182" y="270" font-size="9" text-anchor="middle">헛걸음이 대부분. 물어본 만큼만 알 수 있다</text>
+
+<!-- 오른쪽: WebSocket -->
+<text class="sub" x="384" y="30" font-size="11" font-weight="700">WebSocket</text>
+<text class="dim" x="384" y="45" font-size="9">한 번 연결하면 길이 계속 열려 있다</text>
+
+<rect class="card" x="386" y="58" width="88" height="32" rx="8" stroke-width="1.3"/>
+<text class="ttl" x="430" y="78" font-size="10.5" text-anchor="middle">iOS 앱</text>
+<rect class="srv" x="610" y="58" width="88" height="32" rx="8" stroke-width="1.4"/>
+<text class="ttl" x="654" y="78" font-size="10.5" text-anchor="middle">서버</text>
+
+<rect class="open" x="426" y="140" width="232" height="106" rx="6"/>
+<line class="life" x1="430" y1="92" x2="430" y2="246" stroke-width="1" stroke-dasharray="3 4"/>
+<line class="life" x1="654" y1="92" x2="654" y2="246" stroke-width="1" stroke-dasharray="3 4"/>
+
+<text class="acc" x="542" y="112" font-size="8.5" text-anchor="middle">연결할게요 (딱 한 번)</text>
+<line class="acl" x1="430" y1="118" x2="650" y2="118" stroke-width="1.4" marker-end="url(#a3)"/>
+<text class="acc" x="542" y="134" font-size="8.5" text-anchor="middle">좋아요, 길 열었어요</text>
+<line class="acl" x1="654" y1="140" x2="434" y2="140" stroke-width="1.4" marker-end="url(#a3)"/>
+
+<text class="dim" x="542" y="166" font-size="8.5" text-anchor="middle">안녕하세요</text>
+<line class="ln" x1="430" y1="172" x2="650" y2="172" stroke-width="1.3" marker-end="url(#a1)"/>
+
+<text class="ok" x="542" y="200" font-size="8.5" text-anchor="middle">곰돌이: 반가워요</text>
+<line class="okl" x1="654" y1="206" x2="434" y2="206" stroke-width="1.4" marker-end="url(#a2)"/>
+<text class="ok" x="542" y="228" font-size="8.5" text-anchor="middle">너구리: 안녕!</text>
+<line class="okl" x1="654" y1="234" x2="434" y2="234" stroke-width="1.4" marker-end="url(#a2)"/>
+
+<text class="sub" x="542" y="270" font-size="9" text-anchor="middle">묻지 않아도 서버가 먼저 말을 건다</text>
+</svg>
