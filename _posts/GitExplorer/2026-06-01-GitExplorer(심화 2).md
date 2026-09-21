@@ -215,7 +215,7 @@ typeMismatch(Swift.Array<Any>, Swift.DecodingError.Context(codingPath: [], debug
 
 그래서 다음 단계에서는 에러 스트림을 통합하는 구조로 변경해보려고 한다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-01-GitExplorer심화-2/58c1c494-d059-498e-af72-040460a84e2d.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-01-GitExplorer심화-2/58c1c494-d059-498e-af72-040460a84e2d.png" />
 
 현재 상황을 대변해주는 만화를 만들어 봤다...
 

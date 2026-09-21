@@ -26,7 +26,7 @@ toc_sticky: true
 ### 3. 프레임워크의 진화: 자동 바인딩(Automatic Binding)의 등장
 마틴 파울러는 "언젠가 프레임워크가 이 보충 코드(보링 코드)를 대신 처리해줄 날이 올 것"이라고 예견했다.
 
-<img width="100%" height="100%" alt="Presentation Model Class Diagram" src="https://martinfowler.com/eaaDev/presentationModel/cutTitleClass.gif" />
+<img alt="Presentation Model Class Diagram" src="https://martinfowler.com/eaaDev/presentationModel/cutTitleClass.gif" />
 
 - **WPF의 등장**: 마틴의 예언대로 WPF가 나오면서 **XAML(View)**과 **C#(ViewModel)** 사이의 **양방향 바인딩(Two-way Binding)**을 프레임워크가 자동으로 처리하기 시작했다.
 - **현대의 기술**: 이제 우리가 쓰는 **SwiftUI, React, Flutter**에서는 이 '동기화 로직'을 고민할 필요가 없다. 프레임워크가 상태(State)의 변화를 감지하여 UI를 자동으로 그려주기 때문이다.
@@ -62,10 +62,10 @@ MVVM은 모델(Model), 뷰(View), 뷰모델(ViewModel)로 구성되며, 각 계�
 - **데이터 전달**: 모델의 복잡한 데이터를 뷰가 바로 쓸 수 있는 단순한 형태로 변환한다.
 - **혼동 주의**: 많은 개발자가 뷰모델의 역할을 어렵게 생각하지만, 본질은 모델의 데이터를 뷰로 이어주는 '통로' 역할이다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/2cc7ae04-6b09-4da1-9ba9-94ba77123662.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/2cc7ae04-6b09-4da1-9ba9-94ba77123662.png" />
 
 
-<img width="70%" alt="Swift MVVM Architecture Pattern Diagram" src="https://cdn.prod.website-files.com/5f6e202c72c71024f95ace21/68c3d843797130f2c4d85c37_5fc39ec1234e0551c5102913_SWIFT-MVVM.webp" />
+<img alt="Swift MVVM Architecture Pattern Diagram" src="https://cdn.prod.website-files.com/5f6e202c72c71024f95ace21/68c3d843797130f2c4d85c37_5fc39ec1234e0551c5102913_SWIFT-MVVM.webp" />
 
 ### 4. 네트워크 통신에서의 데이터 흐름 (DTO의 역할)
 서버와 데이터를 주고받을 때는 순수 모델과는 성격이 다른 **DTO(Data Transfer Object)**가 등장하며 흐름이 구체화된다.
@@ -77,7 +77,7 @@ MVVM은 모델(Model), 뷰(View), 뷰모델(ViewModel)로 구성되며, 각 계�
 
 이처럼 MVVM은 역할을 명확히 나누어 복잡한 앱을 관리하는 데 유리하지만, 모든 프레임워크에서 만능인 것은 아니다. 특히 SwiftUI의 선언적 특성과 만났을 때 어떤 제약이 생기는지 이해하는 것이 중요하다.
 
-<img width="90%" height="90%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/2076c130-773d-4d78-8cba-895a8e70ea2b.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/2076c130-773d-4d78-8cba-895a8e70ea2b.png" />
 
 ---
 
@@ -93,7 +93,7 @@ MVVM은 모델(Model), 뷰(View), 뷰모델(ViewModel)로 구성되며, 각 계�
 - **전통적 방식**: 각 뷰모델이 각각 서버와 통신하며 데이터를 들고 있음으로써, 동일한 서버 데이터를 참조하는 여러 개의 '상태(State)'가 앱 내에 파편화된다.
 - **실제 진실의 근원**: 클라이언트-서버 앱에서 유일한 **Source of Truth**는 '서버'여야 한다. 뷰모델을 남발하면 이 원칙이 깨지기 쉽다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/ecc2f10e-d067-447c-88af-b9a3eb6e3a27.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/ecc2f10e-d067-447c-88af-b9a3eb6e3a27.png" />
 
 ### 3. SwiftUI 기능 활용의 제약 (EnvironmentObject의 부재)
 - **계층 구조의 한계**: SwiftUI의 `EnvironmentObject`는 뷰 계층 안에서만 유효하다.
@@ -105,14 +105,14 @@ MVVM은 모델(Model), 뷰(View), 뷰모델(ViewModel)로 구성되며, 각 계�
 단순히 데이터를 가져와 보여주는 화면이라면, 굳이 뷰모델을 만들지 않고 **환경 변수(Environment Values)**와 **상태(@State)**만으로 충분히 구현 가능하다.
 - **로직 추출**: 복잡한 검증이나 변환 로직이 필요하다면 뷰모델 클래스가 아닌, 가벼운 **구조체(Struct)**로 분리하여 테스트 가능성을 확보한다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/70a75f8d-a09a-445e-98de-4a02e54fdcfa.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/70a75f8d-a09a-445e-98de-4a02e54fdcfa.png" />
 
 #### [사례 2] 통합 모델(Aggregate Model/Store) 활용
 화면마다 뷰모델을 만드는 대신, 특정 도메인(예: MovieStore)을 담당하는 **하나의 커다란 관찰 대상 객체**를 만들어 여러 뷰가 공유하도록 한다.
 - **Bounded Context**: 도메인 주도 설계(DDD) 개념을 도입하여, 업무 경계(예: 카탈로그, 주문, 배송)에 따라 통합 모델을 나누면 코드 양을 획기적으로 줄일 수 있다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/b14711a1-0751-4314-86cc-345a59983e51.png" />
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/afff24e7-a59f-45c4-bc7a-132af27945e8.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/b14711a1-0751-4314-86cc-345a59983e51.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-08-13-MVVM-in-SwiftUI-Origin-to-Limitations/afff24e7-a59f-45c4-bc7a-132af27945e8.png" />
 
 ### 5. 테스트에 대한 새로운 시각
 - **뷰모델 테스트의 함정**: 뷰모델의 함수가 성공한다고 해서 UI가 제대로 그려진다는 보장은 없다. 뷰모델 테스트는 UI 테스트가 아니다.

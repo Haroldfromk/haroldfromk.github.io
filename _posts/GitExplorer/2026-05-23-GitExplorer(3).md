@@ -94,7 +94,7 @@ SwiftUI View 내부에서 간단한 설정값 저장할 때 쓴다. 다크모드
 
 정리하면 다음과 같다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-23-GitExplorer3/4940eee5-5304-405d-b638-bd0ffd2b69ce.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-23-GitExplorer3/4940eee5-5304-405d-b638-bd0ffd2b69ce.png" />
 
 ---
 
@@ -373,7 +373,7 @@ SwiftUI는 swipe delete, edit mode 다중 선택 삭제 같은 상황을 내부�
 
 무튼 실을 하면 이렇게
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-23-GitExplorer3/ef38a113-feb5-44ba-a2b1-095b8f433818.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-23-GitExplorer3/ef38a113-feb5-44ba-a2b1-095b8f433818.png" />
 
 잘 되는걸 알 수 있다. (삭제부분 이미지는 생략)
 

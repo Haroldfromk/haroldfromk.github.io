@@ -106,7 +106,7 @@ init() {
 
 다만 AvatarImage를 사용하는 AvatarView에서 기존에는 그냥 원에 H 하나만 있었는데
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/ea988caa-f3a0-4aa3-9835-04a6a46a2a29.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/ea988caa-f3a0-4aa3-9835-04a6a46a2a29.png" />
 
 ```swift
 // Before
@@ -203,7 +203,7 @@ enum Status: Equatable {
 
 이걸 `debounce` 다음에 넣으면, 검색어가 통과되는 순간 `.loading` 상태로 바꾸고 이후 파이프라인은 그대로 흘러간다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/bf3e8d18-5566-4696-814f-198daaa455fc.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/bf3e8d18-5566-4696-814f-198daaa455fc.png" />
 
 ---
 
@@ -324,7 +324,7 @@ if selectedSegment == 0 {
 
 이런식으로 segment를 사용해서 해둔상태
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/ce590d96-0325-4dde-9ac3-8f90b69f72d4.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/ce590d96-0325-4dde-9ac3-8f90b69f72d4.png" />
 
 ---
 

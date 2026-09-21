@@ -69,7 +69,7 @@ final class FavoriteViewModel: ObservableObject {
 
 포인트는 `ObservableObject`을 지워주고 `@Observable` Wrapper를 Class 전체에 씌워주는 형식으로 진행하면서 위에 언급한대로 `@ObservationIgnored`이 필요한 부분에는 이걸 별도로 적어주면 된다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/acf9aa86-ce83-4595-8cd6-494d1f3829b3.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/acf9aa86-ce83-4595-8cd6-494d1f3829b3.png" />
 
 
 ```swift
@@ -96,7 +96,7 @@ final class FavoriteViewModel {
 
 이전에는`@Published` 덕분에 users가 Publisher의 기능을 사용할 수 있었는데, 이젠 그 기능이 빠져버린것.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/3ef21370-3b12-42b5-acbc-79363e52b312.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/3ef21370-3b12-42b5-acbc-79363e52b312.png" />
 
 ---
 
@@ -229,7 +229,7 @@ Button {
 
 이제 [이전글](https://haroldfromk.github.io/posts/GitExplorer(5)/){:target="_blank"}에서 의존성 주입을 하면서 생긴 관련 에러가 발생한다
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/206762d2-82f1-47e8-aced-c23e99cafa9e.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/206762d2-82f1-47e8-aced-c23e99cafa9e.png" />
 
 이부분은 사실 [Docs](https://developer.apple.com/documentation/SwiftUI/Migrating-from-the-observable-object-protocol-to-the-observable-macro){:target="_blank"}만 봐도 해결이 가능하다.
 
@@ -371,7 +371,7 @@ func asyncFetchFavoriteDataBefore() async throws {
 
 `let data` 줄에 Break Point를 걸어보면
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/28f1fb04-6306-4c99-bff8-9cd8f7af0a71.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/28f1fb04-6306-4c99-bff8-9cd8f7af0a71.png" />
 
 `Task 1`이 표시되는데 이는 Main Thread를 의미한다.
 
@@ -695,7 +695,7 @@ nonisolated enum GitHubRequest {
 
 빌드 후 에러가 해결된거 같아 실행을 해보니
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/a1576fbe-2cb4-4136-8bec-50cda746952f.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/a1576fbe-2cb4-4136-8bec-50cda746952f.png" />
 
 이렇게 실행이 안된다.
 
@@ -725,7 +725,7 @@ Thread 4 Crashed:
 ---
 (5.31 수정)
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/10f4e795-04c2-4915-9fd2-c4fbf70e7a5d.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/10f4e795-04c2-4915-9fd2-c4fbf70e7a5d.png" />
 
 나중에 알게 된 사실이지만, 워치 시뮬레이터 없이도 Xcode에서 확인이 가능했다. 
 
@@ -902,7 +902,7 @@ Swift는 이러한 잠재적인 suspension point를 명시적으로 표현하도
 
 이해를 돕기위해 이미지로 만들어보면
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/077637a0-c1a8-488a-92f5-26885e60ed14.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/077637a0-c1a8-488a-92f5-26885e60ed14.png" />
 
 `await`는 "기다림"이라기보다 현재 Task가 잠시 중단될 수 있음을 표시하는 문법이다. 
 다만 Task가 중단된 동안에도 시스템은 다른 작업을 계속 실행할 수 있다. (여기선 네트워크 요청)
@@ -947,7 +947,7 @@ Swift는 이러한 잠재적인 suspension point를 명시적으로 표현하도
 
 ---
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/6c9be3e3-afe9-4d51-9f9a-344015607f04.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/6c9be3e3-afe9-4d51-9f9a-344015607f04.png" />
 
 `names`는 `MainActor`의 격리된 상태이므로 `nonisolated` 함수에서는 직접 접근할 수 없다. 
 
@@ -1468,7 +1468,7 @@ Thread 8 Crashed:
 
 또한 Xcode에서도 `SearchViewModel.init()` 내부에서 문제가 발생한 것을 확인할 수 있었다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/635d9594-86b7-4a07-84e6-4707ee629db6.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-30-GitExplorer심화-1/635d9594-86b7-4a07-84e6-4707ee629db6.png" />
 
 `SearchViewModel`은 `@MainActor`로 선언되어 있는데, 크래시 스택에는 `_dispatch_assert_queue_fail`이 찍혀 있었다.
 

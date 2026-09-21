@@ -21,21 +21,21 @@ toc_sticky: true
 
 iOS App이 있다면 만드는 방법이 달라진다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/c80af5b0-aacb-42c1-87ff-fef8a309b481.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/c80af5b0-aacb-42c1-87ff-fef8a309b481.png" />
 
 이렇게 2가지 방법으로 추가를 하는데, **핵심은 `Target`을 추가한다.** 이다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/226e938c-d109-4b16-98b0-8227e9e6060c.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/226e938c-d109-4b16-98b0-8227e9e6060c.png" />
 
 이렇게 추가하면 전과 달리 기존 앱과 연동할수있게 선택하는 부분이 나온다. 이걸 체크해주면 된다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/981852b7-19c5-4c39-9fc7-ae6d9456ec28.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/981852b7-19c5-4c39-9fc7-ae6d9456ec28.png" />
 
 Target을 추가하면 늘 뜨는 Scheme추가. 이번에도 해준다.
 
 이제 기본적인 준비는 끝났다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/fb1ee57c-d868-4789-87e6-c67cecbe696d.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/fb1ee57c-d868-4789-87e6-c67cecbe696d.png" />
 
 ---
 
@@ -165,7 +165,7 @@ if WCSession.isSupported() {
 
 ---
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/11eb1c51-e940-41ef-96d1-3eb68b0402a5.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/11eb1c51-e940-41ef-96d1-3eb68b0402a5.png" />
 
 이건 정리사진
 
@@ -190,7 +190,7 @@ WatchOS  ⇄  WCSession  ⇄  iOS App
 
 이때 서로 소통을 하기 위해선 양쪽에 `WCSession`을 만들어 줘야 한다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/57e06db6-a0a5-419b-918f-12b10ec958a9.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/57e06db6-a0a5-419b-918f-12b10ec958a9.png" />
 
 이때 중요한건 반드시 **Target**을 확인해줘야 한다.
 
@@ -273,7 +273,7 @@ override init() {
 
 무튼 이렇게 해주면
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/9d7e5fd8-7584-40e5-8903-179570aee321.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/9d7e5fd8-7584-40e5-8903-179570aee321.png" />
 
 이렇게 WCSessionDelegate 사용시 필요한 함수가 없다고 에러가 뜬다.
 
@@ -450,7 +450,7 @@ final class WatchConnectivityService: NSObject, WCSessionDelegate {
 
 다만 WatchOS의 경우 세션을 항상 지원하기에 위에서 언급한 조건은 없다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/61e4b874-f1ea-41c6-874d-56bf4dd1e66a.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/61e4b874-f1ea-41c6-874d-56bf4dd1e66a.png" />
 
 다만 역시나 Watch쪽에서도 Delegate 사용시 기본적으로 사용해야할 함수가 있으므로 Apply를 해주자.
 
@@ -478,7 +478,7 @@ iOS는 여러 대의 Apple Watch와 연결될 수 있어서 기기 교체 시 �
 
 App에서 보냈으니 이젠 Watch에서 받으면 된다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/d5beef1d-2996-429b-9310-57b8d2e1c26f.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/d5beef1d-2996-429b-9310-57b8d2e1c26f.png" />
 
 이건 Delegate가 지원해주는 함수를 사용해주면 된다.
 
@@ -528,13 +528,13 @@ struct GitExplorerWatch_Watch_AppApp: App {
 
 실행할때 
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/4cca86ef-3ed9-4ad7-a126-2e9af1bd95c5.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/4cca86ef-3ed9-4ad7-a126-2e9af1bd95c5.png" />
 
 여기 리스트에 있는걸 해줘야 같이 실행이 된다.
 
 만약 나만의 시뮬레이터 조합을 하고 싶다면?
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/a0f327e5-37f9-4c3d-beea-43f850039f46.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/a0f327e5-37f9-4c3d-beea-43f850039f46.png" />
 
 여기서 만들어주면 된다.
 
@@ -542,7 +542,7 @@ struct GitExplorerWatch_Watch_AppApp: App {
 
 일단 실행하면 이렇게 첫화면이 나온다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/563b2ca3-87d2-4a24-b0ee-f3b4380a9a9a.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/563b2ca3-87d2-4a24-b0ee-f3b4380a9a9a.png" />
 
 이제 앱에서 즐겨찾기를 추가해서 확인해보도록 한다.
 
@@ -1012,7 +1012,7 @@ FavoriteViewModel ────────────────────�
 
 사진으로 정리하면 다음과 같다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/4b412434-a4ca-4c5e-8f48-502175585f72.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/4b412434-a4ca-4c5e-8f48-502175585f72.png" />
 
 이렇게 한쪽을 약한 참조로 끊어줘야 메모리에서 정상적으로 해제된다.
 

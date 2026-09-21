@@ -222,7 +222,7 @@ cancellables.removeAll()   // 전체 취소
 
 사진으로 간단하게 정리를 해봤다.
 
-<img width="50%" height="50%" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine4/be303eb7-72d9-4c2e-9191-bccc350465aa.png" />
+<img alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine4/be303eb7-72d9-4c2e-9191-bccc350465aa.png" />
 
 이건 시뮬레이터
 

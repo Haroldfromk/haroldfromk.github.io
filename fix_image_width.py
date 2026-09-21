@@ -1,25 +1,32 @@
 #!/usr/bin/env python3
 """
-Jekyll 블로그 _posts 폴더에서 이미지 width 스타일 {: width=...} 를 찾아 리포트하고,
+Jekyll 블로그 _posts 폴더에서 이미지 width 지정을 찾아 리포트하고,
 --apply 옵션을 주면 실제로 제거해서 원본 사이즈로 되돌리는 스크립트.
 
-기본 동작:
-  - .jekyll-cache 등 숨김(.으로 시작하는) 폴더는 스캔 대상에서 제외 (빌드 캐시라 건드리면 안 됨)
-  - width 값이 퍼센트(%)이고 --skip-under 값 이상인 것만 제거 대상 (기본 10% 미만은 보존, 인라인 아이콘 보호용)
-  - px 등 퍼센트가 아닌 값(예: 720, 700)은 --strip-px 를 줘야 제거 대상에 포함됨
+처리하는 두 가지 패턴:
+  1. kramdown 방식: ![]() 뒤에 붙는 {: width="50%" height="50%"} 블록 전체 제거
+  2. HTML 방식: <img ... width="50%" height="50%" ... /> 태그에서 width/height 속성만 제거 (태그 자체는 유지)
+
+공통 규칙:
+  - .jekyll-cache 등 숨김(.으로 시작하는) 폴더는 스캔 제외 (빌드 캐시)
+  - width 값이 퍼센트이고 --skip-under 미만이면 보존 (인라인 아이콘 보호용, 기본 10)
+  - px 등 퍼센트가 아닌 값은 --strip-px 를 줘야 제거 대상에 포함
 
 사용법:
   python3 fix_image_width.py                     # 드라이런
-  python3 fix_image_width.py --apply              # 실제 적용
-  python3 fix_image_width.py --skip-under 5        # 5% 미만만 보존하고 싶을 때
-  python3 fix_image_width.py --apply --strip-px    # px 값도 같이 제거
+  python3 fix_image_width.py --apply               # 실제 적용
+  python3 fix_image_width.py --skip-under 5         # 5% 미만만 보존
+  python3 fix_image_width.py --apply --strip-px      # px 값도 같이 제거
 """
 import argparse
 import re
 from pathlib import Path
 from collections import Counter
 
-WIDTH_BLOCK = re.compile(r'\s*\{:\s*[^}]*\bwidth=[^}]*\}')
+KRAMDOWN_BLOCK = re.compile(r'\s*\{:\s*[^}]*\bwidth=[^}]*\}')
+IMG_TAG = re.compile(r'<img\b[^>]*/?>')
+WIDTH_ATTR = re.compile(r'\s*width=["\'“]?\d+%?["\'”]?')
+HEIGHT_ATTR = re.compile(r'\s*height=["\'“]?\d+%?["\'”]?')
 WIDTH_VALUE = re.compile(r'width=["\'“]?(\d+)(%)?["\'”]?')
 
 
@@ -31,10 +38,9 @@ def iter_md_files(posts_dir: Path):
         yield md_file
 
 
-def should_strip(match_text: str, skip_under: int, strip_px: bool):
+def classify(match_text: str, skip_under: int, strip_px: bool):
     m = WIDTH_VALUE.search(match_text)
     if not m:
-        # 파싱 안 되는 특이 케이스(따옴표 이슈 등)는 그냥 제거 대상으로 취급
         return True, "unparsed"
     value, is_percent = int(m.group(1)), bool(m.group(2))
     if not is_percent:
@@ -42,6 +48,40 @@ def should_strip(match_text: str, skip_under: int, strip_px: bool):
     if value < skip_under:
         return False, f"{value}% (skip-under 대상)"
     return True, f"{value}%"
+
+
+def process_text(text: str, skip_under: int, strip_px: bool, do_apply: bool):
+    stripped = Counter()
+    kept = Counter()
+    kept_detail = []
+
+    def kramdown_repl(mo):
+        match_text = mo.group(0)
+        strip, label = classify(match_text, skip_under, strip_px)
+        if strip:
+            stripped[label] += 1
+            return '' if do_apply else match_text
+        kept[label] += 1
+        kept_detail.append(match_text.strip())
+        return match_text
+
+    def img_repl(mo):
+        tag = mo.group(0)
+        if 'width=' not in tag:
+            return tag
+        strip, label = classify(tag, skip_under, strip_px)
+        if strip:
+            stripped[label] += 1
+            if do_apply:
+                return HEIGHT_ATTR.sub('', WIDTH_ATTR.sub('', tag))
+            return tag
+        kept[label] += 1
+        kept_detail.append(tag.strip())
+        return tag
+
+    text = KRAMDOWN_BLOCK.sub(kramdown_repl, text)
+    text = IMG_TAG.sub(img_repl, text)
+    return text, stripped, kept, kept_detail
 
 
 def main():
@@ -63,29 +103,18 @@ def main():
     kept_matches = []
 
     for md_file in iter_md_files(posts_dir):
-        text = md_file.read_text(encoding="utf-8")
-        matches = list(WIDTH_BLOCK.finditer(text))
-        if not matches:
-            continue
+        original = md_file.read_text(encoding="utf-8")
+        new_text, s, k, kd = process_text(original, args.skip_under, args.strip_px, args.apply)
 
-        new_text = text
-        file_stripped = 0
-        for mo in matches:
-            match_text = mo.group(0)
-            do_strip, label = should_strip(match_text, args.skip_under, args.strip_px)
-            if do_strip:
-                stripped_counter[label] += 1
-                file_stripped += 1
-                if args.apply:
-                    new_text = new_text.replace(match_text, '', 1)
-            else:
-                kept_counter[label] += 1
-                kept_matches.append((md_file, match_text.strip()))
+        stripped_counter.update(s)
+        kept_counter.update(k)
+        if s:
+            stripped_files.append((md_file, sum(s.values())))
+        for item in kd:
+            kept_matches.append((md_file, item))
 
-        if file_stripped:
-            stripped_files.append((md_file, file_stripped))
-            if args.apply and new_text != text:
-                md_file.write_text(new_text, encoding="utf-8")
+        if args.apply and new_text != original:
+            md_file.write_text(new_text, encoding="utf-8")
 
     total_stripped = sum(stripped_counter.values())
     total_kept = sum(kept_counter.values())
