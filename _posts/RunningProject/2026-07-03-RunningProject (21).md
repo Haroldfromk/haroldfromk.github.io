@@ -13,7 +13,7 @@ published: true
 
 지금 TakeoffView의 값들이 하드코딩 되어있는데 이걸 실기기 반영을 해보도록 한다.
 
-![](/assets/images/upload/takeoffbefore.png){: width="50%" height="50%"}
+![](/assets/images/upload/takeoffbefore.png)
 
 현재는 하드코딩되어있는데, 워치 연동 그리고 battery 상태 등을 활용해서 실기기를 반영하도록 수정해본다.
 
@@ -145,10 +145,10 @@ Watch 앱이 실제로 포그라운드에서 실행 중이어야 `true`를 반�
 
 Watch 앱이 백그라운드 상태여도 `workoutSessionMirroringStartHandler`가 트리거되어 미러링은 정상적으로 시작된다. TakeoffView의 APPLE WATCH 항목은 어디까지나 사전 연결 상태를 시각적으로 알려주는 용도다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/IMG_3973.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/IMG_3973.png)
 Watch 앱이 백그라운드이거나 실행되지 않았을 때
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/IMG_3972.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/IMG_3972.png)
 Watch 앱이 포그라운드로 실행 중일 때
 
 
@@ -281,11 +281,11 @@ JWT 인증 에러였다. Xcode에서 Signing & Capabilities에 WeatherKit을 추
 
 구글링 결과, [developer](https://developer.apple.com/account/resources/identifiers/list){:target="_blank"} 사이트에서 프로젝트에 해당하는 Identifier에 들어가서 Capabilities 탭이 아닌 **App Services 탭**에도 별도로 WeatherKit을 체크해줘야 한다는 걸 알게 됐다. 
 
-![](/assets/images/upload/weather.png){: width="50%" height="50%"}
+![](/assets/images/upload/weather.png)
 
-![](/assets/images/upload/done1.gif){: width="50%" height="50%"}
+![](/assets/images/upload/done1.gif)
 
-![](/assets/images/upload/done2.png){: width="50%" height="50%"}
+![](/assets/images/upload/done2.png)
 
 시뮬레이터에서 이렇게 나오는걸 알 수 있다.
 
@@ -334,4 +334,4 @@ func cancelTracking() {
 
 그리고 하단에 있던 3, 2, 1 시그널 강도에 대한 내용은 필요 없을듯 해서 지워주었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/takeoff.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/takeoff.png)

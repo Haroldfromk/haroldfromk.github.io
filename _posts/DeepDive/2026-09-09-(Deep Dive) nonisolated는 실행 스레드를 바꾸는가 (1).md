@@ -1,5 +1,5 @@
 ---
-title: (Deep Dive) nonisolated는 실행 스레드를 바꾸는가 (1)
+title: (Deep Dive) nonisolated??
 writer: Harold
 date: 2026-09-09 00:00
 categories: [Deep Dive]

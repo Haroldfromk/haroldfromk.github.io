@@ -63,7 +63,7 @@ private func loadJSON() {
 
 그리고 ViewDidLoad에서 해당 함수를 호출한다.
 
-![CleanShot 2024-10-13 at 01 27 27](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/b8a84258-a743-4c8f-a7c7-d160e95a3d3e.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-13 at 01 27 27](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/b8a84258-a743-4c8f-a7c7-d160e95a3d3e.png) 
 
 이렇게 실행하니 json파일이 잘 콘솔에 출력이됨을 알 수 있다.
 
@@ -90,7 +90,7 @@ struct APIResponse: Decodable {
 
 Layout은 type에 따라 다르므로.
 
-![CleanShot 2024-10-13 at 01 35 47](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/f6b9bf51-306a-4192-a51d-bd62fb2c3d4e.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-13 at 01 35 47](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-8/f6b9bf51-306a-4192-a51d-bd62fb2c3d4e.png) 
 
 enum을 사용해서 구성한다.
 

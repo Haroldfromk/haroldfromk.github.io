@@ -145,7 +145,7 @@ holdTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ 
 
 콜백이 주는 `timer` 파라미터도 그대로 캡처해서 쓰면 안 된다. `Timer` 타입 자체가 `Sendable`이 아니라서, `Task { @MainActor in }` 안에서 그 값을 쓰려고 하면 또 에러가 난다. 그래서 `timer.invalidate()` 대신, 이미 메인 액터에 있는 `holdTimer`(같은 타이머를 담고 있는 `@State` 변수)로 멈추게 했다. 같은 패턴을 쓰던 워치 쪽 `EndFlightHoldButton`과 `statusCycleTimer`도 똑같이 고쳤다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/stopbutton.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/stopbutton.gif)
 
 ---
 
@@ -153,7 +153,7 @@ holdTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ 
 
 시뮬레이터로 24km짜리 러닝을 하나 만들어서 FLIGHT SUMMARY를 열어봤더니, 스플릿 목록 아래쪽이 하단 탭바(Deck/Logbook/Alerts)에 가려서 마지막 줄이 반쯤 잘려 보였다. 기종마다 이 부분이 다르게 보이면 안 되니까 짚고 넘어가기로 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/splits_tabbar_before.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/splits_tabbar_before.png)
 
 스와이프를 해봐도 아래로 안 넘어가고 그대로 멈춰있었다.
 
@@ -219,13 +219,13 @@ GeometryReader { proxy in
 
 수정 전으로 두고 스플릿을 24개까지 늘리면 화면 밖으로 300pt 넘게 밀려나고, 스플릿 17줄과 GO TO DECK 버튼이 통째로 손이 안 닿는 곳으로 간다. 화면을 큰 기종으로 바꿔도 밀려나는 양만 줄어들 뿐 문제 자체는 그대로다. **화면 크기로는 해결되지 않는 문제**라는 게 여기서 드러난다. 수정 후로 바꾸면 어떤 조합에서도 밀려나는 게 0이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/after.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/after.png)
 
 ---
 
 ## Flight Summary에 미션 목표 표시하기
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/summarybefore.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/summarybefore.png)
 
 Flight Summary에서 Mission Flight로 뛴 기록을 봐도 그냥 "MISSION FLIGHT"라고만 나오고, 그 미션이 어떤 목표(페이스였는지 심박이었는지, 목표가 얼마였는지)였는지는 어디서도 안 보였다. 찾아보니 러닝 하나가 끝날 때 `SwiftDataFlight`에 저장하는 값은 `mode`("modeA"/"modeB") 하나뿐이었다. 정작 그 미션의 목표 페이스/심박/거리 같은 실제 설정값(`ModeA`)은 러닝 도중에만 메모리에 떠 있다가, 저장하는 순간 그냥 버려지고 있었다.
 
@@ -303,7 +303,7 @@ var missionDetailText: String? {
 
 Free Flight면 `nil`을 반환해서 원래대로 "Airbus A320-200"이 보이고, Mission Flight면 그 자리에 목표 기준 이름("PACE" 또는 "HEART RATE")과 값, 목표 거리를 보여준다. 처음엔 "TARGET 5'30\"/km"처럼 썼는데 이 숫자가 페이스인지 심박인지 라벨만 봐서는 애매해서, 기준 이름을 그대로 라벨로 바꿨다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/summa.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/summa.png)
 
 
 ---
@@ -353,7 +353,7 @@ func sendStopSignal() {
 
 지인한테 앱을 보여줬는데, 지도에 찍히는 시작/종료 마커가 "S"/"E"라서 시작/종료(Start/End)가 아니라 방위(남쪽/동쪽)처럼 보인다는 피드백을 받았다. "F"(Finish)로 바꾸면 그런 오해가 없을 것 같아서 그렇게 고쳤다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/mapbefore.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/mapbefore.png)
 
 ```swift
 // Before
@@ -373,7 +373,7 @@ case "END":
     view.glyphImage = nil
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/mapafter.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/mapafter.png)
 
 ---
 
@@ -393,7 +393,7 @@ Text("Hold background to peek PFD")
 
 그리고 이 문구는 영어 하드코딩이라 로컬라이징이 필요했다. `Localizable.xcstrings`에 실제 한국어/일본어 번역을 채워 넣어서, 시스템 언어에 따라 자동으로 바뀌게 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/watchgpws.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/watchgpws.png)
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/gpwspfdbutton.gif)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-35/gpws11.gif)
 

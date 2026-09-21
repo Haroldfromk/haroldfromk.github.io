@@ -45,7 +45,7 @@ func startTracking() {
 
 현재는 타겟 추가만 해두고 이후 `HealthKitService`와의 연동 시 함께 구현한다. 실제 동작 여부는 Watch 러닝 테스트를 진행하며 확인할 예정이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/share.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/share.png)
 
 ---
 
@@ -542,11 +542,11 @@ func resetWorkout() {
 
 ---
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/healthkit.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/healthkit.png)
 
 ---
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/healthsum.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/healthsum.png)
 
 간단하게 정리한 만화 두개를 준비해보았다.
 
@@ -655,7 +655,7 @@ func resetState() async {
 
 지금까지 구현한 내용을 Flow로 정리하면 아래와 같다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/watch_architecture.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/watch_architecture.png)
 
 공유할 수 있는 건 타겟 멤버십으로 공유하되, ViewModel은 iPhone과 Watch 각자의 역할에 맞게 분리했다. `LocationService`, `RunningCenter`, `FlightData`는 공유하고, HealthKit 데이터 수집은 Watch VM에서만 담당한다.
 
@@ -677,7 +677,7 @@ WatchConnectivity 설정에 앞서 앱과 Watch 간의 데이터 전달 방향�
 
 아래 다이어그램처럼 세 가지 시나리오로 나눠서 방향성을 정리했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/watchconnectivity_scenarios_blog.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/watchconnectivity_scenarios_blog.png)
 
 ---
 
@@ -685,11 +685,11 @@ WatchConnectivity 설정에 앞서 앱과 Watch 간의 데이터 전달 방향�
 
 우선 `Info.plist` 설정부터 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/infplist.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/infplist.png)
 
 이후 Signing & Capabilities에서 BackgroundModes, HealthKit을 추가하고 아래 사진과 같이 체크를 해준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/deliback.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/deliback.png)
 
 앱과 추가하는건 같지만 워치에선 Background Modes가 일부라서 Workout Processing에 체크를 해주면 된다.
 
@@ -928,7 +928,7 @@ func sessionDidDeactivate(_ session: WCSession) {
 
 별도 함수 구성 없이 자동완성으로 코드 블럭 내부를 구현하면 된다. `didReceiveUserInfo`도 마찬가지다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/didreceive.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/didreceive.png)
 
 ```swift
 func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
@@ -1192,15 +1192,15 @@ nonisolated final class WatchConnectivityService: NSObject, WCSessionDelegate {
 
 Xcode에서 Watch를 인식하지 못해서 Devices and Simulators 목록을 확인해보니
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/developer.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/developer.png)
 
 Developer Mode가 비활성화된 게 원인이었다. 활성화 후 재부팅해도 연결이 안 돼서 사진에는 없지만 Connect 버튼을 직접 눌러주니 연결이 시작됐다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/connect.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/connect.png)
 
 처음 연결 시 심볼 데이터를 다운로드하기 때문에 완료될 때까지 기다려야 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/down.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-13-RunningProject-12/down.png)
 
 ---
 

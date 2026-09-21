@@ -16,7 +16,7 @@ toc_sticky: true
 
 Snapkit Dynamic은 여전히 에러가 발생하는듯하니 설치하지 말자.
 
-![CleanShot 2024-10-10 at 02 15 29](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/33cf7299-a9bd-4442-baa7-0922318fa0df.png){: width="50%" height="50%"}
+![CleanShot 2024-10-10 at 02 15 29](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/33cf7299-a9bd-4442-baa7-0922318fa0df.png)
 
 Xcode Project 생성시 생기는 파일에서 Info.plist, VC 빼고 나머지 파일들을 모두 Supporting Files에 넣어주었다.
 
@@ -32,17 +32,17 @@ Xcode Project 생성시 생기는 파일에서 Info.plist, VC 빼고 나머지 �
 
 그리고 내용은 간단하게 이렇게만 한다.
 
-![CleanShot 2024-10-10 at 02 26 24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/6d1808a0-3c03-47db-8de2-c478943a6a75.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-10 at 02 26 24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/6d1808a0-3c03-47db-8de2-c478943a6a75.png) 
 
 그리고 SwiftUIView 디렉토리엔 반드시 위와 같이 SwiftUI 에 해당하는 파일로 선택해서 만들자.
 
-![CleanShot 2024-10-10 at 02 28 40](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/1491168a-0a9e-4944-bf7e-14a3f79073b3.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-10 at 02 28 40](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/1491168a-0a9e-4944-bf7e-14a3f79073b3.png) 
 
 ## 컬렉션뷰 세팅
 
 View 디렉토리에 여러 파일들을 미리 만들어준다.
 
-![CleanShot 2024-10-10 at 02 35 44](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/e0bcd18c-809f-496f-a330-58f13dfd274b.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-10 at 02 35 44](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/e0bcd18c-809f-496f-a330-58f13dfd274b.png) 
 
 현재는 아무것도 없는 빈 깡통.
 
@@ -100,7 +100,7 @@ class HomeViewController: UIViewController {
 
 즉 실행했을때 녹색화면이 보인다면 제대로 되었다는 것.
 
-![simulator_screenshot_A3D22DA3-47E8-436D-BC52-9DAED2F752B3](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/fb17891e-37a0-4af5-9d01-6d1ceb0dc57c.png){: width="50%" height="50%"} 
+![simulator_screenshot_A3D22DA3-47E8-436D-BC52-9DAED2F752B3](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/fb17891e-37a0-4af5-9d01-6d1ceb0dc57c.png) 
 
 정상인것을 확인!
 
@@ -139,7 +139,7 @@ struct HomeUIModel: Hashable {
 }
 ```
 
-![CleanShot 2024-10-10 at 03 01 16](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/f6a9dc34-e7a6-4ae2-b3e8-aeecc5720b7e.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-10 at 03 01 16](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/f6a9dc34-e7a6-4ae2-b3e8-aeecc5720b7e.png) 
 
 강의에 있는 이부분에 대한 모델링을 미리 해두는 것이다.
 
@@ -194,7 +194,7 @@ struct MainBannerView: View {
 }
 ```
 
-![CleanShot 2024-10-10 at 03 38 30](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/32c7c39c-5c35-45ea-a6aa-07e918df30ff.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-10 at 03 38 30](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-09-Build-the-unofficial-Udemy-Home-Screen-1/32c7c39c-5c35-45ea-a6aa-07e918df30ff.png) 
 
 Preview를 하게 되면 이렇게 나온다.
 

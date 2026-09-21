@@ -243,7 +243,7 @@ weather.temperature = 25
 ![CleanShot 2024-05-02 at 21 51 22@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-02-Deep-Dive-Combine-기초/1dff7031-8137-4f80-a155-621e6f178a14)
 ![CleanShot 2024-05-02 at 21 51 47@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-02-Deep-Dive-Combine-기초/8e8825e1-1656-4a44-9063-48414fe2af87)
 
-![CleanShot 2024-05-02 at 21 52 01@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-02-Deep-Dive-Combine-기초/2e533472-2695-42ec-84f4-2897e8c385b3){: width="40%" height="40%"}
+![CleanShot 2024-05-02 at 21 52 01@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-02-Deep-Dive-Combine-기초/2e533472-2695-42ec-84f4-2897e8c385b3)
 
 ## 7. Scheduler
 

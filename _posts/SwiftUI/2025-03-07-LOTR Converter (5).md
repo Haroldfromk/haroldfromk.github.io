@@ -15,7 +15,7 @@ toc_sticky: true
 
 ## SelectCurrency View 만들기
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/080a587c-58f8-4f68-8e8c-71f0b22fa890.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/080a587c-58f8-4f68-8e8c-71f0b22fa890.png) 
 
 위와 같은 View를 만들기위해 구상은 다음과 같이 한다.
 
@@ -174,7 +174,7 @@ struct SelectCurrency: View {
 }
 ```
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/d9cd1a36-3cfd-4481-bb41-755e7897433a.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/d9cd1a36-3cfd-4481-bb41-755e7897433a.png) 
 
 아이콘을 하나밖에 추가를 안했음에도 불구하고 길어진 코드들...
 
@@ -234,7 +234,7 @@ LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
 
 이렇게 하게되면
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/68f729fd-0946-4518-a521-0873543eb94e.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/68f729fd-0946-4518-a521-0873543eb94e.png) 
 
 위와같이 배치가 되는데
 
@@ -242,7 +242,7 @@ columns에 GridItem()은 행에 몇개를 추가할것인지를 설정한다, �
 
 만약 GridItem의 갯수를 4개로 한다면
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/695f9182-7542-4059-ae64-f4a4ccdcad2a.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/695f9182-7542-4059-ae64-f4a4ccdcad2a.png) 
 
 이렇게 배치가 된다.
 
@@ -401,7 +401,7 @@ ForEach(Currency.allCases) { currency in
 
 그러면
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/76acad63-f369-4029-abb0-f86752e240ab.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/76acad63-f369-4029-abb0-f86752e240ab.png) 
 
 이렇게 우리가 enum을 통해 만들어둔 순서대로 만들어 진다.
 
@@ -420,7 +420,7 @@ ForEach(Currency.allCases) { currency in
 ```
 
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/447b000d-d60b-4343-bfe8-9bc7d1c6efb2.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/447b000d-d60b-4343-bfe8-9bc7d1c6efb2.png) 
 
 이렇게 디자인을 해준다
 
@@ -454,12 +454,12 @@ ForEach(Currency.allCases) { currency in
 
 1, 2의 결과가 다르다.
 1의 경우에는
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/1b296c9b-84be-477d-90d6-5116067b6069.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/1b296c9b-84be-477d-90d6-5116067b6069.png) 
 
 이렇게 5개 전부가 나오는 반면
 
 2의 경우엔
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/cf8bf4bd-9890-4680-91fb-050b4adca5f8.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/cf8bf4bd-9890-4680-91fb-050b4adca5f8.png) 
 
 이렇게 1개만 보이게 된다.
 
@@ -479,7 +479,7 @@ else {
 
 하지만 이렇게만 해두면 우리가 선택을 해도 아이콘이 Effect가 변하지 않는다.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/1d79c302-cb64-4f07-a038-a20fccc34a41.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/1d79c302-cb64-4f07-a038-a20fccc34a41.png) 
 
 이제 `onTapGesture` Modifier를 사용한다.
 
@@ -494,7 +494,7 @@ CurrencyIcon(currencyImage: currency.image, currencyName: currency.name)
 
 실행해보면
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/dde7a62c-6fc4-4a37-b685-213aba1ee19e.png){: width="50%" height="50%"}
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-03-07-LOTR-Converter-5/dde7a62c-6fc4-4a37-b685-213aba1ee19e.png)
 
 이렇게 잘 적용이 되는걸 알 수 있다.
 

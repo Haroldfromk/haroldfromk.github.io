@@ -1040,7 +1040,7 @@ Watch에서 보낸 `"delete"` 키의 값을 꺼내서 `removeToFavorite`에 넘�
 
 실행하면?
 
-<img width="460" height="548" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/66db8016-4953-4955-b773-e1637fb2cbce.png" />{: width="50%" height="50%"}
+<img width="460" height="548" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/66db8016-4953-4955-b773-e1637fb2cbce.png" />
 
 삭제는 잘 된다.
 
@@ -1096,7 +1096,7 @@ struct GitExplorerWatch_Watch_AppApp: App {
 
 이건 실기기로 테스트를 하는게 제일 베스트인것같다.
 
-<img width="460" height="548" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/1c7cf3f1-110b-40e0-a6cd-b7396488d7fc.png" />{: width="50%" height="50%"}
+<img width="460" height="548" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-28-GitExplorer5/1c7cf3f1-110b-40e0-a6cd-b7396488d7fc.png" />
 
 ---
 

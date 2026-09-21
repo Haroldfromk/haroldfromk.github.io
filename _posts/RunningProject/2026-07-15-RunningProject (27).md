@@ -211,7 +211,7 @@ if let attribution = runViewModel.weatherAttribution {
 
 실제로 탭해보면 `developer.apple.com/weatherkit/data-source-attribution/`으로 연결되는데, 이것도 Apple 서버 응답을 그대로 쓴 거라 나중에 Apple이 페이지를 바꿔도 코드를 안 건드려도 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-15-RunningProject-27/before.gif){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-15-RunningProject-27/weather.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-15-RunningProject-27/before.gif)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-15-RunningProject-27/weather.gif)
 
 ### 회신
 
@@ -280,7 +280,7 @@ Watch 쪽(`WatchSummaryView`)은 애초에 이런 "가장 최근 기록 쿼리" 
 
 심사가 시작되고 약 10분정도 지났을때
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-15-RunningProject-27/result.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-15-RunningProject-27/result.png)
 
 이렇게 준비한 앱이 배포가 되었다.
 

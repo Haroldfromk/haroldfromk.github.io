@@ -208,7 +208,7 @@ return abs(Int(viewModel.flightData.pace - targetPace))
 return abs(Int((viewModel.flightData.pace - targetPace) * 60))
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/done.gif){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/done1.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/done.gif)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/done1.gif)
 
 GPWS가 정상 작동하는 것을 확인했다. (2번째 사진)
 
@@ -264,7 +264,7 @@ iPhone 앱 없이 Watch만으로 러닝하는 경우다. 미러링 없이 Watch 
 
 즉 플로우를 정리하면 아래와 같다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/mirroring_scenarios.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/mirroring_scenarios.png)
 
 미러링경우 이전글에서의 Apple에서 제공한 Sample Project와 더불어 [참고글](https://sasq.ca/blog/2025/3/2/building-a-workout-app-for-apple-watch){:target="_blank"}을 하나 더 같이 해서 진행을 해보려 한다.
 
@@ -272,7 +272,7 @@ iPhone 앱 없이 Watch만으로 러닝하는 경우다. 미러링 없이 Watch 
 
 ### 1. 동시 사용
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/togetherfinal.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/togetherfinal.png)
 
 iPhone에서 러닝을 시작하면 `startMirroringToCompanionDevice()`로 Watch와 세션을 공유한다. 
 
@@ -525,7 +525,7 @@ func sessionReachabilityDidChange(_ session: WCSession) {
 
 현재는 Watch가 먼저 시작한 경우만 구현하고, iPhone이 먼저 시작하는 경우는 이후에 추가할 예정이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/watch_mirroring_decision.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/watch_mirroring_decision.png)
 
 ---
 
@@ -854,7 +854,7 @@ func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
 
 Watch에서 미러링 세션을 시작하면 iPhone이 감지해 PFD로 전환하고 GPS 수집을 시작한다. 수집된 FlightData는 다시 Watch로 전송되어 PFD에 표시되는 구조다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/watch_mirroring_flow.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/watch_mirroring_flow.png)
 
 처음에는 구현하는 나조차도 방향이 잘안잡히고 어려웠는데, 하다보니 이젠 어디에 뭐가 부족하고 문제점이 뭔지 알게 되었다.
 
@@ -897,7 +897,7 @@ gpws상태도 flightData에 그대로 담아서 전달을 하기에 별도의 �
 
 #### 최종 정리
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/watch_mirroring_flow_final.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/watch_mirroring_flow_final.png)
 
 지금까지의 작업을 하나의 흐름으로 정리하면 위와 같다.
 
@@ -909,7 +909,7 @@ Watch에서 시작된 워크아웃 세션은 HealthKit 미러링을 통해 iPhon
 
 ### 2. 워치 단독 사용
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/standalone.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-15-RunningProject-13/standalone.png)
 
 iPhone 없이 Watch만으로 러닝하는 경우다. `CoreLocation`으로 GPS를 직접 처리하고 `HealthKit`으로 심박수, 케이던스, 칼로리를 수집한다. `RunningCenter`에서 페이스와 거리를 계산하고, 러닝 종료 후 `transferUserInfo()`로 결과를 iPhone에 전송해 Logbook에 저장한다.
 

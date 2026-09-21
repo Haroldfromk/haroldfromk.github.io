@@ -129,7 +129,7 @@ Model의 데이터를 직접 View에 전달하고 표시하는 방식은 **좋�
 1. **View와 Web Service의 직접 연결**  
    - View가 Web Service와 직접 통신하여 JSON 데이터를 요청.  
    - 예: View에서 클라우드에 데이터를 요청하고 응답을 처리.
-![example2 drawio](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-3/4da56edf-1927-4c21-b498-23567be52d34.png){: width="50%" height="50%"} 
+![example2 drawio](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-28-Async_await-3/4da56edf-1927-4c21-b498-23567be52d34.png) 
 
 2. **문제점**  
    - View와 Web Service가 강하게 결합되어 있음.  

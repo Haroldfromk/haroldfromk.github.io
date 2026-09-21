@@ -253,7 +253,7 @@ Accessing StateObject<FavoriteViewModel>'s object without being installed on a V
 
 잘되는걸 알 수 있다.
 
-<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-23-GitExplorer3/6963a6f5-4b72-40ca-846e-fb4e20d196c4.png" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-23-GitExplorer3/6963a6f5-4b72-40ca-846e-fb4e20d196c4.png" />
 
 ---
 

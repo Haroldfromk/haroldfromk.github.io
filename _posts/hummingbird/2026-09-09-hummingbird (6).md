@@ -25,7 +25,7 @@ toc_sticky: true
 
 이럴 땐 Docker 앱 자체가 제공하는 터미널을 먼저 열어서 설치 경로부터 확인해야 한다. Docker Desktop을 실행하고, 우측 상단 톱니바퀴(Settings) 옆이나 메뉴에서 터미널을 열 수 있는 옵션을 찾아 실행한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-10.5503.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-10.5503.png)
 
 그러면 `/Applications/Docker.app/Contents/Resources/bin/docker` 이 경로에 설치되어 있다는 걸 확인할 수 있다.
 
@@ -49,7 +49,7 @@ source ~/.zshrc
 
 이제 일반 터미널에서 `docker -v`을 입력해보면 정상적으로 버전 정보가 출력되는 걸 확인할 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-10.5815.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-10.5815.png)
 
 ---
 
@@ -96,7 +96,7 @@ services:
 
 Railway 템플릿의 Docker 실행 커맨드를 보면 database host, port, username, password, name 같은 값들을 전부 환경 변수로 주입하고 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.0711.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.0711.png)
 
 그런데 지금까지 프로젝트는 `JWT_SECRET` 하나만 env에서 읽어오고, 나머지 database 관련 설정은 여전히 코드에 하드코딩되어 있었다. 
 
@@ -186,7 +186,7 @@ docker run -p 8080:8080 \
 
 이렇게 실행하니 서버가 정상적으로 뜨고 지정한 포트에서 listen하는 게 확인됐다. `/api/movies`로 요청을 보내보면(로그인을 안 한 상태라 인증 에러가 나긴 하지만) 요청 자체는 API까지 정상적으로 도달한다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.2421.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.2421.png)
 
 즉 Docker container 안에서 애플리케이션과 Postgres가 서로 통신하며 정상 동작하고 있다는 뜻이다.
 
@@ -202,7 +202,7 @@ docker run -p 8080:8080 \
 
 ### GitHub 연동 대신 Docker 이미지 방식을 선택한 이유
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.2625.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.2625.png)
 
 Railway는 GitHub 저장소를 연결해서 클라우드에서 직접 빌드하는 방식도 지원하는데, 이 경우 빌드 시간이 30~45분 이상 걸리고 종종 실패하기도 한다. 그래서 로컬에서 미리 빌드해둔 Docker 이미지를 그대로 push해서 배포하는 방식을 쓰는 게 더 낫다.
 
@@ -219,7 +219,7 @@ docker buildx build \
 --push .
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.3610.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.3610.png)
 
 여기서 `-t` 뒤에 오는 값은 `<Docker Hub 계정 아이디>/<이미지 이름>:<태그>` 형식이다. `dongik`이 Docker Hub 계정 아이디이고, 이 값이 있어야 `--push`했을 때 어느 계정의 어느 레포지토리로 올릴지 Docker가 알 수 있다. 계정 아이디 없이 이미지 이름만 쓰면 로컬 태그로만 인식되어 push할 대상을 찾지 못한다.
 
@@ -227,7 +227,7 @@ docker buildx build \
 
 빌드와 push가 끝나면 Docker Hub의 Repositories 메뉴에서 해당 이미지가 올라간 걸 확인할 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.4711.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.4711.png)
 
 ---
 
@@ -261,17 +261,17 @@ credentials saved for this service are still valid.
 
 실제로 push한 이미지는 `dongik/hummingbird-movies-app:latest`였으므로, Railway의 이미지 경로 입력란에도 계정 아이디를 포함해서 `dongik/hummingbird-movies-app`로 정확히 다시 입력해야 했다. 이렇게 고치니 정상적으로 이미지를 pull해와서 배포가 진행됐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.5857.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.5857.png)
 
 ---
 
 ### Postgres 서비스 추가하기
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.5925.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-11.5925.png)
 
 Railway 프로젝트 안에서 "Database" → "Postgres"를 선택하면 별도의 Postgres 서비스가 새로 생성된다. 이 프로젝트 안에는 이제 애플리케이션 서비스와 Postgres 서비스, 두 개가 함께 존재하게 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.0239.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.0239.png)
 
 ---
 
@@ -279,7 +279,7 @@ Railway 프로젝트 안에서 "Database" → "Postgres"를 선택하면 별도�
 
 Postgres를 추가하고 나서 애플리케이션 로그를 확인해보니 "keys are missing"이라는 에러로 죽어있었다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.0120.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.0120.png)
 
 원인은 명확했다. 로컬 Docker 실행 때는 `-e` 옵션으로 환경 변수를 직접 넘겨줬지만, Railway에는 아직 그 값들(database 관련 정보, `JWT_SECRET` 등)을 설정해두지 않았기 때문이다. Railway는 각 서비스마다 Variables 탭에서 환경 변수를 key-value 형태로 등록할 수 있는데, 애플리케이션 서비스뿐 아니라 Postgres 서비스 쪽에도 필요한 값을 설정해야 한다.
 
@@ -295,7 +295,7 @@ Railway에 Postgres와 애플리케이션, 두 서비스 모두 환경 변수를
 
 Postgres 서비스의 Variables 탭에서 Raw Editor를 열면, key-value 여러 개를 한 번에 붙여넣을 수 있다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.0708.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.0708.png)
 
 username은 `postgres`인데, password는 처음엔 어디 있는지 헷갈렸다. Railway가 Postgres 서비스에 자동으로 생성해둔 값들 중에서 connection password에 해당하는 값을 찾아서 복사해 넣었다.
 
@@ -330,7 +330,7 @@ DATABASE_NAME="railway"
 JWT_SECRET="a-much-longer-random-secret-key-for-testing-purposes-1234567890"
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.1443.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.1443.png)
 
 두 서비스 모두 Deploy를 눌러서 재배포를 진행하고, 각각의 배포와 post-deploy가 다 안정적으로 완료됐는지 로그로 확인한다.
 
@@ -340,7 +340,7 @@ JWT_SECRET="a-much-longer-random-secret-key-for-testing-purposes-1234567890"
 
 배포된 서비스에 접근할 URL이 필요하다. 애플리케이션 서비스의 Settings → Networking에서 Generate Domain을 선택하면 Railway가 자동으로 도메인을 만들어준다(포트는 8080 그대로 사용).
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.1923.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.1923.png)
 
 ---
 
@@ -348,7 +348,7 @@ JWT_SECRET="a-much-longer-random-secret-key-for-testing-purposes-1234567890"
 
 생성된 URL로 Postman에서 회원가입 요청(`POST /api/users/register`)을 보냈는데 계속 404가 났다. 경로도, Content-Type 헤더도 다 맞아 보였는데, 원인은 URL을 `http`로 보내고 있었기 때문이었다. `https`로 바꾸니 정상적으로 "user has been created" 응답이 돌아왔다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.2152.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.2152.png)
 
 ---
 
@@ -356,7 +356,7 @@ JWT_SECRET="a-much-longer-random-secret-key-for-testing-purposes-1234567890"
 
 회원가입에 이어 로그인까지 시도해보니 access token과 refresh token이 정상적으로 발급됐다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.2235.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-09-hummingbird-6/CleanShot_09-12.2235.png)
 
 ---
 

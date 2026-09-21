@@ -13,7 +13,7 @@ toc_sticky: true
 
 Playground에서 실제로 문제를 풀어보면서 몸을 푸는 첫 번째 예제다. 사다리꼴 `ABCD`의 네 변(`AB`, `BC`, `DC`, `AD`)의 길이와 넓이(`area`)가 주어졌을 때, 둘레(circumference)와 중간선(mid-segment) 길이, 높이(height)를 계산해서 반환하는 함수를 만든다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/trapezoid_diagram_fixed.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/trapezoid_diagram_fixed.png)
 
 ---
 
@@ -59,7 +59,7 @@ Playground의 자동 실행(auto-run) 모드를 켜두면, 입력값을 바꿀 �
 
 이번 문제는 문자열로 표현된 숫자(`number`)가 정수 `n`으로 나누어떨어지는지 판별하는 함수를 만드는 것이다. `number`가 실제로는 숫자가 아닌 문자열일 수도 있다는 게 핵심 변수다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/number_divisible_flow_fixed.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/number_divisible_flow_fixed.png)
 
 ---
 
@@ -167,7 +167,7 @@ func numberDivisibleByN3(number: String, n: Int) -> Bool {
 
 `&&`로 여러 조건을 이어 쓸 때는 평가 순서가 왼쪽에서 오른쪽으로 진행되고, 앞 조건이 `false`면 뒤 조건은 아예 평가하지 않는다(short-circuit). 그래서 `n != 0`을 반드시 `num % n == 0`보다 먼저 검사해야 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/short_circuit_order_fixed.png){: width="80%" height="80%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/short_circuit_order_fixed.png)
 
 `n != 0 && num % n == 0`처럼 순서를 지키면, `n`이 0일 때 `num % n` 자체가 아예 평가되지 않아서 0으로 나누는 crash를 원천 차단한다. 반대로 `num % n == 0 && n != 0`처럼 순서를 바꾸면, `n`이 0일 때 `n != 0` 체크에 도달하기도 전에 `num % n`에서 먼저 crash가 난다.
 
@@ -220,7 +220,7 @@ func printNumberDivisibleByNOptional(number: String, n: Int) {
 
 문자열 `text`와 반복 횟수 `copies`가 주어졌을 때, `text`의 홀수 인덱스 문자들로 만든 문자열과 짝수 인덱스 문자들로 만든 문자열을 이 순서(홀수 먼저, 짝수 다음)로 이어붙이고, 그 결과를 `copies`번 반복하는 문제다. 인덱스는 0부터 시작하므로 0은 짝수로 취급한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/strange_repeat_diagram_fixed.png){: width="80%" height="80%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/strange_repeat_diagram_fixed.png)
 
 ---
 
@@ -306,7 +306,7 @@ print(strangeRepeat(text: "hello", copies: 3))  // "elhloelhloelhlo"
 
 **유효하지 않은 입력**: `Q`가 음수이거나, `Q`가 `name`의 길이보다 작지 않거나(즉 `Q >= name.count`), `name`이 빈 문자열이면 유효하지 않은 입력으로 보고 `nil`을 반환한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/reverse_split_diagram.png){: width="80%" height="80%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/reverse_split_diagram.png)
 
 ---
 
@@ -430,7 +430,7 @@ struct ViewWithHelp<Content: View>: View {
 
 `.sheet`처럼 화면을 완전히 새로 띄우는 대신, "지금 보던 화면 위에 살짝 흐리게 깔고 카드만 얹는" 느낌을 내고 싶을 때 재사용할 만한 패턴이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/test12.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/test12.gif)
 
 ---
 
@@ -468,7 +468,7 @@ Canvas { context, size in
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/trapezoid_canvas_coords_fixed.png){: width="80%" height="80%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/trapezoid_canvas_coords_fixed.png)
 
 `context`와 `size`를 받는 클로저 안에서 `Path`를 직접 구성하고, `context.fill(_:with:)`(또는 `stroke`)로 그린다. `top`, `bottom`, `height`, `shiftTop` 같은 슬라이더 바인딩 값(전부 0~1 사이로 정규화된 값)에 `size.width`/`size.height`를 곱해서 실제 픽셀 좌표로 스케일링하는 방식이다. Canvas 좌표계는 원점이 좌상단이고 y가 아래로 갈수록 증가한다는 점만 주의하면, 슬라이더 값이 바뀔 때마다 도형이 실시간으로 다시 그려지는 인터랙티브 다이어그램을 어렵지 않게 만들 수 있다. 커스텀 게이지나 다이어그램이 필요한 화면에 재사용할 만한 패턴이다.
 
@@ -493,7 +493,7 @@ if let shiftTopMax {
 
 값이 있으면(`0` 초과) 그 값을 슬라이더의 상한으로 쓰고, 남은 공간이 없으면(`nil`) `if let`이 실패하면서 슬라이더 자체가 뷰 계층에서 통째로 빠진다. "값이 없으면 이 컨트롤 자체가 의미 없다"는 상황을, 별도의 `isHidden` 플래그 없이 optional 하나로 값과 표시 여부를 동시에 표현하는 방식이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/result1.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/result1.gif)
 
 ---
 
@@ -527,11 +527,11 @@ Slider(value: $n, in: 1...maxDivisor, step: 1)
 
 `ReverseSplitView`에서 `Q` 슬라이더의 상한을 `name.count`에 맞춰 동적으로 계산했는데, 텍스트를 지워가며 테스트하다가 `name.count`가 1 이하로 줄어드는 순간 앱이 죽는 걸 발견했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/CleanShot_16-12.1552.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/CleanShot_16-12.1552.png)
 
 ---
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/slider_range_crash_fixed.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-2/slider_range_crash_fixed.png)
 
 ```swift
 if name.count > 1 {

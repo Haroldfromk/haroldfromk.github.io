@@ -44,7 +44,7 @@ UIKit에서는 present와 비슷하다고 생각하면 될듯하다.
 
 이때 isPresented의 parameter로 showExchangeInfo를 받게하고 true / false에 따라 보여지는지 아닌지를 확인하게한다.
 
-![Sep-11-2024 07-47-50](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-23-LOTR-Converter-4/9c75137f-2800-4f61-94df-7caeacab20a5.png){: width="50%" height="50%"}
+![Sep-11-2024 07-47-50](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-23-LOTR-Converter-4/9c75137f-2800-4f61-94df-7caeacab20a5.png)
 
 지금은 modal처럼 화면이 올라온다.
 
@@ -64,7 +64,7 @@ SwiftUI는 뷰 간에 데이터를 전달하기 위해 다양한 방법을 제�
 	- 미리 정의된 환경 값: SwiftUI는 미리 정의된 여러 환경 값을 제공한다. 예를 들어 colorScheme, presentationMode, accessibilityDifferentiateWithoutColor, horizontalSizeClass 등이 있다.
 	- 커스텀 환경 값: 사용자가 직접 커스텀 환경 값을 정의하고 공유할 수도 있다. EnvironmentKey 프로토콜을 채택하여 커스텀 키를 만들고, 그 키에 대한 기본 값을 제공하는 식으로 구현한다.
 
-![CleanShot 2024-09-14 at 04 25 40@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-23-LOTR-Converter-4/a4eb1e56-9d1b-41b1-b6b6-77f55f7c92bf.png){: width="50%" height="50%"}
+![CleanShot 2024-09-14 at 04 25 40@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-23-LOTR-Converter-4/a4eb1e56-9d1b-41b1-b6b6-77f55f7c92bf.png)
 
 `@Environment(\.dismiss) var dismiss`: @Environment를 사용하여 시스템에서 제공하는 dismiss 메서드를 가져와 뷰를 닫는 데 사용한다.
 
@@ -117,7 +117,7 @@ struct ExchangeInfo: View {
 }
 ```
 
-![Sep-14-2024 04-32-20](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-23-LOTR-Converter-4/6c75b91a-60b6-4d8e-8b07-53e9382a7a29.png){: width="50%" height="50%"}
+![Sep-14-2024 04-32-20](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-23-LOTR-Converter-4/6c75b91a-60b6-4d8e-8b07-53e9382a7a29.png)
 
 작동도 잘된다.
 

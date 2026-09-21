@@ -53,7 +53,7 @@ struct ContentView: View {
 }
 ```
 
-![CleanShot 2024-11-27 at 17 49 44](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-27-Async_await-2/d51cf51b-22df-4d65-a91e-d1c7fd67c75b.png){: width="50%" height="50%"} 
+![CleanShot 2024-11-27 at 17 49 44](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-27-Async_await-2/d51cf51b-22df-4d65-a91e-d1c7fd67c75b.png) 
 
 ### 2. getDate 함수 만들기
 
@@ -257,7 +257,7 @@ List(currentDates) { currentDate in
 
 통신 결과에 대한 값을 바로 list에 보여주는 식으로 한다.
 
-![simulator_screenshot_B0A18628-2BA2-45C1-AFE8-059126684C65](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-27-Async_await-2/40e808fb-76b0-49f8-b34e-5a8c87aa1255.png){: width="50%" height="50%"} 
+![simulator_screenshot_B0A18628-2BA2-45C1-AFE8-059126684C65](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-27-Async_await-2/40e808fb-76b0-49f8-b34e-5a8c87aa1255.png) 
 
 잘 나오는걸 알 수 있다.
 
@@ -285,6 +285,6 @@ Task를 사용해주면 된다.
 
 그리고 async 와 await는 한쌍이나 await를 적어주고 실행해보자.
 
-![Nov-27-2024 20-27-48](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-27-Async_await-2/e3be1b1d-3d74-4478-ba0e-7f830cbe160c.png){: width="50%" height="50%"} 
+![Nov-27-2024 20-27-48](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-27-Async_await-2/e3be1b1d-3d74-4478-ba0e-7f830cbe160c.png) 
 
 잘 된다.

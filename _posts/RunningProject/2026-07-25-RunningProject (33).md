@@ -134,7 +134,7 @@ if let start = runStartTime {
 
 `streamFlightData()`/`streamPhaseData()`랑 같은 패턴으로 `streamSplitData()`를 하나 더 만들어서 아이폰/워치 양쪽 ViewModel이 구독하게 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/while.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/while.png)
 
 한 번만 검사하는 것과 넘긴 만큼 반복하는 것이 실제로 얼마나 다른지 돌려볼 수 있게 만들었다. 중간에 회색으로 칠한 구간이 신호가 끊겼다 돌아오는 지점이다.
 
@@ -412,11 +412,11 @@ private var droppedTailMeters: Int {
 
 고쳐두고 다시 시뮬레이터로 확인했다. 1.05km 러닝은 1번 스플릿이 정상적으로 뜨고, 그 아래 "마지막 50M 구간 - TOO SHORT" 안내도 의도한 대로 나왔다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/splitshort.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/splitshort.png)
 
 1.84km 러닝은 1번(1km)과 2번(842m) 스플릿이 둘 다 뜨는데, 자투리가 100m를 넘겨서 버려지지 않고 실제 거리 그대로 스플릿이 됐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/splitdetail.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/splitdetail.png)
 
 ---
 
@@ -497,7 +497,7 @@ func processAltitude(_ rawAltitude: Double, timestamp: TimeInterval) {
 
 참고로 이 플래그는 고도계를 껐다 켰다 하는 것과는 무관하다. 그건 `AltimeterService.startTracking()`/`stopTracking()`이 따로 담당하고, `isAltitudeInitialized`는 순전히 `RunningCenter` 안에서 스무딩 값을 언제 시드할지만 판단하는 상태다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/init.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/init.png)
 
 두 스무딩을 나란히 놓고 보면 공식 자체는 완전히 같고, "첫 샘플을 언제 시드할지" 판단하는 방법만 다르다는 게 더 잘 보인다.
 
@@ -542,7 +542,7 @@ HStack(spacing: 0) {
 
 붙여놓고 보니 SPD는 배경이 `Color.black.opacity(0.6)`인데 ALT는 예전 mock 파일에 있던 `Color.rwPanel.opacity(0.9)`가 그대로 남아 있어서 톤이 서로 달랐다. SPD 쪽 값으로 맞췄다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/alt.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/alt.png)
 
 고도가 계속 0으로 뜨길래 혹시나 해서 "ALT" 라벨 자리에 `CMAltimeter.isRelativeAltitudeAvailable()` 값을 잠깐 찍어봤더니 실제로 false가 나왔다. 시뮬레이터엔 진짜 기압계가 없어서 아예 값을 안 주는 거였다. 심박 때와 같은 이유다. 레이아웃과 배선은 이걸로 확인이 끝났고, 실제 값 확인은 실기기로 계단이나 언덕을 오르내리며 해봐야 한다.
 
@@ -572,7 +572,7 @@ WatchFocusTab(
 .tag(PFDTab.alt)
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/watchalt.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/watchalt.png)
 
 `WatchFocusTab`이 라벨/값/단위/색/아이콘만 받는 재사용 컴포넌트라 다른 탭들처럼 그대로 끼워 넣기만 하면 됐다. `flightData.altitude`는 워치가 직접 뛰든 아이폰 미러링을 받든 이미 같은 경로로 들어오고 있어서 따로 손댈 것도 없었다.
 
@@ -587,7 +587,7 @@ Divider().frame(height: 36).background(Color.rwBorder)
 WatchStatMini(label: "ALT", value: "\(altitude)", unit: "M")
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/watch_pfd_alt.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/watch_pfd_alt.png)
 
 4칸이 되니 좀 빡빡해 보이려나 걱정했는데, `WatchStatMini`가 원래 숫자 몇 자리 정도만 보여주는 용도라 막상 넣어보니 괜찮았다.
 
@@ -625,7 +625,7 @@ private var elevationLabel: String {
 
 PACE/BPM/SPM 세 칸이 있던 자리에 ALT 칸 하나를 더 얹었는데, 시뮬레이터로 확인해보니 네 칸이 되어도 레이아웃이 깨지지 않고 잘 들어갔다. 다만 시뮬레이터엔 기압계가 없어서 고도 값 자체는 계속 0으로 뜬다. 실제 오르막/내리막 값이 맞게 나오는지는 ALT 때와 마찬가지로 실기기에서 언덕이나 계단을 오르내리며 확인해야 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/summaryalt.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/summaryalt.png)
 
 고도 관련 값은 `SwiftDataSplit`에만 넣었고, GPS 좌표(`SwiftDataCoordinate`)처럼 지점마다 저장하지는 않았다. `SwiftDataCoordinate`는 위도/경도를 지점마다 다 저장하는데, 이건 `MapPolyline`으로 정확한 경로를 그려야 하니 전체 해상도가 필요해서다. 반면 고도는 지금 러닝 중 PFDView의 ALT 테이프(그 순간 값 하나)랑 러닝 후 스플릿/전체 상승고도(구간 단위 집계값) 두 군데에서만 쓰는데, 둘 다 지점마다의 정확한 고도 곡선까지는 필요 없다. 나중에 Strava처럼 구간 고도 그래프를 보여주는 화면이 생기면 그때 좌표처럼 지점마다 저장하면 되고, 지금은 안 쓰이는 데이터를 미리 저장해둘 이유가 없었다.
 
@@ -640,7 +640,7 @@ Thread 12: abort with payload or reason
 RunWay crashed because it attempted to access privacy sensitive data without a usage description.
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/altalert.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/altalert.png)
 
 `AltimeterService.startTracking()`을 다시 보니 원인이 바로 보였다.
 
@@ -663,21 +663,21 @@ func startTracking() {
 <string>러닝 중 고도 변화를 측정하기 위해 동작 및 피트니스 데이터가 필요합니다.</string>
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/fitness.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/fitness.png)
 
 워치 앱은 `Info.plist` 파일이 따로 없기에, Project Target에서 값을 추가해주었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/watchfitness.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/watchfitness.png)
 
 시뮬레이터의 하드웨어 가용성 체크가 오히려 이 크래시를 계속 가려주고 있었던 셈이다. 심박 미션 크래시도 그렇고, 이번 것도 그렇고, 실기기에서만 드러나는 종류의 문제는 결국 실기기로 가봐야 안다.
 
 실기기를 테스트 해보니
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/IMG_4101.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/IMG_4101.png)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/IMG_4102.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/IMG_4102.png)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/IMG_4103.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/IMG_4103.png)
 
 ---
 
@@ -820,7 +820,7 @@ LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flex
 
 이제 스플릿 한 줄 한 줄에도, 러닝 전체 요약에도 상승고도가 같이 나온다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/patch.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/patch.png)
 
 ---
 
@@ -929,7 +929,7 @@ var body: some View {
 
 실기기 스크린샷을 보다가, 스플릿 헤더의 "최고(초록)/최저(빨강)" 범례랑 BPM(빨강)/SPM(초록) 색이 완전히 겹친다는 걸 발견했다. PACE 칸의 페이스 랭킹(제일 빠른 구간은 초록, 제일 느린 구간은 빨강)을 넣을 때, "초록=좋음/빨강=나쁨"이라는 흔한 관용색만 생각하고 같은 줄에 BPM=빨강/SPM=초록이 고정색으로 이미 자리 잡고 있다는 걸 서로 안 맞춰본 채로 넣어버린 거였다. 의도한 설계가 아니라 그냥 놓친 실수였다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/splitbefore.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/splitbefore.png)
 
 처음엔 랭킹 색을 아예 새 색(gold/slate)으로 바꾸는 걸 시도했는데, "새 색을 추가하는 것 자체가 필요한가" 싶어서 다시 생각해보니 더 간단한 방법이 있었다. 색으로 랭킹을 표시하지 않고, 값 옆에 작은 화살표 아이콘만 무채색으로 얹는 것이다.
 
@@ -980,13 +980,13 @@ PACE/BPM/SPM 텍스트는 이제 랭킹과 무관하게 항상 고정색(amber/�
 
 `sortedSplits.count >= 2` 가드를 넣은 이유는, 스플릿이 딱 하나뿐인 러닝을 실기기로 확인하다가 발견했다. 스플릿이 하나면 그 지표의 최댓값도 최솟값도 자기 자신이라, 자기 혼자 최고이자 동시에 최저가 되어버린다. 비교할 대상이 없는데 화살표를 붙이는 게 의미가 없어서, 스플릿이 2개 이상일 때만 뜨게 막았다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/splitafter.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/splitafter.png)
 
 ---
 
 ## 홈 화면 주간 차트 막대가 카드 밖으로 넘치는 문제
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/chartbefore.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/chartbefore.png)
 
 실기기로 하루에 10km 넘게 걸었더니, 홈 화면의 WEEKLY FLIGHT HOURS 막대 그래프에서 그날 막대가 카드 위쪽 경계를 뚫고 넘쳐버렸다.
 
@@ -1012,7 +1012,7 @@ private var maxWeeklyDistance: Double {
 
 이제 그 주에 제일 많이 뛴 요일이 항상 딱 맞는 높이(44pt)로 채워지고, 나머지 요일은 그에 비례한 높이로 나온다. 하루에 몇 km를 뛰든 카드 밖으로 넘칠 일이 없다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/chartafter.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/chartafter.png)
 
 ---
 

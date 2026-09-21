@@ -19,7 +19,7 @@ UIImagePickerController라고 하면
 
 우리가 배달어플을 사용하고 리뷰를 할때 사진을 고를때 보이는 그 화면이다.
 
-![](https://miro.medium.com/v2/resize:fit:1400/1*OGhuxVwPqiw-PVydw9xelA@2x.jpeg){: width="50%" height="50%"}
+![](https://miro.medium.com/v2/resize:fit:1400/1*OGhuxVwPqiw-PVydw9xelA@2x.jpeg)
 
 이렇게 새로운 NavigationView같은 창이 하나 더 올라오면서 보여주기에 `UINavigationControllerDelegate`이 더 필요할 수 밖에 없다고 생각한다.
 
@@ -29,7 +29,7 @@ UIImagePickerController를 사용하면 곧 기능이 사라질거라 PHPicker�
 
 ## 1. 화면구성
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/3kgbfVxPsa.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/3kgbfVxPsa.png)
 
 심플하게 위와 같이 구성해보았다.
 
@@ -123,11 +123,11 @@ extension ViewController : PHPickerViewControllerDelegate {
 - sourceType : camera, photoLibrary, savedPhotosAlbum 이렇게 3개가 존재한다
     - camera 빼고 나머지 2개는 xcode 버전이 업데이트되면 사라질 예정
 - allowedEditing : 이미지 편집 허용
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/z53ceRAYUJ.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/z53ceRAYUJ.png)
     - 이렇게 이미지를 선택하면 사이즈조절 원하는부분 설정 
 등을 할 수 있다
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/GOnmpegah2.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/GOnmpegah2.png)
 
 ```swift
 extension ViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -150,7 +150,7 @@ extension ViewController : UIImagePickerControllerDelegate, UINavigationControll
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/RzoX1yqkCx.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/RzoX1yqkCx.png)
 
 위에 `allowEditing = true` 를 하면 반드시 editedImage로 해줘야한다. 안하면 사진이 보이지 않음.
 
@@ -222,7 +222,7 @@ UIpicker보다는 확실히 더 코드 구현에 있어 디테일 해졌다.
 
 ## 4. 작동화면 (통합)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/LOhPNSmmBr.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-26-Deep-Dive-ImagePicker/LOhPNSmmBr.gif)
 
 ## 5. 참고자료
 

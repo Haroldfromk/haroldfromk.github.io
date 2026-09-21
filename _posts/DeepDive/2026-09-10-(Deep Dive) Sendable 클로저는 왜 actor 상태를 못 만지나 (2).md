@@ -60,7 +60,15 @@ import SwiftUI
 // GitExplorer Actor 미니프로젝트의 SimulatorTask 패턴을 재현한다.
 // onTermination 클로저 안에서 MainActor 메서드를 직접 부르면 에러가 나는지,
 // Task { @MainActor in } 로 감싸야 통과하는지 확인하는 것이 실험 포인트.
-final class TickEmitter {
+//
+// 처음엔 TickEmitter를 class로 만들고 stop()만 @MainActor로 격리했는데,
+// 실제로 빌드하니 다른 에러가 났다.
+//   "Capture of 'self' with non-Sendable type 'TickEmitter?' in a '@Sendable' closure"
+// Task { @MainActor in ... }의 클로저 자체가 @Sendable이라서, non-Sendable
+// 참조 타입(class)인 self를 캡처하는 것 자체가 막힌 것이다. @MainActor를
+// 붙이는 것과는 별개의 검사. actor로 바꾸면 actor 자체가 Sendable이라
+// 이 문제가 사라진다 (2026-09-19 ConcurrencyLab에서 검증).
+actor TickEmitter {
     private var task: Task<Void, Never>?
 
     func start() -> AsyncStream<Int> {
@@ -74,16 +82,13 @@ final class TickEmitter {
                 }
             }
             continuation.onTermination = { [weak self] _ in
-                // 실험: 아래 줄로 바꿔서 직접 호출하면 컴파일 에러가 나는지 확인
-                // self?.stop()
-                Task { @MainActor in
-                    self?.stop()
+                Task {
+                    await self?.stop()
                 }
             }
         }
     }
 
-    @MainActor
     func stop() {
         task?.cancel()
         task = nil
@@ -102,7 +107,7 @@ final class StreamTerminationViewModel {
         isRunning = true
         log.append("시작")
         task = Task {
-            for await tick in emitter.start() {
+            for await tick in await emitter.start() {
                 log.append("tick \(tick)")
             }
         }

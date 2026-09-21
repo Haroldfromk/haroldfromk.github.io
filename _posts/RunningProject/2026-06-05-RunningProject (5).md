@@ -196,7 +196,7 @@ private(set) var totalDistance: Double = 0
 
 다시 돌아와서 거리계산이 현재 0으로 나오는걸 알 수 있다.
 
-<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/a5564b8f-5418-4fc3-a57d-d77a1c633878.png" />{: width="50%" height="50%"}
+<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/a5564b8f-5418-4fc3-a57d-d77a1c633878.png" />
 
 이건 현재 주소가 바뀔때마다 값이 들어가게끔 되어야하는 구조인데 LocationService의 currentLocation은 업데이트가 되고 있는데, 업데이트가 되어도 그 값이 actor의 `processLocation`로 전해지지 않는 것이 가장 큰 문제이다.
 
@@ -277,7 +277,7 @@ init() {
 
 `MapTestView`에서도 `@State private var distance`를 제거하고 `runViewModel.distance`로 교체한다.
 
-<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/953cbd7f-7d7d-47af-af4e-3d63169f4785.png" />{: width="50%" height="50%"}
+<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-05-RunningProject-5/953cbd7f-7d7d-47af-af4e-3d63169f4785.png" />
 
 우리가 원하는대로 잘 되는걸 알 수 있다.
 

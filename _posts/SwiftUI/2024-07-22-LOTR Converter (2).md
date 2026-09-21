@@ -56,7 +56,7 @@ preview에서도 확인이 가능하다.
 
 참고하자
 
-![CleanShot 2024-09-10 at 15 02 52@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/d5ae152c-fc6e-4a19-bae1-8e4a451cf113.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 02 52@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/d5ae152c-fc6e-4a19-bae1-8e4a451cf113.png)
 
 하지만 이렇게 완전 사이드에 붙은것을 알 수 있다.
 
@@ -81,7 +81,7 @@ preview에서도 확인이 가능하다.
                 }
 ```
 
-![CleanShot 2024-09-10 at 15 24 46@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/a01ce0c3-4ca1-4eb2-925d-6b19f0565bc1.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 24 46@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/a01ce0c3-4ca1-4eb2-925d-6b19f0565bc1.png)
 
 이렇게 trailing쪽에 패딩을 줌으로써 약간의 간격이 생겼다.
 
@@ -101,7 +101,7 @@ preview에서도 확인이 가능하다.
 그리고 이제 Textfield를 추가해주자.
 
 
-![CleanShot 2024-09-10 at 15 28 10@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/7132f409-2d69-4119-b36e-bf75e1e83828.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 28 10@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/7132f409-2d69-4119-b36e-bf75e1e83828.png)
 
 이때 여러가지 옵션이 있는데 우린 바로 첫번째것을 선택한다.
 
@@ -116,7 +116,7 @@ text는 값이라고 간단하게 생각하면 되는데, UIKit처럼 바로 변
 
 그러면 값의 변화를 감지할것이다.
 
-![CleanShot 2024-09-10 at 15 33 35@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/18f20bc8-8d97-4cf5-a984-7cc93cae8407.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 33 35@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/18f20bc8-8d97-4cf5-a984-7cc93cae8407.png)
 
 하지만 입력을 어디에 해야하는지 보이지 않아서 이렇게 Modifier를 추가해준다.
 
@@ -126,11 +126,11 @@ TextField("Amount", text: $leftAmount)
                             .textFieldStyle(.roundedBorder)
 ```
 
-![CleanShot 2024-09-10 at 15 32 44@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/1d625ebf-4dd7-4001-bced-6cf8873b9ab6.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 32 44@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/1d625ebf-4dd7-4001-bced-6cf8873b9ab6.png)
 
 우측도 똑같이 해주자.
 
-![CleanShot 2024-09-10 at 15 34 46@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/5ecaeb10-e605-4386-b70b-417cb9d7d6d7.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 34 46@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/5ecaeb10-e605-4386-b70b-417cb9d7d6d7.png)
 
 Amount가 둘다 왼쪽에 붙어있어서 뭔가 이쁘지 않아 보인다.
 
@@ -145,7 +145,7 @@ Amount가 둘다 왼쪽에 붙어있어서 뭔가 이쁘지 않아 보인다.
 
 이렇게 `.multilineTextAlignment(.trailing)` Modifier를 통해 우측으로 붙여줄 수 있다.
 
-![CleanShot 2024-09-10 at 15 36 16@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/41f5b205-e578-482d-8b27-b1bef24f68b4.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 36 16@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/41f5b205-e578-482d-8b27-b1bef24f68b4.png)
 
 뭔가 이쁘게 정돈이 되었다.
 
@@ -175,7 +175,7 @@ VStack {
                     }
 ```
 
-![CleanShot 2024-09-10 at 15 37 27@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/c1ff7d5a-0d22-4fe3-99ed-efecdb31ce09.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 37 27@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/c1ff7d5a-0d22-4fe3-99ed-efecdb31ce09.png)
 
 이렇게 before / after로 확인이 가능하다.
 
@@ -245,6 +245,6 @@ HStack {
 
 투명도 0.5인 검은색을 배경화면으로 주고, 캡슐 모양으로 해서 좀 더 디자인 해보았다. (코드의 마지막 부분)
 
-![CleanShot 2024-09-10 at 15 40 19@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/6970f98a-ae0e-494a-83e6-41d731199076.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 15 40 19@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-2/6970f98a-ae0e-494a-83e6-41d731199076.png)
 
 이렇게 메인화면 디자인이 끝났다. 

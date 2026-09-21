@@ -51,7 +51,7 @@ let result = countChars
     })
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/most_popular_char_tiebreak_final.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/most_popular_char_tiebreak_final.png)
 
 `Dictionary`를 순회하면 `(key, value)` 쌍이 나오는데, `max(by:)`에 넘기는 클로저는 "첫 번째 인자가 두 번째보다 작은가"를 판단하는 규칙이다. 이 규칙을 만족하는 원소가 상대적으로 "작은" 쪽으로 취급되고, 최종적으로 그 규칙에서 한 번도 "작다"고 판정되지 않은 원소가 `max`로 뽑힌다.
 
@@ -162,7 +162,7 @@ final class Part4Tests: XCTestCase {
 
 sparse matrix는 대부분의 원소가 `0`인 행렬이다. 보통 1000×1000처럼 거대한 크기인데 실제 값이 있는 자리는 얼마 안 되는 경우를 말한다. 이런 행렬을 표현할 때, 값이 `0`인 자리까지 전부 저장하는 건 낭비다. 그래서 `0`이 아닌 원소만, `(i, j)` 위치를 key로 하는 Dictionary에 저장하는 방식을 쓴다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/sparse_matrix_dict_fixed.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/sparse_matrix_dict_fixed.png)
 
 ---
 
@@ -207,7 +207,7 @@ key가 없으면(즉 그 자리는 `0`이므로 저장할 필요가 없었던 �
 
 실제 구현에 들어가기 전에, 두 sparse matrix `A`, `B`의 차이를 손으로 계산해보면서 어떤 함정이 있을 수 있는지 미리 짚어봤다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/sparse_matrix_hand_calc_fixed.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/sparse_matrix_hand_calc_fixed.png)
 
 - `A - B`와 `B - A`는 부호만 반대인 관계다
 - `A - A`는 모든 원소가 `0`인 행렬이 되므로, 그 표현은 **빈 Dictionary**(`[:]`)여야 한다
@@ -244,7 +244,7 @@ static func differenceSparseMatrices(_ A: SparseMatrix, _ B: SparseMatrix) -> Sp
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/bp_removal_trick_v2.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/bp_removal_trick_v2.png)
 
 흐름을 정리하면 이렇다.
 
@@ -306,7 +306,7 @@ typealias Offsets = [Int]
 //     "AG": [6], "TT": [0, 4], "AA": [2], "CG": [11]]
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/find_substring_locations.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/find_substring_locations.png)
 
 ---
 
@@ -468,7 +468,7 @@ struct DisplaySparseMatrix: View {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/sparse_matrix_grid_render.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-6/sparse_matrix_grid_render.png)
 
 바깥쪽 `VStack` + `ForEach(0..<m)`가 행(row)을 만들고, 그 안의 `HStack` + `ForEach(0..<n)`이 각 행의 열(column)을 채운다. `SparseMatrix`가 대부분 값을 안 갖고 있는 Dictionary라는 점은, 앞서 만들어둔 `A.getValue(i:j:)` extension이 key가 없는 자리를 자동으로 `0`으로 채워주기 때문에 화면을 그리는 코드에서는 전혀 신경 쓸 필요가 없다. 데이터 구조가 "값이 없는 자리를 어떻게 다룰지"를 이미 책임지고 있어서, View는 그냥 `getValue`만 호출하면 되는 구조다.
 

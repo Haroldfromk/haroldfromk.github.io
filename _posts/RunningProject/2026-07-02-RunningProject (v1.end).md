@@ -25,7 +25,7 @@ CoreLocation 서비스를 붙이는 과정에서 예상 못 한 곳에서 막혔
 
 Week 1의 진짜 핵심은 마지막 날 발견한 구조적 문제였다. 각 View가 `LocationService`, `HealthKitService`를 따로 생성하고 있어서 같은 인스턴스를 공유하지 못했다. `RunWayApp.swift`에서 단일 인스턴스를 만들어 environment로 내려보내는 구조로 정리했는데, 이게 나중에 RunningCenter Actor로 가는 길목이 됐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/1week.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/1week.png)
 
 ---
 
@@ -45,7 +45,7 @@ SwiftData 모델도 이 주에 구조가 잡혔다. `Flight` struct는 `@Model`�
 
 실기기 테스트에서 한 번에 8개 이슈가 쏟아졌다. 버튼 먹통, 거리 누적, GPWS 연속 발생, 페이스가 100분대로 튐, MINIMUMS 오작동, 신호 대기 시 일시정지 없음, GPS 보정 부재. 마지막 것(GPS raw data 보정 없음)이 근본 원인으로 지목됐고, 이게 Week 3 전체의 주제가 됐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/2week.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/2week.png)
 
 ---
 
@@ -77,7 +77,7 @@ Watch → iPhone 단방향으로 시작했다. `SharedModels.swift`로 FlightPha
 
 Week 3 막바지, 미러링 관련 이슈가 한 번에 7개 터졌다. PFD 자동 전환 간헐적 실패, 데이터 수신 실패, 거리 단위 오류, 좌표 미전송, 표시값 불일치, 종료 동기화 미작동. 이 무더기가 Week 4를 미러링 아키텍처 재설계로 몰아넣은 배경이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/3week.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/3week.png)
 
 ---
 
@@ -119,7 +119,7 @@ Day 19에 `os_log`/Console.app으로 재도전했다. `healthd`가 앱 재실행
 
 미러링 아키텍처를 다 갈아엎은 뒤 전체 테스트를 돌리니 마무리 버그들이 나왔다. 일시정지 상태가 미러링 기기에 전달되지 않던 문제, `resetWorkout()`에서 `startOrigin`/`stopOrigin` 초기화가 빠져서 특정 순서로 미러링을 반복하면 다음 미러링이 안 되던 문제, 탭바로 갑자기 이탈해도 상태가 정리 안 되던 문제까지 나왔다. `.onDisappear` + boolean 플래그 패턴을 5개 View에 동일하게 적용해서 정리했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/4week.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/4week.png)
 
 ---
 
@@ -140,7 +140,7 @@ GPS는 카운트다운 시작 전부터 락을 잡아둬야 해서 `start()`와 
 
 이걸로 Master Plan에 적어둔 항목은 다 끝났다. 남은 건 App Store 심사 제출뿐이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-v1.end/realdone.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-v1.end/realdone.png)
 
 ---
 
@@ -156,7 +156,7 @@ GPS는 카운트다운 시작 전부터 락을 잡아둬야 해서 `start()`와 
 
 트러블슈팅 각각의 상세한 코드와 다이어그램은 [포트폴리오 사이트](https://runway-project.vercel.app/)에 정리해뒀다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/Retrospective.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/Retrospective.png)
 
 ---
 
@@ -192,4 +192,4 @@ GPS는 카운트다운 시작 전부터 락을 잡아둬야 해서 `start()`와 
 
 그렇게 리젝 세 번을 거치고서야 v1.0이 App Store 심사를 통과했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-v1.end/result1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-v1.end/result1.png)

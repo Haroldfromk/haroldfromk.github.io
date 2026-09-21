@@ -19,7 +19,7 @@ published: true
 
 시작하기 전 플로우를 정리해보면 아래와 같다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/iphone_led_mirroring_flow.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/iphone_led_mirroring_flow.png)
 
 사실 기본적으로 Watch 주도의 미러링과는 개념이 같기 때문에 그것과 유사하게 하면 될 것 같다.
 
@@ -209,7 +209,7 @@ struct MyWatchApp_Watch_AppApp: App {
 
 그대로 따라가되, `handle(_:)` 안에서 `HealthKitService.shared.startWorkout()`을 호출하는 구조로 가기로 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/single.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/single.png)
 
 ---
 
@@ -373,7 +373,7 @@ iPhone에서 러닝을 시작하면 `startWatchApp(toHandle:)` → Watch가 `han
 
 일단 Watch가 켜지지 않기도 했지만, 앱에서 러닝 종료 시 바로 홈 화면으로 점프되어버렸다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/problem.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/problem.gif)
 
 신기한 건 TOUCHDOWN 화면이 잠깐 보였다가 곧바로 홈으로 튕긴다는 점이었다. 즉 화면 전환 자체는 정상적으로 일어났는데, 그 직후에 뭔가가 강제로 `navigationPath`를 비워버리는 셈이었다.
 
@@ -507,7 +507,7 @@ healthKitService.sessionStatePublisher
 
 #### 문제 2. PFD가 중복 push 됨
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/problem1.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/problem1.gif)
 
 현재 PFDView가 빠르게 2번 호출되고 있다.
 
@@ -543,7 +543,7 @@ if isRemoted {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/done1.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/done1.gif)
 
 이제는 잘 된다.
 
@@ -652,7 +652,7 @@ HealthKitService.shared.sessionStatePublisher
 
 이제 PFD 전환까지는 정상적으로 됐다. 다만 iPhone에서 러닝을 종료했을 때 Watch가 같이 종료되지는 않았다. 이 부분은 iPhone이 만든 세션과 Watch가 `handle(_:)`에서 만든 세션이 진짜 같은 워크아웃으로 공유되고 있는지부터 다시 확인이 필요해 보인다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/IMG_0028.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/IMG_0028.gif)
 
 ---
 
@@ -660,11 +660,11 @@ HealthKitService.shared.sessionStatePublisher
 
 문제를 깊게 파기 전에, 지금 Watch가 마주할 수 있는 상황을 먼저 정리해보았다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/runningmode_decision_flow.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/runningmode_decision_flow.png)
 
 Watch 입장에서 실제로 구분해야 하는 경우는 셋이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/sce.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/sce.png)
 
 1. **Watch 단독**. `WatchTakeoffView`에서 시작했고, iPhone이 없거나 미러링이 안 잡힌 경우
 2. **Watch 주도 미러링**. `WatchTakeoffView`에서 시작했는데 iPhone이 미러링을 받아준 경우
@@ -703,7 +703,7 @@ Watch 입장에서 실제로 구분해야 하는 경우는 셋이다.
 
 그래서 세션 레벨에서 동기화를 시도하는 대신, "누가 직접 멈췄는지"를 명시적으로 알려주는 방향으로 가기로 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/stop_sync_local_remote_flow.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/stop_sync_local_remote_flow.png)
 
 1. 한쪽이 직접 종료 버튼을 눌러서 `stopWorkout()`을 호출하면, 그 기기는 TOUCHDOWN → Summary로 정상적으로 자기 흐름을 진행한다.
 2. 동시에 `sendMessage()`로 "내가 멈췄다"는 신호를 반대쪽 기기로 보낸다.
@@ -1095,7 +1095,7 @@ func stopWorkout() {
 
 정리하면 아래와 같다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/stopbrief.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/stopbrief.png)
 
 ---
 
@@ -1162,7 +1162,7 @@ iPhone이 직접 시작한 러닝은 `TakeoffView`에서 이미 `navigationPath.
 
 `WatchTakeoffView`로 시작했다면 미러링 여부와 무관하게 Watch는 항상 자기가 직접 화면을 전환하니 `sessionStatePublisher`는 push할 필요가 없고, `AppDelegate.handle(_:)`로 시작했다면 `TakeoffView`를 거치지 않으니 `sessionStatePublisher`가 유일한 전환 경로가 된다. 이건 `stopOrigin`이 종료 주체를 구분해줬던 것과 같은 맥락이라, 시작 주체를 나타내는 별도 값이 필요해 보인다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/pfdsce.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/pfdsce.png)
 
 ---
 
@@ -1609,7 +1609,7 @@ HealthKitService.shared.sessionStatePublisher
 
 `WatchViewModel`, `RunViewModel` 양쪽 모두 동일한 형태로 적용했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/IMG_0037.gif){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/IMG_0038.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/IMG_0037.gif)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/IMG_0038.gif)
 
 잘 되는걸 알 수 있다.
 
@@ -1672,7 +1672,7 @@ func retrieveRemoteSession() {
 
 러닝이 종료되면 `elapsedTime = 0`으로 초기화하도록 해두었음에도, 가끔 초가 리셋되지 않고 그대로 남아있는 문제가 발생했다. 특히 iPhone에서 자주 보였다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/IMG_0039.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/IMG_0039.gif)
 
 원인을 따라가보니 정상적인 종료 흐름(TOUCHDOWN 버튼)에서는 `stop()`이 먼저 호출되어 타이머가 멈춘다.
 
@@ -1717,7 +1717,7 @@ func resetState() async {
 
 오늘 다룬 내용이 많아서, 전체 구조를 한 번 정리해본다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/mirroring_system_summary.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-23-RunningProject-15/mirroring_system_summary.png)
 
 핵심은 `HealthKitService`가 `HKWorkoutSessionState`를 받아서 `SessionStateEvent`라는 하나의 이벤트로 가공해 `sessionStatePublisher`를 통해 흘려보내고, `WatchViewModel`과 `RunViewModel`이 똑같은 구조로 그걸 구독해서 세 가지 값을 각자 다른 용도로 쓰는 것이다.
 
@@ -1729,4 +1729,4 @@ func resetState() async {
 
 아래는 최종정리를 간단하게 정리한 만화 (오타는 쩔수..)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-22-RunningProject-15/summary.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-22-RunningProject-15/summary.png)

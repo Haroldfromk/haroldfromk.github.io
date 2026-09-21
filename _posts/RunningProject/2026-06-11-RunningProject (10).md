@@ -38,7 +38,7 @@ func resetState() {
 
 `Task { await runningCenter.reset() }`은 새 Task로 띄워지기 때문에 `resetState()`는 reset 완료 여부와 무관하게 즉시 리턴한다. 이 상태에서 빠르게 재시작하면 `lastLocation`이 아직 이전 값을 들고 있는 채로 `processLocation()`이 불려 거리가 누적된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/reset_race_before_v2.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/reset_race_before_v2.png)
 
 즉 이 문제를 해결하려면 actor의 reset이 완전히 보장된 뒤에 `resetState`가 끝나야 한다.
 
@@ -78,11 +78,11 @@ Task {
 
 이전에는 reset 작업을 별도 Task로 실행해 초기화 완료를 기다리지 않았지만, 수정 후에는 reset 완료가 보장된 뒤에만 다음 러닝을 시작할 수 있게 되었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/reset_race_after_v2.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/reset_race_after_v2.png)
 
 아래 만화를 보면 훨씬 이해가 잘 될듯
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/reset.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/reset.png)
 
 ai로 생성된 이미지다 보니 거리튐의 글자가 깨진건 쩔수..
 
@@ -92,7 +92,7 @@ ai로 생성된 이미지다 보니 거리튐의 글자가 깨진건 쩔수..
 
 실기기 테스트에서 Mission Flight 진입 버튼이 꾹 눌러야만 동작하는 현상이 발견됐다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/before.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/before.gif)
 
 시뮬레이터에서는 멀쩡히 탭으로 동작했기 때문에 실기기 테스트 전까지 발견하지 못했다.
 
@@ -130,7 +130,7 @@ NavigationLink(destination: TakeoffView()) {
 
 탭 한 번에 바로 넘어간다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/after.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/after.gif)
 
 ---
 
@@ -205,7 +205,7 @@ func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:
 
 원본 코드에서는 `NotificationCenter`로 위치를 실시간 스트림 했지만, RunWay는 `PassthroughSubject`를 통해 Combine 스트림으로 흘려보내는 구조라 그에 맞게 변경했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/filter.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/filter.png)
 
 ---
 
@@ -213,7 +213,7 @@ func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:
 
 이건 오늘 `simultaneousGesture` 기능까지 구현하고 확인겸 잠시 나갔다가 발견하게 된 부분이라 급하게 추가를 하였다.
 
-![](/assets/images/upload/runninglocation.png){: width="50%" height="50%"}
+![](/assets/images/upload/runninglocation.png)
 
 앱을 켜자마자 위치 추적이 활성화되면서 `didUpdateLocations`이 바로 호출되기 시작한다.
 
@@ -265,7 +265,7 @@ func startTracking() {
 
 `break`는 해당 케이스에서 아무것도 하지 않겠다는 의미다. Swift의 `switch`는 빈 케이스를 허용하지 않기 때문에 명시적으로 작성해야 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/running.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/running.png)
 
 ---
 
@@ -341,7 +341,7 @@ func detectPauseFromActor() async -> Bool {
 
 우선 Flow를 다시 한번 생각을 해본다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/flow.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/flow.png)
 
 이 Flow를 보면 VM은 순수하게 Actor(RunningCenter)의 Stream만을 기다리고 있다.
 
@@ -349,7 +349,7 @@ func detectPauseFromActor() async -> Bool {
 
 그렇다면 `detectPause`일때의 Flow는 어떻게 될까?
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/pause.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/pause.png)
 
 이런식으로 진행이 된다.
 
@@ -369,7 +369,7 @@ func detectPauseFromActor() async -> Bool {
 
 즉 flow를 다시 그려보면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/timerpause.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/timerpause.png)
 
 이렇게 되는 것이다.
 
@@ -452,7 +452,7 @@ func startStream() async {
 
 즉 정리해보면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/resumetree.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/resumetree.png)
 
 이렇게 별도의 재개하는 함수를 만들 필요없이 `startStream()`의 흐름 안에서 일시정지와 재개가 모두 처리된다.
 
@@ -713,7 +713,7 @@ GPS 드래프트로 인해 정지 상태에서도 좌표가 매초 2~5m씩 튀�
 
 timestamp/accuracy 필터가 이미 적용되어 있어도 GPS 드래프트 자체는 막을 수 없다는 점에서 AI-B의 논리가 더 설득력 있었다. `distanceFilter = 10`, `distanceGap <= 4`로 적용했다. (이 내용은 AI가 작성했다.)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/compare.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-11-RunningProject-10/compare.png)
 
 이렇게 만화로 정리를 다시 해보았다.
 

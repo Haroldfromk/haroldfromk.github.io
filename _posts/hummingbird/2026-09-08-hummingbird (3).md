@@ -13,7 +13,7 @@ toc_sticky: true
 
 이번엔 movie와 review의 관계를 다룬다. 하나의 movie가 여러 개의 review를 가질 수 있으니, 이건 one-to-many 관계다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/movie_review_relationship_v2.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/movie_review_relationship_v2.png)
 
 ---
 
@@ -172,17 +172,17 @@ try await dependencies.reviewRepository.createTable()
 
 SQL에서 컬럼 정의 사이에 콤마(`,`) 하나만 빠져도 전체 쿼리가 syntax error로 실패한다. 특히 `CREATE TABLE`처럼 컬럼이 여러 줄에 걸쳐 나열되는 쿼리에서는, 줄 끝마다 콤마가 제대로 붙어있는지 하나씩 확인하는 습관을 들이는 게 좋다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-03.2252.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-03.2252.png)
 
 강의에선 여기에서 `,`를 붙이지 않아 에러가 발생했었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-03.2349.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-03.2349.png)
 
 이렇게 잘 만들어진걸 확인할 수 있다.
 
 또한 Relationships도 잘 형성 되어있는걸 알 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-03.2425.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-03.2425.png)
 
 ---
 
@@ -317,13 +317,13 @@ routeCollection.delete(":movieId", use: deleteMovie)
 
 만약 하나도 없을 경우 추가를 해준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-03.5859.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-03.5859.png)
 
 그 ID를 이용해 `POST /api/movies/:movieID/reviews`로 comment와 rating을 담아 요청을 보내면, 생성된 review가 그대로 응답으로 돌아온다. 
 
 하지만 지금 내상황은 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-04.0624.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-04.0624.png)
 
 이렇게 에러가 발생한다.
 
@@ -338,13 +338,13 @@ routeCollection.post(use: createReview) // ✅
 
 블로그 글을 제대로 적었으나 실제 코드에는 `put`으로 자동완성을 해버린것....
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-04.1018.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-04.1018.png)
 
 이제는 잘 들어간걸 알 수 있다.
 
 database를 확인해보면 movie ID, rating, comment가 잘 저장되어 있고, `created_at`도 자동으로 채워져 있다. 같은 movie에 review를 여러 개 추가하는 것도 문제없이 동작한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-04.1106.png){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-04.1138.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-04.1106.png)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-04.1138.png)
 
 ---
 
@@ -459,7 +459,7 @@ func getMovieById(request: Request, context: some RequestContext) async throws -
 
 `GET /api/movies/:movieId`로 조회해보면, movie의 id/title/year와 함께 그 movie에 달린 review들이 배열로 깔끔하게 같이 반환된다. 이 응답 하나만으로 클라이언트가 movie 상세 화면에 review까지 바로 표시할 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-06.2019.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-06.2019.png)
 
 ---
 
@@ -542,4 +542,4 @@ router.addRoutes(ReviewsController(repository: dependencies.reviewRepository).en
 
 이제 `/api/reviews`로 요청하면 전체 review 목록을, 각 review에 딸린 movie 정보(id, title, year)까지 함께 받아올 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-06.2909.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-3/CleanShot_08-06.2909.png)

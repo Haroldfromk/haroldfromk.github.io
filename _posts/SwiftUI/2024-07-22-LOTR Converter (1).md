@@ -97,7 +97,7 @@ struct ContentView: View {
 
 그러면
 
-![CleanShot 2024-09-10 at 04 09 31@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-1/e03b41fe-18b0-4e86-ba97-15976b979686.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 04 09 31@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-1/e03b41fe-18b0-4e86-ba97-15976b979686.png)
 
 이렇게 SafeArea는 유지한채로 이미지가 깔리는데,
 
@@ -107,7 +107,7 @@ struct ContentView: View {
 
 그냥 읽어봐도 직관적으로 어떤 걸 의미하는지 알 수 있다.
 
-![CleanShot 2024-09-10 at 04 10 43@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-1/7bbb1c9e-f358-4678-85f6-08c222e93e93.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 04 10 43@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-1/7bbb1c9e-f358-4678-85f6-08c222e93e93.png)
 
 이렇게 깔끔하게 되었다.
 
@@ -120,7 +120,7 @@ VStack {
                     .frame(height: 200)
 ```
 
-![CleanShot 2024-09-10 at 04 12 30@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-1/dba2d915-e28d-4b5c-9221-73833b615caa.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 04 12 30@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-1/dba2d915-e28d-4b5c-9221-73833b615caa.png)
 
 이렇게 Image 추가하듯이 Text도 추가하면 된다.
 
@@ -211,7 +211,7 @@ struct ContentView: View {
 }
 ```
 
-![CleanShot 2024-09-10 at 04 23 11@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-1/13917d2f-1ab4-4d64-8652-c4fbebf60182.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 04 23 11@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-1/13917d2f-1ab4-4d64-8652-c4fbebf60182.png)
 
 equal이 pulse 효과를 주어 은은하게 반짝이지만 gif대신 png이미지로 대체한다.
 

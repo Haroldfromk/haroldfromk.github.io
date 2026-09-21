@@ -15,11 +15,11 @@ published: true
 
 지금 구조는 미러링 중에도 iPhone과 Watch가 각자 독립적으로 위치 데이터를 처리하고 있다. Watch 주도 미러링이어도 iPhone이 자체 `LocationService`와 `RunningCenter`를 돌려서 GPS를 따로 수집하고 계산하는 식이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/mirroring_before.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/mirroring_before.png)
 
 이 방식의 문제는 실제로 사용해보면서 드러났다. Watch에서 미러링으로 러닝을 시작하면 iPhone이 GPS 락을 새로 잡는 동안 딜레이가 생긴다. Watch는 이미 카운트다운을 마치고 러닝 중인데, iPhone은 위치 데이터를 기다리느라 늦게 따라오는 구조였다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/cut1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/cut1.png)
 
 ---
 
@@ -42,7 +42,7 @@ published: true
 
 **값을 만드는 곳을 하나로 두면 어긋날 일 자체가 없어진다.** [이전글](https://haroldfromk.github.io/posts/RunningProject-(15)/){:target="_blank"}에서 `runningMode`를 시작 시점에 확정한 것과 같은 이야기다. 그때는 "언제 정할 것인가"였고, 이번엔 "어디서 정할 것인가"다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/mirroring_after.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/mirroring_after.png)
 
 
 
@@ -52,7 +52,7 @@ published: true
 
 `startOrigin`은 이미 시작 주체를 구분하는 용도로 쓰고 있었다. `.local`이면 그 기기가 직접 카운트다운을 거쳐 시작한 경우이고, `.remote`면 상대 기기가 시작시킨 워크아웃을 미러링으로 받은 경우다. 이 값을 그대로 위치 추적 여부를 결정하는 기준으로 확장하기로 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/cut2.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/cut2.png)
 
 ---
 
@@ -421,7 +421,7 @@ nonisolated func session(_ session: WCSession, didReceiveMessage message: [Strin
 
 Watch에서 보낸 FlightData를 iPhone이 받아서 `vm?.flightData`에 직접 넣는 방식으로, watchOS 쪽 기존 로직과 완전히 동일한 구조다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/cut3.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/cut3.png)
 
 ---
 
@@ -435,7 +435,7 @@ Watch에서 보낸 FlightData를 iPhone이 받아서 `vm?.flightData`에 직접 
 
 #### 단독
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/iphone_standalone_flow.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/iphone_standalone_flow.png)
 
 iPhone 단독 러닝은 단순하다. iPhone이 GPS를 직접 수집하고 `RunningCenter`에서 FlightData를 계산해 PFDView에 표시한다. Watch는 아예 관여하지 않는다.
 
@@ -443,7 +443,7 @@ iPhone 단독 러닝은 단순하다. iPhone이 GPS를 직접 수집하고 `Runn
 
 #### 미러링
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/iphone_led_flow.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/iphone_led_flow.png)
 
 iPhone이 `startOrigin: .local`이므로 GPS와 `RunningCenter`를 직접 돌려 FlightData를 계산한다. 계산된 FlightData는 `sendFlightData()`로 Watch에 전송되고, Watch는 `didReceiveMessage()`로 받아서 WatchPFDView에 표시만 한다. 심박/케이던스는 Watch가 HealthKit으로 수집해서 `sendHealthData()`로 iPhone에 보내고, iPhone PFD에 반영된다.
 
@@ -453,7 +453,7 @@ iPhone이 `startOrigin: .local`이므로 GPS와 `RunningCenter`를 직접 돌려
 
 #### 단독
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/watch_standalone_flow.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/watch_standalone_flow.png)
 
 Watch 단독 러닝도 구조는 iPhone과 동일하다. Watch가 GPS를 직접 수집하고 `RunningCenter`에서 FlightData를 계산해 WatchPFDView에 표시한다. 러닝 중에는 iPhone과 통신하지 않고, 종료 후 `transferUserInfo()`로 결과를 iPhone에 전달해 LogbookView에 저장한다.
 
@@ -461,7 +461,7 @@ Watch 단독 러닝도 구조는 iPhone과 동일하다. Watch가 GPS를 직접 
 
 #### 미러링
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/watch_led_flow.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-30-RunningProject-17/watch_led_flow.png)
 
 Watch가 `startOrigin: .local`이므로 GPS와 `RunningCenter`를 직접 돌려 FlightData를 계산한다. 계산된 FlightData는 `sendFlightData()`로 iPhone에 전송되고, iPhone은 `didReceiveMessage()`로 받아서 PFDView에 표시만 한다. 심박/케이던스는 동일하게 Watch → iPhone 방향으로 `sendHealthData()`를 통해 전달된다.
 

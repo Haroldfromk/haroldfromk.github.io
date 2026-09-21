@@ -31,7 +31,7 @@ iPhone에서 러닝을 시작해서 Watch로 미러링하는 상황에서 두 �
 
 코드 변경 없이 재빌드만 했는데 증상이 완전히 다른 방향으로 옮겨간 게 이상했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3987.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3987.png)
 
 ---
 
@@ -145,7 +145,7 @@ ROTATE 카운트다운이 끝나는 시점에 `didStartFlight = true`를 세팅�
 
 이렇게 하면 `updatePhase(.cruise)` -> `start()`로 이어지는 순서는 그대로 두면서도, `start()`가 더 이상 그 사이의 타이밍에 의존하지 않게 된다. iOS와 동일한 구조가 됐으니, 앞으로 두 플랫폼 코드를 나란히 놓고 봐도 헷갈릴 일이 줄어들 것 같다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/watch.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/watch.png)
 
 ---
 
@@ -153,11 +153,11 @@ ROTATE 카운트다운이 끝나는 시점에 `didStartFlight = true`를 세팅�
 
 이렇게 나오는 문제는 아래 스샷을 보면 알듯 집에서 기기 연동 테스트를 하면서 거리가 0이었기에 페이스 자체도 --:-- 으로 계산을 할 수 없는 값이 저장 되었기 때문이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3988.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3988.png)
 
 이렇게 확신을 할 수 있었던 이유는
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3989.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3989.png)
 
 이렇게 순수하게 데이터를 가져왔을때는 계산이 정상적으로 되기 때문이다.
 
@@ -261,7 +261,7 @@ private var monthAvgPace: String {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3992.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3992.png)
 
 현재 내 앱 기준으로 망가진 레코드는 총 14개가 나온 상태였다. 기기 연동 테스트하면서 쌓인 레코드라 실사용 데이터는 아니었고, 지우는 쪽으로 정리했다.
 
@@ -283,21 +283,21 @@ private var monthAvgPace: String {
 
 이제는 잘 되는걸 알 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3991.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3991.png)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/pacedone.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/pacedone.png)
 
 ---
 
 ## 또 다른 문제, 러닝 바로 종료시 페이스 튐 문제
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3993.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/IMG_3993.png)
 
 집에서 다시 테스트하며 앱에서 러닝을 바로 종료를 해보니 페이스가 엄청나게 튀는 문제를 발견했다.
 
 그리고 그건 아래와 같이 모든 데이터를 오염시키기 시작했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/paceerror.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/paceerror.png)
 
 `saveRunningData()`의 계산식은 지난번 그대로다.
 
@@ -358,4 +358,4 @@ private var monthAvgPace: String {
 
 앞으로 페이스 관련 계산을 추가할 땐 "화면에 안 보이면 괜찮다"가 아니라 "저장되는 값 자체가 안전한가"를 먼저 확인해야겠다는 생각이 들었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/image11.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-05-RunningProject-22/image11.png)

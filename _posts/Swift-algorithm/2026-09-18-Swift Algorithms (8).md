@@ -42,7 +42,7 @@ static func fourBonacciRec(n: Int) -> Int {
 
 `n`이 큰 값으로 가면 컴퓨터가 멈춘 것처럼 오래 걸린다는 걸 미리 경고했는데, 실제로 그 이유는 호출 트리를 그려보면 바로 드러난다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/recursion_call_tree.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/recursion_call_tree.png)
 
 `Q(6)`을 계산하려면 `Q(5)`, `Q(4)`, `Q(3)`, `Q(2)`를 각각 재귀 호출해야 하는데, 그중 `Q(5)`를 계산하는 과정에서 다시 `Q(4)`, `Q(3)`, `Q(2)`를 처음부터 계산하게 된다. `Q(6)`의 직접 자식으로 이미 계산했던 값들과 완전히 똑같은 계산을, `Q(5)`의 하위 호출에서 또 반복하는 것이다. `n`이 하나씩 커질 때마다 호출 트리가 4갈래로 계속 갈라지기 때문에, 이런 중복이 기하급수적으로 쌓인다.
 
@@ -93,7 +93,7 @@ static func fourBonacciMemo(n: Int) -> Int {
 
 `fourBonacciMemo` 자체는 `initMemo()`로 초기 memo를 만들고 helper를 호출하는 두 줄이지만, 실질적인 작업은 helper 안에서 다 이뤄진다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/memo_dict_buildup_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/memo_dict_buildup_fixed.png)
 
 `Q(4)`를 처음 계산할 때만 실제로 `0+1+2+3`을 더하고, 그 결과를 `memo[4]`에 저장해둔다. 이후 `Q(5)`, `Q(6)`을 계산할 때는 이미 `memo`에 있는 값(`memo[1]`, `memo[2]`, `memo[3]`, `memo[4]`, `memo[5]`)을 그대로 꺼내 쓰기만 하면 된다. 앞서 재귀 버전이 겪었던 중복 계산이 여기서는 전혀 일어나지 않고, `Q(4)`와 `Q(5)` 모두 정확히 한 번씩만 계산된다.
 
@@ -137,7 +137,7 @@ func testPerformanceFourBonacciMemoBigInt() throws {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/recursion_vs_memo_perf_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/recursion_vs_memo_perf_fixed.png)
 
 결과가 이 섹션 전체의 핵심이다.
 
@@ -156,7 +156,7 @@ XCTest의 baseline 기능(측정값을 기준선으로 저장해두고, 이후 �
 
 Dictionary 기반 memoization은 `Q(0)`부터 `Q(n)`까지 전부 저장해두기 때문에, `n`이 커질수록 메모리 사용량도 그만큼 늘어난다(공간복잡도 O(n)). 그런데 `Q(n)`을 계산하는 데 실제로 필요한 건 **직전 4개 값**뿐이다. 그보다 더 오래된 값들은 한 번 쓰이고 나면 다시는 참조되지 않는다. 이 점을 이용하면, 전체 이력을 Dictionary에 쌓아두는 대신 변수 4개만 계속 갱신하며 밀어내는 방식으로 메모리를 O(1)까지 줄일 수 있다. 이걸 **rolling array**(또는 rolling variable) 기법이라고 부른다([참고](https://labuladong.online/en/algo/dynamic-programming/space-optimization/){:target="_blank"}).
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/rolling_array_window_v3.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/rolling_array_window_v3.png)
 
 ```swift
 static func fourBonacciRolling(n: Int) -> Int {
@@ -194,7 +194,7 @@ static func fourBonacciRolling(n: Int) -> Int {
 
 `Q(n) = Q(n-1) + Q(n-2) + Q(n-3) + Q(n-4)`라는 정의 자체가, 딱 이 네 항을 직접 더해야만 `Q(n)`을 구할 수 있다고 못박고 있다. 그중 하나라도 없으면 계산 자체가 불가능하다는 뜻에서 "4개가 필요"하다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/why_four_terms_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/why_four_terms_fixed.png)
 
 반대로 "4개보다 더 옛날 값(`Q(n-5)`, `Q(n-6)`, ...)까지 들고 있어야 하지 않을까?"는 의문이 들 수 있는데, 그럴 필요는 없다. `Q(n-5)`나 그보다 옛날 값들은 이미 `Q(n-4)`를 계산하는 시점에 전부 그 계산 안에 녹아들어갔기 때문이다. `Q(n-4)`라는 숫자 하나가 사실상 "그 이전의 모든 히스토리를 압축해서 담고 있는 값"인 셈이라, `Q(n)`을 구하는 입장에서는 `Q(n-4)`만 있으면 그 이전 값들을 따로 들고 있을 이유가 없다.
 
@@ -251,7 +251,7 @@ static func factorialMemo(n: Int) -> BigInteger {
 
 `self.measure { }`로 `factorialRec`과 `factorialMemo`의 성능을 비교해봤는데, 결과가 거의 똑같이 나왔다. "이건 좀 실망스럽다"고 직접 언급할 정도였다. 이유를 breakpoint로 직접 추적해봤다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/factorial_no_branching_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/factorial_no_branching_fixed.png)
 
 `factorialMemoHelper`에서 `memo[n] = result`로 저장하는 시점을 breakpoint로 찍어보니, **그 줄에 도달하기도 전에 이미 재귀 호출이 한 번씩만 일어나고 끝나버린다**는 게 확인됐다. `factorial(n)`은 `factorial(n-1)`을 딱 한 번만 호출하고, 그 `factorial(n-1)`도 `factorial(n-2)`를 딱 한 번만 호출하는 식으로, 호출 경로가 가지 하나 없이 일직선으로 쭉 이어진다. 즉 애초에 같은 부분 문제(subproblem)가 중복해서 요청될 일이 없다.
 
@@ -315,7 +315,7 @@ static func power(base: Int, exponent: Int) -> BigInteger {
 C(n, k) = C(n-1, k-1) + C(n-1, k)
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/pascal_triangle_recurrence.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-8/pascal_triangle_recurrence.png)
 
 `C(4,2)`를 이 관계로 손으로 풀어보면, `C(3,1) + C(3,2)`로 나뉘고, 그 각각이 다시 `C(2,0)+C(2,1)`과 `C(2,1)+C(2,2)`로 나뉜다. 여기서 `C(2,1)`이 두 경로에서 똑같이 다시 계산된다는 걸 알 수 있다. `fourBonacciRec`에서 봤던 것과 같은 종류의 중복이라, 이번엔 Memoization이 확실히 도움이 되는 구조다.
 

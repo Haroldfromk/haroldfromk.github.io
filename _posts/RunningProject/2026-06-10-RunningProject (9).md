@@ -142,7 +142,7 @@ if !coordinates.isEmpty {
 
 하지만 지도가 나오지 않았다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/nmap.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/nmap.png)
 
 좌표가 비어있다는 뜻이므로 저장 로직을 확인해보니, `saveRunningData()`에서 `SwiftDataFlight`만 저장하고 좌표는 전혀 담지 않았던 것이 원인이었다.
 
@@ -210,7 +210,7 @@ func stop() {
 
 이미지로 이해를 해보면 아래와 같다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/task.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/task.png)
 
 실행 순서를 한 줄씩 따라가볼 수 있게 만들었다.
 
@@ -355,7 +355,7 @@ func resetState() {
 
 이제 작동하는지 테스트를 해보도록 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/drive.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/drive.gif)
 
 이렇게 나오는걸 알 수 있다.
 
@@ -391,7 +391,7 @@ if let alerts = self.alerts, !alerts.isEmpty {
 
 3분가량 시뮬레이터를 켜두고 테스트를 했다 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/firsttest.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/firsttest.gif)
 
 일단 지도에는 찍히나 sinkrate는 갑자기 사라졌다. 그리고 탭해도 어떤 정보인지 보이지가 않았다.
 
@@ -521,7 +521,7 @@ case "sinkRate":
 
 이제는 실행하니 잘 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/done.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/done.png)
 
 여기까지 오면서 생각보다 많은 문제가 있었다. 단순히 데이터를 연결하는 작업이라 생각했는데 `UIViewRepresentable` 라이프사이클, SwiftData 저장 순서, MapKit의 내부 최적화 알고리즘까지 다양한 문제가 얽혀있었다.
 
@@ -569,7 +569,7 @@ func updateUIView(_ uiView: MKMapView, context: Context) {
 
 처음 Mock UI를 만들 때는 데이터가 고정값이라 `updateUIView()`를 비워두어도 문제가 없었다. 실제 `@Query` 데이터로 교체하면서 비로소 이 문제가 드러났다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/uiview.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/uiview.png)
 
 ---
 
@@ -606,7 +606,7 @@ var filteredFlights: [SwiftDataFlight] {
 
 `filteredFlights`를 `ForEach`에 적용하면 필터 탭에 따라 목록이 바뀐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/log.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/log.gif)
 
 탭바 배경이 떴다 사라지는 건 알려진 버그로 각 뷰에 `.toolbarBackground(.hidden, for: .tabBar)`를 개별 적용하여 처리했다.
 
@@ -657,7 +657,7 @@ ForEach(filteredFlights) { entry in
 
 LogbookView에서 SummaryView로 넘어가면 지도가 이전 러닝 데이터 그대로 남아있는 문제가 있었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/problem.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/problem.gif)
 
 원인은 `coordinates`와 `alerts`가 `lastestFlight`를 참조하고 있어서 `selectedFlight`로 어떤 값이 넘어와도 항상 최신 Flight 데이터를 보여주고 있었기 때문이다.
 
@@ -695,7 +695,7 @@ var alerts: [SwiftDataAlert] {
 
 실행해보니 잘 되는걸 알 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/summarydone.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/summarydone.gif)
 
 그리고 Logbook으로 들어갔는데 또 Logbook으로 가게되는 로직은 view의 구조가 이상해지기 때문에 이걸 방지하도록 한다.
 
@@ -763,7 +763,7 @@ if selectedFlight == nil {
 
 버튼 텍스트도 `GO TO DECK`으로 변경했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/logbookimage.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/logbookimage.png)
 
 이번 작업을 하면서 렌더링, 라이프사이클, NavigationStack 구조 등 평소에 깊게 다루지 않았던 부분에서 AI 도움을 많이 받았다. 나중에 이 개념들을 딥다이브 형식으로 한번 정리해볼 필요가 있다고 느꼈다.
 
@@ -773,7 +773,7 @@ if selectedFlight == nil {
 
 FlightLoad는 필요없을듯해서 지우고 하단 ui을 4개로만 만들어 주었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/ui.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/ui.png)
 
 5개에서 4개로 변경
 
@@ -783,7 +783,7 @@ FlightLoad는 필요없을듯해서 지우고 하단 ui을 4개로만 만들어 
 
 HomeView의 LAST FLIGHT 섹션이 아직 하드코딩된 샘플 데이터로 표시되고 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/sample.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/sample.png)
 
 "Busan Night Run" 텍스트부터 거리, 페이스, 날짜까지 전부 고정값이다. 이제 실제 SwiftData 데이터로 교체한다.
 
@@ -818,7 +818,7 @@ if !routeCoordinates.isEmpty {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/homedone.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/homedone.png)
 
 지금 미리보기상 아래로 치우치는데, 이건 실제러닝을 해봐야 조금 더 자세히 파악이 가능 할 것같다.
 
@@ -842,7 +842,7 @@ var timeOfDay: String {
 Text("\(timeOfDay) \(lastestFlight?.mode == "modeA" ? "Mission" : "Free") Run")
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/text.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-10-RunningProject-9/text.png)
 
 이렇게 시간대로 하게끔 했다.
 

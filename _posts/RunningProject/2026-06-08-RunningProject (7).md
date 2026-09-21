@@ -144,7 +144,7 @@ ModeA(id: 72621435-7B62-4C87-81EE-4C6DDEB19A82, targetPace: 5.0, paceDeviation: 
 
 NavigationLink의 탭과 데이터 전달이 충돌 없이 함께 처리되는 이유가 여기에 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/gesture.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/gesture.png)
 
 ---
 
@@ -156,7 +156,7 @@ GPWS(Ground Proximity Warning System)는 항공기가 지형이나 장애물에 
 
 RunWay에서는 이 개념을 러닝에 적용했다. 목표 페이스에서 너무 느려지면 SINK RATE, 너무 빨라지면 OVERSPEED, 허용 오차 안으로 돌아오면 GLIDE PATH, 목표 거리 50m 전에는 MINIMUMS를 트리거한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/gpws.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/gpws.png)
 
 ---
 
@@ -338,11 +338,11 @@ func processLocation(_ location: CLLocation) {
 
 실행해서 아래와 같이 세팅을 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/simu.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/simu.png)
 
 그리고 시작을 하면?
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/test.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/test.gif)
 
 잘 되는걸 알 수 있다.
 
@@ -436,7 +436,7 @@ func calculateGPWSStatus(_ pace: Double) -> GPWSState {
 
 실행해보면? (빠른 테스트를 위해 bicycle로 한다)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/mimums.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/mimums.gif)
 
 이렇게 되는걸 알 수 있다.
 
@@ -485,7 +485,7 @@ else 가 되는시점에 true가 되면서
 
 true가 되는 시점에 start()를 하도록 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/takeoff.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/takeoff.gif)
 
 ---
 
@@ -493,11 +493,11 @@ true가 되는 시점에 start()를 하도록 했다.
 
 현재 네비게이션 우측에 있는 x 버튼을 누르면 러닝 중인데도 뒤로 돌아가는 문제가 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/CleanShot_08-14.33.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/CleanShot_08-14.33.png)
 
 저걸 누르면 이렇게 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/problem.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/problem.gif)
 
 이를 해결하기 위해 ViewModel에 `isRunning` 플래그를 추가했다. `start()` 시 `true`, `stop()` 시 `false`로 바뀌며, 러닝 중일 때는 x 버튼을 투명하게 하고 동시에 비활성화했다. 위치를 알고 탭해도 작동하지 않는다.
 
@@ -525,7 +525,7 @@ Button { dismiss() } label: {
 .disabled(runViewModel.isRunning)
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/CleanShot_08-14.36.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-08-RunningProject-7/CleanShot_08-14.36.png)
 
 이제는 러닝 중에 x 버튼이 보이지 않는다.
 

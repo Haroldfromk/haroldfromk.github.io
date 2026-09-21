@@ -16,11 +16,11 @@ toc_sticky: true
 
 ## 새로운 ViewController 생성하기.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/cw7nhq5Uym.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/cw7nhq5Uym.png)
 
 우선 현재 위와 같이 2개의 viewController가 있지만,
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/ZVFWVTusuD.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/ZVFWVTusuD.png)
 
 우리는 현재 viewController가 하나이므로 추가로 하나 더 생성해주자.
 
@@ -30,7 +30,7 @@ toc_sticky: true
 
 class 입력하고 나오는 recommendation중 subclass를 누르면 다음과 같이 나온다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/EFIuiwYVxs.png){: width="80%" height="80%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/EFIuiwYVxs.png)
 
 **Swift에서는 클래스를 만들때 클래스 그자체와 같은 이름을 가진 파일의 이름을 정하는 것이 규칙이다**
 
@@ -58,7 +58,7 @@ class 입력하고 나오는 recommendation중 subclass를 누르면 다음과 �
 그래서 viewDidLoad도 작성을 해주자.
 
 swift는 help에 가면 documentaion을 볼 수있으므로, 참고해두자
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/tM4HOdNH8T.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/tM4HOdNH8T.png)
 
 ## 새로 생성한 ViewController 빌드하기.
 
@@ -146,13 +146,13 @@ secondVC라는 매개변수가 생겼고, 이를 통해 우리는 이제 secondV
 ```
 
 그럼 이제 제대로 돌아가는지 작동 테스트를 해보도록하자.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/l4F6zQgPDp.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/l4F6zQgPDp.gif)
 
 아주 잘된다.
 
 그렇다면 animated를 false를 하면 어떻게 될까?
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/0YSJvKV9G5.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/0YSJvKV9G5.gif)
 
 이렇게 효과 없이 그냥 떡하니 바뀌는 걸 알 수 있다.
 
@@ -191,6 +191,6 @@ let bmi = weight / pow(height,2)// 우리가 bmi값의 데이터형을 Float형�
 secondVC.bmiValue = String(format: "%.1f", bmi)
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/bCwg92QkiQ.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-01-BMI-Calculator-2/bCwg92QkiQ.gif)
 
 전달이 잘 되는것을 확인 할 수 있다.

@@ -75,7 +75,7 @@ func validateFields() {
     }
 ```
 
-![May-19-2024 23-15-08](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-3/e18f43b6-f4b9-48e0-b70d-1e83b7089deb){: width="50%" height="50%"} 
+![May-19-2024 23-15-08](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-3/e18f43b6-f4b9-48e0-b70d-1e83b7089deb) 
 
 실행하니 아주 괜찮다.
 
@@ -127,7 +127,7 @@ DB를 리셋시키고 테스트를 해보자.
 
 여기 부분을 체크해주자.
 
-![May-19-2024 23-23-31](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-3/270adc78-87f4-4180-be87-c248922bbf19){: width="50%" height="50%"} 
+![May-19-2024 23-23-31](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-19-TikTok-Clone-3/270adc78-87f4-4180-be87-c248922bbf19) 
 
 아직 이후 액션이 없어서 저기서 멍때리지만
 

@@ -102,8 +102,8 @@ Task {
 
 두 곳을 고쳤다. 종료 흐름만 그림으로 정리하면 이렇게 갈렸다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-24/runway24-dynamicisland-before.png){: width="60%" height="60%"}
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-24/runway24-dynamicisland-after.png){: width="60%" height="60%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-24/runway24-dynamicisland-before.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-24/runway24-dynamicisland-after.png)
 
 Watch 주도로 시작할 때도 TakeoffView와 같은 방식으로 `startActivity()`를 호출하도록 추가했다.
 
@@ -133,4 +133,4 @@ if result.stopOrigin == .remote {
 
 TakeoffView 카운트다운이 끝날 때 쓰던 것과 같은 `missionName`/`targetPace` 계산식을 그대로 가져다 썼다. 어느 쪽이 주도하든 다이나믹 아일랜드가 똑같이 뜨고, 똑같이 사라지게 됐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-24/ttl.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-24/ttl.png)

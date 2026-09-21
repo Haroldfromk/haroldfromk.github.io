@@ -150,7 +150,7 @@ struct BackgroundImageView: UIViewRepresentable {
 
 ### Navigation Title color 변경
 
-![CleanShot 2024-12-24 at 11 35 03](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-26-Combine-Weather-1/3ffef2ac-e6ce-4931-8878-80c299bfe481.png){: width="50%" height="50%"} 
+![CleanShot 2024-12-24 at 11 35 03](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-26-Combine-Weather-1/3ffef2ac-e6ce-4931-8878-80c299bfe481.png) 
 
 [Developer Forum](https://discussions.apple.com/thread/255346817?sortBy=rank){:target="_blank"}을 보고 해결
 
@@ -456,6 +456,6 @@ location은 publshed에 의해 일종의 `Publisher`의 성격을 갖게 되는�
 
 그래서 onAppear에 유저의 위치를 가져오는 request를 실행하고, 그 값을 가져왔을때 좌표를 주소로 변환하고, 날씨 정보를 가져오게 했다.
 
-![Dec-27-2024 14-04-10](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-26-Combine-Weather-1/4ec97459-a6e8-4f14-9389-eaa1f1640a7e.png){: width="50%" height="50%"} 
+![Dec-27-2024 14-04-10](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-12-26-Combine-Weather-1/4ec97459-a6e8-4f14-9389-eaa1f1640a7e.png) 
 
 실행하면 위와 같다.

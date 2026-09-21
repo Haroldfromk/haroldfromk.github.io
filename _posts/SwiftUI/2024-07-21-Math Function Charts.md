@@ -92,11 +92,11 @@ struct TripsChart: View {
 
 그래프를 여러개라고 적었지만 실제로는 우리가 샘플로 만든 값을 표시했다.
 
-![CleanShot 2024-09-10 at 02 25 07@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-21-Math-Function-Charts/a7cb000f-b227-4c27-bc0c-f489bace1e22.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 02 25 07@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-21-Math-Function-Charts/a7cb000f-b227-4c27-bc0c-f489bace1e22.png)
 
 물론 bar type도 가능하다.
 
-![CleanShot 2024-09-10 at 02 25 45@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-21-Math-Function-Charts/d4b45b94-e7af-48cd-beb2-dff44c42bf17.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 02 25 45@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-21-Math-Function-Charts/d4b45b94-e7af-48cd-beb2-dff44c42bf17.png)
 
 Point를 Bar로만 바꿔 주면 된다.
 

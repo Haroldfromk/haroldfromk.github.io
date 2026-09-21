@@ -108,7 +108,7 @@ var gpwsDeviation: Int {
 
 ## 경고 중엔 러닝 종료 안 됨
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchgpws.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchgpws.png)
 
 여기까지 고치고 다시 실기기로 테스트해보니 새로운 문제가 나왔다. GPWS 상태 자체는 이제 제대로 뜨는데, sink rate나 minimums 경고가 화면을 덮는 동안에는 러닝을 끝낼 방법이 없었다.
 
@@ -174,7 +174,7 @@ var gpwsRemainingMeters: Int {
 
 ## STATUS 칸에 미션 여부 안 보임
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpace.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpace.png)
 
 워치 화면을 다시 보다가 하나 더 걸렸다. STATUS 칸이 어떤 러닝을 하든 항상 "PACE"라는 고정 텍스트만 보여주고 있었다. Free Flight인지, 목표 페이스를 설정한 Mission Flight인지 구분이 전혀 안 됐고, 목표 페이스가 몇인지도 워치 화면 어디서도 확인할 방법이 없었다.
 
@@ -201,7 +201,7 @@ private var statusText: String {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpacegpws.png){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpacegpws1.png){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchfree.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpacegpws.png)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpacegpws1.png)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchfree.png)
 
 ---
 
@@ -305,7 +305,7 @@ private func drainPendingWatchData(_ queue: [SwiftDataFlight]) {
 
 `.onChange`가 문 앞을 지켜보는 역할이라면, `.onAppear`는 지켜보기 시작하기 전에 문 앞에 이미 뭐가 와 있는지 한 번 미리 확인하는 역할이다. 화면이 떠 있는 동안 도착하는 기록은 `.onChange`가, 화면이 뜨기 전에 이미 도착해있던 기록은 `.onAppear`가 나눠서 맡는 구조가 됐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-21-RunningProject-31/sum1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-21-RunningProject-31/sum1.png)
 
 ---
 

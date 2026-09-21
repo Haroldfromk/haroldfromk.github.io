@@ -48,14 +48,14 @@ self.present(alert, animated: true, completion: nil)
 
 우선 버튼에 다음과 같이 넣었고 어떻게 작동이 되는지 확인을 해보기로 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/uTNnppwFeP.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/uTNnppwFeP.gif)
 
 아 이런느낌이구나 라는게 직관적으로 왔다.
 
 ### 1. 1st Line
 `let alert = UIAlertController(title: "My Alert", message: "This is an alert.", preferredStyle: .alert)`
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/HIrWdSrMBf.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/HIrWdSrMBf.png)
 
 - title : 말그대로 제목
 - message : 우리가 내용을 담을 부분 (뭔가 안내등을 좀 더 나타내고자 할때)
@@ -79,11 +79,11 @@ alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default a
 - message : 추가 세부 정보를 제공하는 설명 텍스트
 - preferredStyle : 보여주는 스타일이며 3종류가 있다. 설명은 사진으로 대체한다.
     - default
-        - ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/ce1ZF04ifM.png){: width="50%" height="50%"}
+        - ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/ce1ZF04ifM.png)
     - cancel : 
-        - ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/n1DdeYPNA7.png){: width="50%" height="50%"}
+        - ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/n1DdeYPNA7.png)
     - destructive :
-        - ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/1jgHBc07mw.png){: width="50%" height="50%"}
+        - ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/1jgHBc07mw.png)
 - handler : 해당 내용을 눌렀을때 특정한 기능을 수행하게 하는 것
 
 ⭐️ alert.addAction도 있지만, 별도로 액션을 개체화 해서 사용하는 것도 가능하다.
@@ -101,7 +101,7 @@ alert.addAction(action)
 3. 입력한값을 TableView에 표시되게 한다.
 
 ### 1. StoryBoard
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/aAbs10MT3o.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/aAbs10MT3o.png)
 
 우선 심플하게 이렇게 구현을 해보았다.
 
@@ -164,7 +164,7 @@ extension ViewController : UITableViewDataSource {
 
 ### 3. 작동 테스트
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/wgHwTqoE1n.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/wgHwTqoE1n.gif)
 
 잘된다.
 
@@ -184,7 +184,7 @@ alert.addTextField { (textField: UITextField!) in
         }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/JbU6MTeV2E.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-20-Deep-Dive-UIAlertController/JbU6MTeV2E.png)
 
 Done!
 

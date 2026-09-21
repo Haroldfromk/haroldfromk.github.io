@@ -12,7 +12,7 @@ toc_sticky: true
 
 3. 코드 수정.
 위에서부터 아래로 내려가면서 고쳐보려고한다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/341d7bb5-f567-4492-b5dd-4991f76f596e.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/341d7bb5-f567-4492-b5dd-4991f76f596e.png)
 
 일단 title을 0,1,2로 하면서 sender.title을 가져올때 주석과같이 0,1,2로 리턴하게 하였다.
 
@@ -27,7 +27,7 @@ UI와 structure를 고치고 있기에 그와 관련된 코드들이 모두 터�
 
 위에서 아래로 흐름을 따라 코드를 보던 중
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/9306b261-2677-4d71-98b7-6d121fc927b4.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/9306b261-2677-4d71-98b7-6d121fc927b4.png)
 
 ```swift
 // if user's answer is correct
@@ -62,7 +62,7 @@ quiz내에 correctAnswer를 사용했다.
 이제 true/falsebutton에 관한 error이다.
 왜냐하면 우리는 true/false버튼을 없애고 0,1,2 이런식으로 버튼을 바꿨기에 없는것이 당연하다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/0ba03fa6-c2ba-456b-8693-f8a2ada0a034.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/0ba03fa6-c2ba-456b-8693-f8a2ada0a034.png)
 
 ```swift
 @objc func updateUI() {
@@ -78,12 +78,12 @@ quiz내에 correctAnswer를 사용했다.
 
 작동해보자.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/ffd31c6a-3d9d-4a02-bf0e-b7e8e54e8ae7.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/ffd31c6a-3d9d-4a02-bf0e-b7e8e54e8ae7.png)
 
 켜자마자 문제를 찾았다...
 문제에 대한 3지선다인데 그 3지선다를할 내용이 표시가 되지않았다....
 그리고 print를 사용해서 title의 type을 보니 string이었다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/92d87e34-c01b-481a-bf9c-c7bf0a2e03b0.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/92d87e34-c01b-481a-bf9c-c7bf0a2e03b0.gif)
 그리고 문제도 다음문제로 넘어갔고...
 
 저 button의 title을 3지선다에 있는 선택지로 바꿔준다면 해결이 될것같다!
@@ -92,21 +92,21 @@ quiz내에 correctAnswer를 사용했다.
 우선 그부분과 관련된 코드쪽을 찾아보자.
 
 일단 의심스러운 곳은 여기이다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/efad11af-bf08-433c-bfdf-ae395facebb0.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/efad11af-bf08-433c-bfdf-ae395facebb0.png)
 
 updateUI에는 우리가 문제, 진행률, 스코어, 버튼 이렇게 계속 트리거를 해주는걸 알수있다.
 즉 저부분에 button에 관해 text를 넣어주면 될것같다!
 
 혹시 몰라 우선 ui에 0,1,2로 적었던것을 모두 지웠다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/4f0f1e77-4d0f-42c0-ae65-e2c069a70306.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/4f0f1e77-4d0f-42c0-ae65-e2c069a70306.png)
 
 그리고 아래와 같이 적었다
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/da179c48-7f61-4213-9022-f2d1d41dec52.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/da179c48-7f61-4213-9022-f2d1d41dec52.png)
 
 그럼 이제 structure에가서 관련된 함수를 한번 만들어 보도록 하자!
 
 일단은 각각의 버튼을 통제할 함수를 만들어 주었다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/3b89030a-c430-4737-8d43-93eb5fdb0490.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/3b89030a-c430-4737-8d43-93eb5fdb0490.png)
 
 그리고 updateUI도 수정을 해주었다.
 ```swift
@@ -122,15 +122,15 @@ updateUI에는 우리가 문제, 진행률, 스코어, 버튼 이렇게 계속 �
         secondButton.backgroundColor = UIColor.clear
     }
 ```
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/99a39051-6b47-44db-94e3-a35634521c6d.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/99a39051-6b47-44db-94e3-a35634521c6d.png)
 
 처음에 그냥 titleLabel만 하면되는줄 알았는데 안되어서 다시보니 text가 필요하여 변경해주었다.
 
 작동을 해보자!.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/c1ecf315-3e14-4159-9020-bc1858f47cc1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/c1ecf315-3e14-4159-9020-bc1858f47cc1.png)
 
 돌리자마자 이상하다. 버튼 내용은 어디갔지?
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/fc779ddc-6da9-43e3-a63b-31d8ff87dbd5.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/fc779ddc-6da9-43e3-a63b-31d8ff87dbd5.png)
 
 그리고 버튼을 눌러보니 error가 바로 발생한다.
 optional value? 
@@ -151,16 +151,16 @@ func getAnswerText0 () -> String {
 ```
 혹시 이게 값을 못가져오는게 아닐까?
 playground로 테스트를 해봐야겠다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/1e741b6d-d1bc-43aa-992b-28f109cc3aec.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/1e741b6d-d1bc-43aa-992b-28f109cc3aec.png)
 
 확인결과 아주 잘나온다...
 그럼 0,1,2를 넣고 다시 테스트를 해보자!
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/c6fb19f5-f582-4199-bcf0-3c2270c93fb1.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/c6fb19f5-f582-4199-bcf0-3c2270c93fb1.gif)
 
 아주 잠깐이지만 값이 나왔다가 0, 1, 2로 덮어버려진다.
 
 강의에서 챌린지때 화면을 다시 보았다.
-![])https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/da8b7562-192c-456c-b783-021bd8a068ee.png){: width="50%" height="50%"}
+![])https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/da8b7562-192c-456c-b783-021bd8a068ee.png)
 
 choice1 choice2 이런식으로 해뒀다..
 하지만 나와의 차이점이라면
@@ -172,7 +172,7 @@ firstButton.setTitle(QuizBrain().getAnswerText1(), for: .normal)
 secondButton.setTitle(QuizBrain().getAnswerText2(), for: .normal)
 ```
 이걸써보니 choice에서 바뀌었다!
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/2b171637-438c-446e-983c-b09458dab4e1.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/2b171637-438c-446e-983c-b09458dab4e1.gif)
 
 하지만 그대로였다. 즉 setTitle을 사용하니 문제는 바뀌는데 버튼의 텍스트가 바뀌지않는다는건
 setTitle은 초기에 보여지는 화면의 text를 설정해주는것 같다.
@@ -180,7 +180,7 @@ setTitle은 초기에 보여지는 화면의 text를 설정해주는것 같다.
 그러면 이걸 viewcontroller에 적고 원래 있던 그대로 해보자.
 
 혹시나 했는데 역시 안된다 viewcontroller 자체에는 안되나보다
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/c6dd9fbd-72ca-4430-8390-120378d1c289.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/c6dd9fbd-72ca-4430-8390-120378d1c289.png)
 
 ---
 강의 코드를 살짝 보니 이건 내가 모르는 부분이었다..
@@ -208,13 +208,13 @@ secondButton.setTitle(getAnswer[2], for: .normal)
 그럼 원래 내가하려고했던것도 될것같다...
 
 일단 titleLable?.text는 되지않기에 pass!
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/012315f2-3c5f-4285-9f03-13ae5539d08a.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/012315f2-3c5f-4285-9f03-13ae5539d08a.png)
 
 setTitle을 하고 실행해보았다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/3fc7bfc1-aae4-4856-82bc-3284274ee892.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/3fc7bfc1-aae4-4856-82bc-3284274ee892.png)
 
 잘된다...
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/0b3c5d82-cf47-4e45-9fc9-3f6ccbe7147a.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/0b3c5d82-cf47-4e45-9fc9-3f6ccbe7147a.gif)
 
 그래도 이거 하나만 집어넣었더니 잘되어서 다행이다 :)
 
@@ -224,10 +224,10 @@ setTitle을 사용할때는 그냥 structure에서 가져와서 쓰는게 아니
 그래야 갱신이 된다!
 -> 문제를 보여주는 label하고는 다른 개념이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/6cf3d388-39c0-41cc-a103-59464c52810d.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/6cf3d388-39c0-41cc-a103-59464c52810d.png)
 
 before (wrong way!)
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/5eeccfe4-6c59-42df-95d2-a0e6051f07e8.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/5eeccfe4-6c59-42df-95d2-a0e6051f07e8.png)
 
 after
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/c797ba77-1d7d-4809-808e-bcbb148a529b.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-6-Advanced/c797ba77-1d7d-4809-808e-bcbb148a529b.png)

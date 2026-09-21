@@ -19,11 +19,11 @@ toc_sticky: true
 
 Xcode에서 `File → New`로 새 파일을 만들 때 "test"로 검색하면 여러 템플릿이 뜨는데, UI Test가 아니라 **Unit Test**를 선택해야 한다. 이름은 `Part_1_Tests`로 짓는다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.2439.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.2439.png)
 
 그리고 만약 `No Such Module` 에러가 뜬다면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.2805.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.2805.png)
 
 이렇게 Yes로 변경해주고 빌드를 다시하면된다.
 
@@ -42,15 +42,15 @@ final class Part_1_Tests: XCTestCase {
 
 하지만 아래와 같이 경고가 뜬다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.3629.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.3629.png)
 
 이건 테스트 파일이 잘못된 타겟에 추가된 게 문제이다.
 `@testable import Alogorithmic`은 별도의 테스트 타겟에 있는 파일에서 써야 하기때문.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.3719.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.3719.png)
 
 이렇게 테스트 타겟을 추가해주고 타겟을 바꿔준다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.4038.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-15.4038.png)
 
 ---
 
@@ -77,7 +77,7 @@ func testHello() {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/test_hello_structure_fixed.png){: width="80%" height="80%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/test_hello_structure_fixed.png)
 
 하나의 테스트 함수를 이 세 단계로 나눠서 작성하는 습관을 들이면 읽기가 훨씬 쉬워진다.
 
@@ -110,7 +110,7 @@ Test Suite 'Part1Tests' failed at 2026-09-14 19:18:00.510.
 	 Executed 1 test, with 1 failure (0 unexpected) in 0.330 (0.331) seconds
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-16.1846.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/CleanShot_16-16.1846.png)
 
 실행해보니 예상대로 테스트가 빨간색으로 실패했고, XCTest가 어떤 값과 어떤 값이 달랐는지("Hello Hello World!" vs "Hello Hello Word!") 정확히 알려줬다. 오타를 고쳐서 `"Hello Hello World!"`로 되돌리니 다시 초록색으로 통과했다.
 
@@ -157,7 +157,7 @@ func testTrapezoid1() {
 
 애초에 `XCTAssertEqual(_:_:)`을 `Double`끼리 그대로 비교하지 않고, 처음부터 `accuracy` 파라미터가 있는 오버로드를 썼다. `Double` 연산은 부동소수점 특성상 수학적으로 같아야 할 값도 미세한 오차가 생길 수 있어서, 정확히 `==`로 비교하는 대신 "기대값과의 차이가 `accuracy` 이내인가"를 확인하는 방식을 쓴다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/accuracy_tolerance_diagram_fixed.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/accuracy_tolerance_diagram_fixed.png)
 
 ---
 
@@ -272,7 +272,7 @@ func testNumberDivisibleByNOptional() {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/table_driven_test.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/table_driven_test.png)
 
 몇 가지 짚을 부분이 있다.
 
@@ -407,7 +407,7 @@ func testStrangeRepeat() {
 
 마지막 케이스로 `copies`가 음수(`-1`)인 경우를 넣어봤다. 이 케이스의 결과가 어떻게 나올지 확신이 없는 상태로 실행했는데, 테스트가 "실패"하는 게 아니라 **테스트 프로세스 자체가 죽어버렸다.**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/test_failure_vs_crash_fixed.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/test_failure_vs_crash_fixed.png)
 
 `strangeRepeat` 내부에서 쓰는 `String(repeating:count:)`가 음수 `count`를 받으면 "negative count"라는 fatal error를 던지면서 그 자리에서 프로세스를 종료시켜버린 것이다. 이건 일반적인 `XCTAssertEqual` 실패(빨간 X 표시로 알려주고 나머지 테스트는 계속 진행되는)와는 차원이 다른 문제다. `XCTAssertEqual`이 틀렸다고 알려주는 건 "값이 기대와 다르다"는 신호지만, fatal error로 인한 crash는 그 지점에서 프로그램 실행 자체가 멈춰버리는 훨씬 심각한 상황이다.
 
@@ -489,7 +489,7 @@ func testReverseSplit() {
 
 시뮬레이터에서 앱을 직접 눌러보는 것과 XCTest로 검증하는 것, 둘 다 결국 "로직이 맞게 동작하는지 확인한다"는 목적은 같다. 하지만 이 둘은 세 가지 축에서 근본적으로 다르다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/simulator_vs_xctest_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-14-Swift-Algorithms-3/simulator_vs_xctest_fixed.png)
 
 ---
 

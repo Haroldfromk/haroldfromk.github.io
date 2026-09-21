@@ -585,7 +585,7 @@ private func addLog(_ message: String) {
 
 일단은 시뮬레이터에서는 작동이 된다.
 
-<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/0921446d-ee77-4f6b-9694-6e3bbe8ed3f2.png" />{: width="50%" height="50%"}
+<img width="472" height="986" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-03-RunningProject-2/0921446d-ee77-4f6b-9694-6e3bbe8ed3f2.png" />
 
 ---
 

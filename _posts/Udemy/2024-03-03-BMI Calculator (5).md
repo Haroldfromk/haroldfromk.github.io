@@ -206,7 +206,7 @@ override func viewDidLoad() {
 
 잘된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-BMI-Calculator-5/xPYA53rCWS.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-03-03-BMI-Calculator-5/xPYA53rCWS.gif)
 
 강의에서의 차이점이라면 딱하나
 나는 background imageview를 만들었는데

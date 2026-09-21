@@ -359,7 +359,7 @@ var latestFlight: SwiftDataFlight? {
 
 이제 하드코딩된 값들을 바꿔준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-09-RunningProject-8/touchdownview.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-09-RunningProject-8/touchdownview.png)
 
 실행하면 적용이 잘된걸 알 수 있다.
 
@@ -537,6 +537,6 @@ Alert C - 2026.06.10 09:15:42
 
 `groupedAlerts[date] ?? []`는 해당 날짜에 Alert가 없을 경우 빈 배열을 반환하도록 옵셔널을 처리한 것이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-09-RunningProject-8/folder.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-09-RunningProject-8/folder.gif)
 
 실행하면 기록이 뜨는 걸 알 수 있다. `DisclosureGroup` 덕분에 별도 화면 전환 없이 한 화면에서 날짜별로 접었다 펼 수 있어 더 깔끔해졌다.

@@ -130,7 +130,7 @@ smoothingSpeedFirst = 0.75 * smoothingSpeedFirst + 0.25 * compensatedSpeed
 smoothingSpeedSecond = 0.75 * smoothingSpeedSecond + 0.25 * smoothingSpeedFirst
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/smooth.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/smooth.png)
 
 ---
 
@@ -249,7 +249,7 @@ func resetState() async {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/pause.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/pause.png)
 
 ---
 
@@ -257,7 +257,7 @@ func resetState() async {
 
 새벽에 간단하게 테스트 해본결과 일단은 페이스가 초반에 잘 되는걸 확인했다. 또한 퍼즈도 잘되었다. 움직일때 알아서 퍼즈가 풀리기도 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/test.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/test.gif)
 
 다만 페이스의 정확도는 조금 더 알아볼 필요가 있어보인다.
 
@@ -353,7 +353,7 @@ View가 직접적으로 구독을 하는게 아니라 VM에서 구독을하여 V
 
 그게 지금까지 해온 방식이며, 앞으로도 고수할 방식이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/pipeflow.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/pipeflow.png)
 
 그래서 여기서 구독을 하도록 한다.
 
@@ -462,7 +462,7 @@ docs의 예시는 대부분 `@Bindable var model: MyModel` 형태로 프로퍼�
 
 이럴 때는 `Bindable(runViewModel).didError`처럼 인스턴스를 직접 감싸서 바인딩을 만드는 방식을 쓸 수 있다. 이후 HealthKit 연동 등 VM이 커질 것을 고려해 `HomeView`도 동일한 방식으로 통일했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/alerttest.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/alerttest.gif)
 
 그럼 이렇게 Alert가 잘 뜨는걸 알 수 있다.
 
@@ -486,7 +486,7 @@ enum FlightPhase {
 
 전환 시점을 정리하면, `takeoff`는 카운트다운이 시작되는 순간 전환되었다가 ROTATE 후 바로 `cruise`로 넘어간다. `approach`는 MINIMUMS가 트리거되는 시점에 함께 전환되며, ModeA에서만 사용된다. 유저가 종료하면 `touchdown`으로 바뀐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/flightphase_flow_v7.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/flightphase_flow_v7.png)
 
 ```swift
 enum FlightPhase {
@@ -512,7 +512,7 @@ enum FlightPhase {
 
 즉 Phase는 기존과는 다른 Flow를 가지게 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/phase_update_flow_v2.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/phase_update_flow_v2.png)
 
 이렇게 View에서 Phase를 전달하고 VM이 받아 Actor로 전달하는 구조다.
 
@@ -902,7 +902,7 @@ NavigationStack(path: $vm.navigationPath) {
 
 이 패턴에 대해 [Swift with Majid](https://swiftwithmajid.com/2022/10/05/mastering-navigationstack-in-swiftui-navigationpath/){:target="_blank"}와 [Medium](https://medium.com/@kusalprabathrajapaksha/master-swiftui-navigation-with-navigationpath-and-enum-3c08bee4a41a){:target="_blank"} 등에서도 enum 기반 `NavigationPath` 단일 파이프라인 구조를 소개하고 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/aisolution.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/aisolution.png)
 
 ---
 
@@ -912,11 +912,11 @@ NavigationStack(path: $vm.navigationPath) {
 
 우선 Widget Extension 타겟을 추가한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/widget.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/widget.png)
 
 타겟 추가 시 반드시 Live Activity를 체크해야 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/liveact.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/liveact.png)
 
 그리고 iPhone 앱 타겟의 `Info.plist`에 아래 키를 추가해야 한다. 추가하지 않으면 `Activity.request()`가 항상 실패한다.
 
@@ -925,7 +925,7 @@ NavigationStack(path: $vm.navigationPath) {
 <true/>
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/plist.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-12-RunningProject-11/plist.png)
 
 ---
 

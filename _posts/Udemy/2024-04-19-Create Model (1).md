@@ -34,7 +34,7 @@ Dataset이 많을 수록 더 정확도가 올라간다.
 
 캐글 오래간만에 들어가네, 이전에 프로젝트하면서 견종 인식 딥러닝 모델 정확도 올린다고 2주를 고생했던 기억이 떠오른다.
 
-![CleanShot 2024-04-19 at 22 28 24@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/ccede6fe-95db-4750-8d7f-79220ae47195){: width="75%" height="75%"}
+![CleanShot 2024-04-19 at 22 28 24@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/ccede6fe-95db-4750-8d7f-79220ae47195)
 
 사진은 모델링 하면서 했던 과정중의 하나를 가져와봤다.
 
@@ -72,7 +72,7 @@ Train/Test 이미지를 나눌때 비율은 8:2가 이상적이라고 한다.
 pip install split-folders
 ```
 
-![CleanShot 2024-04-20 at 16 48 42@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/7877649f-7bad-46b4-89aa-6d9601aee586){: width="50%" height="50%"}
+![CleanShot 2024-04-20 at 16 48 42@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/7877649f-7bad-46b4-89aa-6d9601aee586)
 
 위에 pip했을때 reject된 이유는 2.7버전이 더이상 업뎃이나 이런 유지보수를 안하기 때문.
 
@@ -82,7 +82,7 @@ pip install split-folders
 
 vscode에서 F1을 눌러 인터프리터를 설정을 다시 해준다. (그래야 설치한 라이브러리가 적용이된다.)
 
-![CleanShot 2024-04-20 at 16 55 57@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/4a48b3a7-6e5e-40b1-afe9-9ce65222ffe8){: width="50%" height="50%"}
+![CleanShot 2024-04-20 at 16 55 57@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/4a48b3a7-6e5e-40b1-afe9-9ce65222ffe8)
 
 vscode로 바로 터미널로 해당 파일 실행을 하면 이렇게 분류가 된다.
 
@@ -94,7 +94,7 @@ splitfolders.ratio("animals", output="output", seed=1337, ratio=(.8, .2))
 
 이때 주의할점은 디렉토리의 구조가 파이썬파일과 animals라는 상위 폴더와 같이있고, animals를 들어갔을때 label 폴더가 있어야 한다는 점이다.
 
-![CleanShot 2024-04-20 at 16 57 49@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/bfed98c9-c209-4f55-b0d2-dc9001945bd8){: width="50%" height="50%"}
+![CleanShot 2024-04-20 at 16 57 49@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/bfed98c9-c209-4f55-b0d2-dc9001945bd8)
 
 이런식.
 
@@ -110,7 +110,7 @@ train / val 의 디렉토리로 나누어졌다.
 
 Xcode → ToolBar → Open Developer Tools → Create ML → Choose New Document → Choose an Image Classification → Give it the Training and Testing Data
 
-![CleanShot 2024-04-20 at 17 16 31@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/fab96bf9-55fc-48d9-8760-a1680eeb1a21){: width="50%" height="50%"}
+![CleanShot 2024-04-20 at 17 16 31@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-19-Create-Model-1/fab96bf9-55fc-48d9-8760-a1680eeb1a21)
 
 이렇게 된다.
 

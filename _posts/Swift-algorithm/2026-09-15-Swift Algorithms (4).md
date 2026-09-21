@@ -47,7 +47,7 @@ static func firstDivisible(lst: [Int], a: Int) -> Int? {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/first_divisible_enumerated.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/first_divisible_enumerated.png)
 
 `lst.enumerated()`는 `(index, element)` 쌍을 순서대로 만들어준다. `for (i, element) in lst.enumerated()`로 이 쌍을 동시에 받으면, 조건을 만족했을 때 `element` 대신 `i`를 반환할 수 있다.
 
@@ -147,7 +147,7 @@ static func firstDivisibleGeneric<T: BinaryInteger>(lst: [T], a: T) -> Int? {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/generic_t_vs_int_fixed.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/generic_t_vs_int_fixed.png)
 
 핵심은 **무엇이 `T`로 바뀌어야 하고, 무엇이 `Int`로 그대로 남아야 하는지 구분하는 것**이다.
 
@@ -170,7 +170,7 @@ static func firstDivisibleGeneric<T: BinaryInteger>(lst: [T], a: T) -> Int? {
 
 `["hummus", "apple", "banana"]`로 생각해보면 이렇다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/average_string_example.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/average_string_example.png)
 
 각 단어 길이는 6, 5, 6이고 평균은 `5.666...`이다. `hummus`(6)와 `banana`(6)는 평균보다 엄격하게 크지만, `apple`(5)은 평균보다 작다. 그래서 결과는 `(2, 5.666...)`이다.
 
@@ -376,7 +376,7 @@ for i in 0..<len-1 {
 stringRep = String(stringRep.dropLast(plusSign.count))
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/sum_of_products_negative_fixed.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/sum_of_products_negative_fixed.png)
 
 `dropLast(_:)`에 넘기는 값을 처음엔 `1`이나 `3`처럼 숫자를 직접 하드코딩하려고 했는데, 그러면 나중에 `plusSign`을 `" + "`에서 `","` 같은 다른 구분자로 바꿀 때마다 이 숫자도 같이 손봐야 하는 문제가 생긴다. 그래서 `plusSign.count`로 동적으로 계산해서, `plusSign`이 몇 글자든 항상 정확히 그만큼만 잘라내도록 했다. `dropLast`는 `Substring`을 반환하므로, 다시 `String(...)`으로 감싸서 타입을 맞춘다.
 
@@ -492,7 +492,7 @@ for listItem in lst {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/growing_differences_trace_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/growing_differences_trace_fixed.png)
 
 몇 가지 짚을 부분이 있다.
 
@@ -595,7 +595,7 @@ for (index, ch) in myString.dropLast(k - 1).enumerated() {
 
 여기서 실제로 off-by-one 버그를 만났다. 처음엔 `dropLast(k)`로 썼는데, `myString = "ccc"`, `k = 3`으로 테스트하니 분명 `"ccc"` 전체가 정답이어야 하는데 `nil`이 반환됐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/repeated_substring_bug_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/repeated_substring_bug_fixed.png)
 
 원인은 `"ccc".dropLast(3)`이 빈 문자열이 되어버려서, `enumerated()`로 순회할 대상 자체가 아예 없어졌기 때문이었다. `for` 루프에 브레이크포인트를 찍어봐도 한 번도 진입하지 않고 바로 `return nil`로 빠져나갔다. `k`개를 드롭하면 한 글자도 안 남는데, `k-1`개만 드롭하면 `"c"` 한 글자가 남아서 `index=0, ch='c'`로 루프에 정상 진입하고, `myString[0..<3]`(`"ccc"`)과 비교해서 올바르게 `("ccc", 0)`을 반환한다.
 
@@ -726,7 +726,7 @@ final class Part_2_Tests: XCTestCase {
 
 강사가 찾은 해결 방법은 Xcode 메뉴에서 **Product → Scheme → Edit Scheme**으로 들어가서, **Test** 항목을 선택하고 **Options** 탭에서 **"Execute in parallel"** 체크를 해제하는 것이었다. 이 옵션을 끄니 테스트가 정상적으로 실행됐다고 하는데, 병렬 실행 옵션이 왜 테스트 러너를 멈추게 만들었는지 정확한 원인까지는 본인도 확신하지 못했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/CleanShot_18-14.5402.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/CleanShot_18-14.5402.png)
 
 ---
 
@@ -750,7 +750,7 @@ func testFirstDivisible() {
 
 `a`를 `0`으로 넣으니 실제로 앱이 crash했다. 내부적으로 `element % a`를 계산하다가 0으로 나누기가 발생한 것이다. Xcode가 crash 지점을 바로 가리켜줘서, 문제의 근원을 즉시 찾을 수 있었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/CleanShot_18-14.5729.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-15-Swift-Algorithms-4/CleanShot_18-14.5729.png)
 
 이 발견을 반영해서, `firstDivisible` 함수 자체에 방어 코드를 추가했다.
 

@@ -43,7 +43,7 @@ info HelloBird: [HummingbirdCore] Server started and listening on 127.0.0.1:8080
 
 `Package.swift`를 열면 Xcode가 프로젝트 전체를 불러오면서 의존성을 다운로드하고 인덱싱한다. 이때 실행 대상은 반드시 **Mac**으로 선택해야 한다(서버는 로컬 머신에서 실행되므로 iPhone 시뮬레이터가 아님). 빌드가 성공하면 스타터 프로젝트의 파일 구성을 확인할 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-15.49.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-15.49.png)
 
 이렇게 구성이 되어있는 걸 알 수 있다.
 
@@ -327,7 +327,7 @@ router.get("/movies") { request, context in
 
 Hummingbird가 알아서 JSON으로 변환해서 클라이언트한테 보내준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.00.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.00.png)
 
 ---
 
@@ -459,15 +459,15 @@ router.post("/movies") { request, context async throws in
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.10.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.10.png)
 
 그럼 `var`로 바꾸면 되지 않을까 싶은데, 이번엔 concurrency 에러가 난다. non-isolated global shared mutable state라서 안전하지 않다는 것.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.11.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.11.png)
 
 `buildRouter` 함수 안으로 옮겨서 지역 변수로 만들어보려고 해도, 동시에 실행되는 코드에서 참조를 캡처한다는 에러가 또 발생한다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.12.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.12.png)
 
 결국 지금 방식으로는 전역 mutable 배열에 안전하게 추가할 방법이 없다는 뜻이다.
 
@@ -493,11 +493,11 @@ GET request는 브라우저 주소창에 URL만 치면 되지만, POST request�
 3. Header에 `Content-Type: application/json` 추가 (서버한테 JSON을 보낸다고 알려주는 것)
 4. Body에 id, name, year를 담아서 전송
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.19.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.19.png)
 
 서버 쪽에 이미 Movie라는 타입이 있어서 body를 그대로 매핑/decode할 수 있는 것. 실제로 요청을 보내보면 보낸 것과 동일한 movie가 그대로 응답으로 돌아온다. decode가 정상적으로 동작한다는 뜻이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.191.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.191.png)
 
 ---
 
@@ -544,7 +544,7 @@ let movieStore = MovieStore()
 
 이제 `movies`에 접근하는 모든 곳에서 `movieStore.movies`로 바꿔줘야 하는데, actor라서 access가 async/await을 요구한다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.49.png.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.49.png.png)
 
 그래서 route 클로저들을 `async throws`로 바꾸고, `movieStore.movies`에 접근할 때마다 `await`을 붙여준다.
 
@@ -572,7 +572,7 @@ router.get("/movies/:movieID") { request, context async throws in
 
 POST route에서 `movieStore.movies.append(...)`를 바로 시도해도 안 되는데, `private(set)`으로 선언했기 때문에 movies를 바꿀 수 있는 건 MovieStore 자기 자신뿐이기 때문이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.52.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.52.png)
 
 그래서 외부에서 직접 변경하는 대신, MovieStore 안에 `addMovie` 같은 함수를 만들어서 그 함수를 통해서만 추가하도록 한다.
 
@@ -602,11 +602,11 @@ router.post("/movies") { request, context async throws in
 
 먼저 GET으로 movies 목록이 잘 나오는지 확인을 해본다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.54.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.54.png)
 
 그리고 POST로 "Finding Nemo"를 추가해봤다. 다시 GET으로 조회하니 목록 맨 끝에 Finding Nemo가 잘 들어가 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.541.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-1/CleanShot_07-17.541.png)
 
 다만 지금은 MovieStore가 메모리에만 저장되기 때문에, 서버를 재시작하면 추가한 movie는 전부 사라진다. 결국 나중엔 데이터베이스로 영속화해야 한다는 뜻.
 

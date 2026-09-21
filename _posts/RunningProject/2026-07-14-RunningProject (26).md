@@ -160,6 +160,6 @@ if result.stopOrigin == .local {
 
 ---
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-14-RunningProject-26/runway26-scope-narrowing.png){: width="75%" height="75%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-14-RunningProject-26/runway26-scope-narrowing.png)
 
 이제 4가지 경우의 수가 사실상 3가지로 줄었다. 앱 주도(워치 미러링 + 워치 종료 포함)는 그대로, 워치 주도는 미러링 없이 독립 실행 하나로 합쳐졌다. 다시 실기기로 테스트해보고 이상 없으면 App Store Connect에 재제출할 예정이다.

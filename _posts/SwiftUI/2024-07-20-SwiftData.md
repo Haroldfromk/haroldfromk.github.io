@@ -208,7 +208,7 @@ struct PlaceList: View {
 
 여기서는 장소의 이름순으로 소팅을 해주었다.
 
-![CleanShot 2024-09-09 at 21 18 56@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/98389cd3-57df-46dc-8b79-e824e693f623.png){: width="50%" height="50%"}
+![CleanShot 2024-09-09 at 21 18 56@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/98389cd3-57df-46dc-8b79-e824e693f623.png)
 
 이렇게만 해줘도 Preview에 바로 row가 6개가 나온다
 
@@ -237,7 +237,7 @@ struct PlaceList: View {
 
 이렇게 해주니
 
-![CleanShot 2024-09-09 at 21 22 35@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/ceda8761-8186-4431-8a71-0c65a1683f52.png){: width="50%" height="50%"}
+![CleanShot 2024-09-09 at 21 22 35@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/ceda8761-8186-4431-8a71-0c65a1683f52.png)
 
 이렇게 나온다.
 
@@ -272,7 +272,7 @@ struct PlaceList: View {
 
 ```
 
-![CleanShot 2024-09-09 at 21 23 53@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/aad9f8ee-8cf9-4dc7-9d31-2c97353bac76.png){: width="50%" height="50%"}
+![CleanShot 2024-09-09 at 21 23 53@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/aad9f8ee-8cf9-4dc7-9d31-2c97353bac76.png)
 
 이렇게 확인이 가능하다.
 
@@ -298,7 +298,7 @@ navigationBar로 생각하면 될듯하다.
 
 `@State private var showImages = false`
 
-![CleanShot 2024-09-09 at 21 29 40@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/589817d4-6a25-4811-8a0b-8729955d054c.png){: width="50%" height="50%"}
+![CleanShot 2024-09-09 at 21 29 40@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/589817d4-6a25-4811-8a0b-8729955d054c.png)
 
 위치는 위에 코드를 보면 topBarTrailing으로 해두어서 우상단에 위치한 걸 알 수 있다.
 
@@ -359,7 +359,7 @@ showImages가 true일 때 시트가 나타나고, false일 때 시트가 사라�
 
 ---
 
-![Sep-09-2024 21-52-57](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/3edea502-6dcb-4eee-a694-cbaaa43deb90.png){: width="50%" height="50%"}
+![Sep-09-2024 21-52-57](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/3edea502-6dcb-4eee-a694-cbaaa43deb90.png)
 
 ### 7. predicates 사용하기
 
@@ -428,7 +428,7 @@ SwiftUI를 공부하면서 느낀점은 UIComponent 추가하는게 너무 쉽�
 
 좀 더 쉽게 확인이 가능해진다!.
 
-![CleanShot 2024-09-09 at 21 59 47@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/1a6bd575-dd71-487a-8558-57f41152838d.png){: width="50%" height="50%"}
+![CleanShot 2024-09-09 at 21 59 47@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/1a6bd575-dd71-487a-8558-57f41152838d.png)
 
 이렇게 Search Bar가 만들어졌다.
 
@@ -487,7 +487,7 @@ private var predicate: Predicate<Place> {
 
 여기에 modifier인 animation을 추가해주자.
 
-![Sep-09-2024 23-35-22](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/c80ccc06-4d31-4ca1-9c43-4d12fb51fb89.png){: width="50%" height="50%"}
+![Sep-09-2024 23-35-22](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/c80ccc06-4d31-4ca1-9c43-4d12fb51fb89.png)
 
 뭔가 디퍼블 사용하는듯한 느낌이 든다.
 
@@ -507,7 +507,7 @@ trailing했던 부분 바로 밑에 하나를 더 만들어 주었다.
 
 이녀석은 interested = true인 것만 보여주는 녀석이다.
 
-![Sep-09-2024 23-39-07](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/196d8263-c73d-4d15-99d8-0c1e9dc53bb8.png){: width="50%" height="50%"}
+![Sep-09-2024 23-39-07](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/196d8263-c73d-4d15-99d8-0c1e9dc53bb8.png)
 
 이것 역시도 `withAnimation`을 추가하여 애니메이션 효과를 주었다.
 
@@ -525,6 +525,6 @@ trailing했던 부분 바로 밑에 하나를 더 만들어 주었다.
 ```
 
 
-![Sep-09-2024 23-41-14](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/e6714580-5548-48c4-999e-e27cfcbaa7aa.png){: width="50%" height="50%"}
+![Sep-09-2024 23-41-14](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-20-SwiftData/e6714580-5548-48c4-999e-e27cfcbaa7aa.png)
 
 완료.

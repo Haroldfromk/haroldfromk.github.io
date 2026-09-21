@@ -13,7 +13,7 @@ toc_sticky: true
 
 mapkit을 사용하기전에 먼저 아래 사진을 보면
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/9162a649-53b4-4ac4-a490-6d43b168a395.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/9162a649-53b4-4ac4-a490-6d43b168a395.png) 
 
 배경이 파란색인 경우 Navigation button이 잘 보이지 않는다.
 
@@ -25,19 +25,19 @@ mapkit을 사용하기전에 먼저 아래 사진을 보면
 
 우리는 현재 ` .preferredColorScheme(.dark)`를 통해 애초에 다크모드로 해둔 상태이긴 하다.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/8ec8d318-8060-48e0-97fe-490edf8f3407.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/8ec8d318-8060-48e0-97fe-490edf8f3407.png) 
 
 둘다 labelColor로 해준다.
 
 이후 ConentView로 돌아와서 Preview에서 Light, Dark 모드 테스트를 할 수 있는데.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/581ed310-1fee-4e0d-8a6c-b67b9d4eb3c1.png){: width="50%" height="50%"} ![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/4f866652-0dbf-46d2-9e09-50bc7bebdacb.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/581ed310-1fee-4e0d-8a6c-b67b9d4eb3c1.png) ![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/4f866652-0dbf-46d2-9e09-50bc7bebdacb.png) 
 
 이렇게 확인이 가능
 
 그리고 체크를 풀게되면 애초에 우리가 설정해둔 `preferredColorScheme`를 통해 다시 검게 된다.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/1f707ab4-01a9-4561-bca5-0672c1f782b9.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/1f707ab4-01a9-4561-bca5-0672c1f782b9.png) 
 
 이제는 이렇게 하얗게 변한걸 알 수 있다.
 
@@ -72,15 +72,15 @@ Overlay를 통해 겹치게 하고 LinearGradient를 통해 그라데이션 효�
 
 아무생각없이 Gradient를 사용하게되면...
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/b34d6169-dfb4-40f8-9ae4-9a372783c345.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/b34d6169-dfb4-40f8-9ae4-9a372783c345.png) 
 
 이렇게 개판날수도 있으니까 조심
 
 
 - before
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/f1cc2f9b-7394-4387-afd4-52374a30bae7.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/f1cc2f9b-7394-4387-afd4-52374a30bae7.png) 
 - after
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/7578dab8-6dbf-4c0d-95e6-339edced1c2c.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/7578dab8-6dbf-4c0d-95e6-339edced1c2c.png) 
 
 확실히 하단부분이 다른걸 알 수 있다.
 
@@ -144,7 +144,7 @@ Map(position: $position) {
 
 이렇게 코드를 작성하면
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/c1074187-401a-4e70-9633-744fbf5f6b54.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/c1074187-401a-4e70-9633-744fbf5f6b54.png) 
 
 symboleffect에 의해 핀이 깜빡 깜빡 거린다.
 
@@ -217,7 +217,7 @@ NavigationLink {
 
 뭐 딱히 크게 언급할만한건 없어보이긴 한다.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/7e5500db-39fa-4738-87af-221ea5a6a585.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-13-JPApexPredators-5/7e5500db-39fa-4738-87af-221ea5a6a585.png) 
 
 실행하면 이렇게 된다.
 

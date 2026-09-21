@@ -171,7 +171,7 @@ static func findMax(nums: [Int]) -> Int? {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-7/find_max_recursion_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-7/find_max_recursion_fixed.png)
 
 base case가 세 단계로 나뉜다.
 
@@ -278,7 +278,7 @@ static func isPalindrome(str: String) -> Bool {
 
 바로 코드를 짜기 전에, `n`이 작은 경우부터 손으로 세어보면서 규칙을 찾아봤다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-7/staircase_three_panels_v5.png){: width="95%" height="95%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-7/staircase_three_panels_v5.png)
 
 - `n = 1`: 방법은 1가지 (한 칸)
 - `n = 2`: 방법은 2가지 (두 칸을 한 번에, 또는 한 칸씩 두 번)
@@ -286,7 +286,7 @@ static func isPalindrome(str: String) -> Bool {
 
 `n = 3`을 세면서 중요한 관찰이 나왔다. 첫걸음을 1칸으로 시작하면 남은 건 2칸(`n=2`의 경우와 같음), 첫걸음을 2칸으로 시작하면 남은 건 1칸(`n=1`의 경우와 같음)이라는 것. 즉 **첫걸음이 1칸이냐 2칸이냐에 따라 문제가 더 작은 같은 문제로 쪼개진다.**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-7/climb_stairs_recurrence_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-18-Swift-Algorithms-7/climb_stairs_recurrence_fixed.png)
 
 이 관찰을 `n = 4`에 적용해보면, 첫걸음이 1칸이면 남은 계단은 3칸(`climbCombinations(3)`), 첫걸음이 2칸이면 남은 계단은 2칸(`climbCombinations(2)`)이 되고, 이 둘을 더하면 전체 경우의 수가 나온다. `n=3`이 3가지, `n=2`가 2가지이므로 `n=4`는 `3 + 2 = 5`가지다. 실제로 `n=10`일 때 89가지라는 힌트도 주어졌는데, 이 규칙을 계속 적용해서 손으로 확인해볼 수 있다. 이 점화식은 사실 Fibonacci 수열과 똑같은 패턴이다.
 

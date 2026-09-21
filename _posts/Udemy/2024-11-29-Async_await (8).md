@@ -108,7 +108,7 @@ https://quoteslate.vercel.app/api/quotes/random
 
 이걸로 변경.
 
-![simulator_screenshot_5B031220-7AC4-4AB2-B666-226FF115481E](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/2c8750e0-9dec-47df-8edc-01f86d5514e0.png){: width="50%" height="50%"} 
+![simulator_screenshot_5B031220-7AC4-4AB2-B666-226FF115481E](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/2c8750e0-9dec-47df-8edc-01f86d5514e0.png) 
 
 완료.
 
@@ -335,11 +335,11 @@ class RandomImageListViewModel: ObservableObject {
 
 **[Before]**
 
-![Nov-29-2024 16-49-21](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/fb4cbfa5-11e0-43ab-b788-145f6854dc86.png){: width="50%" height="50%"} 
+![Nov-29-2024 16-49-21](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/fb4cbfa5-11e0-43ab-b788-145f6854dc86.png) 
 
 **[After]**
 
-![Nov-29-2024 16-50-49](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/6238a7fd-2c97-4e14-b902-439d4fb29ea0.png){: width="50%" height="50%"} 
+![Nov-29-2024 16-50-49](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/6238a7fd-2c97-4e14-b902-439d4fb29ea0.png) 
 
 일단은 강의와 달리 난 id를 사용하지 않기에 이번에도 배제를 했으나
 
@@ -347,7 +347,7 @@ class RandomImageListViewModel: ObservableObject {
 
 ### 3. 시나리오: 랜덤 이미지 앱 (Unstructured Task)
 
-![CleanShot 2024-11-29 at 16 38 25](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/fea906e2-c011-4871-a094-fac3d3e9899b.png){: width="50%" height="50%"} 
+![CleanShot 2024-11-29 at 16 38 25](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/fea906e2-c011-4871-a094-fac3d3e9899b.png) 
 
 현재 이렇게 ui가 구성되어있다.
 
@@ -365,7 +365,7 @@ Refresh 버튼을 누른다고 가정해보자.
 
 그러면 배열에 계속 추가되면서 스크롤이 길어지게 된다.
 
-![Nov-29-2024 16-42-24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/03f80c36-eae3-490d-990a-8a9dd139c25c.png){: width="50%" height="50%"} 
+![Nov-29-2024 16-42-24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/03f80c36-eae3-490d-990a-8a9dd139c25c.png) 
 
 이건 Refresh라고 볼수 없다.
 
@@ -399,6 +399,6 @@ func getRandomImages(ids: [Int]) async {
 
 함수가 호출될때마다 배열을 초기화 해주는 작업을 해주면 된다.
 
-![Nov-29-2024 16-47-55](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/97e30e16-e99c-4261-9200-4ad1625f1918.png){: width="50%" height="50%"} 
+![Nov-29-2024 16-47-55](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-29-Async_await-8/97e30e16-e99c-4261-9200-4ad1625f1918.png) 
 
 끝.

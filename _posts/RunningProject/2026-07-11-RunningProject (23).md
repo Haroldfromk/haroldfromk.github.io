@@ -18,8 +18,8 @@ published: true
 
 온보딩 첫 페이지 기준으로 한국어/일본어가 이렇게 나뉜다. RUNWAY 브랜드명과 아이콘은 그대로 두고, 설명 문구와 SKIP/NEXT 버튼만 언어별로 바뀐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/runway23-onboarding-ko.png){: width="45%" height="45%"}
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/runway23-onboarding-ja.png){: width="45%" height="45%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/runway23-onboarding-ko.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/runway23-onboarding-ja.png)
 
 ---
 
@@ -27,7 +27,7 @@ published: true
 
 먼저 프로젝트에 언어를 추가한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/langadd.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/langadd.png)
 
 영어만 있는 목록에서 +를 눌러 한국어와 일본어를 추가했다.
 
@@ -37,7 +37,7 @@ published: true
 
 Command + N으로 템플릿 파일을 추가할 때 `string`으로 검색하면 String Catalog가 나온다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/string.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/string.png)
 
 근데 파일을 만들어 놓기만 하면 목록이 비어있다. 빌드를 한 번 돌려야 코드 안에서 `Text("문자열")`처럼 리터럴로 쓰인 문자열들을 Xcode가 스캔해서 카탈로그에 채워준다. 그렇게 채워진 목록에서 언어별 칸에 번역만 입력해주면 끝이다.
 
@@ -49,7 +49,7 @@ Info.plist 권한 문구는 이 파일이랑은 따로 관리해야 했다. 방�
 
 이렇게 두 파일(Localizable, InfoPlist)을 추가하면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/complete.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/complete.png)
 
 Resources에 2개로 바뀐 걸 확인할 수 있다.
 
@@ -151,7 +151,7 @@ Text("Ready for your next flight?")
 
 앱을 지우고 새 빌드로 다시 설치하고 나서야 권한 팝업 문구가 일본어로 나왔다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/runway23-permission-ja.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/runway23-permission-ja.png)
 
 ---
 
@@ -191,4 +191,4 @@ private var mustAgreeWarning: String {
 
 상단의 "아래 내용을 확인 후 동의해주세요"도 같은 문제라 `consentSubtitle`이라는 이름으로 하나 더 추가했다. 세 개 다 `Text(agreeCheckboxLabel)`처럼 리터럴 자리에 변수만 끼워 넣으면 끝이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/lang.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-12-RunningProject-23/lang.gif)

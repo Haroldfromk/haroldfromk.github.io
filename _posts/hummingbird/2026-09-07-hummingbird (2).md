@@ -19,7 +19,7 @@ MVC는 UIKit 할 때 하도 많이 써서 익숙한 개념이지만, 백엔드�
 
 `App` 폴더 밑에 `Controllers` 폴더를 만들고, `MovieController`를 생성한다. Controller는 `RouteCollection`을 프로퍼티로 가지고, 그 안에 실제 route들을 등록한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-18.4008.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-18.4008.png)
 
 이때 `routeCollection.get(use:)`에서 `use`로 넘기는 함수는 아무 함수나 되는 게 아니라, `request`와 `context`를 받아서 뭔가를 반환하는(그리고 `async throws`인) 특정 시그니처를 만족해야 한다. 그래서 `getMovies` 함수를 그 시그니처에 맞게 정의해두면, `use: getMovies`라고 참조만 해줘도 알아서 연결된다.
 
@@ -220,18 +220,18 @@ Postman으로 전체 movie 목록 조회, 특정 movie 조회, movie 추가(Find
 
 [postgresapp.com](https://postgresapp.com){:target="_blank"}에서 다운로드하고 설치하면 메뉴 바에 아이콘이 뜬다. 열어보면 기본 데이터베이스가 한두 개 보이고, 필요하면 Initialize 버튼을 눌러줘야 서버가 켜지기도 한다. 정상적으로 실행되면 Postgres 서버가 돌아가고 있는 게 확인된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.3736.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.3736.png)
 
 start를 눌러준다.
 
 그럼 아래와 같이 뜨는데 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.3823.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.3823.png)
 
 더블클릭을 하면 터미널사용에 대해 유져의 권한 허용이 필요하다.
 모르고 거절을 했다면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.3910.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.3910.png)
 
 여기서 다시 허용을 해주면 된다.
 
@@ -247,7 +247,7 @@ CREATE DATABASE moviesdb;
 
 세미콜론을 꼭 붙여야 명령어가 완성된다(안 붙이면 계속 다음 줄로 넘어가버린다). 키워드를 대문자로 쓰는 건 습관일 뿐, 필수는 아니다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.4110.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.4110.png)
 
 실행하고 나면 Postgres.app 목록에 `moviesdb`가 생긴 걸 확인할 수 있다. 지금은 빈 데이터베이스고, 테이블은 앞으로 Hummingbird 구현을 통해 만들어나갈 예정이다.
 
@@ -280,7 +280,7 @@ targets: [
 ]
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.5143.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-19.5143.png)
 
 ---
 
@@ -465,11 +465,11 @@ moviesdb=# select * from movies;
 
 연결 설정에서 connection type을 PostgreSQL로 선택하고, user는 `postgres`, password는 비워두고(설치 시 자동 생성된 계정), database는 `movies_db`로 지정한 다음 Test 버튼으로 연결을 확인하고 접속하면 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-21.2903.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-21.2903.png)
 
 접속하면 테이블 목록이 보이고, View Data로 데이터를(지금은 비어있음), View Structure로 테이블 구조를 시각적으로 확인할 수 있다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-21.2950.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-21.2950.png)
 
 ---
 
@@ -575,7 +575,7 @@ struct Movie {
 
 다시 요청을 보내니 생성된 movie가 JSON으로 잘 반환됐다. Beekeeper Studio에서 View Data 후 새로고침해보니 실제로 Finding Nemo가 id, title, year와 함께 database에 저장되어 있는 걸 확인했다. 요청이 controller → repository → database까지 끝까지 잘 이어졌다는 뜻이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-22.0956.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-22.0956.png)
 
 ---
 
@@ -711,7 +711,7 @@ func getMovieById(request: Request, context: some RequestContext) async throws -
 
 Postman으로 실제 movie ID(꽤 긴 UUID 문자열)를 URL에 넣어서 요청해보니, Finding Nemo가 정상적으로 반환됐다. 다른 ID(Batman)로도 확인해보니 마찬가지로 잘 동작한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-22.5543.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_07-22.5543.png)
 
 ---
 
@@ -782,7 +782,7 @@ URL에서 movie ID를 꺼내고, `repository.delete`를 호출한다. `MovieErro
 
 먼저 전체 movie 목록을 조회해서 Batman의 ID를 확인한다. Postman에서 method를 DELETE로 설정하고 해당 ID로 요청을 보내면, 삭제된 Batman 정보가 응답으로 돌아온다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_08-00.4036.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_08-00.4036.png)
 
 다시 전체 목록을 조회해보면 Batman은 사라지고 Finding Nemo, Lord of the Rings만 남아있다. database에서 직접 확인해도 Batman이 삭제된 걸 볼 수 있다.
 
@@ -862,7 +862,7 @@ URL에 별도로 ID를 안 받는 대신, body에 담긴 movie의 `id`를 그대
 
 Finding Nemo의 ID를 확인한 뒤, Postman에서 PUT 요청으로 title을 "Finding Dory", year를 2023으로 바꿔서 보낸다. 응답으로 수정된 movie가 그대로 돌아오고, database를 확인해보면 실제로 Finding Nemo가 Finding Dory로 바뀌어 있다. ID 기준으로 정확히 그 레코드만 업데이트된 것.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_08-00.4613.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_08-00.4613.png)
 
 이렇게 해서 movies controller, movies repository를 거쳐 database까지 이어지는 CRUD(Create, Read, Update, Delete) 전체 흐름을 완성했다.
 
@@ -945,7 +945,7 @@ func createTable() async throws {
 
 Beekeeper Studio에서 구조를 확인해보면 id 컬럼에 default 값으로 `gen_random_uuid()`가 잡혀있는 걸 볼 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_08-01.3244.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-07-hummingbird-2/CleanShot_08-01.3244.png)
 
 ---
 

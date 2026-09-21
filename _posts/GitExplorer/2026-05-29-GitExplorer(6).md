@@ -643,7 +643,7 @@ UserCell(user: user, avatarData: index < avatarData.count ? avatarData[index] : 
 
 실행하면 잘 되는 걸 알 수 있다.
 
-<img width="420" height="618" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/befeaeed-4105-4b35-b3c4-af80276b1663.png" />{: width="50%" height="50%"}
+<img width="420" height="618" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-29-GitExplorer6/befeaeed-4105-4b35-b3c4-af80276b1663.png" />
 
 ---
 

@@ -47,8 +47,8 @@ CloudKit 백업을 하려면 복원 흐름을 넣을 화면이 필요한데, v1.
 
 처음엔 홈 화면 헤더에 주석으로 잠들어 있던 톱니바퀴 버튼을 살려서 Deck 탭 안에서만 들어가게 만들었는데, 다시 생각해보니 탭바 자체에 넣는 게 더 맞는 것 같아서 Deck/Logbook/Alerts 옆에 Settings 탭을 하나 더 추가하는 쪽으로 바꿨다. 안에는 공지사항, 개인정보 처리방침, 데이터 저장/복원 3개 메뉴를 뒀다.
 
-![홈 화면과 새 Settings 탭](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_home_button.png){: width="50%" height="50%"}
-![설정 화면 목록](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_list.png){: width="50%" height="50%"}
+![홈 화면과 새 Settings 탭](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_home_button.png)
+![설정 화면 목록](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_list.png)
 
 ---
 
@@ -58,7 +58,7 @@ CloudKit 백업을 하려면 복원 흐름을 넣을 화면이 필요한데, v1.
 
 기본 `DisclosureGroup` 화살표는 `.tint()`를 줘도 색이 안 바뀌길래, 라벨과 화살표를 직접 그리는 커스텀 `DisclosureGroupStyle`을 만들어서 화살표를 앱 accent 컬러(`rwGreen`)로 맞췄다.
 
-![공지사항](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_announcements.png){: width="50%" height="50%"}
+![공지사항](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_announcements.png)
 
 ---
 
@@ -66,7 +66,7 @@ CloudKit 백업을 하려면 복원 흐름을 넣을 화면이 필요한데, v1.
 
 개인정보 처리방침은 원래 온보딩(`OnboardingPrivacyConsent`)에만 있어서 한 번 동의하고 나면 다시 볼 방법이 없었다. 한/영/일 본문 텍스트와 언어 피커를 `PrivacyPolicyContent`라는 뷰로 따로 빼서, 온보딩(동의 체크박스 있는 버전)이랑 설정 화면(읽기 전용 버전) 양쪽에서 같이 쓰도록 했다. 뽑아내는 김에 CoreMotion(기압계 고도) 접근에 대한 문구가 빠져 있던 것도 이번에 추가했다.
 
-![개인정보 처리방침](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_privacy_policy.png){: width="50%" height="50%"}
+![개인정보 처리방침](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_privacy_policy.png)
 
 ---
 
@@ -76,7 +76,7 @@ CloudKit 백업을 하려면 복원 흐름을 넣을 화면이 필요한데, v1.
 
 데이터 백업쪽에 뭔가 수치로 보여줄게 필요해서 고민을 하다가 총 러닝 횟수, 거리, 시간을 보여주기로 결정 했다.
 
-![데이터 저장/복원](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_databackup.png){: width="50%" height="50%"}
+![데이터 저장/복원](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_databackup.png)
 
 여기에 데이터 초기화 버튼도 새로 추가했다. 기기에 저장된 모든 기록을 지우는 기능이라 실수로 눌렸을 때 되돌릴 수 없으니, 버튼을 누르면 바로 지우지 않고 확인 alert를 한 번 더 띄운다. 
 
@@ -111,7 +111,7 @@ Button {
 @Relationship(deleteRule: .cascade) var splits: [SwiftDataSplit] = []
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_delete.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/settings_delete.png)
 
 만드는 중에 화면 전환이 전혀 안 되는 문제를 겪었다. 처음(헤더 버튼 방식)에는 설정 화면 전용으로 `SettingsDestination`이라는 열거형을 만들어서 썼는데, 원인은 `HomeView`의 `NavigationStack`이 들고 있는 경로가 타입 제한이 없는 범용 경로가 아니라 `[FlightDestination]`으로 못박힌 배열이었던 것. 이 배열엔 `FlightDestination`이 아닌 값은 애초에 들어갈 수가 없어서 버튼을 눌러도 조용히 아무 일도 안 일어났다.
 
@@ -159,16 +159,16 @@ struct SettingsView: View {
 
 두 번째 페이지(TWO FLIGHT MODES)의 Mission Flight 목업을 실제 `ModeAView`의 PACE/HEART RATE 토글과 똑같이 캡슐 두 개로 바꾸고, 1km마다 음성 안내한다는 문구도 추가했다. 원래는 "목표 페이스·거리를 설정하는 Mission Flight"라고만 적혀 있었는데, 심박수 목표 모드가 생긴 지 한참인데 온보딩엔 이게 전혀 없었다.
 
-![두 가지 비행 모드](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_modes.png){: width="50%" height="50%"}
+![두 가지 비행 모드](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_modes.png)
 
 세 번째 페이지(GPWS ALERT)엔 Watch에서 경고 화면을 길게 눌러 실시간 계기판을 확인할 수 있다는 문구를 한 줄 추가했고, 네 번째 페이지(ALERTS ON MAP)의 지도 목업은 종료 마커를 실제 앱과 똑같이 E에서 F로 바꿨다.
 
-![GPWS 경고](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_gpws.png){: width="50%" height="50%"}
-![지도 위의 경고](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_alertmap.png){: width="50%" height="50%"}
+![GPWS 경고](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_gpws.png)
+![지도 위의 경고](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_alertmap.png)
 
 CloudKit 백업은 아직 구현 전이지만, 다 됐다고 가정하고 새 페이지(CLOUD BACKUP)를 만들어서 Privacy Consent 바로 앞에 끼워 넣었다. 처음엔 "자동으로 백업되어"라고 썼는데, 백업 시점 자체를 아직 정하지 않았고(위 CloudKit 백업 생각해보기 참고) 지금 설정 화면의 백업 버튼도 수동 트리거를 전제로 만들어둔 거라 "자동"이라는 표현은 맞지 않아서 뺐다.
 
-![CLOUD BACKUP](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_cloudbackup.png){: width="50%" height="50%"}
+![CLOUD BACKUP](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_cloudbackup.png)
 
 ---
 
@@ -178,7 +178,7 @@ CloudKit 백업은 아직 구현 전이지만, 다 됐다고 가정하고 새 �
 
 그럴 때마다 `PFDView`의 `saveAlert()`가 매번 새 `SwiftDataAlert`를 만들어서, 사실상 같은 사건인데 지도에 마커가 여러 개 찍히고 기록(`AlertsView`)에도 중복으로 쌓이는 문제가 있었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/alertsss.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/alertsss.png)
 
 화면 경고(플래시, 햅틱, 사운드, Live Activity)는 매번 그대로 뜨는 게 맞다.
 
@@ -237,7 +237,7 @@ func saveAlert() {
 
 중요한 건 좌표를 SwiftData가 쓸 수 있는 형태로 바꾸는 "변환" 자체는 두 방식 다 N번 해야 한다는 것. 차이는 그렇게 변환한 걸 러닝 기록에 "붙이는" 횟수다.
 
-![좌표를 러닝 기록에 붙이는 횟수 차이](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/touchdown_attach_count_diagram.png){: width="100%" height="100%"}
+![좌표를 러닝 기록에 붙이는 횟수 차이](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/touchdown_attach_count_diagram.png)
 
 ```swift
 // before
@@ -373,7 +373,7 @@ enum PolylineSimplifier {
 
 ## CloudKit 백업/복원 구현하기
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/signandcap.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/signandcap.png)
 
 우선 Signing & Capabilities에 CloudKit을 추가해준다. CloudKit 백업 생각해보기에서는 SwiftData의 자동 동기화(`ModelConfiguration(cloudKitDatabase:)`)를 그대로 써볼 생각이었는데, 다시 보니 애초에 방향을 "자동 트리거 없이 버튼을 눌러야 실행"으로 잡아뒀었다. SwiftData의 자동 동기화는 백그라운드에서 알아서 도는 방식이라 이 방향이랑 안 맞아서, 처음부터 버튼을 눌렀을 때만 [`CKRecord`](https://developer.apple.com/documentation/cloudkit/ckrecord)를 직접 만들어서 CloudKit에 올리고 받는 방식으로 갔다.
 
@@ -469,7 +469,7 @@ enum CloudSyncStatusService {
 
 버튼도 백업/복원 둘 다 이 상태가 연결됨일 때만 눌리게 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/icloud_status.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/icloud_status.png)
 
 ---
 
@@ -493,7 +493,7 @@ let (saveResults, _) = try await database.modifyRecords(
 
 #### 버그 2. 백업은 되는데 대시보드에서 조회가 안 됨
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/dashboarderror.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/dashboarderror.png)
 
 백업은 됐는데 이번엔 CloudKit Dashboard에서 직접 `Flight` 레코드를 조회해보니 "Field 'recordName' is not marked queryable"이라는 에러가 났다. CloudKit은 [`CKQuery`](https://developer.apple.com/documentation/cloudkit/ckquery)로 조회할 때 조건이나 정렬에 쓰는 필드마다 Queryable 인덱스가 걸려 있어야 하는데, `mode`/`distance`/`date` 같은 우리가 만든 필드는 레코드를 저장할 때 자동으로 인덱스가 걸리는 반면, `recordName`은 기본으로는 인덱스가 안 걸려 있다. 그런데 우리 쿼리(`NSPredicate(value: true)`, 조건 없이 전체 조회)는 조건에 걸리는 필드가 하나도 없어서, CloudKit이 내부적으로 recordName을 끌어다 쓰려다 막힌 것.
 
@@ -513,7 +513,7 @@ query.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
 
 대시보드의 "Query Records" 버튼은 필터/정렬을 아무것도 안 넣으면 자기 나름의 기본 조회를 만드는데, 그때 recordName을 참조하는 것으로 보인다. 반면 우리 앱 코드는 조건(`date > ...`)과 정렬(`date` 기준) 둘 다 이미 인덱스가 있는 `date` 필드만 쓰도록 명시했기 때문에 recordName을 아예 참조할 일이 없다. 대시보드에서 그때그때 `date`로 정렬(또는 필터) 조건을 직접 추가해서 눌러봐도 되지만, [Apple Docs](https://developer.apple.com/documentation/cloudkit/inspecting-and-editing-an-icloud-container-s-schema#Enable-querying-for-your-record-type)를 보니 아예 recordName 자체에 QUERYABLE 인덱스를 걸어두는 방법도 있었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/addindex.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/addindex.png)
 
 - Dashboard 왼쪽 메뉴에서 **Schema > Indexes**로 들어간다.
 - 위쪽 **+** 버튼을 눌러 Add Index를 연다.
@@ -526,7 +526,7 @@ query.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
 
 이 두 가지를 고치고 나서야 기기에서 기록을 전부 지운 다음 복원 버튼으로 CloudKit에 있던 기록을 다시 받아오는 것까지 확인됐다.
 
-![](/assets/images/upload/cloudresult.png){: width="50%" height="50%"}
+![](/assets/images/upload/cloudresult.png)
 
 ---
 
@@ -611,7 +611,7 @@ PFDView(러닝 중 화면)는 들어온 시점에 이미 러닝이 시작된 뒤
 
 FlightSummaryView는 원래부터 탭바를 숨기는 코드가 없어서 손대지 않았다. 시뮬레이터로 확인해보니 TAKEOFF에서 ROTATE 누르기 전엔 뒤로가기/탭바가 그대로 보이다가, ROTATE를 누르고 카운트다운이 시작되면서(PFDView로 넘어간 뒤까지) 둘 다 사라지는 게 의도한 대로 동작했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/rotate.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/rotate.gif)
 
 ---
 

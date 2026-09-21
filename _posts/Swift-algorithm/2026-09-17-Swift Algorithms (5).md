@@ -27,7 +27,7 @@ static func firstDivisibleSwifty(lst: [Int], a: Int) -> Int? {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-5/first_divisible_swifty_filter_fixed.png){: width="85%" height="85%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-17-Swift-Algorithms-5/first_divisible_swifty_filter_fixed.png)
 
 `lst.indices`로 인덱스 목록을 만들고, `filter`로 조건(`lst[$0] % a == 0`)을 만족하는 인덱스만 남긴다. 조건을 만족하는 게 하나도 없으면 `filter`의 결과가 빈 배열이 되고, 빈 배열의 `.first`는 자연스럽게 `nil`이 된다. 별도로 "찾지 못한 경우"를 처리하는 코드가 필요 없다는 게 포인트다.
 

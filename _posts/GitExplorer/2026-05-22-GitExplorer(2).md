@@ -275,7 +275,7 @@ enum Status: Equatable {
 
 이때 EmptyView()를 사용하는 이유는 아무것도 보이지않게해서 호출의 결과인 list만 보이게 하겠다는 것 
 
-<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/fcf3426d-ef8a-4237-a0ca-c76c756733b3.png" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/fcf3426d-ef8a-4237-a0ca-c76c756733b3.png" />
 
 실행하면 이렇게 상태에 따라 다르게 나오는걸 알 수 있다.
 
@@ -610,7 +610,7 @@ init(user: GithubUser) {
 
 실행하니 모든 결과값을 가져오는걸 확인했다.
 
-<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/0bffe480-d3e1-4a95-96c2-eb7bc7dfa739.png" />{: width="50%" height="50%"}
+<img width="302" height="630" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-22-GitExplorer2/0bffe480-d3e1-4a95-96c2-eb7bc7dfa739.png" />
 
 ##### 통합 모델로 만들기
 

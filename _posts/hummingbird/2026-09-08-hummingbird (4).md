@@ -13,7 +13,7 @@ toc_sticky: true
 
 지금까지는 SQL을 직접 손으로 작성해서 database와 통신했는데, 이제부터는 ORM인 Fluent를 써서 SQL 생성과 실행을 대신 맡겨보도록한다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-06.4224.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-06.4224.png)
 
 프로젝트를 새로 만들때 위의 사진에서 Fluent를 설치하도록 했다.
 (다만 이렇게 설치할 경우 강의의 초기 프로젝트와 코드 구성이 상이하다.)
@@ -79,7 +79,7 @@ targets: [
 
 그리고 database 쪽에서 `movies_db`는 그대로 두되 기존에 있던 `movies`, `reviews` 테이블은 미리 삭제해뒀다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-06.4955.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-06.4955.png)
 
 이 테이블들은 앞으로 Fluent의 migration 기능으로 새로 만들 예정이기 때문이다.
 
@@ -209,11 +209,11 @@ return app
 
 저장하고 서버가 재시작되면, Beekeeper Studio 같은 도구로 확인했을 때 `public` 스키마 안에 `movies` 테이블과 함께 `_fluent_migrations`라는 테이블이 새로 생긴 걸 볼 수 있다. `movies` 테이블은 정의한 대로 만들어져 있지만 아직 데이터는 없다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-07.1202.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-07.1202.png)
 
 `_fluent_migrations` 테이블은 Fluent가 어떤 migration이 이미 실행됐는지 이름 기준으로 기록해두는 곳이다. 예를 들어 `CreateMoviesTable`이 이미 실행됐다고 기록해두면, 다음에 다시 `migrate()`를 호출해도 이 migration은 건너뛴다. 이 테이블은 Fluent가 내부적으로 관리하는 용도라 직접 손대지 않는 게 좋다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-07.1244.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-07.1244.png)
 
 ---
 
@@ -262,7 +262,7 @@ final class Movie: Model, ResponseCodable, @unchecked Sendable {
 - `@Field(key: "...")`로 각 프로퍼티가 실제 컬럼 이름과 매핑된다. 컬럼 이름이 프로퍼티명과 다르면(예: DB엔 `name`인데 Swift에선 `title`을 쓰고 싶다면) `key`에 실제 컬럼 이름을 넣어주면 된다
 - 빈 초기화 함수 `init()`과, 값을 다 채워서 만드는 초기화 함수 둘 다 만들어두는 게 권장되는 패턴이다
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-08.1404.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-08.1404.png)
 
 ---
 
@@ -356,11 +356,11 @@ Postman으로 `POST /api/movies`에 `Content-Type: application/json`을 설정�
 
 응답으로 title, year와 함께 database가 생성한 id까지 포함된 movie가 돌아온다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-08.2559.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-08.2559.png)
 
 database를 직접 확인해봐도 정상적으로 저장되어 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-08.2647.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-08.2647.png)
 
 ---
 
@@ -368,7 +368,7 @@ database를 직접 확인해봐도 정상적으로 저장되어 있다.
 
 이번엔 Fluent로 전체 movie 목록 조회, 그리고 ID로 movie 하나 조회하는 기능을 만든다. Lord of the Rings에 이어 Spider-Man, Batman도 미리 추가해둔 상태다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.1607.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.1607.png)
 
 ---
 
@@ -396,7 +396,7 @@ routeCollection.get(use: getAll)
 
 `GET /api/movies`로 요청해보면 Lord of the Rings, Batman, Spider-Man이 전부 반환된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.1821.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.1821.png)
 
 ---
 
@@ -429,7 +429,7 @@ routeCollection.get(":id", use: getById)
 
 `GET /api/movies/:id`로 Lord of the Rings의 id를 넣어 요청하면 정상적으로 해당 movie만 반환된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.2300.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.2300.png)
 
 ---
 
@@ -455,7 +455,7 @@ return try await Movie.query(on: db)
 
 key path 방식이 좀 더 간결하고 많은 사람들이 선호한다고 하는데, 이 문법을 쓰려면 `FluentPostgresDriver`가 import되어 있어야 한다(빠지면 "binary operator cannot be applied" 에러가 난다). 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.2434.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.2434.png)
 
 결과는 두 방식 다 동일하므로 편한 쪽을 쓰면 된다.
 
@@ -505,7 +505,7 @@ routeCollection.delete(":id", use: deleteMovie)
 
 Batman의 id로 DELETE 요청을 보내면 삭제된 Batman 정보가 반환되고, 다시 전체 목록을 조회하면 Batman이 사라져 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.3657.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.3657.png)
 
 ---
 
@@ -553,7 +553,7 @@ routeCollection.put(use: updateMovie)
 
 Lord of the Rings의 id로 title을 "Lord of the Rings: Fellowship of the Ring", year를 2001로 바꿔서 PUT 요청을 보내면, 응답과 database 양쪽에서 값이 갱신된 걸 확인할 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.4127.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-09.4127.png)
 
 이렇게 해서 Fluent(ORM) 기반으로도 CRUD 전체를 구현했다. 코드량이 줄어드는 것도 있지만, 그보다 SQL을 문자열로 직접 작성할 때 생기는 콤마 하나 빠뜨리거나 세미콜론을 놓치는 것 같은 오타 리스크 자체가 사라진다는 게 더 크게 와닿는 장점이다.
 
@@ -609,7 +609,7 @@ await fluent.migrations.add(CreateReviewsTable(), to: .psql)
 
 서버를 재시작하면 migration이 실행되면서 `reviews` 테이블이 새로 생긴다. `id`, `subject`, `comment`, `movie_id`, `created_at` 컬럼이 정의한 대로 만들어져 있고, 아직 데이터는 비어있는 상태다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-11.3204.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-11.3204.png)
 
 ---
 
@@ -669,7 +669,7 @@ var reviews: [Review]
 
 `@Parent`가 "하나에 속한다"였다면, `@Children`은 "여러 개를 가진다"는 의미다. `for: \.$movie`는 이 관계가 `Review` 모델의 `movie` 프로퍼티(정확히는 그 관계 wrapper)를 통해 연결된다는 뜻이다. 즉 "movie는 review.movie로 연결되는 review들을 여러 개 가진다"는 관계가 이렇게 표현된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/parent_children_relationship_v3.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/parent_children_relationship_v3.png)
 
 ---
 
@@ -758,7 +758,7 @@ URL parameter에서 movieId를 꺼내고, body는 `CreateReviewRequest`로 decod
 
 먼저 movie 목록을 조회해서 Lord of the Rings의 id를 확인한다. `POST /api/movies/:id/reviews`에 `Content-Type: application/json`을 설정하고 subject와 comment를 담아 요청을 보내면, 생성된 review(id, subject, comment, createdAt까지 포함)가 그대로 반환된다. database를 확인해보면 movieId로 연결된 review가 잘 저장되어 있다. 여러 개를 더 추가해봐도 문제없이 다 저장된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-11.5253.png){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-11.5433.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-11.5253.png)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-11.5433.png)
 
 만약 응답에서 review 데이터 전체가 아니라 일부만 보여주고 싶다면, movie 부분을 뺀 커스텀 DTO를 별도로 만들어서 반환하는 방법도 있다.
 
@@ -797,7 +797,7 @@ func getById(request: Request, context: some RequestContext) async throws -> Mov
 
 이렇게 요청해보면 movie의 id, title, year와 함께 review 배열도 응답에 포함된다. 다만 이 review들은 `Review` 데이터 모델 그대로라서, 각 review 안에 movieId를 담은 관계 정보나 createdAt처럼 클라이언트 입장에서 필요 없는 정보까지 같이 딸려온다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-12.0044.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-12.0044.png)
 
 ---
 
@@ -872,7 +872,7 @@ func getById(request: Request, context: some RequestContext) async throws -> Mov
 
 다시 요청해보면 응답이 훨씬 깔끔해진다. movie의 id, title, year와 함께, review는 subject/comment/id만 포함된 형태로 정리되어서 온다. `movieId`가 담긴 관계 정보나 `createdAt`처럼 클라이언트 UI에 필요 없는 값은 더 이상 노출되지 않는다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-12.0656.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-12.0656.png)
 
 ---
 
@@ -917,7 +917,7 @@ router.addRoutes(ReviewsController(fluent: fluent).endpoints, atPath: "/api/revi
 
 지금은 `Review` 데이터 모델을 그대로 반환하고 있어서 movie 관계 정보나 불필요한 필드까지 딸려오는데, 필요하다면 앞서 만든 `MovieResponse`/`ReviewResponse` 같은 방식으로 DTO를 만들어서 원하는 형태로만 다듬을 수도 있다. 다만 이런 "전체 review + movie" 조회는 일반 사용자보다는 admin 관점에 가까운 기능이고, 개별 사용자 입장에서는 movie ID 기준으로 review를 조회하는 기존 방식이 더 적절하다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-12.2159.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/CleanShot_08-12.2159.png)
 
 ---
 
@@ -950,7 +950,7 @@ router.addRoutes(ReviewsController(fluent: fluent).endpoints, atPath: "/api/revi
 
 그래서 `GET ""`였던 규칙이 이 시점에 `GET /api/reviews`로 확정되고, 해당 요청이 들어오면 `getAll`이 호출된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/route_mounting_fixed.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/route_mounting_fixed.png)
 
 ---
 
@@ -973,4 +973,4 @@ controller 안의 배선(`GET ""` → `getAll`)은 그대로 두고, 그걸 어�
 
 Postman에서 method를 선택해서 요청을 보내는 건 클라이언트가 "이런 조합의 요청을 보낸다"는 사실을 만드는 것일 뿐이고, 실제로 그 요청의 (경로, method)를 자기가 등록해둔 테이블과 대조해서 일치하는 함수를 찾아 실행하는 건 전적으로 서버(라우터) 쪽의 역할이다. 클라이언트가 능동적으로 뭔가를 맞추는 게 아니라, 서버가 들어온 요청 정보를 보고 수동적으로 탐색해서 연결하는 구조인 것이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/method_path_matching_fixed.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-4/method_path_matching_fixed.png)

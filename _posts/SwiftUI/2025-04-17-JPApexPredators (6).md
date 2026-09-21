@@ -42,7 +42,7 @@ heading, pitch의 경우는
 
 다음과 같다.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/95ad1445-fe0f-46b6-ae12-6df3e9393fd2.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/95ad1445-fe0f-46b6-ae12-6df3e9393fd2.png) 
 
 MapView에 모든 이미지를 담기위해서
 
@@ -67,7 +67,7 @@ Map(position: $positoin) {
 
 이건 딱히 언급할만한 건 없다.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/9d2c93c3-1a1a-46c0-a1b0-a20601857c18.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/9d2c93c3-1a1a-46c0-a1b0-a20601857c18.png) 
 
 축소를 하면 이렇게 전부 다 나오는걸 알 수 있다.
 
@@ -118,7 +118,7 @@ overlay를 통해 우측 하단에 버튼을 만들어 주고 위와 같이 코�
 
 그리고 실행하면 이렇게 된다.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/55d48e11-99e5-4398-942d-bcbca342cd27.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/55d48e11-99e5-4398-942d-bcbca342cd27.png) 
 
 위성사진 로딩이 좀 걸리긴 하네..
 
@@ -145,7 +145,7 @@ NavigationLink {
 
 왜냐면 preview에선 특정값으로 일부러 하드코딩을 해뒀기 때문.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/d855a3f5-a573-4fb9-b178-84ff5cf1a624.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/d855a3f5-a573-4fb9-b178-84ff5cf1a624.png) 
 
 잘 되는걸 알 수 있다.
 
@@ -231,6 +231,6 @@ SwiftUI에서는 `@Namespace`를 활용하여 **화면 전환 시 부드러운 �
 
 ---
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/55632f15-e097-48d0-b02c-c779dc0773db.png){: width="50%" height="50%"} 
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-17-JPApexPredators-6/55632f15-e097-48d0-b02c-c779dc0773db.png) 
 
 이렇게 화면전환이 달라진걸 볼 수 있다.

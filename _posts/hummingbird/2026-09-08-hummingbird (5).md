@@ -54,7 +54,7 @@ await fluent.migrations.add(CreateUsersTable(), to: .psql)
 
 Beekeeper Studio로 확인해보면 `users` 테이블이 새로 생겼고, `id`, `username`, `password` 컬럼이 정의한 대로 만들어져 있다. 아직 데이터는 비어있는 상태다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_08-12.5829.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_08-12.5829.png)
 
 ---
 
@@ -187,7 +187,7 @@ routeCollection.post("/register", use: register)
 
 Postman으로 `POST /api/users/register`에 username "John Doe", password를 담아 요청을 보냈는데, database가 완전히 비어있는 상태인데도 `409 Conflict`가 발생했다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-02.3657.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-02.3657.png)
 
 즉 "이미 존재하는 user"라는 응답이 나왔는데, 실제로는 `users` 테이블에 아무 데이터도 없는 상황이었다.
 
@@ -222,7 +222,7 @@ func register(request: Request, context: some RequestContext) async throws -> Re
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-02.4107.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-02.4107.png)
 
 이젠 생성이 잘 되는걸 알 수 있다.
 
@@ -232,7 +232,7 @@ func register(request: Request, context: some RequestContext) async throws -> Re
 
 지금까지는 회원가입 시 비밀번호를 평문 그대로 database에 저장하고 있었다. 당연히 위험한 방식이라, 이번엔 bcrypt로 암호화해서 저장하도록 고친다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-03.3818.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-03.3818.png)
 
 ---
 
@@ -259,7 +259,7 @@ targets: [
 
 이때 패키지 명을 잘못 입력하면 에러가 뜨니 확실하게 하자
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-03.5933.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-03.5933.png)
 
 ```swift
 .product(name: "HummingbirdBCrypt", package: "hummingbird-auth"),  // ❌ 틀림
@@ -306,7 +306,7 @@ let user = try await User(request: createUserRequest)
 
 기존에 평문으로 저장돼 있던 John Doe 계정을 지우고 같은 정보로 다시 등록해보면, 응답은 이전과 동일하게 "user has been created"가 오지만 database를 확인해보면 password 컬럼에 더 이상 평문이 아니라 bcrypt로 암호화된 값이 들어가 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-04.0425.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-04.0425.png)
 
 비밀번호뿐 아니라 주민등록번호, 여권번호, 신용카드 번호처럼 민감한 정보라면 마찬가지로 암호화해서 저장해야 한다는 점도 함께 짚어두고 넘어간다.
 
@@ -324,7 +324,7 @@ let user = try await User(request: createUserRequest)
 
 참고로 bcrypt는 단방향 해싱이라 "복호화"라는 개념 자체가 없다. 나중에 로그인 시에도 저장된 해시값을 원래 비밀번호로 되돌리는 게 아니라, 입력받은 비밀번호를 다시 같은 방식으로 해싱해서 저장된 해시값과 비교하는 방식으로 검증하게 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/register_flow.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/register_flow.png)
 
 ---
 
@@ -516,7 +516,7 @@ return LoginResponse(accessToken: accessToken, refreshToken: refreshToken)
 
 로그인 요청을 보내면 internal server error가 발생했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-06.3919.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-06.3919.png)
 
 ```swift
 await jwtKeyCollection.add(hmac: "my-secret-key", digestAlgorithm: .sha256, kid: JWKIdentifier("auth-jwt"))
@@ -554,7 +554,7 @@ secret key나 알고리즘 같은 설정이 하나도 안 된 상태에서 바�
 await jwtKeyCollection.add(hmac: "a-much-longer-random-secret-key-for-testing-purposes-1234567890", digestAlgorithm: .sha256, kid: JWKIdentifier("auth-jwt"))
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.0114.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.0114.png)
 
 물론 이것도 어디까지나 테스트용 문자열이고, 실제 운영 환경에서는 암호학적으로 안전한 난수 생성기로 만든 32바이트 이상의 랜덤 값을 env file에서 읽어와 쓰는 게 맞다.
 
@@ -564,7 +564,7 @@ await jwtKeyCollection.add(hmac: "a-much-longer-random-secret-key-for-testing-pu
 
 username, password가 맞으면 access token과 refresh token이 정상적으로 발급된다. username을 틀리거나(`John Doe2`) password를 틀리면 각각 `401 Unauthorized`가 반환되는 것도 확인했다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.0201.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.0201.png)
 
 발급된 토큰은 클라이언트(iOS 앱이라면 Keychain 같은 안전한 저장소)가 보관하고, 이후 보호된 리소스에 접근할 때 함께 실어 보내는 방식으로 쓰이게 된다.
 
@@ -630,7 +630,7 @@ secret key를 코드에서 완전히 빼기 위해, 프로젝트 루트에 `.env
 
 하지만 이미 파일은 존재한다.(단지 중요파일이라 숨김처리가 되어있을뿐이다.)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.1318.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.1318.png)
 
 그리고 파일을 열어서 (터미널에서 `open .env`)
 
@@ -642,7 +642,7 @@ JWT_SECRET=a-much-longer-random-secret-key-for-testing-purposes-1234567890
 
 `.gitignore`에 `.env`가 이미 포함되어 있어야 한다(포함되어 있지 않다면 추가한다). 그래야 이 파일이 GitHub에 올라가지 않는다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.1655.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.1655.png)
 
 ---
 
@@ -657,7 +657,7 @@ print(jwtSecret!)
 
 확인을 위해 print를 해주고 터미널을 보면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.1845.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-07.1845.png)
 
 잘 가져오는걸 확인할 수 있다.
 
@@ -810,11 +810,11 @@ middleware는 route보다 먼저 추가해야 한다. 여러 middleware를 동�
 
 이 상태로 `/api/movies`에 접속하면 `401 Unauthorized`가 반환된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.3815.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.3815.png)
 
 접근하려면 먼저 로그인해서 access token을 받아야 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.4133.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.4133.png)
 
 토큰을 받았으면, 요청 헤더에 다음과 같이 실어 보낸다.
 
@@ -822,11 +822,11 @@ middleware는 route보다 먼저 추가해야 한다. 여러 middleware를 동�
 Authorization: Bearer <access_token>
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.4244.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.4244.png)
 
 토큰을 포함해서 요청하면 movie 목록이 정상적으로 반환되고, 헤더를 빼고 보내면 다시 `401 Unauthorized`가 반환된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.4328.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.4328.png)
 
 여기서 주의할 점은, 이 middleware를 아무 route에나 무분별하게 걸면 안 된다는 것이다. 예를 들어 아래처럼 `/api/users` 전체를 하나의 그룹으로 묶고 그 위에 middleware를 걸어버리면,
 
@@ -873,7 +873,7 @@ reviews.addRoutes(ReviewsController(fluent: fluent).endpoints)
 
 토큰 없이 `/api/reviews`에 접근하면 `401 Unauthorized`, 토큰을 포함해서 접근하면 정상적으로 review 목록이 반환되는 걸 확인할 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.5202.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-09.5202.png)
 
 ---
 
@@ -992,11 +992,11 @@ routeCollection.post("refresh", use: refresh)
 
 만료된 access token으로 `/api/movies`에 접근하면 예상대로 `401 Unauthorized`가 반환된다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-10.2116.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-10.2116.png)
 
 이때 로그인 시 받아뒀던 refresh token으로 `/api/users/refresh`를 호출하면 새 access token이 발급되고, 그 새 토큰으로 다시 `/api/movies`에 접근하면 정상적으로 movie 목록이 반환된다. 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-10.2227.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-08-hummingbird-5/CleanShot_09-10.2227.png)
 
 refresh token을 통해 재로그인 없이 access token을 재발급받는 흐름이 완성된 것이다.
 

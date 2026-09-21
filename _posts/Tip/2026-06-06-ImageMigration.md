@@ -81,7 +81,7 @@ Cloudflare R2를 선택한 이유:
 
 Token 생성은
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-06-ImageMigration/CleanShot%202026-06-06%20at%2019.03.50%402x.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-06-ImageMigration/CleanShot%202026-06-06%20at%2019.03.50%402x.png)
 
 여기서 하면 된다.
 
@@ -131,11 +131,11 @@ Token 생성은
 
 보통 스크린샷을 찍을 때 CleanShot을 쓰는데, 기본 파일명에 공백이 있어서 이미지 업로드할 때 문제가 생긴다. 설정에서 파일명 포맷을 바꿔줬다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-06-ImageMigration/CleanShot_06-19.22@2x.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-06-ImageMigration/CleanShot_06-19.22@2x.png)
 
 Edit을 눌러서 포맷을 수정하면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-06-ImageMigration/CleanShottest.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-06-ImageMigration/CleanShottest.png)
 
 이렇게 공백 없는 파일명으로 저장된다.
 
@@ -146,7 +146,7 @@ Edit을 눌러서 포맷을 수정하면
     vars:
       - name: filename
         type: clipboard
-    replace: "![](/assets/images/upload/{{filename}}){: width=\"50%\" height=\"50%\"}"
+    replace: "![](/assets/images/upload/{{filename}})"
 ````
 
 파일명만 복사하고 `;img` 치면 전체 경로가 완성된다.

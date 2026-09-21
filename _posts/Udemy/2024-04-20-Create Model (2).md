@@ -138,13 +138,13 @@ swift에 관한 내용은 [여기](https://github.com/mattdonnelly/Swifter)를 �
 
 그리고 우리가 만든 프로젝트에 드래그를 해준다.
 
-![CleanShot 2024-04-20 at 21 15 10@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-20-Create-Model-2/8cf17300-53f4-4ff7-9cd1-87d54f310758){: width="50%" height="50%"}
+![CleanShot 2024-04-20 at 21 15 10@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-20-Create-Model-2/8cf17300-53f4-4ff7-9cd1-87d54f310758)
 
 그리고 프로젝트 바로 하위로 드래그 해준다.
 
 xcodeproj 파일을 드래그 해준 이유는 아래 사진으로 모두 설명이 된다.
 
-![CleanShot 2024-04-20 at 21 16 40@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-20-Create-Model-2/a74fc059-1be3-49f9-9bba-071e7eb3abe6){: width="50%" height="50%"}
+![CleanShot 2024-04-20 at 21 16 40@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-20-Create-Model-2/a74fc059-1be3-49f9-9bba-071e7eb3abe6)
 
 이렇게 프로젝트의 하위 내용도 그대로 사용이 가능해진다.
 

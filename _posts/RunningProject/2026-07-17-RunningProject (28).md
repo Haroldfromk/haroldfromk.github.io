@@ -73,7 +73,7 @@ func sendRunningData() {
 
 지금까지는 러닝 끝나고 거의 바로 전송됐으니 두 값이 비슷해서 티가 안 났는데, 이제 지연 전송이 정상 시나리오가 된 이상 이것도 같이 고쳤다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-28/sum.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-28/sum.png)
 
 ---
 
@@ -90,4 +90,4 @@ func sendRunningData() {
 
 `sendMessage`/`transferUserInfo`를 처음 붙였던 [이전글](https://haroldfromk.github.io/posts/RunningProject-(12)/){:target="_blank"}에서는 이 둘의 차이를 "즉시 전달 vs 큐 기반 전달"로만 정리하고 넘어갔었는데, `isReachable` 가드 하나가 그 구분 자체를 무의미하게 만들 수 있다는 걸 이번에 제대로 확인했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-28/sum1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-28/sum1.png)

@@ -40,7 +40,7 @@ published: true
 
 지금 앱에는 `isWatchConnected`라는 프로퍼티가 하나 있는데, 이게 `isReachable`을 그대로 감싼 거였다. `TakeoffView`의 사전 점검 화면은 "지금 당장 뛸 수 있는가"를 확인하는 자리라 `isReachable` 그대로 쓰는 게 맞다. 근데 이번에 심박 모드 옵션을 `ModeAView`에 추가하면서 보니, 이건 설정하는 시점과 실제로 뛰는 시점 사이에 간격이 있는 화면이라 계속 흔들리는 `isReachable`보다 `isPaired`(+ `isWatchAppInstalled`)로 옵션 노출 여부를 판단하는 게 더 맞아 보였다. 같은 "워치 연결"이라는 말이어도 화면마다 원하는 값이 달랐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/reachable.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/reachable.png)
 
 ---
 
@@ -223,9 +223,9 @@ let modeAData = ModeA(
 runViewModel.getModeData(modeAData)
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/nopair.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/nopair.png)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/pair.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/pair.png)
 
 ---
 
@@ -281,7 +281,7 @@ if let modeA = modeAData, modeA.target == .heartRate {
 
 옵션 B로 정했다. 판정을 한 곳(`RunningCenter`)에서만 하니까 MINIMUMS 우선순위가 그대로 지켜지고, 스트림을 합칠 필요도 없어진다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/center.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/center.png)
 
 ---
 
@@ -358,7 +358,7 @@ actor HealthCenter {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/actor-race-timeline.png)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/actor.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/actor.png)
 
 ---
 
@@ -719,7 +719,7 @@ Button {
 
 여기서 하나 정리한 것도 있다. `WatchDestination.missionSummary`가 원래 `preset`, `paceSeconds`, `deviation` 세 개를 들고 다녔는데, 정작 `WatchMissionSummaryView`는 그 값들을 하나도 안 쓰고 `viewModel.modeAData`만 직접 읽고 있었다. 심박 경로를 추가하면서 이 케이스를 어차피 다 손대야 했던 김에, 안 쓰는 값들을 걷어내고 `case missionSummary`로 단순하게 바꿨다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchtarget.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchtarget.png)
 
 ---
 
@@ -811,7 +811,7 @@ if target == .pace {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/appbpm.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/appbpm.png)
 
 ---
 
@@ -833,7 +833,7 @@ var gpwsDeviation: Int {
 
 그리고 `WatchGPWSView`가 편차를 표시할 때 단위를 `"sec"`로 하드코딩하고 있었다. 심박 모드에서 SINK RATE가 뜨면 "+18 sec"라고 나왔을 텐데, 실제로는 bpm 차이인데 초 단위인 것처럼 보였을 거다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/gpwswarn.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/gpwswarn.gif)
 
 ```swift
 var deviationUnit: String = "sec"
@@ -855,7 +855,7 @@ var gpwsDeviationUnit: String {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/gpwswarn1.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/gpwswarn1.gif)
 
 전체 계기판 탭의 STATUS 칸도 항상 "PACE"로 고정돼 있던 걸, 실제 미션 기준에 맞게 바꿨다.
 
@@ -863,7 +863,7 @@ var gpwsDeviationUnit: String {
 Text(missionTarget == .heartRate ? "HEART RATE" : "PACE")
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/heartrate.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/heartrate.png)
 
 ---
 

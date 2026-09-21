@@ -74,7 +74,7 @@ struct MainView: View {
 }
 ```
 
-![CleanShot 2024-11-14 at 14 57 24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/81369ca6-6d1f-48dc-8e1e-aee9c8741395.png){: width="50%" height="50%"}
+![CleanShot 2024-11-14 at 14 57 24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/81369ca6-6d1f-48dc-8e1e-aee9c8741395.png)
 
 이전에는 
 
@@ -190,7 +190,7 @@ struct ItemView: View {
 }
 ```
 
-![CleanShot 2024-11-14 at 15 52 36](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/5136e4ac-15ec-418d-b8e8-96adfac191b6.png){: width="50%" height="50%"} 
+![CleanShot 2024-11-14 at 15 52 36](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/5136e4ac-15ec-418d-b8e8-96adfac191b6.png) 
 
 이렇게 세팅을 완료
 
@@ -206,7 +206,7 @@ extension Double {
 
 이렇게 만들면 굳이 `"$\(price)"` 이런식으로 번거롭게 할 필요가 없어진다.
 
-![CleanShot 2024-11-14 at 15 54 53](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/000360c9-77b6-4b98-88f7-a1d46340f79d.png){: width="50%" height="50%"} 
+![CleanShot 2024-11-14 at 15 54 53](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/000360c9-77b6-4b98-88f7-a1d46340f79d.png) 
 
 현재는 이렇게 나온다.
 
@@ -235,7 +235,7 @@ Navigation Toolbar를 처음에 버튼으로 했다가. 생각해보니 메뉴�
 ```
 
 
-![Simulator Screenshot - iPhone 16 Pro - 2024-11-14 at 16 06 38](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/62af07b0-99e0-44a3-bacd-66562c2e8182.png){: width="50%" height="50%"} 
+![Simulator Screenshot - iPhone 16 Pro - 2024-11-14 at 16 06 38](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/62af07b0-99e0-44a3-bacd-66562c2e8182.png) 
 
 그리고 아래에도 버튼을 만들어 주었다.
 
@@ -269,7 +269,7 @@ Navigation Toolbar를 처음에 버튼으로 했다가. 생각해보니 메뉴�
             .padding(.horizontal, 15)
 ```
 
-![CleanShot 2024-11-14 at 17 15 57](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/10b08a29-dff7-4ce3-aa3b-fc5029c73de2.png){: width="50%" height="50%"} 
+![CleanShot 2024-11-14 at 17 15 57](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/10b08a29-dff7-4ce3-aa3b-fc5029c73de2.png) 
 
 완료
 
@@ -560,7 +560,7 @@ struct WishModel: Codable {
 
 `.scaledToFill()` 이걸로 바꿔준다.
 
-![Nov-14-2024 20-09-45](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/3557cbcd-42e0-4615-b20f-33831a3ef220.png){: width="50%" height="50%"} 
+![Nov-14-2024 20-09-45](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/3557cbcd-42e0-4615-b20f-33831a3ef220.png) 
 
 지금 다음을 눌렀을때 새롭게 가져오는건
 
@@ -961,7 +961,7 @@ Button {
 
 Frame을 이전에는 버튼이 2개라 90%정도 있으면 좋을듯해서 가로길이의 0.45 였으나, 버튼이 3개므로 0.3을 적용해주었다.
 
-![simulator_screenshot_9CA1BFA6-DC3A-4405-B443-94E204593626](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/aec08390-0b5c-4e05-a73b-9dbd03b10aa8.png){: width="50%" height="50%"} 
+![simulator_screenshot_9CA1BFA6-DC3A-4405-B443-94E204593626](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/aec08390-0b5c-4e05-a73b-9dbd03b10aa8.png) 
 
 적용된사진은 다음과 같다.
 
@@ -1163,7 +1163,7 @@ struct CartView: View {
 
 기존 두번째 화면에서 viewModel 쪽만 추가.
 
-![Simulator Screenshot - iPhone 16 Pro - 2024-11-15 at 04 00 51](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/262bc131-93c3-4cfe-a557-ee28a0f35b14.png){: width="50%" height="50%"} 
+![Simulator Screenshot - iPhone 16 Pro - 2024-11-15 at 04 00 51](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/262bc131-93c3-4cfe-a557-ee28a0f35b14.png) 
 
 추가했던게 잘 나오고 있었다.
 
@@ -1230,7 +1230,7 @@ Tab("Display", systemImage: "eye") {
 ```
 viewmodel을 전달해주니 바로 적용이된다.
 
-![simulator_screenshot_F2CC8B96-8A72-4509-9032-5D4327FF01B2](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/3976cecb-610d-4307-97c1-9b4b0a7eccea.png){: width="50%" height="50%"}![simulator_screenshot_67511425-DFD8-4CD7-8412-56DBC65BE7E0](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/6185da6e-f315-4351-a951-3ab6abe1add3.png){: width="50%" height="50%"} 
+![simulator_screenshot_F2CC8B96-8A72-4509-9032-5D4327FF01B2](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/3976cecb-610d-4307-97c1-9b4b0a7eccea.png)![simulator_screenshot_67511425-DFD8-4CD7-8412-56DBC65BE7E0](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/6185da6e-f315-4351-a951-3ab6abe1add3.png) 
 
 움짤 귀찮아서 패스
 
@@ -1298,7 +1298,7 @@ struct SDCartView: View {
 
 코드는 동일
 
-![simulator_screenshot_88963A3B-BF04-4F94-8217-3B168BE88FD7](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/d0532950-7e94-4bb7-b24e-b5924343e304.png){: width="50%" height="50%"} 
+![simulator_screenshot_88963A3B-BF04-4F94-8217-3B168BE88FD7](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/d0532950-7e94-4bb7-b24e-b5924343e304.png) 
 
 작동 확인 완료.
 
@@ -1374,7 +1374,7 @@ struct CartView: View {
 }
 ```
 
-![Nov-15-2024 04-14-00](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/e33f7074-ff79-4f0e-b3a4-6860edbf38aa.png){: width="50%" height="50%"} 
+![Nov-15-2024 04-14-00](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/e33f7074-ff79-4f0e-b3a4-6860edbf38aa.png) 
 
 우선 작동은 완료.
 
@@ -1835,7 +1835,7 @@ ViewModel이 메모리가 다른데 CoreData를 공유하기에 발생했던 문
 
 CartView에서 전체 삭제를 하게되면 view가 업데이트 되지 않는 문제가 있다.
 
-![Nov-15-2024 06-19-26](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/3f8268f9-4e6b-4778-aa9f-24dde66be119.png){: width="50%" height="50%"} 
+![Nov-15-2024 06-19-26](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/3f8268f9-4e6b-4778-aa9f-24dde66be119.png) 
 
 2번 문제를 해결 하면서 자연스럽게 해결.
 
@@ -1843,7 +1843,7 @@ CartView에서 전체 삭제를 하게되면 view가 업데이트 되지 않는 
 
 장바구니를 비웠으나 아무래도 배열에 대해 초기화가 되지않아서 생기는 문제로 보인다.
 
-![Nov-15-2024 06-20-17](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/71725553-7b13-4b08-a50e-9bfddb948ef0.png){: width="50%" height="50%"} 
+![Nov-15-2024 06-20-17](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/71725553-7b13-4b08-a50e-9bfddb948ef0.png) 
  
 삭제하는 함수에 `print(cart.map { $0.title ?? "" })`이걸 다시 넣어서 배열을 확인해봐야할듯하다.
 
@@ -1961,7 +1961,7 @@ var body: some View {
 }
 ```
 
-![Nov-15-2024 09-41-51](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/32c8ef86-bef2-4aaf-b137-cd5f75c93448.png){: width="50%" height="50%"} 
+![Nov-15-2024 09-41-51](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/32c8ef86-bef2-4aaf-b137-cd5f75c93448.png) 
 
 Warning이 더이상 뜨지 않는다.
 
@@ -2163,7 +2163,7 @@ struct TestView: View {
 
 실패.
 
-![Nov-15-2024 11-23-37](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/910afdf8-25ab-4924-a2e6-ff13a7fe446b.png){: width="50%" height="50%"} 
+![Nov-15-2024 11-23-37](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/910afdf8-25ab-4924-a2e6-ff13a7fe446b.png) 
 
 변화가 없음.
 
@@ -2220,7 +2220,7 @@ struct TestView: View {
 }
 ```
 
-![Nov-15-2024 11-26-23](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/d77d2488-42f7-4cf9-981f-75c254f8a034.png){: width="50%" height="50%"} 
+![Nov-15-2024 11-26-23](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/d77d2488-42f7-4cf9-981f-75c254f8a034.png) 
 
 결과는 상동.
 
@@ -2246,11 +2246,11 @@ var body: some View {
 
 wrapper와 상관없이 API결과가 계속 달라진다.
 
-![Nov-15-2024 11-34-07](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/d7425f9f-3e48-4e87-8653-832d660c6128.png){: width="50%" height="50%"} 
+![Nov-15-2024 11-34-07](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/d7425f9f-3e48-4e87-8653-832d660c6128.png) 
 
 그래서 onAppear를 빼보았다.
 
-![Nov-15-2024 11-35-36](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/3cc54700-62b7-4257-b849-d880f59ea96e.png){: width="50%" height="50%"} 
+![Nov-15-2024 11-35-36](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/3cc54700-62b7-4257-b849-d880f59ea96e.png) 
 
 조회 결과가 사라진다.
 
@@ -2335,7 +2335,7 @@ struct CartDataSubview: View {
 }
 ```
 
-![Nov-15-2024 12-00-35](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/7761daff-739d-4016-8f96-a9689f906610.png){: width="50%" height="50%"} 
+![Nov-15-2024 12-00-35](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/7761daff-739d-4016-8f96-a9689f906610.png) 
 
 영향이 없다.
 
@@ -2444,7 +2444,7 @@ struct ApiDataSubview: View {
 
 ### 12-1. ObservedObject
 
-![Nov-15-2024 11-55-47](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/830126b9-5924-48ca-9842-dbe30c097f7e.png){: width="50%" height="50%"} 
+![Nov-15-2024 11-55-47](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/830126b9-5924-48ca-9842-dbe30c097f7e.png) 
 
 
 ```swift
@@ -2488,7 +2488,7 @@ struct ApiDataSubview: View {
     @StateObject var testWishViewModel = TestWishViewModel()
 ```
 
-![Nov-15-2024 11-54-13](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/090fd539-765b-4981-8727-65ef68964574.png){: width="50%" height="50%"} 
+![Nov-15-2024 11-54-13](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/090fd539-765b-4981-8727-65ef68964574.png) 
 
 장바구니 UI가 변해도 API 조회 결과가 그대로 유지된다.
 
@@ -2588,11 +2588,11 @@ struct ApiStateSubview: View {
 ```
 ApiDataSubview, ApiStateSubview 이렇게 만들었고 ApiDataSubview의 코드도 위의 코드와 동일하게 하되 `@observedobject` 이걸로만 바꿨다.
 
-![simulator_screenshot_BBEB06E1-85A2-4F39-A73A-C4AB6222A6E7](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/11728d51-68f3-4a1e-8e4e-eb825c51f7ee.png){: width="50%" height="50%"} 
+![simulator_screenshot_BBEB06E1-85A2-4F39-A73A-C4AB6222A6E7](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/11728d51-68f3-4a1e-8e4e-eb825c51f7ee.png) 
 
 그러면 이렇게 한화면에서 비교가 가능해진다.
 
-![Nov-16-2024 15-04-28](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/6aee8f53-6251-4912-82e1-962b83a4ac81.png){: width="50%" height="50%"} 
+![Nov-16-2024 15-04-28](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-11-14-ObjectTest/6aee8f53-6251-4912-82e1-962b83a4ac81.png) 
 
 내가 생각한대로 결과가 나온다. 하지만 이걸하면서 느낀건 부모뷰와 자식관계에 따라 @StateObject, @ObservableObject의 결과가 같을수도 다를수도 있다는것.
 

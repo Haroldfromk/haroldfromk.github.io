@@ -61,7 +61,7 @@ Text("Exchange Rates")
                     .tracking(3)
 ```
 
-![Sep-10-2024 20-15-04](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/38c2e0ac-7043-4e20-bcae-6b2eecc5368f.png){: width="50%" height="50%"}
+![Sep-10-2024 20-15-04](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/38c2e0ac-7043-4e20-bcae-6b2eecc5368f.png)
 
 차이가 명확하다.
 
@@ -120,13 +120,13 @@ struct ExchangeInfo: View {
 }
 ```
 
-![CleanShot 2024-09-10 at 20 20 35@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/1f91e743-c82f-4b1e-be19-f37a6540cf27.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 20 20 35@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/1f91e743-c82f-4b1e-be19-f37a6540cf27.png)
 
 이렇게 완성이 되었다.
 
 ## SubView 사용해보기
 
-![CleanShot 2024-09-10 at 20 32 55@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/d57db523-3dab-420b-979f-33223bf59530.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 20 32 55@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/d57db523-3dab-420b-979f-33223bf59530.png)
 
 HStack을 여러번 사용할것이라 효과적으로 코드를 작성하기위해 SubView를 사용하려고 한다.
 
@@ -167,7 +167,7 @@ struct ExtractedView: View {
 
 그냥 아래에 이렇게 적어주면 된다.
 
-![CleanShot 2024-09-10 at 21 09 14@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/f457694f-9ea2-4eaa-b597-a27cbddb1eb6.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 21 09 14@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/f457694f-9ea2-4eaa-b597-a27cbddb1eb6.png)
 
 그럼 이렇게 상단에 preview를 선택해서 볼 수 있다.
 
@@ -200,7 +200,7 @@ struct ExtractedView: View {
                 ExtractedView()
 ```
 
-![CleanShot 2024-09-10 at 22 07 16@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/8999bdf4-d4f1-4bd2-bdd3-0425a9340fd1.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 22 07 16@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/8999bdf4-d4f1-4bd2-bdd3-0425a9340fd1.png)
 
 이렇게 SubView를 사용하면 코드를 좀 더 간결하게 할 수 있고, 유지 보수도 용이해진다.
 
@@ -266,7 +266,7 @@ struct ExchangeRate: View {
 
 코드를 모두 적어주자.
 
-![CleanShot 2024-09-10 at 23 17 47@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/4fb8f47b-ca61-4e56-b597-1e14a8fcefad.png){: width="50%" height="50%"}
+![CleanShot 2024-09-10 at 23 17 47@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-07-22-LOTR-Converter-3/4fb8f47b-ca61-4e56-b597-1e14a8fcefad.png)
 
 이렇게 코드는 간결해지고, 원하는 내용을 바로바로 추가하거나 변경만 하면 되므로 쉽게 커스터마이징이 가능해졌다.
 

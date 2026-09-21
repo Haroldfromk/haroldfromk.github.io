@@ -67,11 +67,11 @@ if hasCompletedOnboarding {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/done111.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/done111.gif)
 
 이렇게 이제는 온보딩뷰와 스플래시뷰 모두 연결이 되었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/watchsplash.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/watchsplash.gif)
 
 워치도 해주었다. (다만 워치의 온보딩은 굳이 필요없을듯 해서 하지는 않았다.)
 
@@ -210,10 +210,10 @@ LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
 
 `daysInMonth()`가 만든 배열을 7개씩 끊어서 그려주는 게 `LazyVGrid`다. `nil`인 칸은 빈 공간(`Color.clear`)으로, 실제 날짜가 있는 칸은 `DayCell`로 채워서 보여준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/calendar.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/calendar.png)
 
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/screen1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/screen1.png)
 
 ---
 
@@ -317,9 +317,9 @@ Text(weekDays[i])
 
 `weeklyDistances`를 계산할 때 썼던 것과 같은 방식(`(weekday + 5) % 7`)으로 월요일을 0으로 맞춘 인덱스를 구해서, 그 인덱스에 해당하는 요일을 색뿐 아니라 크기와 굵기도 같이 키워서 더 또렷하게 강조되도록 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/weekly.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/weekly.png)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/screen2.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/screen2.png)
 
 ---
 
@@ -725,7 +725,7 @@ static let healthKitAuthorizationFailed = AlertItem(
 
 화면마다 따로 alert 로직을 새로 짤 필요 없이, `LocationService`에서 시작한 구조를 `HealthKitService`까지 그대로 확장할 수 있었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/combine.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/combine.png)
 
 ---
 
@@ -770,6 +770,6 @@ private func complete() {
 
 Watch는 따로 온보딩 화면을 만들지 않았기 때문에, 기존처럼 `WatchHomeView.onAppear`에서 HealthKit 권한을 요청하는 구조를 그대로 유지하기로 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/done11.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-26-RunningProject-16/done11.gif)
 
 그러면 이렇게 실행시 요청이 나오게 된다.

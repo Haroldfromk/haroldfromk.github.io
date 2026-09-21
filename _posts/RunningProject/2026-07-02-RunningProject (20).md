@@ -112,7 +112,7 @@ RunWay는 단순히 페이스와 거리를 기록하는 앱이 아닙니다. 러
 러닝,달리기,조깅,마라톤,페이스,러닝트래커,애플워치,항공,파일럿,비행,계기판,조종석,GPS,운동기록,헬스케어,인터벌,러닝앱,러닝기록,워치앱
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/keyworddone.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/keyworddone.png)
 
 지금은 한/미/일 언어를 테스트 해보려고 일본어로 추가한 사진이다.
 
@@ -122,53 +122,53 @@ RunWay는 단순히 페이스와 거리를 기록하는 앱이 아닙니다. 러
 
 이제 앱스토어의 연령을 추가해보도록 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age.png)
 
 7단계로 구성된 설문이다. 각 항목별로 선택 근거를 정리했다.
 
 **1단계 - 앱 내 제어**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age1.png)
 
 유해 콘텐츠 차단, 나이 확인 모두 **아니요**. 콘텐츠 제한 기능이나 연령 인증 메커니즘이 없다.
 
 **2단계 - 성적 테마**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age2.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age2.png)
 
 전부 **없음**. 러닝 트래커라 성적 콘텐츠와 무관하다.
 
 **3단계 - 의료 또는 건강**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age3.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age3.png)
 
 의료 또는 치료 정보는 **없음**, 건강 또는 웰빙 주제는 **예**. 러닝 중 심박수, 케이던스 등 건강 데이터를 다루는 앱이라 해당된다.
 
 **4단계 - 성적인 내용 또는 노출**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age4.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age4.png)
 
 전부 **없음**. 해당 없다.
 
 **5단계 - 폭력**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age5.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age5.png)
 
 전부 **없음**. 해당 없다.
 
 **6단계 - 우연에 기반한 활동**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age6.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age6.png)
 
 가상 도박, 도박, 랜덤 박스 전부 **없음/아니요**. 시합 항목은 현재 없지만 추후 러닝 챌린지나 랭킹 기능이 추가될 경우 업데이트가 필요할 수 있다.
 
 **7단계 - 결과**
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age7.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/age7.png)
 
 RunWay는 폭력, 성인, 도박 등 민감 콘텐츠가 전혀 없어서 설문은 대부분 "없음"으로 체크했다. 건강/웰빙 주제 항목에 "예"를 선택한 영향으로 결과는 **9+** 로 계산됐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/agedone.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/agedone.png)
 
 위치 정보 사용 여부는 등급이 아니라 개인정보 관련 섹션에서 별도로 표기한다.
 
@@ -182,17 +182,17 @@ RunWay는 위치 데이터와 HealthKit 데이터를 수집하지만 모두 기�
 
 외부 분석 툴이나 광고 SDK도 사용하지 않으므로 "아니요, 이 앱에서 데이터를 수집하지 않습니다."를 선택했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/connectprivacy.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/connectprivacy.png)
 
 그러면 아래와 같이 데이터 수집 없음으로 표시된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/connectprivacydone.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/connectprivacydone.png)
 
 ---
 
 개인정보 처리방침 URL도 App Store Connect 제출 시 필수 항목이다. 별도 서버를 두지 않아 포트폴리오 사이트(Vercel)에 `/privacy` 경로로 페이지를 추가하는 방식으로 해결했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/privacyadd.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/privacyadd.png)
 
 [privacy link](https://runway-project.vercel.app/ko/privacy){:target="_blank"}
 
@@ -227,7 +227,7 @@ private func complete() {
 
 SKIP 버튼은 컨셉 소개 페이지들은 건너뛸 수 있게 두되, 누르면 동의 페이지로 바로 이동하도록 했다. 즉 어떤 경로로도 동의 자체는 건너뛸 수 없다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/privacy.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/privacy.gif)
 
 ---
 
@@ -235,10 +235,10 @@ SKIP 버튼은 컨셉 소개 페이지들은 건너뛸 수 있게 두되, 누르
 
 외부 테스트 심사가 통과되었다. 공개 링크가 활성화되어 이제 링크만 공유하면 누구든 TestFlight를 통해 앱을 설치할 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/testdone.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/testdone.png)
 
 모바일에선 링크를 누르니 이렇게 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/IMG_3966.PNG){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/IMG_3967.jpg){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/IMG_3966.PNG)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-02-RunningProject-20/IMG_3967.jpg)
 
 이전에 팀 프로젝트로 배포해본 적은 있지만, 혼자서 기획부터 개발까지 전부 진행한 앱이 외부에 공개된 건 이번이 처음이다. 이제 실제 사용자 피드백을 받으면서 버그를 잡고 App Store 정식 출시를 준비하면 된다.

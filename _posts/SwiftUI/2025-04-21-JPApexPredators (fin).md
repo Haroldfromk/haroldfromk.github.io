@@ -43,7 +43,7 @@ toc_sticky: true
 
 현재 Target이 바뀌어 있으므로 다시 앱으로 반드시 바꿔주자.
 
-![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/8a20c55a-8470-44fb-9f9c-fa5a645485e5.png){: width="50%" height="50%"}
+![Image](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2025-04-21-JPApexPredators-fin/8a20c55a-8470-44fb-9f9c-fa5a645485e5.png)
 
 현재는 시뮬레이터라 전송은 안된다.
 

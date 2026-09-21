@@ -184,7 +184,7 @@ struct Pair: Comparable {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-12-Swift-Algorithms-1/pair_comparison_flow_fixed.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-12-Swift-Algorithms-1/pair_comparison_flow_fixed.png)
 
 `Comparable`을 만족하려면 `<` 연산자를 직접 정의해야 한다. 여기서는 사전순 비교를 구현한다. `x` 값이 다르면 `x`만으로 대소를 결정하고, `x`가 같으면 `y` 값으로 비교한다(tiebreaker).
 
@@ -320,7 +320,7 @@ print("Popping top element: \(String(describing: popped))")
 
 1을 가장 먼저 넣었으니 스택 맨 아래에 위치하고, 가장 나중에 넣은 4가 맨 위에 온다. `pop()`을 호출하면 가장 최근에 넣은 값(4)이 먼저 나온다. 이런 후입선출(LIFO, Last In First Out) 동작이 스택의 핵심이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-12-Swift-Algorithms-1/stack_push_pop_fixed.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-12-Swift-Algorithms-1/stack_push_pop_fixed.png)
 
 ---
 
@@ -403,7 +403,7 @@ print(s2)
 
 **class(참조 타입)일 때**: `let s3 = s2`는 값을 복사하는 게 아니라, 같은 인스턴스를 가리키는 참조(포인터)를 하나 더 만드는 것이다. `s2`와 `s3`는 사실상 같은 메모리 상의 객체를 가리키고 있으므로, `s3`에서 `pop()`을 호출하면 그 변화가 `s2`에도 그대로 반영된다. `s3`, `s2` 둘 다 `[1]`로 바뀐다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-12-Swift-Algorithms-1/struct_vs_class_semantics_fixed.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-12-Swift-Algorithms-1/struct_vs_class_semantics_fixed.png)
 
 이건 많은 경우 의도치 않은 부작용(side effect)이 될 수 있다. 물론 상황에 따라 참조 타입의 이 공유 특성이 오히려 필요한 경우도 있지만, 값 타입과 참조 타입 중 뭘 쓰느냐에 따라 이렇게 대입 하나로 완전히 다른 결과가 나올 수 있다는 걸 명확히 인지하고 있어야 한다.
 
@@ -470,7 +470,7 @@ struct AdditiveDictionary<Key: Comparable,Value: AdditiveArithmetic> {
 
 반환 타입이 `AdditiveDictionary?`인 이유는, key가 서로 다르면 애초에 더할 수 없는 값들이라 `nil`을 반환해야 하기 때문이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-12-Swift-Algorithms-1/additive_dictionary_add_flow.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-12-Swift-Algorithms-1/additive_dictionary_add_flow.png)
 
 ---
 

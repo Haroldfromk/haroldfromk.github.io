@@ -16,7 +16,7 @@ published: true
 
 Mock UI 기준으로 PFDView에 하드코딩된 값들을 추려보면 아래와 같다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/CleanShot_07-08.23.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/CleanShot_07-08.23.png)
 
 - 현재 페이스 (`5'32"`), 평균 페이스
 - 누적 거리 (`8.42` km)
@@ -98,7 +98,7 @@ Swift에서 `struct`는 값 타입, `class`는 참조 타입이다. 이번 `Flig
 
 아래는 이해를 돕기위한 만화
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/structvsclass.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/structvsclass.png)
 
 ---
 
@@ -267,7 +267,7 @@ Text(formatPace(runViewModel.flightData.pace))
 
 실행해보면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/Jun-07-2026%2012-42-59.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/Jun-07-2026%2012-42-59.gif)
 
 반영이 잘 되는걸 알 수 있지만 페이스 범위가 맞지 않는다. 현재 페이스에 대해서 유동적으로 범위가 변해야할 필요가 있다.
 
@@ -320,7 +320,7 @@ Text(formatPace(runViewModel.flightData.pace))
 
 이렇게 페이스를 `:00`, `:15`, `:30`, `:45` 단위로 끊어서 GPS 오차로 인한 잦은 변동을 줄여준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/pace.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/pace.png)
 
 이해를 돕기위한 사진을 추가하니 보면 이해가 될듯
 
@@ -366,7 +366,7 @@ var dynamicPaces: [String] {
 
 `.reversed()`를 사용한 이유는 SpeedTape가 위쪽이 빠른 페이스(숫자가 작은 값)이기 때문이다. 배열 그대로 쓰면 위에서부터 느린 페이스가 표시되므로 순서를 뒤집어준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/afterpace.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/afterpace.gif)
 
 이제 실행하면 이렇게 값이 바뀌는걸 알 수 있다.
 
@@ -376,7 +376,7 @@ var dynamicPaces: [String] {
 
 Avg의 경우 현재 시간값을 가져오지는 않아서 그대로 둔다. (추후 변경 예정)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/avg.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/avg.png)
 
 ---
 
@@ -458,7 +458,7 @@ var dynamicHeading: [String] {
 
 제대로 되는지 확인을 하기위해 극단적인 변화를 주었다. (Run이 아닌 Drive로 변경)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/change.gif){: width="50%" height="50%"}![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/change2.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/change.gif)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/change2.gif)
 
 이렇게 잘 되는걸 알 수 있다.
 
@@ -534,11 +534,11 @@ func secondToTime(_ second: Int) -> String {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/timer.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/timer.gif)
 
 작동은 하지만 두 가지 문제가 있다. 다시 시작했을 때 `elapsedTime`이 리셋되지 않고, 타이머도 재작동하지 않는다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/stop.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/stop.gif)
 
 ---
 
@@ -577,7 +577,7 @@ var elapsedTime: String {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/done.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/done.gif)
 
 이제 정지 후 재시작도 정상 작동한다. 다만 현재는 `stop()` 시 `elapsedTime`을 리셋하지 않는다. 이후 정지와 일시정지를 세분화하면서 함께 처리할 예정이다.
 
@@ -597,7 +597,7 @@ func start() {
 
 이해를 돕기위한 이미지
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/connect.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/connect.png)
 
 참고로 `connect()`는 1회성이다. `cancel()` 이후 재사용이 불가능하다.
 
@@ -632,7 +632,7 @@ func stop() {
 
 두 방식 모두 동일하게 동작한다. Combine은 이미 프로젝트에서 사용 중인 패턴이라 일관성을 위해 선택했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/timer.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/timer.png)
 
 ---
 
@@ -652,12 +652,12 @@ var avgPace: String {
 
 이렇게 Computed Property를 이용해 계산한다. 다만 `elapsedTime`은 `Int`라서 `Double`로 형변환을 해주었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/avg.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/avg.gif)
 
 
 아래는 오늘 최종적으로 구현한 기능들이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/ttl.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-07-RunningProject-6/ttl.gif)
 
 ---
 

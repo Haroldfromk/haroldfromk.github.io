@@ -14,7 +14,7 @@ toc_sticky: true
 
 ## 시작
 
-![CleanShot 2024-04-30 at 16 38 00@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/3bb5beda-a320-49bf-9f4c-231ab8bf3371){: width="50%" height="50%"}
+![CleanShot 2024-04-30 at 16 38 00@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/3bb5beda-a320-49bf-9f4c-231ab8bf3371)
 
 Test를 체크를 해준다.
 
@@ -142,7 +142,7 @@ private lazy var vStackView: UIStackView = {
 
 ## Build Settings 재 수정
 
-![simulator_screenshot_D639E5E1-56D6-4625-959F-1C3FA12FBB21](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/8bcac74c-6957-452b-ae17-9f66a0d83989){: width="50%" height="50%"}
+![simulator_screenshot_D639E5E1-56D6-4625-959F-1C3FA12FBB21](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-30-Tip-Calculator-1/8bcac74c-6957-452b-ae17-9f66a0d83989)
 
 현재 SafeArea쪽도 그렇고 위와 아래쪽이 예전 폰으로 보이는듯한 느낌이 들어서 우리가 보는것 처럼 확대를 해보려 한다.
 

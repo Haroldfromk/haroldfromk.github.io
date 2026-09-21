@@ -206,7 +206,7 @@ UIResponder만 신선했다.
 >> 먼저 `next` 응답자가 `UIViewController`인지 확인하고, 그렇다면 해당 `UIViewController`를 반환
 >> 만약 `next` 응답자가 `UIViewController`가 아니라면, `next?.parentViewController`를 재귀적으로 호출하여 UIViewController를 찾거나 응답 체인의 끝까지 탐색
 
-![CleanShot 2024-05-03 at 16 21 00@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-5/e4b7994c-8dad-4d13-8d21-3913b4d11d76){: width="50%" height="50%"}
+![CleanShot 2024-05-03 at 16 21 00@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-03-Tip-Calculator-5/e4b7994c-8dad-4d13-8d21-3913b4d11d76)
 
 그리고 다시 VM으로 돌아가서
 

@@ -201,7 +201,7 @@ parameters라는 배열을 통해 위에처럼 주소로 다 안적고 심플하
 
 특이한건 responseJSON을 사용했다는것.
 
-![CleanShot 2024-04-18 at 15 00 18@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/6bfb112f-d450-40f1-983a-ef59499e8de6){: width="50%" height="50%"}
+![CleanShot 2024-04-18 at 15 00 18@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-04-18-WhatFlower-2/6bfb112f-d450-40f1-983a-ef59499e8de6)
 
 그러다보니 데이터 타입이 다르다.
 

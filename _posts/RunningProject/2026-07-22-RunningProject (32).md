@@ -151,7 +151,7 @@ if isModeA, let modeAData {
 
 저 -150의 음수는 heartrate 설정할때 내가 세팅해둔 값이었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/heartrate.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/heartrate.png)
 
 실제로 뛰어보니 DIFF 칸에 이렇게 떴다.
 
@@ -301,9 +301,9 @@ errorHandler 자리에 클로저를 넣고 그 안에 뭔가 실행되게 하면
 
 Xcode로 잡아보니 크래시 지점이 딱 그 클로저 안이었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/CleanShot_22-21.50.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/CleanShot_22-21.50.png)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/CleanShot_22-21.51.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/CleanShot_22-21.51.png)
 
 ```swift
 // Before

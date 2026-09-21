@@ -17,7 +17,7 @@ published: false
 
 다시 정확한 시나리오를 짚어보면 이렇다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-29-RunningProject-17/zombie_session_full_scenario.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-29-RunningProject-17/zombie_session_full_scenario.png)
 
 1. Watch에서 미러링으로 러닝을 시작하면 iPhone이 PFDView로 전환된다.
 2. 이 상태에서 Watch 앱과 iPhone 앱을 둘 다 강제종료한다.
@@ -45,7 +45,7 @@ if mirroredSession.state == .running {
 
 그래서 AI에게 이 상황을 설명하고 어떻게 접근하면 좋을지 물어봤다. Console.app과 `os_log`를 쓰면 디버거 연결 없이도 시스템 레벨 로그를 확인할 수 있다는 답을 받았고, 정직하게 말하면 이 둘의 존재 자체를 잘 모르고 있었다. 그래서 이번 트러블슈팅은 `print()`를 `os_log`로 바꾸고, Console.app으로 강제종료 전후의 실제 시스템 동작을 들여다보는 방식으로 다시 시작해보기로 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-29-RunningProject-17/zombie.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-29-RunningProject-17/zombie.png)
 
 ---
 
@@ -71,7 +71,7 @@ logger.info("startWorkout called, session state: \(String(describing: self.sessi
 
 이렇게 의심되는 지점마다 현재 세션 상태를 같이 찍어두면, Console.app에서 시점별로 `session?.state`가 어떻게 변하는지 추적할 수 있다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-29-RunningProject-17/log.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-29-RunningProject-17/log.png)
 
 ---
 
@@ -254,7 +254,7 @@ if result.state == .running {
 
 정확히 어디서 그 흐름이 일어나는지 짚어보면 이렇다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-29-RunningProject-17/zombie_trigger_exact_path.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-29-RunningProject-17/zombie_trigger_exact_path.png)
 
 `retrieveRemoteSession()`이 좀비 세션을 `.running` 상태로 전달받으면, 그 즉시 `if mirroredSession.state == .running { self.handleiOSStateChange(.running) }`로 처리해서 `sessionStatePublisher`에 이벤트를 흘려보낸다. 이 경로 어디에도 "이게 좀비인지 정상 시작인지"를 구분하는 지점이 없다. 그래서 `RunViewModel`의 구독부가 그 이벤트를 받으면 그냥 평소처럼 `navigationPath.append(.pfd)`를 실행해버리는 것이다.
 

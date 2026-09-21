@@ -20,7 +20,7 @@ published: true
 
 AI한테 부탁해서 적당한 멘트를 추천받아 만들었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-screenshot-sample.png){: width="45%" height="45%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-screenshot-sample.png)
 
 어플의 테마색을 유지하면서 만들었다.
 
@@ -63,7 +63,7 @@ AI한테 부탁해서 적당한 멘트를 추천받아 만들었다.
 
 `com.apple.developer.healthkit.background-delivery`가 iPhone/Watch 양쪽 entitlements에 다 선언되어 있었는데, `enableBackgroundDelivery`나 `HKObserverQuery` 관련 코드는 어디에도 없었다. 안 쓰는 걸 확인하고 둘 다 체크 해제 했다. (앱, 워치)
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/target.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/target.png)
 
 
 **3. 암호화 수출 규정 플래그 없음**
@@ -83,13 +83,13 @@ AI한테 부탁해서 적당한 멘트를 추천받아 만들었다.
 
 이전에 TestFlight 만들때처럼 Archive를 하되
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/connect.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/connect.png)
 
 이젠 App Store Connect를 선택해준다.
 
 그리고 업로드를 하고 기다리면
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/distribute.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/distribute.png)
 
 이렇게 업로드가 되었다는 메일이 온다.
 
@@ -97,7 +97,7 @@ AI한테 부탁해서 적당한 멘트를 추천받아 만들었다.
 
 ## 빌드 추가 하여 배포
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/build.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/build.png)
 
 이제 이렇게 업로드한 빌드에 대해 배포를 하려고 추가할때 목록이 뜬다.
 
@@ -109,7 +109,7 @@ AI한테 부탁해서 적당한 멘트를 추천받아 만들었다.
 
 심사에 추가 버튼을 누르니
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/error.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/error.png)
 
 이렇게 에러가 뜬다.
 
@@ -121,14 +121,14 @@ AI한테 부탁해서 적당한 멘트를 추천받아 만들었다.
 
 콘텐츠 권한 정보(Content Rights)는 앱에 제3자가 만든 콘텐츠(라이선스 음악, 외부 브랜드 콘텐츠, 다른 서비스에서 가져온 사용자 생성 콘텐츠 등)가 들어있는지 묻는 항목이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/contentinfo.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/contentinfo.png)
 
 이 앱의 경우, 표시되는 데이터(심박수, 걸음 수, 날씨, GPS)가 전부 Apple 프레임워크(HealthKit, WeatherKit, CoreLocation)에서 오는 기능적 데이터지, 제3자가 만든 저작물이 아니다.
 
 외부에서 가져온 이미지, 음악, 텍스트, 다른 사용자의 콘텐츠 같은 것도 전혀 없다.(AI를 통해 만들었기 때문)
 그러니 "아니요"로 답하면 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/contentno.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/contentno.png)
 
 ---
 
@@ -136,11 +136,11 @@ AI한테 부탁해서 적당한 멘트를 추천받아 만들었다.
 
 이제 앱 가격을 설정해야 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/price.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/price.png)
 
 지금 앱에는 인앱결제나 구독 로직이 전혀 없다. 나중에 버전을 올리면서 추가할 수도 있겠지만 아직 거기까진 생각 안 하고 있어서, 일단은 무료앱으로 등록하기로 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/pricezero.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/pricezero.png)
 
 0달러로 해주면 된다. 나중에 인앱결제를 붙이고 싶어지면 그때 가서 유료 앱 계약이나 상품 등록을 새로 하면 되는 거라, 지금 무료로 시작한다고 나중에 발목 잡힐 일은 없다.
 
@@ -150,7 +150,7 @@ AI한테 부탁해서 적당한 멘트를 추천받아 만들었다.
 
 ### 3. 규제 대상 의료 기기 신고
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/euiro.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/euiro.png)
 
 이건 앱이 질병을 진단·치료·예방한다는 주장을 하는지가 기준이다. 
 
@@ -160,21 +160,21 @@ RunWay가 GPWS 알림으로 심박수나 페이스를 보여주긴 하지만, �
 
 Strava나 Nike Run Club 같은 러닝 앱들도 다 이 카테고리라, 우리도 의료기기가 아니므로 아니오로 해준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/singo.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/singo.png)
 
 ---
 
 ### 4. 소셜 미디어 관련 연령 등급 응답 업데이트
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/social.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/social.png)
 
 어디서 이부분을 설정해야하나 구글링을 해보니
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/age.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/age.png)
 
 여기서 해야한다고 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/age1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/age1.png)
 
 보면 새롭게 2 항목이 추가된걸 알 수 있다.
 
@@ -188,7 +188,7 @@ Strava나 Nike Run Club 같은 러닝 앱들도 다 이 카테고리라, 우리�
 
 이거는 Apple Developer 계정에 등록된 이름이랑 맞춰서 적어야 한다고 해서, 연도 + 실제 이름 조합으로 적었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/copyright.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/copyright.png)
 
 형식 자체는 어렵지 않은데, 계정에 등록된 이름이랑 다르게 적으면 나중에 문제가 될 수 있다고 해서 Membership 페이지에서 등록된 이름을 다시 한번 확인하고 그대로 썼다.
 
@@ -257,8 +257,8 @@ func reset() {
 
 #### 해결
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug1-before.png){: width="55%" height="55%"}
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug1-after.png){: width="55%" height="55%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug1-before.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug1-after.png)
 
 두 군데를 고쳤다.
 
@@ -373,7 +373,7 @@ if HealthKitService.shared.startOrigin == .local  {
 
 반면 첫 번째 원인(`lastSentTime` 공유)은 이 `if` 블록이 정상적으로 진입한 다음 얘기다. `self.flightData = data`는 매번 잘 갱신되니까 Watch 화면은 멀쩡한데, 뒤이어 호출되는 `sendFlightData(data)` **내부의** `guard` 문에서 조용히 `return`돼버리는 거라 iPhone 쪽에만 영향을 준다. 정리하면 두 원인이 망가뜨리는 범위가 다르다. 하나는 "화면 + 전송"을 통째로 죽이고, 다른 하나는 "전송"만 죽인다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug2-anatomy.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug2-anatomy.png)
 
 사실 이거랑 똑같은 레이스를 예전에 `start()` 안에서 한 번 겪은 적이 있다. `locationService.startTracking()`이 안 불려서 GPS 자체가 안 켜지던 문제였고, 그때 `prepareTracking()`으로 분리해서 해결했었다. 근데 그건 GPS 시작 지점만 고친 거였고, `startStream()`에 있는 이 조건은 그때 안 건드렸다. 같은 병이 다른 자리에 그대로 남아있었던 셈이다.
 
@@ -385,8 +385,8 @@ if HealthKitService.shared.startOrigin == .local  {
 
 #### 해결
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug2-before.png){: width="55%" height="55%"}
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug2-after.png){: width="55%" height="55%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug2-before.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug2-after.png)
 
 첫 번째 문제는 타임스탬프를 분리하는 걸로 끝났다. `sendHealthData()`용 `lastHealthSentTime`을 따로 만들어서 `sendFlightData()`의 `lastSentTime`과 서로 갱신을 방해하지 않게 했다.
 
@@ -449,8 +449,8 @@ let totalPace = (rawPace.isFinite && totalDistance >= minimumValidDistance) ? ra
 
 #### 해결
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug3-before.png){: width="55%" height="55%"}
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug3-after.png){: width="55%" height="55%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug3-before.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug3-after.png)
 
 네 군데 중 실제로 `modelContext.insert()`를 호출하는 곳은 두 곳뿐이었다. `WatchPFDView`와 `WatchConnectivityService+iOS`는 `SwiftDataFlight`를 만들기만 하고, 최종 저장은 각각 `RunViewModel`과 `HomeView`로 넘어가서 처리된다. 그러니 이 두 곳에만 거리 가드를 걸면 네 경로 전부를 막을 수 있다.
 
@@ -523,8 +523,8 @@ func sendRunningData() {
 
 #### 해결
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug4-before.png){: width="55%" height="55%"}
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug4-after.png){: width="55%" height="55%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug4-before.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug4-after.png)
 
 양쪽에 대칭으로 가드를 채워 넣었다.
 
@@ -680,8 +680,8 @@ Watch 쪽 `WatchViewModel.start()`도 똑같은 방식으로 고쳤다. 이제 �
 
 #### 해결
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug6-before.png){: width="55%" height="55%"}
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug6-after.png){: width="55%" height="55%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug6-before.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug6-after.png)
 
 재진입 가드를 하나 추가했다.
 
@@ -721,7 +721,7 @@ if result.stopOrigin == .remote {
 
 데이터 요청은 성공했는데 화면에 안 뜬다는 건, 실제 UI를 그리는 쪽(메인 앱이 아니라 `RunWayActivityExtension` 위젯 익스텐션 쪽)에 문제가 있다는 뜻이었다. 위젯 익스텐션은 메인 앱과 **완전히 별도 프로세스**로 돌기 때문에, 여기서 렌더링이 실패해도 메인 앱 Xcode 콘솔엔 어떤 에러도 안 찍힌다. 그래서 지금까지 아무 단서가 없었던 거다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug7-anatomy.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-13-RunningProject-25/runway25-bug7-anatomy.png)
 
 `DynamicIslandWidget.swift`를 뜯어보니 이런 코드가 있었다.
 

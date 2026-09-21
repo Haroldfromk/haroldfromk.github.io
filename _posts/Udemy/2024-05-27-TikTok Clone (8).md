@@ -47,7 +47,7 @@ func stopRecording() {
 
 저건 멈추면
 
-![CleanShot 2024-05-27 at 22 36 34@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-27-TikTok-Clone-8/6de47b61-3c4d-47f0-9f29-d2b6aa79f6df){: width="50%" height="50%"}
+![CleanShot 2024-05-27 at 22 36 34@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-27-TikTok-Clone-8/6de47b61-3c4d-47f0-9f29-d2b6aa79f6df)
 
 이렇게 보인다.
 

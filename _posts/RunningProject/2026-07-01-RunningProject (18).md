@@ -185,7 +185,7 @@ if type == "elapsedTime" {
     - 앱 종료: 정상 작동
     - Watch 종료 후 Watch 주도 미러링 시도: iPhone이 반응하지 않음. 단, 이후 iPhone 주도로 한 번 더 러닝을 하고 나면 Watch 주도 미러링이 다시 가능해짐. `resetState()`에서 `startOrigin`이 리셋되지 않아 이전 세션 상태가 남아있는 것으로 추정.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/iphone_led_scenarios.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/iphone_led_scenarios.png)
 
 ---
 
@@ -193,7 +193,7 @@ if type == "elapsedTime" {
     - 앱 종료: 정상 작동
     - Watch 종료: Watch가 Summary 없이 바로 홈으로 돌아감. `stopOrigin = .local`임에도 TOUCHDOWN → Summary 흐름을 타지 않는 것으로 보임.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/watch_led_scenarios.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/watch_led_scenarios.png)
 
 ---
 
@@ -317,13 +317,13 @@ retrieveRemoteSession handler fired: state=2
 
 여기도 간단하게 정리를 해보려 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/result.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/result.png)
 
 실기기 테스트를 통해 발견한 버그들을 하나씩 잡아나갔다. 일시정지 동기화는 `sendPauseData()`를 별도로 만들어 해결했고, Pause overlay는 `.allowsHitTesting(false)`로 종료 버튼 접근성을 확보했다. `elapsedTime` 싱크는 1초마다 별도 전송하는 방식으로 해결했다. 미러링 세션 관련 두 문제는 `resetWorkout()`에서 `startOrigin`/`stopOrigin` 초기화 누락과 iPhone 세션 미종료가 원인이었고, 각각 `resetWorkout()`에 nil 초기화와 `session?.end()` 추가로 해결했다.
 
 탭바 배경색이 뷰 전환 시 흰색으로 튀는 현상도 발견했다. `RunWayApp.swift`의 `init()`에서 `UITabBarAppearance`로 배경색과 아이콘 색을 전역으로 세팅하고, `RootTabView`에 `.tint(.rwGreen)`을 추가해 해결했다. 시뮬레이터에서는 여전히 간헐적으로 튀지만 실기기에서는 정상 동작한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/problem.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-01-RunningProject-18/problem.png)
 
 ```swift
 // RunWayApp

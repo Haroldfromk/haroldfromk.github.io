@@ -129,7 +129,7 @@ private let totalBillView: AmountView = {
 
 그리고 런치 테스트는 필요없으니까 쓰레기통
 
-![CleanShot 2024-05-04 at 12 41 30@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/7f224f50-f66a-4bf9-a1f4-f40a1b7b6618){: width="50%" height="50%"}
+![CleanShot 2024-05-04 at 12 41 30@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/7f224f50-f66a-4bf9-a1f4-f40a1b7b6618)
 
 그리고 uitests파일 역시 지난번 test처럼 내부 함수는 다 지워준다.
 
@@ -492,7 +492,7 @@ func testRegulapTip() {
 
 의심이 가는 부분이 있어 지역을 미국으로 변경
 
-![simulator_screenshot_ADE569F9-98DD-41D8-BE5A-063687B92224](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/ed8c9092-7785-4d65-a5fa-0c135fa50ece){: width="50%" height="50%"}
+![simulator_screenshot_ADE569F9-98DD-41D8-BE5A-063687B92224](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/ed8c9092-7785-4d65-a5fa-0c135fa50ece)
 
 테스트 재실행.
 
@@ -569,7 +569,7 @@ func testRegularTip() {
 
 이걸해결하니 모든 문제가 해결.
 
-![May-04-2024 14-48-29](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/bde8d3fb-9e5b-4768-8963-7289ca7e90c3){: width="50%" height="50%"}
+![May-04-2024 14-48-29](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/bde8d3fb-9e5b-4768-8963-7289ca7e90c3)
 
 테스트는 이런식으로 진행이됨.
 
@@ -598,7 +598,7 @@ $300를 입력하고 tip으로 $200 입력하고 1명을 더 추가 했을때
 
 하지만 실패
 
-![May-04-2024 14-59-24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/d879ab3e-7d3f-4745-8a4a-52483a667dac){: width="50%" height="50%"}
+![May-04-2024 14-59-24](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/d879ab3e-7d3f-4745-8a4a-52483a667dac)
 
 그냥 얼타고있다?
 
@@ -678,7 +678,7 @@ private func handleCustomTipButton() {
 
 다시 테스트하면 성공.
 
-![May-04-2024 15-00-49](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/28f87f86-6c9a-4cdd-b0dd-8bef18d9cbc0){: width="50%" height="50%"}
+![May-04-2024 15-00-49](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/28f87f86-6c9a-4cdd-b0dd-8bef18d9cbc0)
 
 이제는 제대로 textField에 값을 입력한다.
 
@@ -703,7 +703,7 @@ func testResetButton() {
 
 테스트해보니 잘된다
 
-![May-04-2024 15-02-19](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/d18d1d96-25ce-47ae-bd46-afa176cfa076){: width="50%" height="50%"}
+![May-04-2024 15-02-19](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-04-Tip-Calculator-9/d18d1d96-25ce-47ae-bd46-afa176cfa076)
 
 끝
 

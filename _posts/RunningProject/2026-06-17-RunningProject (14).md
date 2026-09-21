@@ -30,7 +30,7 @@ published: true
 
 1, 2번은 같이 묶어서 해결하는 게 좋아 보인다.
 
-![](/assets/images/upload/IMG_3947.png){: width="50%" height="50%"}
+![](/assets/images/upload/IMG_3947.png)
 
 테스트 중 찍었던 스크린샷이다. 321.72km라고 표시되어 있는데, 이게 거리 단위가 m로 저장된 채 그대로 표시된 것이다. 
 그리고 지도에 아무것도 표시되지 않는 것을 보면, 좌표가 없을 때를 대비해 만들어두었던 옵셔널 처리 분기가 그대로 노출된 것을 확인할 수 있다.
@@ -516,7 +516,7 @@ func startWorkout(workoutConfiguration: HKWorkoutConfiguration) async throws {
 
 다시 실기기로 테스트해보니 러닝 시작 시 앱이 튕겼다. Xcode를 Watch에 직접 붙여서 디버깅했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-17-RunningProject-14/probl.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-17-RunningProject-14/probl.png)
 
 스택 트레이스를 보니 `_dispatch_assert_queue_fail`에서 발생했고, 호출 스택을 따라가보니 `HealthKitService.workoutSession(_:didChangeTo:from:date:)`가 원인이었다.
 
@@ -604,7 +604,7 @@ private func handleStateChange(_ toState: HKWorkoutSessionState) {
 
 이후 다시 테스트하니 PFD로 정상 전환됐고, Watch에서 러닝을 종료하면 iPhone도 같이 홈으로 돌아가는 것까지 확인했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-17-RunningProject-14/testt.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-17-RunningProject-14/testt.gif)
 
 그리고 미러링을 통해 러닝이 종료되면 앱에서 계속 위치를 추적하려고 하는 기능이 활성화된 상태로 남아있어서 비활성화를 해주도록 한다.
 
@@ -717,7 +717,7 @@ let avgFuel = Int(runViewModel.healthData.activeEnergy)
 
 바로 확인을 해보니
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-17-RunningProject-14/done.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-17-RunningProject-14/done.png)
 
 심박이 적용이 된걸 알 수 있었다.
 
@@ -751,7 +751,7 @@ if viewModel.isPaused {
 
 이런식으로 해주었다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-17-RunningProject-14/IMG0023.gif){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-06-17-RunningProject-14/IMG0023.gif)
 
 이제 일시정지도 되는 걸 알 수 있다.
 

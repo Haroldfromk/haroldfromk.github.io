@@ -275,7 +275,7 @@ NavigationView {
 
 실행하면 이렇게 나온다.
 
-<img width="288" height="598" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine5/b0032748-620c-41a2-bc25-50db57769b0a.png" />{: width="50%" height="50%"}
+<img width="288" height="598" alt="Image" src="https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-05-17-SwiftUI_Combine5/b0032748-620c-41a2-bc25-50db57769b0a.png" />
 
 ## 마지막으로
 

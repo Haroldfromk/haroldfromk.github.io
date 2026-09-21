@@ -107,7 +107,7 @@ extension SignUpViewController: PHPickerViewControllerDelegate {
 
 그리고 dismiss를 하는 이유는 이것도 하나의 VC의 개념이라 dismiss를 통해 해당 vc를 사라지게 해준다.
 
-![May-19-2024 22-27-14](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-2/ee044dee-c5cb-42d2-ae9e-1e9d0ab69116){: width="50%" height="50%"} 
+![May-19-2024 22-27-14](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-18-TikTok-Clone-2/ee044dee-c5cb-42d2-ae9e-1e9d0ab69116) 
 
 이렇게 이미지가 뜨는걸 확인할 수 있다.
 

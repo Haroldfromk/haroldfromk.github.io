@@ -108,7 +108,7 @@ struct DoublyLinkedListView<T>: View {
 
 값으로 노드를 찾아 삭제하는 함수를 구현한다. 값이 같은 노드를 찾은 뒤, 그 노드의 양옆(`prev`, `next`)을 서로 직접 연결해서 삭제된 노드를 건너뛰게 만드는 방식이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Swift-Algorithms-9/dll_delete_relink_fixed.png){: width="90%" height="90%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Swift-Algorithms-9/dll_delete_relink_fixed.png)
 
 ```swift
 func delete(value: T) {

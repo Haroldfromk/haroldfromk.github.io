@@ -81,7 +81,7 @@ Title name이 현재 True로 되어있다.
 name -> 0, 1, 2 이런식으로 했다
 배열안에 답을 골라야 할것 같아서 배열 index에 해당하는 title을 꺼내오기위해 네이밍을 저렇게 했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/1074775c-2678-40fb-b214-b4c5e738ab46.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/1074775c-2678-40fb-b214-b4c5e738ab46.png)
 
 그리고 
 
@@ -90,23 +90,23 @@ name -> 0, 1, 2 이런식으로 했다
 
 그냥 해당 버튼을 우클릭하고 빨갛게 표시한 저 x 버튼만 눌러주면 main과 controller의 연결이 끊어진다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/cfa02a9f-e407-4601-bbda-28718f9222bb.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/cfa02a9f-e407-4601-bbda-28718f9222bb.png)
 
 아주 잘 끊어졌다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/9110d927-537a-4245-9262-28bd6c216f1f.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/9110d927-537a-4245-9262-28bd6c216f1f.png)
 
 그렇게 버튼에 현재 연결되어있던것을 끊어주었다.
 (기존에 있던 프로젝트를 수정하는것이므로)
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/0518a721-c524-4649-9f65-7f564b644d5d.gif)
 
 그리고 새로운 연결을 해주었다.
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/e2351855-264f-48e9-ae7e-51adbf6c5a63.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/e2351855-264f-48e9-ae7e-51adbf6c5a63.png)
 
 나는 zero / first / second Button으로 해주었다.
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/9bf59f85-a30e-459e-b297-b29897ce3512.gif)
 
 이렇게 모두 연결이 되었다!
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/feb421b7-668a-4d53-8090-5fe5b5f8afca.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-02-23-Quizzler-5-Advanced/feb421b7-668a-4d53-8090-5fe5b5f8afca.png)
 
 그리고 IBaction도 새로 만들어주어야 하는데 이것은 생략하겠다. 방식은 같다.
 (나는 기존의 작성되어있는것을 그대로 두고 내부 코드만 바꿔보려고한다.)

@@ -11,7 +11,7 @@ toc_sticky: true
 
 ## 게시글 등록 VC 만들기
 
-![CleanShot 2024-05-26 at 16 43 14@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/e5de9dfa-86a4-4242-a2ff-3f8b449c5b0a){: width="50%" height="50%"}
+![CleanShot 2024-05-26 at 16 43 14@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/e5de9dfa-86a4-4242-a2ff-3f8b449c5b0a)
 
 스토리보드 디자인은 다음과 같다.
 
@@ -61,7 +61,7 @@ VC LifeCycle을 활용하여, 탭바를 사라지게했다가, 다시 보여지�
 
 왜냐 다른화면에서는 탭바가 다시 보여야하기 때문.
 
-![simulator_screenshot_212190E8-7B01-43BD-9936-FF646188D698](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/990a0e9d-88d7-4108-adab-57514520731f){: width="50%" height="50%"}
+![simulator_screenshot_212190E8-7B01-43BD-9936-FF646188D698](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/990a0e9d-88d7-4108-adab-57514520731f)
 
 제법 카메라 화면다워보인다.
 
@@ -145,14 +145,14 @@ func setupCaptureSession() -> Bool {
 
 그리고 이렇게 다양한 카메라 설정이 가능!
 
-![CleanShot 2024-05-26 at 17 03 25@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/5700cefd-a34c-45b6-9ccb-30783d9d8ff2){: width="50%" height="50%"}
+![CleanShot 2024-05-26 at 17 03 25@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/5700cefd-a34c-45b6-9ccb-30783d9d8ff2)
 
 그리고 어떤 형태를 내가 input으로 따올건지 설정도 가능. 여기선 비디오와 오디오를 했다.
-![CleanShot 2024-05-26 at 17 04 31@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/c1ec4155-e34d-4ab1-8826-27b36dc5cffe){: width="50%" height="50%"}
+![CleanShot 2024-05-26 at 17 04 31@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/c1ec4155-e34d-4ab1-8826-27b36dc5cffe)
 
 또한 position을 통해 전, 후면 설정도 가능.
 
-![CleanShot 2024-05-26 at 17 05 42@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/1a5ff9e1-9375-4291-9d6f-eb00b3f6b5dd){: width="50%" height="50%"}
+![CleanShot 2024-05-26 at 17 05 42@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/1a5ff9e1-9375-4291-9d6f-eb00b3f6b5dd)
 
 ### 2. 아웃풋 설정
 
@@ -162,7 +162,7 @@ func setupCaptureSession() -> Bool {
 
 여기서도 좀 더 디테일하게 들어갈 수 있다.
 
-![CleanShot 2024-05-26 at 17 08 23@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/e2f65cf0-2918-44fe-b2ba-ab3765cd69c3){: width="50%" height="50%"}
+![CleanShot 2024-05-26 at 17 08 23@2x](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-05-26-TikTok-Clone-6/e2f65cf0-2918-44fe-b2ba-ab3765cd69c3)
 
 이렇게 코덱 타입이라던가.. 무수히 많으니 나중에 좀 더 알아보기로 하자.
 

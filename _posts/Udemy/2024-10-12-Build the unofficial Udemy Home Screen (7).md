@@ -159,10 +159,10 @@ cell.onTap = { [weak self] title in
 프린트를 지우고 주석단부분을 활성화 했을때 어떻게 나오는지 먼저 확인해보자.
 
 **[before]**
-![Oct-12-2024 22-14-07](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/5fd0cb0f-bda6-43c0-a7f1-3472074360ae.png){: width="50%" height="50%"} 
+![Oct-12-2024 22-14-07](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/5fd0cb0f-bda6-43c0-a7f1-3472074360ae.png) 
 
 **[after]**
-![Oct-12-2024 22-13-30](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/4e813db3-ec0d-4f74-b624-5820e67086f8.png){: width="50%" height="50%"} 
+![Oct-12-2024 22-13-30](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/4e813db3-ec0d-4f74-b624-5820e67086f8.png) 
 
 아이템을 지칭하는 전체적인것이 탭이 되었다고 뜬다.
 
@@ -174,7 +174,7 @@ case .categoriesScroller(let id, let titles):
 ```
 이렇게 했을때 어떻게 출력이 되는지 확인해보자.
 
-![Oct-12-2024 22-30-16](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/e5c1ef99-247d-4e0b-af0e-afa4c896fa96.png){: width="50%" height="50%"} 
+![Oct-12-2024 22-30-16](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/e5c1ef99-247d-4e0b-af0e-afa4c896fa96.png) 
 
 하나를 클릭하더라도 전체 category안에 있는 전체 Item들이 다 보이는걸 알 수 있다.
 
@@ -217,7 +217,7 @@ first를 하지않으면
 
 이제 탭을 해보면
 
-![Oct-12-2024 22-37-03](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/f89241d4-ca56-4d93-a45a-db750102e9d3.png){: width="50%" height="50%"} 
+![Oct-12-2024 22-37-03](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/f89241d4-ca56-4d93-a45a-db750102e9d3.png) 
 
 잘 된다.
 
@@ -291,11 +291,11 @@ StoryBoard로 가서 NavigationController를 Embeded 해주자.
 
 편한걸로 하자.
 
-![simulator_screenshot_40369EEE-613F-453F-861D-C0AFFC295507](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/73381f43-5f79-4ac7-98ff-080692812598.png){: width="50%" height="50%"} 
+![simulator_screenshot_40369EEE-613F-453F-861D-C0AFFC295507](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/73381f43-5f79-4ac7-98ff-080692812598.png) 
 
 상단에 NavigationBar Area가 생긴걸 알 수 있다.
 
-![Oct-12-2024 23-11-12](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/fbb48c2a-583a-4629-8103-62f3ead7bcc5.png){: width="50%" height="50%"} 
+![Oct-12-2024 23-11-12](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/fbb48c2a-583a-4629-8103-62f3ead7bcc5.png) 
 
 이걸 숨기기 위해서
 
@@ -335,7 +335,7 @@ private func showSafariWebView(link: String) {
     }
 ```
 
-![CleanShot 2024-10-12 at 23 37 26](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/66adfe9b-53a6-48ee-be74-9d7f958339cb.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-12 at 23 37 26](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/66adfe9b-53a6-48ee-be74-9d7f958339cb.png) 
 
 ```swift
 case .udemyBusinessBanner(let id, let link):
@@ -344,13 +344,13 @@ case .udemyBusinessBanner(let id, let link):
 
 print 대신 바꿔준다.
 
-![Oct-12-2024 23-39-06](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/e041406f-0507-428f-abe4-54fc1678c1ee.png){: width="50%" height="50%"} 
+![Oct-12-2024 23-39-06](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/e041406f-0507-428f-abe4-54fc1678c1ee.png) 
 
 현재 링크를 Udemy로 해두었는데 이렇게 바로 사이트로 연결되는걸 확인할 수 있다.
 
 ## Tab Event 정리
 
-![CleanShot 2024-10-12 at 23 41 42](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/b31a78af-3f23-4bcf-ac9d-62651cd4c678.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-12 at 23 41 42](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/b31a78af-3f23-4bcf-ac9d-62651cd4c678.png) 
 
 현재 이렇게 Warning이 많기에 사용하지 않는 파라미터, 그리고 item들을 좀 정리한다.
 
@@ -374,7 +374,7 @@ private func handleItemTapped(item: HomeUIModel.Item) {
     }
 ```
 
-![CleanShot 2024-10-12 at 23 50 12](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/5e421c8c-14f4-42ce-a743-6508e05fa10c.png){: width="50%" height="50%"} 
+![CleanShot 2024-10-12 at 23 50 12](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2024-10-12-Build-the-unofficial-Udemy-Home-Screen-7/5e421c8c-14f4-42ce-a743-6508e05fa10c.png) 
 
 warning들이 전부 사라졌다.
 

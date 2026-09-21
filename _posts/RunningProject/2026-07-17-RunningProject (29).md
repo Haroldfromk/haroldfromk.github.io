@@ -16,11 +16,11 @@ published: true
 
 그래서 이걸 아예 디폴트로 해서 헤더를 바꿔보려고 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/before.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/before.png)
 
 이걸
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/after.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/after.png)
 
 이런식으로 헤더를 바꿀 생각이다.
 
@@ -75,7 +75,7 @@ struct NavigationHeader: View {
 
 이번엔 실제 코드에 써먹은 김에 `<T: View>`가 뭘 뜻하는지 제대로 정리하고 넘어간다. 이건 "`NavigationHeader`는 `T`라는 미지의 타입 하나를 받는데, 그 `T`는 반드시 `View` 프로토콜을 따라야 한다"는 뜻이다. `T`가 정확히 어떤 타입인지는 이 구조체를 실제로 쓰는 시점에 결정된다. 예를 들어 `trailing`에 `Button`을 넘기면 그 순간 `T`는 `Button`이 되고, `Image`를 넘기면 `T`는 `Image`가 되는 식이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/nav-header-generic.png){: width="70%" height="70%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/nav-header-generic.png)
 
 이렇게 제네릭으로 만든 이유는, `trailing: () -> T`처럼 클로저가 정확히 어떤 뷰를 돌려주는지 Swift가 미리 알고 있어야 하기 때문이다.
 
@@ -163,7 +163,7 @@ extension View {
 
 위쪽은 `NavigationHeader` 내부에서 `ZStack`이 타이틀 레이어와 뒤로가기/trailing 레이어를 어떻게 겹치는지, 아래쪽은 화면에 `.customNavHeader(...)`를 붙였을 때 `CustomNavHeaderModifier`가 `VStack`으로 헤더와 콘텐츠를 쌓아 올리는 흐름이다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/generic.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/generic.png)
 
 ---
 
@@ -175,7 +175,7 @@ command + shift + F를 통해 `navigationTitle`을 어디서 사용하는지 확
 
 확인결과, FlightCalendarView, FlightSummaryView, ModeAView, TakeoffView에서 사용되는걸 확인했다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/navtitle.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/navtitle.png)
 
 이제 여기에 우리가 만든 CustomModifier를 적용해주면 된다.
 
@@ -205,7 +205,7 @@ command + shift + F를 통해 `navigationTitle`을 어디서 사용하는지 확
 
 실기기에서 돌려보니 상단 상태바 영역이 흰색으로 비어 보였다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/before1.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/before1.png)
 
 `.toolbarBackground(Color.rwPanel, ...)`를 지우면서, 그 자리를 채워주던 배경색도 같이 없어진 거였다. 커스텀 헤더는 세이프에어리어(상태바 영역)까지 뻗어있지 않아서, 시스템 기본 흰 배경이 그 뒤로 그대로 비쳐 보였다.
 
@@ -224,7 +224,7 @@ func body(content: Content) -> some View {
 
 다시 확인해보니 상태바까지 배경색이 제대로 채워졌다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/after11.png){: width="50%" height="50%"}
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/after11.png)
 
 생각보다 Custom Navigation Header의 크기가 작은것 같아 조금 사이즈를 키워 주었다.
 
