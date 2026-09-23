@@ -42,7 +42,7 @@ final class AppSettings: CustomStringConvertible {
 
 `description`은 `let name`, `let timeout`만 읽는다. 둘 다 불변이라 어느 스레드에서 읽어도 안전할 것 같은데, 그냥 빌드하면 에러가 발생한다.
 
-![](/assets/images/upload/CleanShot_19-17.4536.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/CleanShot_19-17.4536.png)
 
 ---
 
@@ -60,7 +60,7 @@ final class AppSettings: CustomStringConvertible {
 
 짧게만 정리하면, MainActor로 격리된 코드가 격리 밖으로 "넘어가면" 서로 다른 실행 흐름이 같은 상태를 동시에 건드릴 수 있게 되고, 컴파일러는 그 가능성 자체를 막으려는 것이다. 계좌 잔고로 예를 들면, 두 흐름이 같은 값을 동시에 읽고 각자 계산한 뒤 나중에 쓰는 쪽이 앞의 변경을 덮어써버리는 식이다. 이게 데이터 레이스다.
 
-![](/assets/images/upload/datarace.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/datarace.png)
 
 ---
 
@@ -119,11 +119,11 @@ warning: capture of 'account' with non-Sendable type 'BankAccount' in a '@Sendab
 
 짧게만 정리하면, 값 타입이거나 불변이면 안전해서 Sendable이고, 참조 타입인데 내부 값이 바뀔 수 있으면 격리로 보호해야 해서 Sendable이 아니다.
 
-![](/assets/images/upload/sendable.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/sendable.png)
 
 `nonisolated`가 "이 멤버를 어디서 호출해도 되는가"를 다뤘다면, `Sendable`은 "이 값을 다른 스레드나 작업으로 넘겨도 되는가"를 다룬다. 둘 다 "동시성 경계를 넘을 때 안전한가"라는 같은 문제의 다른 면이다.
 
-![](/assets/images/upload/nonisolated_vs_sendable_diagram.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/nonisolated_vs_sendable_diagram.png)
 
 좀 더 크게 보면, `Sendable`을 준수한다는 건 격리됐든 안 됐든 상관없이 통하는 일종의 공인된 안전 표시다. 컴파일러 입장에서는 "이 값이 `Sendable`을 준수하는가"만 확인하면 되고, 그 값이 actor 안에 있었는지 밖에 있었는지는 중요하지 않다. `Sendable`을 준수하는 값이라면 격리 경계를 넘나들어도 공식적으로 안전하다고 전제하는 것이다.
 
@@ -173,7 +173,7 @@ Objective-C에서 그대로 들여온 선언은 개발자가 아무것도 안 �
 
 `concurrentPerform`은 조금 다르다. 위 선언을 보면 `@preconcurrency`가 직접 적혀있다. `concurrentPerform`은 Objective-C 선언을 그대로 들여온 게 아니라, Apple이 Swift 쪽에서 따로 덧붙인 메서드다. 그래서 자동으로 붙는 게 아니라 선언에 직접 적혀있는 것이다. Swift Concurrency 이전부터 쓰던 API라 기존 코드가 한 번에 에러로 깨지지 않도록 Apple이 직접 붙여둔 것이고, 위에서 본 마이그레이션 용도 그대로다. `callConcurrently`(우리가 만든 순수 Swift 함수)는 `@preconcurrency`가 없어서 그대로 에러였고, `concurrentPerform`은 이 속성 때문에 경고로 낮아진 것이다.
 
-![](/assets/images/upload/preconcurrency.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/preconcurrency.png)
 
 즉 "격리가 없어서 안 봐준다"가 아니라, 검사 자체(Sendable)는 똑같이 걸리는데 API 선언에 `@preconcurrency`가 있느냐 없느냐로 심각도가 갈린다는 게 정확한 설명이다.
 
@@ -280,7 +280,7 @@ func capturePlain(model: PlainModel) async {
 
 결과가 다르다.
 
-![](/assets/images/upload/CleanShot_23-00.4449.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/CleanShot_23-00.4449.png)
 
 `MainActorModel`은 캡처 자체는 통과한다. 위에서 인용한 [Sendable Docs](https://developer.apple.com/documentation/swift/sendable){:target="_blank"} 문장 그대로, `@MainActor` 클래스라 이미 Sendable이기 때문이다. 대신 그 안에서 격리된 메서드(`log()`)를 동기 호출하려다 막힌다. 이게 `ActorIsolatedCall`이다. 격리된 멤버를 격리 밖에서 동기로 부를 때 나는 에러고, 뒤의 "함수도 안 쓰면 빌드 에러가 난다"에서 다시 나온다. `PlainModel`은 애초에 캡처하는 시점에서 막힌다 (`SendableClosureCaptures`).
 
@@ -288,7 +288,7 @@ func capturePlain(model: PlainModel) async {
 
 즉 `model.log()`라는 같은 자리를 서로 다른 두 검사(격리 검사, Sendable 검사)가 타입에 따라 나눠서 잡아내는 것이지, 하나가 다른 하나를 일으키는 건 아니다.
 
-![](/assets/images/upload/nonisolated_mainactor_vs_plain_diagram.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/nonisolated_mainactor_vs_plain_diagram.png)
 
 ---
 
@@ -304,7 +304,7 @@ actor의 참조를 여기저기 넘겨도 안전한 이유는, 누가 그 참조
 
 근데 실제로는 `DispatchQueue.concurrentPerform`을 썼고, 그건 `@preconcurrency`라서 경고만 뜨고 통과했다. 그래서 컴파일이 됐고, 그 결과로 진짜 오염(20번 중 17번 잔고가 틀림)을 볼 수 있었다. `Sendable` 검사가 원래 하려던 일이 정확히 이 상황을 막는 것이었는데, `@preconcurrency`가 문지기를 느슨하게 풀어놔서 그 실패를 직접 눈으로 본 셈이다.
 
-![](/assets/images/upload/sendableblock.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/sendableblock.png)
 
 ---
 
@@ -359,7 +359,7 @@ Background Thread: DeviceInfo(model: iPhone)
 
 그냥 `CustomStringConvertible`을 만족하는 값 하나일 뿐이다. `description`이 `nonisolated`라서 이게 안전하게 성립한 것이다. 만약 `description`에 `nonisolated`가 없어서 MainActor에 격리된 채였다면(글 처음 에러가 났던 코드) 애초에 `AppSettings`가 `CustomStringConvertible`을 준수하지도 못했을 것이다. 억지로 통과시키는 방법은 두 가지인데 결과가 다르다. Swift 5 모드로 내리면 경고만 뜨고 빌드되고, `description`이 백그라운드 스레드에서 아무 말 없이 실행된다. 바뀌는 값을 건드리는 코드였다면 그대로 레이스가 난다. Swift 6 모드에서 프로토콜 이름 앞에 `@preconcurrency`를 붙여(`: @preconcurrency CustomStringConvertible`) 통과시키면, 뒤의 "진짜로 크래시까지 재현해보기"에서 볼 것처럼 실행 중에 크래시가 난다.
 
-![](/assets/images/upload/nonisolated_protocol_erasure_diagram.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/nonisolated_protocol_erasure_diagram.png)
 
 프로토콜 타입으로 감싸이는 순간 "이건 MainActor에 격리되어 있다"는 정보가 겉으로 드러나지 않는다. 그 값을 들고 있는 임의의 Background Thread는 그걸 모른 채로 그냥 호출한다. 만약 그 구현이 실제로 격리된 가변 상태를 건드리는 것이었다면, 그 순간 진짜 레이스가 난다. 지금 `AppSettings`가 딱 그 상황이다. `@MainActor`인 타입이 `CustomStringConvertible`을 준수하는 것 자체가 격리 경계를 넘나든다는 뜻이다.
 
@@ -389,7 +389,7 @@ Background Thread: DeviceInfo(model: iPhone)
 
 비유하면 이렇다. `AppSettings`는 직원(MainActor 배지)만 출입 가능한 회사다. 근데 `CustomStringConvertible`이라는 협회에 가입하려면, 규정상 접수처만큼은 배지 없이 누구나 예약 없이 즉시 응대 가능해야 한다. 마침 접수처가 하는 일은 회사 기밀이 아니라 공개 정보(`name`, `timeout`) 안내뿐이라, 접수처(`description`)만 `nonisolated`로 열어서 그 규정을 만족시킨 것이다.
 
-![](/assets/images/upload/requirenonisolated.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/requirenonisolated.png)
 
 ---
 
@@ -509,7 +509,7 @@ func callLabelDirectly(_ settings: AppSettings) {
 
 평범한 코드에서 동기 호출하면, 예상대로 에러가 난다. 위의 "MainActor 클래스는 왜 다른가"에서 `MainActorModel.log()`를 부를 때 본 것과 같은 `ActorIsolatedCall`이다.
 
-![](/assets/images/upload/CleanShot_23-12.1254.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/CleanShot_23-12.1254.png)
 
 ```text
 error: call to main actor-isolated instance method 'label()' in a synchronous nonisolated context [#ActorIsolatedCall]
@@ -566,7 +566,7 @@ extension WatchConnectivityService: @preconcurrency WCSessionDelegate {
 
 원인은 Xcode 빌드 설정 `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`다. RunWay 프로젝트에는 실제로 이렇게 켜져 있다.
 
-![](/assets/images/upload/CleanShot_23-04.0101.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/CleanShot_23-04.0101.png)
 
 [SE-0466](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0466-control-default-actor-isolation.md){:target="_blank"}("Control default actor isolation inference", Swift 6.2에서 구현)이 추가한 컴파일러 옵션(`-default-isolation MainActor`)을 Xcode 빌드 설정으로 꺼내놓은 것이다. 격리가 따로 정해지지 않은 선언은 전부 `@MainActor`로 보겠다는 설정이다.
 
@@ -595,7 +595,7 @@ error: call to main actor-isolated instance method 'inExtension()' in a synchron
 
 RunWay의 델리게이트 메서드들은 `WatchConnectivityService+iOS.swift`, `+watchOS.swift` 같은 extension 파일에 나눠져 있었다. 그래서 클래스에 `nonisolated`를 붙여놨는데도 extension 안의 메서드는 조용히 `@MainActor`가 된 것이다. RunWay 기록에 "`nonisolated`는 클래스 선언이 아니라 메서드 단위로 명시해야 한다"고 적었던 게 정확히는 이 extension 얘기였다.
 
-![](/assets/images/upload/nonisolated_extension_isolation_diagram.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/nonisolated_extension_isolation_diagram.png)
 
 ---
 
@@ -690,7 +690,7 @@ DispatchQueue.global().async {
 }
 ```
 
-![](/assets/images/upload/crash.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/crash.png)
 
 **순수 Swift 프로토콜 경로**
 
@@ -731,7 +731,7 @@ frame #7: ConcurrencyLab`closure #3 in runRuntimeCrashComparisonDemo(erased=...)
 
 Objective-C가 없어도 크래시가 났다는 게 중요하다. 순수 Swift 경로는 앞의 "프로토콜 타입으로 감싸면 왜 위험한가"에서 `printAnywhere`로 본 상황 그대로다. `any LabelProviding`으로 감싸는 순간 이 값이 MainActor 타입이라는 정보가 안 보이고, 그대로 백그라운드에서 불린다. 그러니까 크래시 조건은 "Objective-C냐"가 아니라 "격리 밖에서, 프로토콜 이름 앞에 `@preconcurrency`를 붙인 프로토콜의 witness나 `@objc` thunk를 거쳐서 부르느냐"다.
 
-![](/assets/images/upload/runtime_check_paths_diagram.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/runtime_check_paths_diagram.png)
 
 `ConcurrencyLab`에 이 경로들을 모아뒀다. `swift run ConcurrencyLab runtimecrash objc`와 `swift run ConcurrencyLab runtimecrash witness`로 각각 확인할 수 있고, 마지막에 실제로 프로그램이 죽는 게 정상이다.
 
@@ -747,7 +747,7 @@ After 코드는 `@preconcurrency`와 `nonisolated`를 둘 다 쓴다. 근데 크
 
 `@preconcurrency`는 컴파일러의 경고와 에러만 낮출 뿐 메서드의 격리 상태는 그대로 둔다. 메서드는 여전히 `@MainActor`이고, 백그라운드에서 불리는 순간 런타임 체크에 걸린다.
 
-![](/assets/images/upload/preconcurrency_vs_nonisolated_diagram.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/preconcurrency_vs_nonisolated_diagram.png)
 
 실제로 `ObjCSettings.label()`에 `nonisolated`를 붙이니 크래시 없이 `exit code 0`으로 끝났다. 그리고 컴파일러가 이런 경고를 하나 띄웠다.
 
@@ -773,7 +773,7 @@ warning: '@preconcurrency' on conformance to 'ObjCLabelProviding' has no effect
 
 그러니까 "Objective-C라서 크래시가 난다"가 아니라, "Objective-C 델리게이트는 이 구멍(프로토콜 이름 앞의 `@preconcurrency`)을 만들기 쉽고, 그 구멍으로 들어오는 호출을 컴파일러가 볼 수도 없다"가 정확하다.
 
-![](/assets/images/upload/objc.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/objc.png)
 
 `nonisolated`는 프로퍼티냐 함수냐를 가리지 않는다. 근데 이 사례에서 배운 진짜 교훈은 따로 있다. 컴파일러가 항상 에러로 막아주는 게 아니라는 것이다. `@preconcurrency`가 낀 자리에서는 에러가 경고로 낮아지거나 아예 조용히 통과하고, 실제로 실행해서 크래시를 봐야만 문제가 드러날 수 있다.
 
@@ -905,7 +905,7 @@ error: call to main actor-isolated instance method 'loadDefaultLabel()' in a syn
 
 `summary()`는 `nonisolated`라서 어느 스레드에서든 `await` 없이 불릴 수 있다. 그런데 그 안에서 MainActor에서만 부를 수 있는 `loadDefaultLabel()`을 `await` 없이 부르니 막힌 것이다. `loadDefaultLabel()`에도 `nonisolated`를 붙이면 통과한다. 하나에 `nonisolated`를 붙이면, 그 안에서 부르는 것들도 따라서 붙여야 하는 셈이다.
 
-![](/assets/images/upload/nonisolated_propagation_diagram.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/nonisolated_propagation_diagram.png)
 
 [Actor-isolated-call Docs](https://docs.swift.org/compiler/documentation/diagnostics/actor-isolated-call){:target="_blank"}에는 이 에러의 해결책이 두 가지 나온다. 여기에 방금 한 방법까지 더하면 세 가지다.
 
@@ -969,7 +969,7 @@ nonisolated final class GitHubNetworkService {
 - 그 타입이 UI 상태를 다루는가 (`@MainActor`가 실제로 필요한가) → 필요한 멤버에만 하나씩 `nonisolated`
 - 그 타입이 UI와 상관없는 코드인가 → 타입 전체를 `nonisolated`로 선언
 
-![](/assets/images/upload/nonisolated_member_vs_type_diagram.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-19-Deep-Dive-nonisolated는-왜-필요한가/nonisolated_member_vs_type_diagram.png)
 
 ---
 
