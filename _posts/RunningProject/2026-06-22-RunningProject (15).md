@@ -37,8 +37,8 @@ Watch 주도 미러링 때처럼 iPhone에도 `HKWorkoutSession`을 직접 생�
 
 | | iOS 18.5 | iOS 26 |
 |---|---|---|
-| iPhone에서 `HKWorkoutSession` 생성 | 불가 | 가능 |
-| `HKLiveWorkoutBuilder` 직접 사용 | 불가 | 가능 |
+| iPhone에서 `HKWorkoutSession` 생성 | <span style="color:#e5534b">불가</span> | <span style="color:#2e9e4f">가능</span> |
+| `HKLiveWorkoutBuilder` 직접 사용 | <span style="color:#e5534b">불가</span> | <span style="color:#2e9e4f">가능</span> |
 | 워크아웃 세션의 주인 | Watch만 가능 | iPhone도 가능 |
 | 호환 기기 | 더 넓음 | 최신 기기로 한정 |
 

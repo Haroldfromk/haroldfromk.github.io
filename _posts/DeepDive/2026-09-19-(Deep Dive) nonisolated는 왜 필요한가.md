@@ -1,7 +1,8 @@
 ---
 title: (Deep Dive) nonisolated는 왜 필요한가
 writer: Harold
-date: 2026-09-23 18:00
+date: 2026-09-19 18:00
+last_modified_at: 2026-09-23 21:11:00
 categories: [Deep Dive]
 tags: [Myself]
 published: true
@@ -111,7 +112,9 @@ warning: capture of 'account' with non-Sendable type 'BankAccount' in a '@Sendab
 
 #### Sendable???
 
-`Sendable`을 스치듯 언급하고 넘어가기엔 계속 나온다. Sendable이 정확히 뭔지는 [이전글](https://haroldfromk.github.io/posts/swift-concurrency-isolation/){:target="_blank"}에서 이미 다뤘다.
+위 경고를 다시 보면 `Sendable`이라는 단어가 두 번 나온다. `BankAccount`는 Sendable이 아닌 타입(`non-Sendable type`)인데, 그걸 `@Sendable` 클로저 안에서 캡처했다는 것이다. 게다가 잔고가 실제로 깨졌는데도 에러가 아니라 경고였다.
+
+왜 경고에 그쳤는지 이해하려면 `Sendable`부터 짚고 가야 한다. 스치듯 넘어가기엔 앞으로도 계속 나온다. Sendable이 정확히 뭔지는 [이전글](https://haroldfromk.github.io/posts/swift-concurrency-isolation/){:target="_blank"}에서 이미 다뤘다.
 
 ---
 
@@ -213,9 +216,9 @@ func paramModelToTask(model: MyModel) {
 
 | 경우 | 결과 |
 |---|---|
-| 1) 새로 만들고 다시 안 씀 | 통과 |
-| 2) 새로 만들었지만 밖에서 또 씀 | `sending value of non-Sendable type ... risks causing data races` 에러 |
-| 3) 파라미터로 받은 값 | `passing closure as a 'sending' parameter risks causing data races ...` 에러 |
+| 1) 새로 만들고 다시 안 씀 | <span style="color:#2e9e4f">통과</span> |
+| 2) 새로 만들었지만 밖에서 또 씀 | <span style="color:#e5534b">`sending value of non-Sendable type ... risks causing data races` 에러</span> |
+| 3) 파라미터로 받은 값 | <span style="color:#e5534b">`passing closure as a 'sending' parameter risks causing data races ...` 에러</span> |
 
 `@Sendable`인 `callConcurrently`는 Sendable이 아닌 값을 캡처하는 것 자체를 막았다. `sending`은 그보다 너그럽다. 넘긴 뒤에 원래 쪽에서 그 값을 더 이상 건드릴 수 없는 경우(1번)는 허락하고, 넘긴 뒤에도 원래 쪽에서 쓸 수 있는 경우만 막는다. 2번은 넘긴 뒤 직접 또 썼고, 3번은 파라미터라 이 함수를 부른 쪽이 그 값을 계속 들고 있을 수 있어서 막혔다.
 
@@ -229,11 +232,15 @@ func paramModelToTask(model: MyModel) {
 
 그리고 여기엔 actor가 하나도 없다. `BankAccount`도 `concurrentPerform`도 actor를 쓰지 않는데 Sendable 검사가 걸렸다. 즉 진짜 기준은 "actor를 넘나드는가"가 아니라 "동시에 실행될 수 있는 곳으로 넘어가는가"다. actor는 그런 곳의 한 형태일 뿐이고, `Task`나 `DispatchQueue.concurrentPerform`처럼 actor 없이 그냥 동시에 도는 것도 해당된다(기준은 위에서 본 것처럼 조금씩 다르다).
 
-이 김에 `Sendable` 자체가 언제부터 있었는지도 찾아봤다. [Sendable Docs](https://developer.apple.com/documentation/swift/sendable){:target="_blank"}를 보면 `Sendable` 프로토콜은 iOS 8.0부터 있었다고 나온다. 근데 이건 오해하기 쉬운 표시다. Swift Evolution [SE-0302](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0302-concurrent-value-and-concurrent-closures.md){:target="_blank"}("Sendable and @Sendable closures")에서 `Sendable`은 "marker protocol"로 정의되어 있다.
+이 김에 `Sendable` 자체가 언제부터 있었는지도 찾아봤다. [Sendable Docs](https://developer.apple.com/documentation/swift/sendable){:target="_blank"}를 보면 `Sendable` 프로토콜은 iOS 8.0부터 있었다고 나온다. 근데 이건 오해하기 쉬운 표시다. Swift Evolution [SE-0302](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0302-concurrent-value-and-concurrent-closures.md){:target="_blank"}("Sendable and @Sendable closures", Swift 5.7에서 구현)에서 `Sendable`은 "marker protocol"로 정의되어 있다.
 
 > This proposal introduces the concept of a "marker" protocol, which indicates that the protocol has some semantic property but is entirely a compile-time notion that does not have any impact at runtime.
 
 빌드할 때 컴파일러만 확인하는 표시일 뿐, 앱이 실행될 때는 아무 영향이 없다는 뜻이다. 실행할 때 필요한 게 없으니, Swift가 지원하는 가장 오래된 OS를 도입 버전으로 그냥 붙여놓은 것에 가깝다.
+
+여기서 Swift Evolution은 Swift에 새 기능을 넣을 때 거치는 공개 절차다. [Swift Evolution Process Docs](https://github.com/swiftlang/swift-evolution/blob/main/process.md){:target="_blank"}에 따르면 Swift 커뮤니티의 누구나 포럼에 아이디어를 올려 제안할 수 있고, 공개 리뷰를 거친 뒤 Language Steering Group이 채택 여부를 정한다. 말 그대로 제안서라서 제안서마다 상태가 적혀있다. 채택됨(Accepted)은 아직 구현을 기다리거나 구현 중이라는 뜻이고, 구현됨(Implemented (Swift X.Y))이어야 그 버전에서 실제로 쓸 수 있다. 그래서 이 글에서는 제안서를 처음 언급할 때 제목과 함께 이 상태를 적어뒀다.
+
+다만 상태에 적힌 버전이 기능이 처음 보인 버전과 꼭 같지는 않다. SE-0302의 상태는 "Swift 5.7에서 구현"인데, 아래처럼 `Sendable`은 그보다 먼저 쓰이고 있었다.
 
 실제로 `Sendable`이 등장한 건 2021년이다. WWDC21의 [Protect mutable state with Swift actors](https://developer.apple.com/videos/play/wwdc2021/10133/){:target="_blank"} 세션이 actor를 소개하면서 참고 자료로 SE-0302를 걸어두고 있다. 그리고 non-Sendable 값을 경계 너머로 넘길 때 실제로 경고가 뜨기 시작한 건 Swift 5.6부터다. [Swift CHANGELOG](https://github.com/swiftlang/swift/blob/main/CHANGELOG.md){:target="_blank"}의 Swift 5.6 항목에 이렇게 적혀있다.
 
@@ -469,13 +476,13 @@ final class C: HasBox {
 
 | 타입 | `id` / `box` | 결과 |
 |---|---|---|
-| `A` | `let` 저장 프로퍼티 (Sendable 타입) | 통과 |
-| `B` | `let`만 읽는 계산 프로퍼티 | `ConformanceIsolation` 에러 |
-| `C` | `let` 저장 프로퍼티 (Sendable이 아닌 타입) | `ConformanceIsolation` 에러 |
+| `A` | `let` 저장 프로퍼티 (Sendable 타입) | <span style="color:#2e9e4f">통과</span> |
+| `B` | `let`만 읽는 계산 프로퍼티 | <span style="color:#e5534b">`ConformanceIsolation` 에러</span> |
+| `C` | `let` 저장 프로퍼티 (Sendable이 아닌 타입) | <span style="color:#e5534b">`ConformanceIsolation` 에러</span> |
 
 `nonisolated` 없이 통과한 건 `A` 하나뿐이었다. `B`는 `description`과 똑같은 상황이다. `let`만 읽는데도 에러가 났다. `C`는 `let` 저장 프로퍼티인데도 타입이 Sendable이 아니라서 에러가 났다.
 
-[SE-0434](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0434-global-actor-isolated-types-usability.md){:target="_blank"}(Swift 6.0에서 구현)에 이 규칙이 적혀있다. 전역 액터에 격리된 구조체를 예로 들어 설명하는데, 위 실험처럼 클래스에서도 결과가 같았다.
+[SE-0434](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0434-global-actor-isolated-types-usability.md){:target="_blank"}("Usability of global-actor-isolated types", Swift 6.0에서 구현)에 이 규칙이 적혀있다. 전역 액터에 격리된 구조체를 예로 들어 설명하는데, 위 실험처럼 클래스에서도 결과가 같았다.
 
 > `let` properties of such types are implicitly treated as `nonisolated` within the current module if they have `Sendable` type, but `var` properties are not.
 
@@ -836,7 +843,7 @@ Swift 6 언어 모드를 켜면 데이터 레이스 가능성을 컴파일 에�
 
 여기서 꼬리질문이 하나 생겼다. 플래그를 따로 켜야 경고로 보였다면, 플래그를 안 켠 평범한 Swift 5 프로젝트에서는 뭐가 보였을까.
 
-Swift 5.6 때 나온 [SE-0337](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0337-support-incremental-migration-to-concurrency-checking.md){:target="_blank"} 제안서의 첫 부분에 이유가 나온다.
+[SE-0337](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0337-support-incremental-migration-to-concurrency-checking.md){:target="_blank"}("Incremental migration to concurrency checking", Swift 5.6에서 구현) 제안서의 첫 부분에 이유가 나온다.
 
 > However, Swift 5.5 does not fully enforce Sendable nor all uses of the main actor because interacting with modules which have not been updated for Swift Concurrency was found to be too onerous.
 
@@ -846,10 +853,10 @@ Swift 5.5는 `Sendable`과 MainActor 규칙을 전부 강제하지 않았다. �
 
 | 설정 | `capturePlain` | `AppSettings` |
 |---|---|---|
-| Swift 5, 기본값 (Minimal) | 아무것도 안 뜸 | 경고 |
-| Swift 5, Targeted | 경고 | 경고 |
-| Swift 5, Complete | 경고 | 경고 |
-| Swift 6 | 에러 | 에러 |
+| Swift 5, 기본값 (Minimal) | 아무것도 안 뜸 | <span style="color:#d29922">경고</span> |
+| Swift 5, Targeted | <span style="color:#d29922">경고</span> | <span style="color:#d29922">경고</span> |
+| Swift 5, Complete | <span style="color:#d29922">경고</span> | <span style="color:#d29922">경고</span> |
+| Swift 6 | <span style="color:#e5534b">에러</span> | <span style="color:#e5534b">에러</span> |
 
 `capturePlain`은 Swift 5 기본 설정에서 경고 한 줄 없이 그냥 통과했다. 위의 "경고와 에러가 갈리는 이유"에서 Sendable 경고가 Swift 5.6부터 뜨기 시작했다고 했지만, 기본 설정에서는 이렇게 아예 안 뜨는 코드도 있었던 것이다. "진짜로 값이 깨지는지 확인해보기"의 `BankAccount` 코드도 마찬가지다. Swift 6에서는 `@preconcurrency` 덕분에 경고로 낮아졌던 코드인데, Swift 5 기본 설정에서는 그 경고조차 없었다. 반면 `AppSettings`는 기본 설정에서도 경고가 떴다.
 
@@ -1020,7 +1027,7 @@ func callFromMainActor() async {
 async nonisolated: Background Thread
 ```
 
-같은 `nonisolated`인데 동기 함수는 부른 쪽(메인 스레드)에서 그대로 돌았고, async 함수는 백그라운드 스레드로 넘어갔다. [SE-0461](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0461-async-function-isolation.md){:target="_blank"}에 이 차이가 그대로 적혀있다.
+같은 `nonisolated`인데 동기 함수는 부른 쪽(메인 스레드)에서 그대로 돌았고, async 함수는 백그라운드 스레드로 넘어갔다. [SE-0461](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0461-async-function-isolation.md){:target="_blank"}("Run nonisolated async functions on the caller's actor by default", Swift 6.2에서 구현, 기본 동작을 바꾸는 부분은 Swift 6 모드에서도 꺼져 있음)에 이 차이가 그대로 적혀있다.
 
 > nonisolated synchronous functions always run on the caller's actor, while nonisolated async functions always switch off of the caller's actor.
 
@@ -1127,7 +1134,7 @@ async 얘기를 정리하면서 AI가 하나를 더 짚어줬다. 앞의 "Swift 
 
 ### 프로토콜 이름 앞에 @MainActor 붙이기
 
-[SE-0470](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0470-isolated-conformances.md){:target="_blank"}(Swift 6.2에서 구현)에서 새로 생긴 방법이다. `description`에 `nonisolated`를 붙이는 대신, `CustomStringConvertible` 이름 앞에 `@MainActor`를 붙인다.
+[SE-0470](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0470-isolated-conformances.md){:target="_blank"}("Global-actor isolated conformances", Swift 6.2에서 구현, 자동 추론은 기본으로 꺼져 있음)에서 새로 생긴 방법이다. `description`에 `nonisolated`를 붙이는 대신, `CustomStringConvertible` 이름 앞에 `@MainActor`를 붙인다.
 
 ```swift
 @MainActor
@@ -1200,9 +1207,9 @@ func callFromBackground(_ s: AppSettings) {
 
 | ① class 앞 | ② 프로토콜 이름 앞 | 결과 |
 |---|---|---|
-| `@MainActor` | 없음 | `class AppSettings` 줄에서 `ConformanceIsolation` 에러 (글 처음과 같은 상황) |
-| 없음 | `@MainActor` | 백그라운드로 넘길 때 Sendable 경고, `printAnywhere(s)` 줄에서 `IsolatedConformances` 에러 |
-| `@MainActor` | `@MainActor` | `printAnywhere(s)` 줄에서만 `IsolatedConformances` 에러 |
+| `@MainActor` | 없음 | <span style="color:#e5534b">`class AppSettings` 줄에서 `ConformanceIsolation` 에러</span> (글 처음과 같은 상황) |
+| 없음 | `@MainActor` | <span style="color:#d29922">백그라운드로 넘길 때 Sendable 경고</span>, <span style="color:#e5534b">`printAnywhere(s)` 줄에서 `IsolatedConformances` 에러</span> |
+| `@MainActor` | `@MainActor` | <span style="color:#e5534b">`printAnywhere(s)` 줄에서만 `IsolatedConformances` 에러</span> |
 
 - ① class 앞의 `@MainActor`: 클래스 안의 값(`count`, `description`)을 MainActor가 지키게 한다. "누가 이 값을 만질 수 있나"를 정한다
 - ② 프로토콜 이름 앞의 `@MainActor`: `AppSettings`를 `CustomStringConvertible`로 쓰는 걸 MainActor 안으로 제한한다. "이 타입을 이 프로토콜로 어디서 쓸 수 있나"를 정한다
@@ -1264,8 +1271,8 @@ SE-0470은 `@MainActor` 타입이면 프로토콜 이름 앞의 `@MainActor`를 
 
 | 설정 | 글 처음의 코드(`nonisolated` 없음) 결과 |
 |---|---|
-| 기본 Swift 6 (이 글의 실험 환경) | `class AppSettings: CustomStringConvertible` 줄에서 `ConformanceIsolation` 에러 |
-| `InferIsolatedConformances` 켬 | 그 줄은 통과, 백그라운드에서 쓰는 곳에서만 `IsolatedConformances` 에러 |
+| 기본 Swift 6 (이 글의 실험 환경) | <span style="color:#e5534b">`class AppSettings: CustomStringConvertible` 줄에서 `ConformanceIsolation` 에러</span> |
+| `InferIsolatedConformances` 켬 | <span style="color:#2e9e4f">그 줄은 통과</span>, <span style="color:#e5534b">백그라운드에서 쓰는 곳에서만 `IsolatedConformances` 에러</span> |
 
 켜면 `@MainActor`를 직접 적은 것과 똑같이 동작했다.
 

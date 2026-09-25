@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>지갑 재진입 타임라인</title>
+<style>
+  :root {
+    --bg: #f5f5f7; --card: #ffffff; --text: #1d1d1f; --sub: #6e6e73; --line: #d9dbe3;
+    --a: #4a6fa5; --a-soft: #dbe8fb; --b: #c46a1c; --b-soft: #fdebd6;
+    --gap: #aab1c2; --gap-soft: rgba(170,177,194,0.22);
+    --good: #2e9e4f; --good-soft: #e5f4ea; --bad: #e5534b; --bad-soft: #fbecec; --warn: #b7860b;
+    --seg: #e8e8ed; --seg-on: #ffffff; --head: #e5534b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #2c2c2e; --text: #f5f5f7; --sub: #a1a1a6; --line: #3a3a3c;
+      --a: #7aa2de; --a-soft: #22334d; --b: #e89650; --b-soft: #4a3220;
+      --gap: #6e7384; --gap-soft: rgba(142,148,166,0.18);
+      --good: #4cc26e; --good-soft: #1f3a28; --bad: #ff6b63; --bad-soft: #4a2323; --warn: #e3b341;
+      --seg: #3a3a3c; --seg-on: #5a5a5e; --head: #ff6b63;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; overflow: hidden; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 14px; }
+  h3 { margin: 0; text-align: center; font-size: 17px; }
+  .subtitle { text-align: center; font-size: 12px; color: var(--sub); margin: 4px 0 12px; }
+  .seg { display: flex; background: var(--seg); border-radius: 9px; padding: 3px; gap: 2px; }
+  .seg button { flex: 1; border: 0; background: transparent; color: var(--text); font-size: 13px; padding: 7px 4px;
+    border-radius: 7px; cursor: pointer; font-family: inherit; }
+  .seg button.on { background: var(--seg-on); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  .desc { font-size: 12px; color: var(--sub); text-align: center; margin: 8px 0 10px; height: 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 12px 10px; }
+  .tl { position: relative; display: grid; grid-template-columns: 40px repeat(var(--n), 1fr); row-gap: 6px; }
+  .lab { font-size: 13px; font-weight: 800; display: flex; align-items: center; }
+  .lab.A { color: var(--a); } .lab.B { color: var(--b); } .lab.S { color: var(--sub); font-size: 11px; font-weight: 700; }
+  .blk { margin: 0 2px; height: 46px; border-radius: 8px; border: 1.5px solid; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-size: 11px; line-height: 1.3; text-align: center; font-weight: 700;
+    transition: opacity 0.25s; overflow: hidden; }
+  .blk small { font-weight: 600; font-size: 10.5px; }
+  .blk .f { display: contents; } .blk .s { display: none; }
+  .blk.A { color: var(--a); background: var(--a-soft); border-color: var(--a); }
+  .blk.B { color: var(--b); background: var(--b-soft); border-color: var(--b); }
+  .blk.bad { color: var(--bad); background: var(--bad-soft); border-color: var(--bad); }
+  .blk.reject { color: var(--sub); background: transparent; border-style: dashed; }
+  .gapbox { margin: 0 2px; height: 46px; border-radius: 8px; border: 1.5px dashed var(--gap); position: relative; overflow: hidden;
+    transition: opacity 0.25s; }
+  .gapfill { position: absolute; top: 0; bottom: 0; left: 0; background: repeating-linear-gradient(135deg, var(--gap-soft) 0 6px, transparent 6px 12px); }
+  .gaplab { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--sub); }
+  .note { font-size: 11px; font-weight: 700; color: var(--bad); height: 16px; white-space: nowrap; transition: opacity 0.25s; }
+  .chip { justify-self: start; margin-left: 2px; font-size: 13px; font-weight: 800; padding: 2px 8px; border-radius: 6px;
+    border: 1px solid var(--line); font-variant-numeric: tabular-nums; transition: opacity 0.25s; }
+  .chip.neg { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
+  .head { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--head); border-radius: 1px; display: none; }
+  .msg { margin-top: 10px; font-size: 13px; line-height: 1.5; height: 40px; overflow: hidden; }
+  .row { display: flex; gap: 8px; align-items: stretch; margin-top: 10px; }
+  .result { flex: 1; border-radius: 10px; padding: 8px 12px; font-size: 12.5px; line-height: 1.5; border: 1px solid var(--line); height: 62px; overflow: hidden; }
+  .result.good { background: var(--good-soft); border-color: var(--good); }
+  .result.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .result b.good { color: var(--good); } .result b.bad { color: var(--bad); } .result .cost { color: var(--warn); font-weight: 700; }
+  .play { width: 96px; border: 0; background: var(--a); color: #fff; border-radius: 10px; font-size: 14px; font-weight: 800;
+    cursor: pointer; font-family: inherit; }
+  @media (max-width: 560px) {
+    .seg button { font-size: 11.5px; padding: 7px 2px; }
+    .tl { grid-template-columns: 26px repeat(var(--n), 1fr); }
+    .blk { font-size: 9.5px; margin: 0 1px; } .blk small { font-size: 9px; } .gapbox { margin: 0 1px; }
+    .blk .f { display: none; } .blk .s { display: flex; flex-direction: column; align-items: center; }
+    .subtitle { font-size: 11px; }
+    .gaplab { font-size: 10px; }
+    .msg { height: 58px; }
+    .row { flex-direction: column; }
+    .result { height: 96px; }
+    .play { width: 100%; height: 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h3>지갑 재진입 타임라인</h3>
+  <div class="subtitle">잔액 100원에서 80원 결제 두 번. A가 먼저 들어오고, B는 조금 뒤에 도착한다</div>
+  <div class="seg" id="tabs"></div>
+  <div class="desc" id="desc"></div>
+  <div class="card">
+    <div class="tl" id="tl"></div>
+    <div class="msg" id="msg"></div>
+  </div>
+  <div class="row">
+    <div class="result" id="result"></div>
+    <button class="play" id="play">▶ 재생</button>
+  </div>
+</div>
+
+<script>
+// 결과는 ConcurrencyLab 실험 8(A 먼저, B는 10ms 뒤, 80원 두 번)과 같다.
+// 한 칸 = actor 안에서 코드 한 덩어리를 실행하는 시간. 승인(await)은 APPROVAL칸 동안 기다린다.
+const AMOUNT = 80, APPROVAL = 4;
+
+const check = (s, t) => { t.checked = s.balance; return s.balance >= AMOUNT
+  ? { top: '잔액 확인', sub: `${s.balance} ≥ 80`, short: ['확인', s.balance], msg: `잔액 ${s.balance}을 확인하고 통과한다.` }
+  : { top: '잔액 확인', sub: `${s.balance} < 80 거절`, short: ['거절', s.balance], msg: `잔액 ${s.balance}을 보고 거절한다.`, end: false, reject: true }; };
+const request = () => ({ top: '승인 요청', sub: 'await', short: ['요청', ''], msg: '카드사 승인을 요청하고 기다린다. 기다리는 동안 actor를 비운다.', await: true });
+const deduct = (s, t) => { s.balance -= AMOUNT;
+  const stale = t.checked - AMOUNT !== s.balance;
+  return { top: '차감', sub: `→ ${s.balance}`, short: ['차감', s.balance], bad: s.balance < 0, end: true,
+    msg: stale ? `80을 뺀다. 잔액 ${s.balance}. 확인할 때 본 ${t.checked}은 이미 사실이 아니었다.` : `80을 뺀다. 잔액 ${s.balance}. 결제 완료.` }; };
+
+const METHODS = {
+  base: { label: '막기 전', desc: '잔액 확인 → 승인 기다리기(await) → 차감', ops: [check, request, deduct] },
+  reserve: { label: '먼저 빼두기', desc: 'await 전에 먼저 빼두고, 승인이 실패하면 되돌린다', ops: [check,
+    (s) => { s.balance -= AMOUNT; return { top: '먼저 차감', sub: `→ ${s.balance}`, short: ['차감', s.balance], msg: `승인을 기다리기 전에 80을 먼저 뺀다. 잔액 ${s.balance}.` }; },
+    request,
+    () => ({ top: '승인 성공', sub: '완료', short: ['완료', ''], msg: '승인이 됐다. 이미 빼뒀으니 그대로 결제 완료.', end: true })] },
+  recheck: { label: '다시 확인하기', desc: 'await에서 돌아온 뒤 잔액을 한 번 더 확인한다', ops: [check, request,
+    (s, t) => { t.checked = s.balance; return s.balance >= AMOUNT
+      ? { top: '다시 확인', sub: `${s.balance} ≥ 80`, short: ['다시', s.balance], msg: `돌아와서 잔액 ${s.balance}을 다시 확인하고 통과한다.` }
+      : { top: '다시 확인', sub: `${s.balance} < 80 거절`, short: ['거절', s.balance], msg: `돌아와서 다시 확인하니 잔액 ${s.balance}. 승인은 받았지만 거절한다.`, end: false, reject: true }; },
+    deduct] },
+  guard: { label: '진행 중 표시', desc: 'await 전에 "결제 중" 표시를 켜서 다음 결제를 막는다', ops: [
+    (s, t) => s.isPaying
+      ? { top: '결제 중?', sub: '진행 중 거절', short: ['거절', '진행 중'], msg: '"결제 중" 표시가 켜져 있어서 바로 거절한다.', end: false, reject: true }
+      : (s.isPaying = true, t.flag = true, { top: '표시 켬', sub: 'isPaying', short: ['표시', '켬'], msg: '"결제 중" 표시를 켠다.' }),
+    check, request, deduct] },
+};
+
+const VERDICT = {
+  base: ['bad', '꼬임', 'B가 A의 틈에 들어와 같은 잔액 100을 확인했다.', ''],
+  reserve: ['good', '정상', 'B는 A가 먼저 빼둔 뒤의 잔액 20을 보고 거절됐다.', '단점: A의 승인이 실패하면 되돌리지만, 그사이 B는 이미 거절돼 있다.'],
+  recheck: ['good', '정상', 'B는 돌아와서 다시 확인하고 거절됐다.', '단점: B는 카드사 승인까지 받은 뒤라 승인 취소 처리가 필요하다.'],
+  guard: ['good', '정상', 'B는 "결제 중" 표시를 보고 바로 거절됐다.', '단점: 잔액이 충분한 결제도 진행 중이면 튕긴다.'],
+};
+
+// 한 칸씩 시뮬레이션해서 블록 배치를 만든다.
+// actor는 한 번에 한 명만 실행한다. 실행 중인 쪽이 await에서 멈추거나 끝나야 다음 쪽이 들어온다.
+function simulate(key) {
+  const ops = METHODS[key].ops, s = { balance: 100, isPaying: false };
+  const T = { A: { name: 'A', readyAt: 0, i: 0, blocks: [], gaps: [] }, B: { name: 'B', readyAt: 1, i: 0, blocks: [], gaps: [] } };
+  let runner = null; const bal = [{ slot: 0, v: 100 }], msgs = [];
+  for (let slot = 0; slot < 40; slot++) {
+    if (!runner) {
+      runner = Object.values(T).filter(t => !t.done && !t.running && t.readyAt <= slot).sort((x, y) => x.readyAt - y.readyAt)[0] || null;
+      if (runner) { runner.running = true; if (runner.gaps.length && runner.gaps.at(-1).to === undefined) runner.gaps.at(-1).to = slot; }
+    }
+    if (!runner) { msgs.push({ slot, text: '둘 다 카드사 승인을 기다리는 중이다. actor는 비어 있다.' }); continue; }
+    const t = runner, other = t.name === 'A' ? T.B : T.A, before = s.balance;
+    const intoGap = t.i === 0 && other.gaps.some(g => g.from <= slot && (g.to === undefined || g.to > slot));
+    const r = METHODS[key].ops[t.i](s, t);
+    t.blocks.push({ slot, top: r.top, sub: r.sub, st: r.short[0], ss: r.short[1], bad: r.bad, reject: r.reject, intoGap });
+    msgs.push({ slot, text: (intoGap ? `A가 기다리는 틈에 B가 들어온다. ` : '') + `${t.name}: ${r.msg}` });
+    t.i++;
+    if (r.await) { t.running = false; t.readyAt = slot + 1 + APPROVAL; t.gaps.push({ from: slot + 1 }); runner = null; }
+    else if (r.end !== undefined) {
+      t.done = true; t.running = false; t.endSlot = slot; runner = null;
+      if (t.flag) { s.isPaying = false; msgs.at(-1).text += ' 끝나면서 "결제 중" 표시를 끈다.'; }
+    }
+    if (s.balance !== before) bal.push({ slot, v: s.balance });
+    if (T.A.done && T.B.done) break;
+  }
+  return { T, bal, msgs, n: Math.max(T.A.endSlot, T.B.endSlot) + 1, final: s.balance };
+}
+
+const tl = document.getElementById('tl');
+let cur = null, playing = null;
+
+function draw(key) {
+  const sim = simulate(key); cur = { key, sim };
+  tl.style.setProperty('--n', sim.n);
+  let h = '';
+  for (const name of ['A', 'B']) {
+    const row = name === 'A' ? 1 : 2, t = sim.T[name];
+    h += `<div class="lab ${name}" style="grid-row:${row}">${name}</div>`;
+    for (const g of t.gaps) h += `<div class="gapbox" data-from="${g.from}" data-to="${g.to}" style="grid-row:${row};grid-column:${g.from + 2}/${g.to + 2}"><div class="gapfill"></div><div class="gaplab">await 틈</div></div>`;
+    for (const b of t.blocks) h += `<div class="blk ${name}${b.bad ? ' bad' : ''}${b.reject ? ' reject' : ''}" data-slot="${b.slot}" style="grid-row:${row};grid-column:${b.slot + 2}"><span class="f">${b.top}<small>${b.sub}</small></span><span class="s">${b.st}<small>${b.ss}</small></span></div>`;
+  }
+  const into = sim.T.B.blocks.find(b => b.intoGap);
+  h += `<div class="lab S" style="grid-row:3"></div>`;
+  if (into) h += `<div class="note" data-slot="${into.slot}" style="grid-row:3;grid-column:${into.slot + 2}/-1">▲ A의 await 틈에 B가 들어왔다</div>`;
+  h += `<div class="lab S" style="grid-row:4">잔액</div>`;
+  for (const c of sim.bal) h += `<div class="chip${c.v < 0 ? ' neg' : ''}" data-slot="${c.slot}" style="grid-row:4;grid-column:${c.slot + 2}">${c.v}</div>`;
+  h += `<div class="head" id="head"></div>`;
+  tl.innerHTML = h;
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.k === key));
+  document.getElementById('desc').textContent = METHODS[key].desc;
+}
+
+function render(p) { // p: 지금까지 지난 칸 수. null이면 전체를 한 번에 보여준다
+  const all = p === null;
+  tl.querySelectorAll('[data-slot]').forEach(el => el.style.opacity = all || +el.dataset.slot < p ? 1 : 0);
+  tl.querySelectorAll('.gapbox').forEach(el => {
+    const from = +el.dataset.from, to = +el.dataset.to;
+    const k = all ? 1 : Math.max(0, Math.min(1, (p - from) / (to - from)));
+    el.style.opacity = all || p > from ? 1 : 0;
+    el.querySelector('.gapfill').style.width = (k * 100) + '%';
+  });
+  const head = document.getElementById('head');
+  head.style.display = all ? 'none' : 'block';
+  if (!all) { const lw = tl.firstElementChild.getBoundingClientRect().width; head.style.left = `calc(${lw}px + (100% - ${lw}px) * ${Math.min(p, cur.sim.n) / cur.sim.n})`; }
+  const m = document.getElementById('msg');
+  if (all) m.textContent = '▶ 재생을 누르면 시간 순서대로 따라간다. 칸 하나는 actor 안에서 코드 한 덩어리가 실행되는 시간이다.';
+  else {
+    const slot = Math.min(Math.floor(p), cur.sim.n - 1);
+    m.textContent = cur.sim.msgs.filter(x => x.slot === slot).map(x => x.text).join(' ');
+  }
+  const res = document.getElementById('result');
+  if (all || p >= cur.sim.n) {
+    const [tone, word, why, cost] = VERDICT[cur.key];
+    res.className = 'result ' + tone;
+    res.innerHTML = `<b class="${tone}">${word} · 최종 잔액 ${cur.sim.final}</b> ${why}${cost ? `<br><span class="cost">${cost}</span>` : ''}`;
+  } else { res.className = 'result'; res.textContent = ''; }
+}
+
+function play() {
+  if (playing) cancelAnimationFrame(playing);
+  const start = performance.now(), per = 900;
+  document.getElementById('play').textContent = '↺ 다시';
+  const tick = (now) => {
+    const p = (now - start) / per;
+    render(Math.min(p, cur.sim.n));
+    playing = p < cur.sim.n ? requestAnimationFrame(tick) : null;
+  };
+  playing = requestAnimationFrame(tick);
+}
+
+document.getElementById('tabs').innerHTML = Object.entries(METHODS).map(([k, v]) => `<button data-k="${k}">${v.label}</button>`).join('');
+document.getElementById('tabs').addEventListener('click', e => { const k = e.target.dataset.k; if (!k) return; draw(k); play(); });
+document.getElementById('play').onclick = play;
+
+// 블로그와 같은 도메인에서 iframe으로 열리면, iframe 높이를 내용에 맞춘다 (글의 height 값은 대비용)
+function fitFrame() {
+  try { const f = window.frameElement; if (f) f.style.height = Math.ceil(document.querySelector('.wrap').getBoundingClientRect().height) + 'px'; } catch (e) {}
+}
+new ResizeObserver(fitFrame).observe(document.querySelector('.wrap'));
+draw('base'); render(null); fitFrame();
+</script>
+</body>
+</html>

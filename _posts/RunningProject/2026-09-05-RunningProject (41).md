@@ -112,10 +112,10 @@ func saveAlert() {
 |---|---|---|---|
 | 0초 | SINK RATE 발생 | SINK 기록 없음 | 저장 |
 | 5초 | 정상 복귀 | SINK 해제 시각 = 5초 | |
-| 6초 | OVERSPEED 발생 | OVER 기록 없음 | **저장** |
+| 6초 | OVERSPEED 발생 | OVER 기록 없음 | <span style="color:#e5534b">**저장**</span> |
 | 12초 | 정상 복귀 | OVER 해제 시각 = 12초 | |
-| 30초 | SINK RATE 발생 | SINK 해제 시각 5초 → 25초 경과 | **저장** |
-| 40초 | OVERSPEED 발생 | OVER 해제 시각 12초 → 28초 경과 | **저장** |
+| 30초 | SINK RATE 발생 | SINK 해제 시각 5초 → 25초 경과 | <span style="color:#e5534b">**저장**</span> |
+| 40초 | OVERSPEED 발생 | OVER 해제 시각 12초 → 28초 경과 | <span style="color:#e5534b">**저장**</span> |
 
 40초 동안 네 건이 저장됐는데 20초 조건에 **한 번도 걸리지 않았다.** 두 경고가 번갈아 뜨면 각자 자기 시계만 보기 때문에 둘 다 20초를 쉽게 넘긴다.
 
@@ -195,7 +195,7 @@ func saveAlert() {
 | 화면 플래시, 경고음 | 없음 |
 | Watch 경고 오버레이, 반복 햅틱 | 없음 |
 | Dynamic Island 갱신 | 없음 |
-| Alerts 저장, 지도 마커 | 여기만 막힘 |
+| Alerts 저장, 지도 마커 | <span style="color:#d29922">여기만 막힘</span> |
 
 의도한 대로다. 실시간 코칭은 매번 알려주고, 기록만 요약하는 것이다. 페이스가 벗어났으면 그 순간 알려주는 게 맞고, 나중에 지도에서 볼 때 같은 사건이 스무 번 찍힐 필요는 없다.
 
