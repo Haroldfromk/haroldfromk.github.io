@@ -20,7 +20,7 @@ toc_sticky: true
 
 이번에도 AI와 계속 대화하면서 정리했다. 이전글들처럼 AI가 하는 말을 그대로 받아 적지 않고, 애매하면 다시 묻고, 공식 문서와 대조하고, 직접 돌려서 확인하는 식으로 진행했다. 그러다 보니 이번에도 정정할 일이 생겼다. 계산대 비유를 그림으로 옮기다가, 기다리는 사이에 사실이 아니게 된 건 A가 아니라 B가 확인한 재고였다는 걸 알고 고쳤다. 나는 처음에 재진입을 `await`가 기다리는 시간을 파고드는 문제로 봤는데, 기다리는 시간이 아주 짧아도 끼어드는 걸 보고 "틈의 길이가 아니라 틈이 생긴다는 것 자체가 문제"로 정리했다.
 
-글의 모양도 대화하면서 많이 바뀌었다. "재고 1개 가게에서 `async let`으로 사면 어떻게 되나", "네트워크 이슈가 생기면 어느 방법이 더 흔들리나" 같은 질문을 이어가다 보니 예시가 계속 늘었고, 경우마다 헤더를 나누는 대신 예시 하나와 표로 한눈에 보는 쪽으로 합쳤다. 지갑 시뮬레이터도 처음엔 눌러야 할 게 너무 많아서 타임라인으로 다시 만들었다. AI가 제안서에서 그대로 가져온 어려운 말들도 읽으면서 쉬운 말로 바꿨다. 이번에도 AI가 꼬리질문 후보를 따로 적어뒀다가 마지막에 꺼냈고, 그중 확인해서 필요한 것만 추가했다.
+글의 흐름도 대화하면서 바뀌었다. "재고 1개 가게에서 `async let`으로 사면 어떻게 되나", "네트워크 이슈가 생기면 어느 방법이 더 흔들리나" 같은 질문을 이어가다 보니 처음 계획보다 예시가 늘었다.
 
 ---
 
@@ -169,12 +169,16 @@ SE-0306은 가장 쉬운 방법으로 상태를 바꾸는 코드를 `await`가 �
 actor Wallet {
     var balance = 100
     var isPaying = false
+    var approvals = 0                 // 카드사 승인을 받은 횟수
+    let failFor: String?              // 이 이름의 결제는 승인이 실패한다
+
+    init(failFor: String? = nil) { self.failFor = failFor }
 
     // 1) 먼저 빼두기: await 전에 차감하고, 승인이 실패하면 되돌린다
-    func payReserve(_ amount: Int) async -> Bool {
+    func payReserve(_ amount: Int, _ name: String) async -> Bool {
         guard balance >= amount else { return false }
         balance -= amount
-        guard await approve() else {
+        guard await approve(name) else {
             balance += amount
             return false
         }
@@ -182,27 +186,60 @@ actor Wallet {
     }
 
     // 2) 다시 확인하기: await 뒤에 잔액을 한 번 더 확인한다
-    func payRecheck(_ amount: Int) async -> Bool {
+    func payRecheck(_ amount: Int, _ name: String) async -> Bool {
         guard balance >= amount else { return false }
-        guard await approve() else { return false }
+        guard await approve(name) else { return false }
         guard balance >= amount else { return false }   // 돌아와서 다시 확인
         balance -= amount
         return true
     }
 
     // 3) 진행 중 표시: 결제 중이면 다음 결제를 바로 거절한다
-    func payGuarded(_ amount: Int) async -> Bool {
+    func payGuarded(_ amount: Int, _ name: String) async -> Bool {
         guard !isPaying else { return false }
         isPaying = true
         defer { isPaying = false }
         guard balance >= amount else { return false }
-        guard await approve() else { return false }
+        guard await approve(name) else { return false }
         balance -= amount
         return true
     }
 
-    private func approve() async -> Bool {
-        // 생략 (100ms 기다린 뒤 카드사 승인 결과를 돌려준다)
+    // 카드사 승인: 100ms 기다린 뒤 결과를 돌려준다
+    private func approve(_ name: String) async -> Bool {
+        try? await Task.sleep(for: .milliseconds(100))
+        approvals += 1
+        return name != failFor
+    }
+}
+
+enum Method { case reserve, recheck, guarded }
+
+func run(_ method: Method, amount: Int, failFor: String? = nil) async -> String {
+    let wallet = Wallet(failFor: failFor)
+    func pay(_ name: String) async -> Bool {
+        switch method {
+        case .reserve: return await wallet.payReserve(amount, name)
+        case .recheck: return await wallet.payRecheck(amount, name)
+        case .guarded: return await wallet.payGuarded(amount, name)
+        }
+    }
+    // A가 먼저 들어가도록 B는 10ms 뒤에 보낸다
+    async let a = pay("A")
+    try? await Task.sleep(for: .milliseconds(10))
+    async let b = pay("B")
+    let (ra, rb) = await (a, b)
+    return "A \(ra) / B \(rb) → 잔액 \(await wallet.balance), 승인 \(await wallet.approvals)번"
+}
+
+@main struct Main {
+    static func main() async {
+        for (name, method) in [("먼저 빼두기", Method.reserve), ("다시 확인하기", .recheck), ("진행 중 표시", .guarded)] {
+            print("[\(name)]")
+            print("  80원 두 번:          ", await run(method, amount: 80))
+            print("  30원 두 번:          ", await run(method, amount: 30))
+            print("  80원 두 번, A 실패:  ", await run(method, amount: 80, failFor: "A"))
+        }
     }
 }
 ```
@@ -239,14 +276,27 @@ A를 먼저 보내고 B를 10ms 뒤에 보냈다. `async let` 두 줄로 동시�
 값을 계산하지 않는 경우도 같은 방향으로 막았다.
 
 ```swift
+// 다운로드와 검색 응답을 흉내 내는 함수 (기다리기만 한다)
+func download(_ url: String) async -> String {
+    try? await Task.sleep(for: .milliseconds(100))
+    return "image(\(url))"
+}
+
+func fetch(_ query: String, delay: Int) async -> String {
+    try? await Task.sleep(for: .milliseconds(delay))
+    return "\(query) 검색 결과"
+}
+
 actor ImageLoader {
     var cache: [String: String] = [:]
     var inFlight: [String: Task<String, Never>] = [:]
+    var downloadCount = 0
 
     func image(_ url: String) async -> String {
         if let cached = cache[url] { return cached }
         if let running = inFlight[url] { return await running.value }   // 이미 받는 중이면 그걸 기다림
 
+        downloadCount += 1
         let task = Task { await download(url) }
         inFlight[url] = task                                            // await 전에 "받는 중" 기록
         let image = await task.value
@@ -261,11 +311,30 @@ final class SearchViewModel {
     var results = ""
     var latestQuery = ""
 
-    func search(_ query: String) async {
+    func search(_ query: String, delay: Int) async {
         latestQuery = query                                  // await 전에 "내가 최신" 기록
-        let found = await fetch(query)
+        let found = await fetch(query, delay: delay)
         guard query == latestQuery else { return }           // 돌아와서 아직 최신인지 확인
         results = found
+    }
+}
+
+@main struct Main {
+    @MainActor static func main() async {
+        // 같은 이미지를 동시에 두 번 요청
+        let loader = ImageLoader()
+        async let x = loader.image("cat.png")
+        async let y = loader.image("cat.png")
+        _ = await (x, y)
+        print("다운로드 횟수:", await loader.downloadCount)
+
+        // 'a' 입력 후 바로 'ab' 입력, 'a' 응답이 더 늦게 옴
+        let vm = SearchViewModel()
+        let t1 = Task { await vm.search("a", delay: 200) }
+        try? await Task.sleep(for: .milliseconds(10))
+        let t2 = Task { await vm.search("ab", delay: 50) }
+        _ = await (t1.value, t2.value)
+        print("화면에 남은 결과:", vm.results)
     }
 }
 ```

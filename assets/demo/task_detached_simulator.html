@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task와 Task.detached는 어디서 도나</title>
+<style>
+  :root {
+    --bg: #f5f5f7; --card: #ffffff; --text: #1d1d1f; --sub: #6e6e73; --line: #d9dbe3;
+    --main: #4a6fa5; --main-soft: #dbe8fb; --lane-main: #eef4ff;
+    --task: #c46a1c; --task-soft: #fdebd6; --det: #7a5ea8; --det-soft: #ece6f7;
+    --fetch: #8a90a6; --fetch-soft: #eceef3; --ok: #2e9e4f; --ok-soft: #e5f4ea; --actor: #b7860b; --actor-soft: #fdf6e3;
+    --seg: #e8e8ed; --seg-on: #ffffff; --head: #e5534b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #2c2c2e; --text: #f5f5f7; --sub: #a1a1a6; --line: #3a3a3c;
+      --main: #7aa2de; --main-soft: #22334d; --lane-main: #1f2a3a;
+      --task: #e89650; --task-soft: #4a3220; --det: #b39ddb; --det-soft: #3a3150;
+      --fetch: #a1a1a6; --fetch-soft: #3a3a3e; --ok: #4cc26e; --ok-soft: #1f3a28; --actor: #e3b341; --actor-soft: #463a17;
+      --seg: #3a3a3c; --seg-on: #5a5a5e; --head: #ff6b63;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; overflow: hidden; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 14px; }
+  h3 { margin: 0; text-align: center; font-size: 17px; }
+  .subtitle { text-align: center; font-size: 12px; color: var(--sub); margin: 4px 0 12px; }
+  .seg { display: flex; background: var(--seg); border-radius: 9px; padding: 3px; gap: 2px; }
+  .seg button { flex: 1; border: 0; background: transparent; color: var(--text); font-size: 12.5px; padding: 7px 3px;
+    border-radius: 7px; cursor: pointer; font-family: inherit; }
+  .seg button.on { background: var(--seg-on); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  .desc { font-size: 12px; color: var(--sub); text-align: center; margin: 8px 0 10px; height: 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .lanes { position: relative; }
+  .lane { display: flex; align-items: center; height: 46px; border-bottom: 1px dashed var(--line); }
+  .lane:last-child { border-bottom: 0; }
+  .lane .name { width: 108px; flex-shrink: 0; font-size: 12px; font-weight: 800; color: var(--sub); }
+  .lane .track { position: relative; flex: 1; height: 100%; }
+  .lane.mainactor .track { background: var(--lane-main); border-radius: 6px; }
+  .lane.mainactor .name { color: var(--main); }
+  .blk { position: absolute; top: 8px; height: 30px; border-radius: 7px; border: 1.5px solid; overflow: hidden; }
+  .blk .fill { position: absolute; inset: 0 auto 0 0; }
+  .blk .lab { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 7px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .k-main { border-color: var(--main); color: var(--main); } .k-main .fill { background: var(--main-soft); }
+  .k-task { border-color: var(--task); color: var(--task); } .k-task .fill { background: var(--task-soft); }
+  .k-det { border-color: var(--det); color: var(--det); border-style: dashed; } .k-det .fill { background: var(--det-soft); }
+  .k-fetch { border-color: var(--fetch); color: var(--sub); } .k-fetch .fill { background: repeating-linear-gradient(135deg, var(--fetch-soft) 0 6px, transparent 6px 12px); }
+  .k-ok { border-color: var(--ok); color: var(--ok); } .k-ok .fill { background: var(--ok-soft); }
+  .k-actor { border-color: var(--actor); color: var(--actor); } .k-actor .fill { background: var(--actor-soft); }
+  .blk .s { display: none; }
+  .head { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--head); display: none; }
+  .timeax { display: flex; margin-top: 4px; font-size: 10px; color: var(--sub); }
+  .timeax .spacer { width: 108px; flex-shrink: 0; }
+  .msg { margin-top: 10px; font-size: 13px; line-height: 1.5; height: 40px; overflow: hidden; }
+  .row { display: flex; gap: 8px; margin-top: 10px; }
+  .result { flex: 1; border-radius: 10px; padding: 8px 12px; font-size: 12.5px; line-height: 1.5; border: 1px solid var(--line); height: 58px; overflow: hidden; }
+  .result.done { background: var(--ok-soft); border-color: var(--ok); }
+  .play { width: 96px; border: 0; background: var(--main); color: #fff; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; }
+  @media (max-width: 560px) {
+    .seg button { font-size: 11px; padding: 7px 1px; }
+    .lane .name, .timeax .spacer { width: 70px; }
+    .lane .name { font-size: 10.5px; }
+    .blk .lab { font-size: 9.5px; padding: 0 4px; }
+    .blk .f { display: none; } .blk .s { display: inline; }
+    .desc { height: 34px; }
+    .msg { height: 58px; }
+    .row { flex-direction: column; }
+    .result { height: 78px; }
+    .play { width: 100%; height: 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h3>Task { }와 Task.detached는 어디서 도나</h3>
+  <div class="subtitle">@MainActor 뷰모델의 buttonTapped()에서 시작했을 때 (Swift 6 기본 설정)</div>
+  <div class="seg" id="tabs"></div>
+  <div class="desc" id="desc"></div>
+  <div class="card">
+    <div class="lanes" id="lanes"></div>
+    <div class="timeax"><span class="spacer"></span><span>시간 →</span></div>
+    <div class="msg" id="msg"></div>
+  </div>
+  <div class="row">
+    <div class="result" id="result"></div>
+    <button class="play" id="play">▶ 재생</button>
+  </div>
+</div>
+
+<script>
+// 각 블록: [줄 번호, 시작, 끝, 글자, 종류, 우선순위 표시]
+// 3, 4번 탭의 시간은 ConcurrencyLab 실험 15에서 잰 값(204ms, 408ms)이다. 1, 2번 탭은 순서만 보여주는 그림이라 폭이 실제 시간 비율과 다르다.
+const TABS = {
+  task: {
+    label: 'Task { }',
+    desc: 'await 동안만 공용 스레드에 갔다가 MainActor로 돌아온다',
+    lanes: ['MainActor', '공용 스레드 A', '공용 스레드 B'], mainLane: 0, max: 150,
+    blocks: [
+      [0, 0, 30, 'buttonTapped()', 'main', 'tap'],
+      [0, 30, 62, 'Task 시작 (high)', 'task', 'Task'],
+      [1, 62, 112, 'await fetchUser()', 'fetch', 'fetch'],
+      [0, 112, 150, 'name = "harold"', 'task', 'name'],
+    ],
+    msgs: [
+      [0, 'buttonTapped()가 MainActor에서 돈다. 여기서는 await를 쓸 수 없다.'],
+      [30, 'Task { }가 시작된다. 만든 곳(MainActor)을 따라가서 MainActor에서 돈다. 우선순위 high도 물려받는다.'],
+      [62, 'fetchUser()는 nonisolated async 함수라 공용 스레드에서 돈다. 그동안 MainActor는 비어 있다.'],
+      [112, '돌아와서 MainActor에서 name을 바로 바꾼다.'],
+    ],
+    result: 'Task { }는 MainActor를 따라가서, await 뒤에 name을 바로 바꿀 수 있다. 우선순위도 따라간다.',
+  },
+  detached: {
+    label: 'Task.detached',
+    desc: '처음부터 공용 스레드에서 돈다. MainActor 상태는 MainActor.run으로 돌아가서 바꾼다',
+    lanes: ['MainActor', '공용 스레드 A', '공용 스레드 B'], mainLane: 0, max: 150,
+    blocks: [
+      [0, 0, 30, 'buttonTapped()', 'main', 'tap'],
+      [1, 30, 66, 'detached (medium)', 'det', 'detached'],
+      [1, 66, 104, 'await fetchUser()', 'fetch', 'fetch'],
+      [0, 104, 150, 'MainActor.run { name }', 'ok', 'run'],
+    ],
+    msgs: [
+      [0, 'buttonTapped()가 MainActor에서 돈다.'],
+      [30, 'Task.detached가 시작된다. MainActor를 따라가지 않고 공용 스레드에서 돈다. 우선순위도 물려받지 않아 medium이다.'],
+      [66, 'fetchUser()도 공용 스레드에서 돈다.'],
+      [104, 'name은 MainActor 소속이라 여기서 바로 못 바꾼다. await MainActor.run { }으로 MainActor에 돌아가서 바꾼다.'],
+    ],
+    result: 'detached는 공용 스레드에서 시작한다. MainActor 상태를 바꾸려면 MainActor.run으로 돌아가야 한다.',
+  },
+  two: {
+    label: 'detached 두 개',
+    desc: '200ms 동안 붙잡는 일을 detached 두 개로 돌리면',
+    lanes: ['MainActor', '공용 스레드 A', '공용 스레드 B'], mainLane: 0, max: 420,
+    blocks: [
+      [1, 0, 204, 'detached 1 (200ms)', 'det'],
+      [2, 0, 204, 'detached 2 (200ms)', 'det'],
+    ],
+    msgs: [
+      [0, 'detached 두 개가 서로 다른 공용 스레드에서 동시에 시작된다.'],
+      [100, '서로 막지 않고 같이 돈다. detached는 한 번에 하나씩 지켜주는 영역이 아니다.'],
+      [204, '둘 다 끝났다.'],
+    ],
+    result: '204ms. 두 개가 같이 돌았다. detached는 새 소속이 아니라, 소속이 없는 상태로 돈다.',
+  },
+  actor: {
+    label: 'actor 메서드 두 번',
+    desc: '같은 200ms짜리 일을 actor 메서드로 두 번 부르면',
+    lanes: ['MainActor', 'Worker actor', '공용 스레드'], mainLane: 0, max: 420,
+    blocks: [
+      [1, 0, 204, 'busy() 1번째', 'actor'],
+      [1, 204, 408, 'busy() 2번째', 'actor'],
+    ],
+    msgs: [
+      [0, '첫 번째 busy()가 actor에 들어간다. 두 번째는 차례를 기다린다.'],
+      [204, '첫 번째가 끝나야 두 번째가 들어간다. actor는 한 번에 하나씩이다.'],
+      [408, '둘 다 끝났다.'],
+    ],
+    result: '408ms. actor는 한 번에 하나씩이라 두 배가 걸렸다. detached와 달리 안쪽을 지켜주는 영역이다.',
+  },
+};
+
+const lanesEl = document.getElementById('lanes');
+let cur = null, raf = null;
+
+function draw(key) {
+  const d = TABS[key]; cur = { key, d };
+  lanesEl.innerHTML = d.lanes.map((n, i) =>
+    `<div class="lane ${i === d.mainLane && n === 'MainActor' ? 'mainactor' : ''}"><div class="name">${n}</div><div class="track" data-lane="${i}"></div></div>`
+  ).join('') + '<div class="head" id="head"></div>';
+  const tracks = lanesEl.querySelectorAll('.track');
+  d.blocks.forEach(([lane, a, b, lab, kind, short], i) => {
+    const left = a / d.max * 100, width = (b - a) / d.max * 100;
+    tracks[lane].insertAdjacentHTML('beforeend',
+      `<div class="blk k-${kind}" data-i="${i}" style="left:${left}%;width:${width}%"><div class="fill"></div><div class="lab"><span class="f">${lab}</span><span class="s">${short || lab}</span></div></div>`);
+  });
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.k === key));
+  document.getElementById('desc').textContent = d.desc;
+}
+
+function render(p) { // p: 지금 시각(ms). null이면 전체
+  const d = cur.d, all = p === null;
+  lanesEl.querySelectorAll('.blk').forEach(el => {
+    const [, a, b] = d.blocks[+el.dataset.i];
+    const k = all ? 1 : Math.max(0, Math.min(1, (p - a) / (b - a)));
+    el.style.opacity = all || p >= a ? 1 : 0;
+    el.querySelector('.fill').style.width = (k * 100) + '%';
+  });
+  const head = document.getElementById('head');
+  head.style.display = all ? 'none' : 'block';
+  if (!all) {
+    const nameW = lanesEl.querySelector('.name').getBoundingClientRect().width;
+    head.style.left = `calc(${nameW}px + (100% - ${nameW}px) * ${Math.min(p, d.max) / d.max})`;
+  }
+  const m = document.getElementById('msg');
+  if (all) m.textContent = '▶ 재생을 누르면 시간 순서대로 따라간다. 빨간 선이 지금 시각이다.';
+  else { const cands = d.msgs.filter(x => x[0] <= p); m.textContent = cands.length ? cands[cands.length - 1][1] : ''; }
+  const r = document.getElementById('result');
+  const end = Math.max(...d.blocks.map(x => x[2]));
+  if (all || p >= end) { r.className = 'result done'; r.textContent = d.result; }
+  else { r.className = 'result'; r.textContent = ''; }
+}
+
+function play() {
+  if (raf) cancelAnimationFrame(raf);
+  const d = cur.d, dur = 3200, start = performance.now();
+  const end = Math.max(...d.blocks.map(x => x[2]));
+  document.getElementById('play').textContent = '↺ 다시';
+  const tick = now => {
+    const p = (now - start) / dur * d.max;
+    render(Math.min(p, d.max));
+    raf = p < d.max ? requestAnimationFrame(tick) : null;
+  };
+  raf = requestAnimationFrame(tick);
+}
+
+document.getElementById('tabs').innerHTML = Object.entries(TABS).map(([k, v]) => `<button data-k="${k}">${v.label}</button>`).join('');
+document.getElementById('tabs').addEventListener('click', e => { const k = e.target.dataset.k; if (!k) return; draw(k); play(); });
+document.getElementById('play').onclick = play;
+
+// 블로그와 같은 도메인에서 iframe으로 열리면, iframe 높이를 내용에 맞춘다 (글의 height 값은 대비용)
+function fitFrame() {
+  try { const f = window.frameElement; if (f) f.style.height = Math.ceil(document.querySelector('.wrap').getBoundingClientRect().height) + 'px'; } catch (e) {}
+}
+new ResizeObserver(fitFrame).observe(document.querySelector('.wrap'));
+draw('task'); render(null); fitFrame();
+</script>
+</body>
+</html>

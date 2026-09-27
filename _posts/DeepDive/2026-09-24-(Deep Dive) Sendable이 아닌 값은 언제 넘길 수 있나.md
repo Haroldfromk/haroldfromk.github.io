@@ -19,7 +19,7 @@ toc_sticky: true
 
 이번에도 AI와 계속 대화하면서 정리했다. 이전글처럼 AI가 하는 말을 그대로 받아 적지 않고, 애매하면 다시 묻고, 공식 문서와 대조하고, 직접 빌드해서 확인하는 식으로 진행했다. 그러다 보니 정정할 일이 계속 생겼다. 이번 글을 준비하다가 이전글에 "`Task`의 클로저는 `@Sendable`"이라고 적은 게 틀렸다는 걸 알게 돼서 `sending`으로 고쳤다. AI가 "`: Sendable`을 직접 적어두면 `public`을 붙여도 선언한 자리에서 에러가 난다"고 설명한 것도 빌드해보니 절반만 맞았다. 반대로 내가 `@unchecked`와 `where`의 순서를 거꾸로 이해한 것도 실험으로 바로잡았다.
 
-글의 흐름도 대화하면서 많이 바뀌었다. 공장과 브랜드 로고 비유를 떠올리고 "같은 제품이면 여러 브랜드에 납품할 수 있지 않나", "로고가 한 번 찍히면 거절되나" 같은 질문을 이어가다 보니, 처음에 계획한 정의와 예시보다 한 단계 더 들어가게 됐다. 이번엔 AI가 꼬리질문 후보를 따로 적어두게 하고, 내가 먼저 질문을 떠올려본 다음 마지막에 비교해서 필요한 것만 추가했다.
+글의 흐름도 대화하면서 많이 바뀌었다. 공장과 브랜드 로고 비유를 떠올리고 "같은 제품이면 여러 브랜드에 납품할 수 있지 않나", "로고가 한 번 찍히면 거절되나" 같은 질문을 이어가다 보니, 처음에 계획한 정의와 예시보다 한 단계 더 들어가게 됐다.
 
 ---
 
@@ -113,12 +113,40 @@ actor ClientStore {
 final class AccountViewModel {
     let store = ClientStore()
 
+    // 새로 만든 값을 넘김 → 통과
     func openNewAccount() async {
         let client = Client(name: "John", balance: 0)
         await store.addClient(client)
     }
 
-    // 생략
+    // 넘긴 뒤 또 씀 → sending 에러
+    func openNewAccountThenLog() async {
+        let client = Client(name: "John", balance: 0)
+        await store.addClient(client)
+        client.log()
+    }
+
+    // 상관없는 두 값을 차례로 넘김 → 통과
+    func openTwoAccounts() async {
+        let john = Client(name: "John", balance: 0)
+        let joanna = Client(name: "Joanna", balance: 0)
+        await store.addClient(john)
+        await store.addClient(joanna)
+    }
+
+    // 이어진 두 값을 하나씩 넘김 → sending 에러
+    func openFriends() async {
+        let john = Client(name: "John", balance: 0)
+        let joanna = Client(name: "Joanna", balance: 0)
+        john.friend = joanna
+        await store.addClient(john)
+        await store.addClient(joanna)
+    }
+
+    // 파라미터로 받은 값을 넘김 → sending 에러
+    func addExisting(_ client: Client) async {
+        await store.addClient(client)
+    }
 }
 ```
 
@@ -395,7 +423,12 @@ final class Holder {             // Sendable 아님
 }
 
 actor ClientStore {
-    // 생략
+    var clients: [Client] = []
+
+    func addClient(_ c: Client) {
+        clients.append(c)
+    }
+
     func addHolder(_ h: Holder) {
         if let c = h.client { clients.append(c) }
     }
