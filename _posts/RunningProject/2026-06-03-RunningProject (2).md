@@ -503,7 +503,7 @@ location에 체크를 해준다.
 
 ---
 
-### 8. 실기기 `startTracking` Test
+### 8. 실기기 startTracking 테스트
 
 ```swift
 func startTracking() {

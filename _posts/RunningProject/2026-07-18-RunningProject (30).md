@@ -229,7 +229,7 @@ runViewModel.getModeData(modeAData)
 
 ---
 
-## RunningCenter냐 HealthCenter냐
+## RunningCenter와 HealthCenter 중 어디에
 
 심박 러닝 관련 로직을 어디에 둘지 두 가지 시나리오를 그려봤다.
 
@@ -314,7 +314,7 @@ actor HealthCenter {
 
 ---
 
-## actor 없이 하면 왜 위험한지
+## actor 없이 했을 때의 위험
 
 내용을 정리하다보니 처음부터 다시 짚어야 할 것 같았다. 심박이 들어오는 경로는 플랫폼마다 다르다.
 

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "85405cfe-c9a9-4498-bdfa-2b06b465b187",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "/Users/dongik/Documents/Workspace/blog/.archify/workflow-watch-stop-20261005-0030/candidate.json",
+  "output": "/Users/dongik/Documents/Workspace/blog/.archify/workflow-watch-stop-20261005-0030/workflow-watch-stop.html",
+  "specification": {
+    "sha256": "ca3f5086b5a2e405286f07884297134c604861256f65a02758384c9ae72b4212",
+    "bytes": 5403
+  },
+  "artifact": {
+    "sha256": "7358e53385b41922a0d5c6ce69cab20c98216cba2beb6e6f75c5f194568bfb16",
+    "bytes": 766175
+  }
+}

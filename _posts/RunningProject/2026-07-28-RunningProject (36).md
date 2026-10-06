@@ -621,7 +621,7 @@ FlightSummaryView는 원래부터 탭바를 숨기는 코드가 없어서 손대
 
 ---
 
-### 같은 러닝인지 알 방법이 없었다
+### 같은 러닝인지 알 방법이 없던 문제
 
 원인은 두 기기가 "이건 같은 러닝이다"를 서로 알 방법이 없었다는 거였다. `RunViewModel`과 `WatchViewModel` 둘 다에 `runSessionID`라는 문자열 프로퍼티를 추가해서, 러닝을 시작하는 쪽에서 새 UUID를 발급하고(`resetState()`에서 비움) 이 값을 `flightData`와 최종 저장 메시지에 매번 실어 보냈다. 저장할 때도 이 값을 그대로 `SwiftDataFlight.id`로 썼다.
 
@@ -683,7 +683,7 @@ Task { @MainActor in
 
 ---
 
-### retrieveRemoteSession()은 실제로 뭘 하고 있었나
+### retrieveRemoteSession()이 실제로 하던 일
 
 여기까지 고치고 나서 `HealthKitService+iOS.swift`의 `retrieveRemoteSession()`이라는 함수를 다시 들여다봤다. 워치가 `startMirroringToCompanionDevice()`로 자기 세션을 아이폰에 흘려보내면 이 함수가 받아서 아이폰의 `startOrigin`을 `.remote`로 바꾸는데, `HealthKitService.swift`를 보니 워치는 `startOrigin != .local`일 때만(아이폰이 주도해서 워치가 따라가는 경우에만) 그 호출 자체를 한다. 즉 `retrieveRemoteSession()`은 "워치주도 미러링"을 받는 코드가 아니라 "아이폰주도 미러링"에서 워치가 자기 세션을 다시 흘려보내주는 걸 받는 자리였다.
 

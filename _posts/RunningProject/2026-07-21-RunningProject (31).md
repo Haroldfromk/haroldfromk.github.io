@@ -1,5 +1,5 @@
 ---
-title: RunWay (31) v1.1 핫픽스
+title: RunWay 1.1 (3) - 핫픽스
 writer: Harold
 date: 2026-07-21 10:00:00 +0900
 categories: [RunWay]

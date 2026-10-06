@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>공용 스레드를 붙잡으면</title>
+<style>
+  :root {
+    --bg: #f5f5f7; --card: #ffffff; --text: #1d1d1f; --sub: #6e6e73; --line: #d9dbe3;
+    --task: #4a6fa5; --task-soft: #dbe8fb;
+    --thread: #0f8a8a; --thread-soft: #dcf2f1;
+    --hold: #c46a1c; --hold-soft: #fdebd6;
+    --ok: #2e9e4f; --ok-soft: #e5f4ea;
+    --extra: #7a5ea8; --extra-soft: #ece6f7;
+    --bad: #c94a4a; --bad-soft: #fbe3e3;
+    --zone: #f7f8fa; --seg: #e8e8ed; --seg-on: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #2c2c2e; --text: #f5f5f7; --sub: #a1a1a6; --line: #3a3a3c;
+      --task: #7aa2de; --task-soft: #22334d;
+      --thread: #4cc2c2; --thread-soft: #173a3a;
+      --hold: #e89650; --hold-soft: #4a3220;
+      --ok: #4cc26e; --ok-soft: #1f3a28;
+      --extra: #b39ddb; --extra-soft: #3a3150;
+      --bad: #ff7b73; --bad-soft: #4a2524;
+      --zone: #252527; --seg: #3a3a3c; --seg-on: #5a5a5e;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; overflow: hidden; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 14px; }
+  h3 { margin: 0; text-align: center; font-size: 17px; }
+  .subtitle { text-align: center; font-size: 12px; color: var(--sub); margin: 4px 0 12px; }
+  .seg { display: flex; background: var(--seg); border-radius: 9px; padding: 3px; gap: 2px; }
+  .seg button { flex: 1; border: 0; background: transparent; color: var(--text); font-size: 12.5px; padding: 7px 3px;
+    border-radius: 7px; cursor: pointer; font-family: inherit; }
+  .seg button.on { background: var(--seg-on); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  .desc { font-size: 12px; color: var(--sub); text-align: center; margin: 8px 0 10px; height: 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .top { display: flex; justify-content: space-between; align-items: baseline; margin: -2px 0 8px; gap: 8px; }
+  .legend { font-size: 11px; color: var(--sub); }
+  .clock { font-size: 12px; font-weight: 800; color: var(--sub); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .rows { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .r { display: flex; align-items: stretch; border-top: 1px solid var(--line); }
+  .r:first-child { border-top: 0; }
+  .r .lab { width: 330px; flex-shrink: 0; padding: 7px 10px; background: var(--zone); border-right: 1px solid var(--line); }
+  .r .lab .c { font-family: ui-monospace, Menlo, monospace; font-size: 11px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .r .lab .t { font-size: 12px; font-weight: 700; }
+  .r .lab .b { display: inline-block; margin-top: 4px; font-size: 10.5px; font-weight: 700; padding: 1px 6px; border-radius: 5px; }
+  .b-thread { color: var(--thread); background: var(--thread-soft); }
+  .b-hold { color: var(--hold); background: var(--hold-soft); }
+  .b-none { color: var(--sub); background: var(--seg); }
+  .r .z { flex: 1; min-width: 0; padding: 7px 8px; display: flex; flex-wrap: wrap; gap: 4px; align-content: center; }
+
+  .chip { height: 24px; min-width: 24px; padding: 0 5px; border-radius: 6px; border: 1.5px solid; display: flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; white-space: nowrap; }
+  .c-queue { border-color: var(--task); color: var(--task); background: var(--card); }
+  .c-thread { border-color: var(--task); color: var(--task); background: var(--task-soft); }
+  .c-hold { border-color: var(--hold); color: var(--hold); background: var(--hold-soft); }
+  .c-none { border-color: var(--sub); color: var(--sub); background: transparent; border-style: dashed; }
+  .c-done { border-color: var(--ok); color: var(--ok); background: var(--ok-soft); }
+  .gone { display: none; }
+
+  .meters { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .meter { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+  .meter .ml { width: 92px; flex-shrink: 0; font-weight: 800; color: var(--thread); }
+  .meter .cells { flex: 1; display: flex; gap: 3px; }
+  .meter .cell { flex: 1; height: 16px; border-radius: 4px; border: 1.5px solid var(--thread); background: transparent; }
+  .meter .cell.on { background: var(--thread); }
+  .meter .cell.x { border-color: var(--extra); }
+  .meter .cell.x.on { background: var(--extra); }
+  .meter .cell.main { max-width: 40px; border-color: var(--task); }
+  .meter .cell.main.on { background: var(--task); }
+  .meter .mv { width: 52px; flex-shrink: 0; text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .xnote { font-size: 10.5px; color: var(--extra); font-weight: 700; margin-left: 100px; height: 14px; }
+
+  .msg { margin-top: 10px; font-size: 13px; line-height: 1.5; height: 40px; overflow: hidden; }
+  .msg .warn { color: var(--bad); font-weight: 700; }
+  .note { margin-top: 6px; font-size: 10.5px; color: var(--sub); }
+  .row { display: flex; gap: 8px; margin-top: 10px; }
+  .result { flex: 1; border-radius: 10px; padding: 8px 12px; font-size: 12.5px; line-height: 1.5; border: 1px solid var(--line); height: 58px; overflow: hidden; }
+  .result.done { background: var(--ok-soft); border-color: var(--ok); }
+  .result.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .ctrl { display: flex; gap: 6px; }
+  .ctrl button { border: 0; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; }
+  .ctrl .step { width: 44px; background: var(--seg); color: var(--text); }
+  .ctrl .play { width: 96px; background: var(--task); color: #fff; }
+  @media (max-width: 560px) {
+    .seg button { font-size: 11px; padding: 7px 1px; }
+    .desc { height: 34px; }
+    .top { flex-direction: column; gap: 3px; }
+    .legend { height: 28px; line-height: 14px; overflow: hidden; }
+    .r { flex-direction: column; }
+    .r .lab { width: auto; border-right: 0; border-bottom: 1px dashed var(--line); padding: 5px 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .r .lab .c { font-size: 10px; }
+    .r .lab .b { margin-top: 0; font-size: 10px; }
+    .r .z { min-height: 38px; padding: 6px; }
+    .meter .ml { width: 62px; font-size: 10.5px; }
+    .meter .mv { width: 44px; font-size: 10.5px; }
+    .xnote { margin-left: 70px; }
+    .msg { height: 78px; }
+    .row { flex-direction: column; }
+    .result { flex: none; height: 78px; }
+    .ctrl .play { flex: 1; height: 40px; }
+    .ctrl .step { height: 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h3 id="title"></h3>
+  <div class="subtitle" id="subtitle"></div>
+  <div class="seg" id="tabs"></div>
+  <div class="desc" id="desc"></div>
+  <div class="card">
+    <div class="top"><div class="legend" id="legend"></div><div class="clock" id="clock"></div></div>
+    <div class="rows" id="rows"></div>
+    <div class="meters" id="meters"></div>
+    <div class="xnote" id="xnote"></div>
+    <div class="msg" id="msg"></div>
+    <div class="note">움직이는 속도는 실제 시간 비율과 다르다. 오른쪽 위 시각은 실험에서 잰 값이다.</div>
+  </div>
+  <div class="row">
+    <div class="result" id="result"></div>
+    <div class="ctrl">
+      <button class="step" id="prev">◀</button>
+      <button class="play" id="play">▶ 재생</button>
+      <button class="step" id="next">▶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ConcurrencyLab Experiments/06-Blocking 실험 2(20개), 3(가벼운 작업), 4(세마포어), 10(GCD)에서 잰 값으로 만든 장면이다.
+// 칸(rows): 차례 기다림 / 코드 줄마다 한 칸 / 끝. 작업 칩은 지금 도는 줄의 칸에 들어간다.
+// need: thread(스레드 필요) / hold(스레드를 붙잡고 기다림) / none(스레드를 양보하고 기다림). on: 없으면 공용 스레드, 'main'이면 메인 스레드
+// 단계(step): t(시각), at(칸 번호 → 작업 목록), msg
+const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+const ids = (p, a, b) => range(a, b).map(i => p + i);
+const not = (list, ex) => list.filter(x => !ex.includes(x));
+const Q = { title: '차례 기다림', sub: '빈 스레드를 기다리는 중' };
+const D = { title: '끝' };
+const T20 = ids('t', 1, 20);
+const nums = list => list.map((id, i) => ({ id, label: String(i + 1) }));
+
+// Task.sleep 탭: 4개씩(실측 최대 스레드 수) 줄을 지나가는 모습을 묶음 단계로 만든다
+function sleepSteps() {
+  const chunk = (list, n) => range(0, Math.ceil(list.length / n) - 1).map(k => list.slice(k * n, (k + 1) * n));
+  const start = chunk(T20, 4);
+  const wake = chunk([7, 2, 15, 11, 19, 4, 1, 13, 9, 20, 5, 17, 3, 12, 8, 16, 10, 6, 18, 14].map(n => 't' + n), 4);
+  const steps = [{ t: 0, at: { 0: T20 }, msg: '1초 기다리는 작업 20개를 TaskGroup으로 띄운다. 아직 아무것도 돌지 않았다.' }];
+  start.forEach((c, k) => steps.push({
+    t: 0, dur: 1100,
+    at: { 0: start.slice(k + 1).flat(), 1: c, 2: start.slice(0, k).flat() },
+    msg: k === 0 ? `${c.join(', ').replace(/t/g, '')}가 스레드에 올라타 첫 줄을 돈다.`
+                 : '앞의 작업은 await에서 스레드를 양보하고, 그 스레드에 다음 작업이 올라탄다. 첫 줄은 순식간이라 스레드 몇 개(실측 1~4개)로 돌아가며 출발시킨다.',
+  }));
+  steps.push({ t: 0, at: { 2: T20 }, msg: '20개가 다 잠드는 데 2ms도 안 걸려서, 1초 뒤 깨어나기 전에 전부 여기 모였다. <span class="warn">sleep에서 기다리던 작업은 지정한 시간이 지나면, 다른 작업이 아직 이 줄에 들어오는 중이어도 먼저 return으로 넘어간다.</span>' });
+  wake.forEach((c, k) => steps.push({
+    t: '약 1000~1057ms', dur: 1100,
+    at: { 2: wake.slice(k + 1).flat(), 3: c, 4: wake.slice(0, k).flat() },
+    msg: k === 0 ? '자기 1초가 지난 작업은 다른 작업을 기다리지 않고 바로 return id를 돌리러 스레드에 올라탄다. 같은 작업이 await 앞과 뒤에서 한 번씩 스레드를 쓴다.'
+                 : 'return id까지 돈 작업은 끝나고, 깨어난 작업이 이어서 올라탄다. 깨어나는 순서는 정해져 있지 않다.',
+  }));
+  steps.push({ t: 1057, at: { 4: T20 }, msg: '20개가 다 끝났다.' });
+  return steps;
+}
+
+const SCENES = {
+  twenty: {
+    title: '1초짜리 작업 20개를 돌리면',
+    subtitle: '공용 스레드는 코어 수(이 Mac은 10개)만큼만 있다',
+    tabs: {
+      sleep: {
+        label: 'Task.sleep', desc: '20개가 각각 Task.sleep으로 1초를 기다린다', pool: 10,
+        chips: nums(T20), legend: '칩 하나가 작업 하나다. 20개 모두 group.addTask { } 안의 세 줄을 돈다',
+        rows: [{ title: '출발 전', sub: '아직 첫 줄을 돌기 전' }, { code: 'let id = threadID()', need: 'thread' }, { code: 'try? await Task.sleep(for: .seconds(1))', need: 'none' }, { code: 'return id', need: 'thread' }, D],
+        steps: sleepSteps(),
+        result: '1021~1057ms에 전부 끝났다(20번). 기다리는 동안 스레드를 양보해서, 스레드 몇 개로 20개가 같이 기다렸다.',
+      },
+      block: {
+        label: 'usleep', desc: '같은 20개가 usleep으로 1초를 기다린다', pool: 10,
+        chips: nums(T20), legend: '칩 하나가 작업 하나다. 20개 모두 group.addTask { } 안의 세 줄을 돈다',
+        rows: [Q, { code: 'let id = threadID()', need: 'thread' }, { code: 'usleep(1_000_000)', need: 'hold' }, { code: 'return id', need: 'thread' }, D],
+        steps: [
+          { t: 0, at: { 0: T20 }, msg: '같은 20개를 이번엔 usleep으로 기다리게 한다. await가 없는 코드다.' },
+          { t: 0, at: { 0: ids('t', 11, 20), 2: ids('t', 1, 10) }, msg: '1~10이 usleep 줄에서 스레드 10개를 다 붙잡는다. usleep은 기다리는 동안에도 스레드를 양보하지 않는다.' },
+          { t: 500, at: { 0: ids('t', 11, 20), 2: ids('t', 1, 10) }, msg: '11~20은 빈 스레드가 없어서 첫 줄도 못 돌리고 차례를 기다린다.' },
+          { t: 1000, at: { 2: ids('t', 11, 20), 4: ids('t', 1, 10) }, msg: '1초 뒤 1~10이 끝나서야 11~20이 올라탄다.' },
+          { t: 2009, at: { 4: T20 }, msg: '20개가 다 끝났다.' },
+        ],
+        result: '2007~2014ms에 끝났다(20번). 스레드는 늘 10개였다. 10개를 다 붙잡으니 두 번에 나눠 돌았다.',
+      },
+      gcd: {
+        label: 'GCD에서 usleep', desc: '같은 20개를 DispatchQueue.global()에 던진다', pool: 20, extraFrom: 10,
+        chips: nums(T20), legend: '칩 하나가 작업 하나다. 20개 모두 DispatchQueue.global().async { } 안의 두 줄을 돈다',
+        rows: [Q, { code: 'ids.withLock { _ = $0.insert(threadID()) }', need: 'thread' }, { code: 'usleep(1_000_000)', need: 'hold' }, D],
+        steps: [
+          { t: 0, at: { 0: T20 }, msg: '같은 20개를 GCD 전역 큐에 던진다.' },
+          { t: 0, at: { 2: T20 }, msg: 'GCD는 스레드가 막혀 있고 남은 일이 있으면 스레드를 더 만든다. 20개가 스레드 20개를 하나씩 붙잡았다.' },
+          { t: 1005, at: { 3: T20 }, msg: '20개가 다 끝났다.' },
+        ],
+        result: '1003~1006ms에 끝났다(10번). 스레드를 20개 썼다. 대신 막히는 만큼 스레드가 계속 늘어날 수 있다.',
+      },
+    },
+  },
+  light: {
+    title: '공용 스레드가 꽉 차면 가벼운 작업은 언제 시작하나',
+    subtitle: '1초 동안 붙잡는 작업을 먼저 띄우고, 50ms 뒤에 가벼운 작업 두 개를 띄운다',
+    tabs: {},
+  },
+  sema: {
+    title: '세마포어로 다른 작업의 신호를 기다리면',
+    subtitle: '신호 줄 작업은 100ms를 await한 뒤 signal()을 부른다. 부르려면 스레드 하나가 필요하다',
+    tabs: {},
+  },
+};
+
+// 가벼운 작업: 붙잡는 작업 수만 다르다
+function lightTab(n) {
+  const B = ids('b', 1, n), ten = n === 10;
+  const t1 = ten ? 56 : 54;
+  return {
+    label: `붙잡는 작업 ${n}개`, desc: `공용 스레드 10개 중 ${n}개를 1초 동안 붙잡는다`, pool: 10, main: true,
+    chips: [...nums(B), { id: 'main', label: 'main' }, { id: 'L', label: 'light' }, { id: 'M', label: 'onMain' }],
+    legend: '숫자 칩은 붙잡는 작업, main은 main 함수, light와 onMain은 가벼운 작업이다',
+    rows: [
+      { title: '차례 기다림', sub: '빈 공용 스레드를 기다리는 중' },
+      { code: 'Task.detached { usleep(1_000_000) }', need: 'hold' },
+      { code: 'usleep(50_000)   // main 함수', need: 'hold', on: 'main' },
+      { code: 'let light = Task.detached { now() - start }', need: 'thread' },
+      { code: 'let onMain = Task { @MainActor in now() - start }', need: 'thread', on: 'main' },
+      D,
+    ],
+    steps: ten ? [
+      { t: 0, at: { 1: B, 2: ['main'] }, msg: '1초 동안 붙잡는 작업 10개가 공용 스레드 10개를 다 붙잡는다. 메인 스레드는 main 함수가 50ms 동안 붙잡는다.' },
+      { t: t1, at: { 0: ['L'], 1: B, 4: ['M'] }, msg: '가벼운 작업 둘을 띄운다. onMain은 메인 스레드에서 바로 돌고, light는 빈 공용 스레드가 없어 차례를 기다린다.' },
+      { t: t1, at: { 0: ['L'], 1: B, 5: ['M'] }, msg: 'onMain은 끝났다. 메인 스레드는 공용 스레드와 따로라서 영향이 없다.' },
+      { t: 500, at: { 0: ['L'], 1: B, 5: ['M'] }, msg: 'light는 now() - start 한 줄뿐인 작업인데, 스레드가 비기 전까지 출발을 못 한다.' },
+      { t: 1002, at: { 3: ['L'], 5: [...B, 'M'] }, msg: '1초가 지나 붙잡던 작업이 끝나자 그제야 빈 스레드에 올라탄다.' },
+      { t: 1002, at: { 5: [...B, 'M', 'L'] }, msg: 'light도 끝났다.' },
+    ] : [
+      { t: 0, at: { 1: B, 2: ['main'] }, msg: '1초 동안 붙잡는 작업 9개가 공용 스레드 9개를 붙잡는다. 메인 스레드는 main 함수가 50ms 동안 붙잡는다.' },
+      { t: t1, at: { 1: B, 3: ['L'], 4: ['M'] }, msg: '가벼운 작업 둘을 띄운다. 공용 스레드 하나가 비어 있어서 light도 바로 올라타고, onMain은 메인 스레드에서 돈다.' },
+      { t: t1, at: { 1: B, 5: ['L', 'M'] }, msg: '둘 다 바로 시작해서 끝났다.' },
+    ],
+    result: ten ? 'light 1002ms, onMain 56ms. 공용 스레드가 꽉 차면 가벼운 작업도 자리가 날 때까지 밀린다.'
+                : 'light 54ms, onMain 54ms. 공용 스레드 하나가 남아 있으니 둘 다 바로 시작했다.',
+    bad: ten,
+  };
+}
+SCENES.light.tabs.nine = lightTab(9);
+SCENES.light.tabs.ten = lightTab(10);
+
+// 세마포어: 기다리는 작업 수만 다르다
+function semaTab(n) {
+  const W = ids('w', 1, n), S = ids('s', 1, n), ten = n === 10;
+  return {
+    label: `기다리는 작업 ${n}개`, desc: `waitForSignal()을 ${n}개 띄운다`, pool: 10,
+    chips: [...W.map((id, i) => ({ id, label: '기' + (i + 1) })), ...S.map((id, i) => ({ id, label: '신' + (i + 1) }))],
+    legend: '기: waitForSignal()을 도는 작업 / 신: 그 안에서 띄운 Task.detached',
+    rows: [
+      { title: '차례 기다림', sub: '빈 스레드를 기다리는 중' },
+      { code: 'return block(sem)   // 안에서 sem.wait()', need: 'hold' },
+      { code: 'try? await Task.sleep(for: .milliseconds(100))', need: 'none' },
+      { code: 'sem.signal()', need: 'thread' },
+      D,
+    ],
+    steps: ten ? [
+      { t: 0, at: { 1: W, 2: S }, msg: '기 10개가 sem.wait()으로 스레드 10개를 다 붙잡고, 신 10개는 Task.sleep으로 100ms를 기다린다.' },
+      { t: 100, at: { 0: S, 1: W }, msg: '100ms가 지나 신이 깨어났다. signal()을 부르려면 스레드가 필요한데, 빈 스레드가 없다.' },
+      { t: 1000, at: { 0: S, 1: W }, msg: '기는 신호를, 신은 빈 스레드를 기다린다. 서로를 기다리니 아무도 움직이지 못한다.' },
+      { t: 5000, at: { 0: S, 1: W }, msg: '5초가 지나도 그대로다.' },
+    ] : [
+      { t: 0, at: { 1: W, 2: S }, msg: '기 9개가 sem.wait()으로 스레드 9개를 붙잡고, 신 9개는 Task.sleep으로 100ms를 기다린다.' },
+      { t: 100, at: { 0: S, 1: W }, msg: '100ms가 지나 신이 깨어났다. signal()을 부르려면 스레드가 필요한데, 하나가 비어 있다.' },
+      { t: 100, at: { 0: not(S, ['s1']), 1: W, 3: ['s1'] }, msg: '신1이 빈 스레드에 올라타 signal()을 부른다.' },
+      { t: 101, at: { 0: not(S, ['s1', 's2', 's3']), 1: not(W, ['w1']), 3: ['s2', 's3'], 4: ['w1', 's1'] }, msg: '신호를 받은 기1이 끝나면서 스레드가 하나 더 비고, 비는 대로 다음 신이 올라탄다.' },
+      { t: 102, at: { 4: [...W, ...S] }, msg: '다 끝났다.' },
+    ],
+    result: ten ? '5초가 지나도 안 끝나서 강제로 종료했다. 제한 없이 기다리면 영원히 멈춘다. 9개와의 차이는 빈 스레드 하나였다.'
+                : '102ms에 전부 끝났다. 비어 있던 스레드 하나로 신호가 돌기 시작하자, 풀려난 스레드들이 이어서 신호를 날랐다.',
+    bad: ten,
+  };
+}
+SCENES.sema.tabs.nine = semaTab(9);
+SCENES.sema.tabs.ten = semaTab(10);
+
+// actor vs Mutex: 방 하나를 10개가 쓰려 할 때 차례를 기다리는 방식 (실험 15)
+function roomTab(kind) {
+  const R = ids('r', 1, 10), rest = n => R.slice(n), isMutex = kind === 'mutex';
+  const waitRow = isMutex
+    ? { code: 'lock.withLock {   // 잠금이 풀리길 기다림', need: 'hold' }
+    : { code: 'await room.use()   // actor 차례를 기다림', need: 'none' };
+  const inRow = isMutex
+    ? { code: '_ = usleep(200_000)   // 잠금 안', need: 'hold' }
+    : { code: 'usleep(200_000)   // actor 메서드 안', need: 'hold' };
+  return {
+    label: isMutex ? 'Mutex' : 'actor', pool: 10,
+    desc: isMutex ? '방을 Mutex로 지킨다. 잠금이 풀리길 기다리는 동안 스레드를 붙잡는다' : '방을 actor로 지킨다. 차례를 await로 기다린다',
+    chips: [...nums(R), { id: 'L', label: 'light' }],
+    legend: '숫자 칩은 방을 쓰려는 작업, light는 50ms 뒤에 띄운 가벼운 작업이다',
+    rows: [
+      { title: '차례 기다림', sub: '빈 스레드를 기다리는 중' },
+      waitRow, inRow,
+      { code: 'Task.detached { now() - start }   // 가벼운 작업', need: 'thread' },
+      D,
+    ],
+    steps: isMutex ? [
+      { t: 0, at: { 0: R }, msg: '방 하나를 10개가 쓰려고 한다. 방은 Mutex로 지켜서 한 번에 하나만 들어간다.' },
+      { t: 0, at: { 1: rest(1), 2: ['r1'] }, msg: '1이 잠금을 얻어 방에서 200ms 머문다. 나머지 9개는 잠금이 풀릴 때까지 <span class="warn">스레드를 붙잡고 기다린다.</span> 공용 스레드 10개가 다 찼다.' },
+      { t: 50, at: { 0: ['L'], 1: rest(1), 2: ['r1'] }, msg: '50ms 뒤 가벼운 작업을 띄운다. 빈 스레드가 없어서 차례를 기다린다.' },
+      { t: 200, at: { 1: rest(2), 2: ['r2'], 3: ['L'], 4: ['r1'] }, msg: '200ms에 1이 나오면서 스레드가 하나 비자 그제야 가벼운 작업이 시작한다. 2는 잠금을 얻어 방에 들어간다.' },
+      { t: 205, at: { 1: rest(2), 2: ['r2'], 4: ['r1', 'L'] }, msg: '가벼운 작업은 끝났다. 남은 작업들은 계속 스레드를 붙잡은 채 차례를 기다린다.' },
+      { t: 2032, at: { 4: [...R, 'L'] }, msg: '10개가 방을 다 썼다.' },
+    ] : [
+      { t: 0, at: { 0: R }, msg: '방 하나를 10개가 쓰려고 한다. 방은 actor라서 한 번에 하나만 들어간다.' },
+      { t: 0, at: { 1: rest(1), 2: ['r1'] }, msg: '1이 방에 들어가 200ms 머문다. 나머지 9개는 await에서 스레드를 양보하고 차례를 기다린다. 쓰는 스레드는 1개뿐이다.' },
+      { t: 50, at: { 1: rest(1), 2: ['r1'], 3: ['L'] }, msg: '50ms 뒤 가벼운 작업을 띄운다. 스레드가 9개나 비어 있어서 바로 시작한다.' },
+      { t: 51, at: { 1: rest(1), 2: ['r1'], 4: ['L'] }, msg: '가벼운 작업은 바로 끝났다.' },
+      { t: 200, at: { 1: rest(2), 2: ['r2'], 4: ['r1', 'L'] }, msg: '200ms에 1이 나오면 다음 작업이 들어간다. 기다리는 작업들은 그동안 스레드를 쓰지 않는다.' },
+      { t: 2043, at: { 4: [...R, 'L'] }, msg: '10개가 방을 다 썼다.' },
+    ],
+    result: isMutex ? '전체 2026~2053ms로 actor와 비슷했지만, 가벼운 작업은 201~260ms에 시작했다(12번). 기다리는 9개가 스레드를 붙잡고 있어서다.'
+                    : '전체 2026~2044ms, 가벼운 작업은 51~57ms에 바로 시작했다(12번). 기다리는 9개가 스레드를 양보하고 있어서 공용 스레드가 남아 있었다.',
+    bad: isMutex,
+  };
+}
+SCENES.mutex = {
+  title: '방 하나를 10개가 쓰려고 할 때',
+  subtitle: '방 안에서는 200ms 머문다. 50ms 뒤에 가벼운 작업 하나를 띄운다',
+  tabs: { actor: roomTab('actor'), mutex: roomTab('mutex') },
+};
+
+const sceneKey = new URLSearchParams(location.search).get('s') || 'twenty';
+const scene = SCENES[sceneKey];
+let tabKey = Object.keys(scene.tabs)[0], idx = 0, timer = null, chips = {};
+const BADGE = { thread: ['b-thread', '스레드 필요'], hold: ['b-hold', '스레드를 붙잡고 기다림'], none: ['b-none', '스레드를 양보하고 기다림'] };
+
+function build() {
+  const tab = scene.tabs[tabKey];
+  document.getElementById('rows').innerHTML = tab.rows.map((r, i) => {
+    const lab = r.code
+      ? `<div class="c">${r.code.replace(/</g, '&lt;')}</div><span class="b ${BADGE[r.need][0]}">${BADGE[r.need][1]}${r.on === 'main' ? ' (메인 스레드)' : ''}</span>`
+      : `<div class="t">${r.title}</div>${r.sub ? `<span class="b b-none">${r.sub}</span>` : ''}`;
+    return `<div class="r"><div class="lab">${lab}</div><div class="z" data-r="${i}"></div></div>`;
+  }).join('');
+  const cells = (n, cls, xFrom) => range(0, n - 1).map(i => `<div class="cell ${cls}${xFrom !== undefined && i >= xFrom ? ' x' : ''}"></div>`).join('');
+  document.getElementById('meters').innerHTML =
+    `<div class="meter"><div class="ml">${tab.extraFrom ? 'GCD 스레드' : '공용 스레드'}</div><div class="cells" id="pc">${cells(tab.pool, '', tab.extraFrom)}</div><div class="mv" id="pv"></div></div>`
+    + (tab.main ? `<div class="meter"><div class="ml" style="color:var(--task)">메인 스레드</div><div class="cells" id="mc">${cells(1, 'main')}</div><div class="mv" id="mv"></div></div>` : '');
+  document.getElementById('xnote').textContent = tab.extraFrom ? '보라색: 코어 수(10개)를 넘어 GCD가 더 만든 스레드' : '';
+  document.querySelectorAll('.chip').forEach(c => c.remove());
+  chips = {};
+  tab.chips.forEach(c => { const el = document.createElement('div'); el.className = 'chip gone'; el.textContent = c.label; chips[c.id] = el; document.body.appendChild(el); });
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.k === tabKey));
+  document.getElementById('desc').textContent = tab.desc;
+  document.getElementById('legend').textContent = tab.legend;
+}
+
+const rowKind = row => row.code ? row.need : (row === D ? 'done' : 'queue');
+
+// 칩을 옮기기 전후 위치를 재서 부드럽게 움직인다
+function withFlip(animate, fn) {
+  const first = {};
+  if (animate) for (const id in chips) if (!chips[id].classList.contains('gone')) first[id] = chips[id].getBoundingClientRect();
+  fn();
+  if (!animate) return;
+  for (const id in chips) {
+    const el = chips[id], f = first[id];
+    if (!f || el.classList.contains('gone')) continue;
+    const l = el.getBoundingClientRect(), dx = f.left - l.left, dy = f.top - l.top;
+    if (!dx && !dy) continue;
+    el.style.transition = 'none'; el.style.transform = `translate(${dx}px, ${dy}px)`;
+    el.getBoundingClientRect();
+    el.style.transition = 'transform .6s ease'; el.style.transform = '';
+  }
+}
+
+function moveList(list, r) {
+  const row = scene.tabs[tabKey].rows[r], z = document.querySelector(`[data-r="${r}"]`);
+  list.forEach(id => { z.appendChild(chips[id]); chips[id].className = 'chip c-' + rowKind(row); });
+}
+
+function place(at) {
+  const placed = new Set();
+  for (const r in at) { moveList(at[r], r); at[r].forEach(id => placed.add(id)); }
+  for (const id in chips) if (!placed.has(id)) chips[id].classList.add('gone');
+}
+
+// 막대는 지금 스레드를 쓰는 칸(스레드 필요, 붙잡고 기다림)에 있는 칩 수를 센다
+function meter() {
+  const tab = scene.tabs[tabKey];
+  let pool = 0, main = 0;
+  tab.rows.forEach((row, r) => {
+    if (!row.code || row.need === 'none') return;
+    const n = document.querySelectorAll(`[data-r="${r}"] .chip:not(.gone)`).length;
+    if (row.on === 'main') main += n; else pool += n;
+  });
+  document.querySelectorAll('#pc .cell').forEach((c, k) => c.classList.toggle('on', k < pool));
+  document.getElementById('pv').textContent = `${pool} / ${tab.pool}`;
+  if (tab.main) { document.querySelector('#mc .cell').classList.toggle('on', main > 0); document.getElementById('mv').textContent = `${main} / 1`; }
+}
+
+function showResult(i) {
+  const tab = scene.tabs[tabKey], res = document.getElementById('result');
+  if (i === tab.steps.length - 1) { res.className = 'result ' + (tab.bad ? 'bad' : 'done'); res.textContent = tab.result; }
+  else { res.className = 'result'; res.textContent = `${i + 1} / ${tab.steps.length} 단계`; }
+}
+
+function render(i, animate) {
+  const st = scene.tabs[tabKey].steps[i];
+  document.getElementById('clock').textContent = typeof st.t === 'string' ? `시각 ${st.t}` : `시각 ${st.t}ms`;
+  document.getElementById('msg').innerHTML = st.msg;   // 강조(<span class="warn">)를 쓰려고 innerHTML
+  withFlip(animate, () => place(st.at));
+  meter(); showResult(i);
+  idx = i;
+}
+
+// 탭을 바꿔도 높이가 흔들리지 않게, 이 장면의 모든 탭·단계 중 가장 높은 칸 목록 높이로 맞춘다
+function lockHeight() {
+  const rowsEl = document.getElementById('rows'); rowsEl.style.minHeight = '';
+  const keep = tabKey; let max = 0;
+  for (const k of Object.keys(scene.tabs)) {
+    tabKey = k; build();
+    scene.tabs[k].steps.forEach((_, i) => { render(i, false); max = Math.max(max, rowsEl.getBoundingClientRect().height); });
+  }
+  tabKey = keep; build(); idx = 0; render(0, false);
+  rowsEl.style.minHeight = Math.ceil(max) + 'px';
+}
+
+function stop() {
+  if (timer) { clearTimeout(timer); timer = null; }
+  document.getElementById('play').textContent = '▶ 재생';
+}
+function schedule() {
+  const steps = scene.tabs[tabKey].steps;
+  timer = setTimeout(() => {
+    if (idx >= steps.length - 1) { timer = null; document.getElementById('play').textContent = '↺ 다시'; return; }
+    render(idx + 1, true); schedule();
+  }, steps[idx].dur || 2600);
+}
+function play() {
+  stop();
+  if (idx >= scene.tabs[tabKey].steps.length - 1) render(0, true);
+  document.getElementById('play').textContent = '❚❚ 멈춤';
+  schedule();
+}
+
+document.getElementById('title').textContent = scene.title;
+document.getElementById('subtitle').textContent = scene.subtitle;
+document.getElementById('tabs').innerHTML = Object.entries(scene.tabs).map(([k, v]) => `<button data-k="${k}">${v.label}</button>`).join('');
+document.getElementById('tabs').addEventListener('click', e => {
+  const k = e.target.dataset.k; if (!k) return;
+  stop(); tabKey = k; build(); idx = 0; render(0, false); play();
+});
+document.getElementById('play').onclick = () => { if (timer) stop(); else play(); };
+document.getElementById('prev').onclick = () => { stop(); if (idx > 0) render(idx - 1, true); };
+document.getElementById('next').onclick = () => { stop(); if (idx < scene.tabs[tabKey].steps.length - 1) render(idx + 1, true); };
+
+// 블로그와 같은 도메인에서 iframe으로 열리면, iframe 높이를 내용에 맞춘다 (글의 height 값은 대비용)
+function fitFrame() {
+  try { const f = window.frameElement; if (f) f.style.height = Math.ceil(document.querySelector('.wrap').getBoundingClientRect().height) + 'px'; } catch (e) {}
+}
+new ResizeObserver(fitFrame).observe(document.querySelector('.wrap'));
+window.addEventListener('resize', () => { stop(); lockHeight(); });
+lockHeight(); fitFrame();
+</script>
+</body>
+</html>

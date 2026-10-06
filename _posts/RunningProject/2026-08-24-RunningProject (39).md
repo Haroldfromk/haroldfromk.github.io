@@ -124,7 +124,7 @@ Task { @MainActor in
 
 ---
 
-## `modelContext`는 여전히 `HomeView`에 묶여있었다
+## modelContext가 HomeView에 묶여 있던 문제
 
 여기까지 써두고 다시 읽어보다가 걸리는 부분이 있었다. `vm`(`RunViewModel`)은 `RunWayApp`의 `@State` 프로퍼티라서, 앱 프로세스가 시작되기만 하면(화면이 실제로 안 떠도) `init()`이 돌면서 바로 확보된다. 근데 `modelContext`는 다르다.
 
@@ -178,7 +178,7 @@ init() {
 
 ---
 
-## 프로세스가 뭔데 백그라운드에서 저장이 된다는 거지
+## 백그라운드에서도 저장이 되는 이유
 
 "iOS가 앱을 백그라운드에서 실행한다"는 말이 처음엔 잘 안 와닿아서 AI한테 몇 번을 되물었다.
 

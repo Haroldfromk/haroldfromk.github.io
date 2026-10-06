@@ -141,7 +141,7 @@ if result.stopOrigin == .local {
 
 ---
 
-### 3. 빠져있던 `.onDisappear` 추가
+### 3. 빠져있던 onDisappear 추가
 
 주석에만 있고 실제로는 없던 안전장치를 iPhone의 `PFDView`와 똑같은 패턴으로 채워 넣었다.
 

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trace Range Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --panel:#f7f8fa; --line:#e3e6ea; --ink:#16181d; --dim:#6b7280;
+    --faint:#9aa1ab; --bad:#d0392b; --bad-bg:#fbeae8; --ok:#0d9276; --ok-bg:#e2f4ef;
+    --warn:#b3790a; --warn-bg:#fdf5e3; --grid:#eceff2; --run:#e8991a; --walk:#9aa1ab;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#09090b; --panel:#141417; --line:#27272a; --ink:#f4f4f5; --dim:#a1a1aa;
+      --faint:#71717a; --bad:#f87171; --bad-bg:#331416; --ok:#34d399; --ok-bg:#0d2b23;
+      --warn:#fbbf24; --warn-bg:#2b2310; --grid:#1c1c20; --run:#f5b53d; --walk:#71717a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; padding:16px; background:var(--bg); color:var(--ink);
+    font-family:'Inter',-apple-system,'Apple SD Gothic Neo',sans-serif;
+    user-select:none; -webkit-user-select:none;
+  }
+  h1 { font-size:15px; font-weight:700; margin:0 0 5px; }
+  .lead { font-size:12.5px; line-height:1.6; color:var(--dim); margin:0 0 14px; max-width:66ch; }
+  .lead code { font-family:'Fira Code',monospace; font-size:11.5px; background:var(--panel); padding:1px 5px; border-radius:4px; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; margin-bottom:14px; }
+  .grp { display:flex; flex-direction:column; gap:5px; }
+  .grp > span { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.04em; color:var(--faint); text-transform:uppercase; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .seg button { border:none; background:var(--bg); color:var(--dim); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:8px 12px;
+    border-right:1px solid var(--line); transition:background .13s,color .13s; }
+  .seg button:last-child { border-right:none; }
+  .seg button[aria-pressed="true"] { background:var(--ok); color:var(--bg); font-weight:600; }
+  .btn { border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer;
+    font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; padding:8px 14px; border-radius:7px; }
+  .btn[aria-pressed="true"] { background:var(--bad); border-color:var(--bad); color:var(--bg); font-weight:600; }
+
+  .lanes { display:flex; flex-direction:column; gap:10px; }
+  .lane { border:1px solid var(--line); border-radius:9px; background:var(--panel); padding:10px 12px 11px; }
+  .lane.best { border-color:var(--ok); }
+  .lane.broken { border-color:var(--bad); }
+  .lane-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; margin-bottom:7px; }
+  .lane-head .name { font-size:12.5px; font-weight:700; }
+  .lane-head .rng { font-family:'Fira Code',monospace; font-size:10.5px; color:var(--faint); margin-left:auto; white-space:nowrap; }
+  .pill { font-family:'Fira Code',monospace; font-size:10.5px; font-weight:600; padding:2px 7px; border-radius:5px;
+    background:var(--bad-bg); color:var(--bad); white-space:nowrap; }
+  .pill.good { background:var(--ok-bg); color:var(--ok); }
+  .pill.mid { background:var(--warn-bg); color:var(--warn); }
+  .lane svg { display:block; width:100%; height:auto; }
+
+  .note { margin-top:13px; font-size:12.5px; line-height:1.65; color:var(--dim); border-left:2px solid var(--line); padding-left:12px; }
+  .note b { color:var(--ink); font-weight:600; }
+  .note.alarm { border-left-color:var(--bad); }
+  .note.fine { border-left-color:var(--ok); }
+
+  pre { margin:13px 0 0; background:var(--panel); border:1px solid var(--line); border-radius:9px;
+    padding:11px 13px; overflow-x:auto; font-family:'Fira Code',monospace; font-size:11px; line-height:1.75; }
+  pre .hl { background:var(--ok-bg); display:inline-block; width:100%; }
+  pre .cm { color:var(--faint); }
+  pre .live { color:var(--ok); font-weight:600; }
+  .caption { font-family:'Fira Code',monospace; font-size:10px; color:var(--faint); margin:6px 0 0; }
+  .live { display:flex; flex-wrap:wrap; gap:8px; margin-top:7px; }
+  .live span { font-family:'Fira Code',monospace; font-size:10.5px; color:var(--dim);
+    background:var(--ok-bg); border-radius:5px; padding:3px 8px; white-space:nowrap; }
+  .live b { color:var(--ok); font-weight:600; }
+
+  .legend { display:flex; flex-wrap:wrap; gap:14px; margin-top:9px; font-family:'Fira Code',monospace; font-size:10px; color:var(--dim); }
+  .legend i { display:inline-block; width:14px; height:2px; vertical-align:3px; margin-right:5px; }
+</style>
+</head>
+<body>
+
+<h1>페이스 줄의 세로 폭을 정하는 세 가지</h1>
+<p class="lead">
+  같은 기록을 세 방법으로 그렸다. 값은 그대로고 <b>줄의 위아래를 어디로 잡느냐</b>만 다르다.
+  걷기는 튄 값이 아니라 진짜 기록이라 지울 수 없다.
+</p>
+
+<div class="bar">
+  <div class="grp">
+    <span>걷기 비율</span>
+    <div class="seg" id="walkSeg">
+      <button data-v="0">0%</button>
+      <button data-v="1">1%</button>
+      <button data-v="5">5%</button>
+      <button data-v="25">25%</button>
+      <button data-v="40">40%</button>
+    </div>
+  </div>
+  <div class="grp">
+    <span>폭주 한 점</span>
+    <button class="btn" id="spikeBtn" aria-pressed="false">554분/km 넣기</button>
+  </div>
+  <button class="btn" id="reBtn">다시 생성</button>
+</div>
+
+<div class="lanes" id="lanes"></div>
+
+<div class="legend">
+  <span><i style="background:var(--run)"></i>달린 구간</span>
+  <span><i style="background:var(--walk)"></i>걸은 구간</span>
+  <span><i style="background:var(--ok);height:8px;opacity:.18"></i>달린 구간이 차지하는 세로 폭</span>
+</div>
+
+<div class="note" id="note"></div>
+
+<pre id="code"></pre>
+<div class="live" id="live"></div>
+<p class="caption">FDRTraceView.swift 의 typicalRange</p>
+
+<script>
+(function () {
+  const W = 640, H = 92, PAD = 6;
+  const SPIKE = 554.38;              // 실제로 찍혔던 554:23
+  let walkPct = 25, spike = false, seed = 7;
+
+  /* ---------- 결정적 난수 ---------- */
+  function rng(s) {
+    let x = s >>> 0;
+    return function () {
+      x ^= x << 13; x >>>= 0;
+      x ^= x >> 17;
+      x ^= x << 5; x >>>= 0;
+      return x / 4294967296;
+    };
+  }
+
+  /* ---------- 표본 만들기 ----------
+     5초 간격 324개(27분). 달릴 때는 5~7분/km 사이에서 흔들리고,
+     걸을 때는 11.5~13분/km. 걷기는 덩어리로 들어간다. */
+  function build() {
+    const r = rng(seed);
+    const n = 324;
+    const walkCount = Math.round(n * walkPct / 100);
+    const blocks = walkPct === 0 ? 0 : Math.max(1, Math.round(walkCount / 18));
+    const isWalk = new Array(n).fill(false);
+    for (let b = 0; b < blocks; b++) {
+      const len = Math.round(walkCount / blocks);
+      const start = Math.floor(30 + r() * (n - 60 - len));
+      for (let i = start; i < Math.min(n, start + len); i++) isWalk[i] = true;
+    }
+    const out = [];
+    let drift = 0;
+    for (let i = 0; i < n; i++) {
+      drift += (r() - 0.5) * 0.14;
+      drift = Math.max(-0.9, Math.min(1.25, drift));
+      if (isWalk[i]) out.push({ v: 12.2 + drift * 0.4 + (r() - 0.5) * 0.6, walk: true });
+      else out.push({ v: 6.4 + drift + (r() - 0.5) * 0.32, walk: false });
+    }
+    if (spike) out[1] = { v: SPIKE, walk: false, spiked: true };
+    return out;
+  }
+
+  /* ---------- 세 가지 범위 ---------- */
+  const median = a => {
+    const m = a.length >> 1;
+    return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
+  };
+
+  function rangeMinMax(vals) {
+    const s = [...vals].sort((a, b) => a - b);
+    return { min: s[0], max: s[s.length - 1] };
+  }
+
+  function rangeTrim(vals) {
+    const s = [...vals].sort((a, b) => a - b);
+    const cut = Math.max(1, Math.round(s.length * 0.02));
+    return { min: s[cut], max: s[s.length - 1 - cut] };
+  }
+
+  function rangeTypical(vals) {
+    const s = [...vals].sort((a, b) => a - b);
+    const center = median(s);
+    const spread = median(s.map(v => Math.abs(v - center)).sort((a, b) => a - b));
+    if (spread <= 0) return { min: s[0], max: s[s.length - 1], center, spread };
+    return { min: center - spread * 3, max: center + spread * 3, center, spread };
+  }
+
+  /* ---------- 그리기 ---------- */
+  const fmt = v => {
+    if (!isFinite(v)) return "∞";
+    const t = Math.round(v * 60);
+    return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
+  };
+
+  function lane(samples, rng_, label) {
+    const span = rng_.max - rng_.min;
+    const y = v => {
+      const t = span > 0 ? (v - rng_.min) / span : 0.5;
+      return (H - PAD * 2) * (1 - t) + PAD;
+    };
+    const x = i => W * i / (samples.length - 1);
+
+    // 달린 구간이 차지하는 세로 폭
+    const runs = samples.filter(s => !s.walk && !s.spiked).map(s => s.v);
+    const rLo = Math.min(...runs), rHi = Math.max(...runs);
+    const covered = span > 0
+      ? Math.max(0, Math.min(1, (Math.min(rHi, rng_.max) - Math.max(rLo, rng_.min)) / span))
+      : 0;
+
+    // 범위 밖은 잘린다 (앱과 같은 동작)
+    let d = "", drawing = false;
+    const segs = [];
+    let cur = null;
+    samples.forEach((s, i) => {
+      const inside = s.v >= rng_.min && s.v <= rng_.max;
+      if (!inside) { cur = null; return; }
+      const px = x(i), py = y(s.v);
+      if (!cur || cur.walk !== s.walk) {
+        cur = { walk: s.walk, pts: [] };
+        segs.push(cur);
+        if (i > 0) {
+          const p = samples[i - 1];
+          if (p.v >= rng_.min && p.v <= rng_.max) cur.pts.push([x(i - 1), y(p.v)]);
+        }
+      }
+      cur.pts.push([px, py]);
+    });
+
+    const band = `<rect x="0" y="${y(Math.min(rHi, rng_.max)).toFixed(1)}" width="${W}"
+      height="${Math.max(0, y(Math.max(rLo, rng_.min)) - y(Math.min(rHi, rng_.max))).toFixed(1)}"
+      fill="var(--ok)" opacity=".18"/>`;
+
+    const paths = segs.filter(s => s.pts.length > 1).map(s =>
+      `<polyline points="${s.pts.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ")}"
+        fill="none" stroke="${s.walk ? "var(--walk)" : "var(--run)"}" stroke-width="1.6"
+        stroke-linejoin="round" stroke-linecap="round"/>`).join("");
+
+    return {
+      covered,
+      svg: `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="height:${H}px">
+        <rect x="0" y="0" width="${W}" height="${H}" fill="none"/>
+        ${band}${paths}
+      </svg>`
+    };
+  }
+
+  function render() {
+    const samples = build();
+    const vals = samples.map(s => s.v);
+    const defs = [
+      { key: "minmax", name: "최소~최대", r: rangeMinMax(vals) },
+      { key: "trim", name: "양 끝 2% 제거", r: rangeTrim(vals) },
+      { key: "typical", name: "중앙값 ± 3×MAD", r: rangeTypical(vals) }
+    ];
+
+    let best = -1, bestCov = -1;
+    const built = defs.map((d, i) => {
+      const L = lane(samples, d.r, d.name);
+      if (L.covered > bestCov) { bestCov = L.covered; best = i; }
+      return L;
+    });
+
+    document.getElementById("lanes").innerHTML = defs.map((d, i) => {
+      const pct = Math.round(built[i].covered * 100);
+      const cls = i === best ? " best" : (pct < 25 ? " broken" : "");
+      const pill = pct >= 40 ? "good" : (pct >= 25 ? "mid" : "");
+      return `<div class="lane${cls}">
+        <div class="lane-head">
+          <span class="name">${d.name}</span>
+          <span class="pill ${pill}">달린 구간 ${pct}%</span>
+          <span class="rng">${fmt(d.r.min)} ~ ${fmt(d.r.max)}</span>
+        </div>
+        ${built[i].svg}
+      </div>`;
+    }).join("");
+
+    const t = defs[2].r;
+    const trimPct = Math.round(built[1].covered * 100);
+    const typPct = Math.round(built[2].covered * 100);
+
+    let msg;
+    if (walkPct === 0 && !spike) {
+      msg = `걷기도 폭주도 없으면 <b>세 방법이 거의 같다.</b> 값들이 이미 한 군데 모여 있어서 끝값이 곧 보통 범위다.
+        2% 제거가 듣는 것처럼 보이는 건 이 상태에서 본 결과다.`;
+    } else if (spike && walkPct === 0) {
+      msg = `폭주 한 점만으로 <b>최소~최대가 무너진다</b>(${Math.round(built[0].covered * 100)}%).
+        이건 2% 제거로도 잡힌다. 점 하나는 324개 중 0.3%라 떼어내는 2% 안에 들어가기 때문이다.
+        <b>2% 제거가 통하는 건 여기까지다.</b>`;
+    } else if (trimPct >= typPct - 10) {
+      msg = `걷기가 ${walkPct}%(324개 중 ${Math.round(324 * walkPct / 100)}개)면 아직 2% 제거로도 버틴다.
+        떼어내는 양 끝 2%가 ${Math.round(324 * 0.02)}개씩이라 걷는 값이 그 안에 들어가기 때문이다.
+        <b>한 칸만 더 올려보면</b> 그 선을 넘는다.`;
+    } else {
+      msg = `걷기가 ${walkPct}%(324개 중 ${Math.round(324 * walkPct / 100)}개)면 <b>2% 제거는 전혀 안 듣는다</b>(${trimPct}%).
+        떼어내는 건 양 끝 ${Math.round(324 * 0.02)}개뿐이라 나머지가 그대로 남는다.
+        반면 중앙값은 ${fmt(t.center)}로 여전히 달린 구간 안에 있다(${typPct}%).
+        <b>걷기가 절반을 넘지 않는 한 중앙값은 안 움직인다.</b> 그게 끝값을 보는 두 방법과 갈리는 지점이다.`;
+    }
+    const noteEl = document.getElementById("note");
+    noteEl.className = "note " + (typPct - trimPct > 10 ? "alarm" : "fine");
+    noteEl.innerHTML = msg;
+
+    document.getElementById("code").innerHTML =
+`<span class="cm">// 값들이 보통 어디쯤 모여 있는지로 폭을 잡는다</span>
+let center = median(of: sorted)
+let spread = median(of: sorted.map { abs($0 - center) }.sorted())
+<span class="hl">return (center - spread * 3, center + spread * 3)</span>`;
+
+    document.getElementById("live").innerHTML =
+      `<span>center <b>${fmt(t.center)}</b></span>` +
+      `<span>spread <b>${t.spread.toFixed(2)}분</b></span>` +
+      `<span>범위 <b>${fmt(t.min)} ~ ${fmt(t.max)}</b></span>`;
+  }
+
+  /* ---------- 조작 ---------- */
+  const seg = document.getElementById("walkSeg");
+  function syncSeg() {
+    [...seg.children].forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.v === walkPct)));
+  }
+  seg.addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    walkPct = +b.dataset.v; syncSeg(); render();
+  });
+  const spikeBtn = document.getElementById("spikeBtn");
+  spikeBtn.addEventListener("click", () => {
+    spike = !spike; spikeBtn.setAttribute("aria-pressed", String(spike)); render();
+  });
+  document.getElementById("reBtn").addEventListener("click", () => {
+    seed = (seed * 1103515245 + 12345) >>> 0 || 1; render();
+  });
+
+  syncSeg();
+  render();
+})();
+</script>
+
+</body>
+</html>
