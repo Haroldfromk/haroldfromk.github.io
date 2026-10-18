@@ -2,6 +2,7 @@
 title: RunWay 1.4 (11) 걸어서 얻은 것과 못 얻은 것
 writer: Harold
 date: 2026-10-05 19:00:00 +0900
+last_modified_at: 2026-10-07 20:30:00 +0900
 categories: [RunWay, CoreMotion]
 tags: [CoreLocation, SwiftUI, HealthKit, WatchConnectivity, OSLog]
 

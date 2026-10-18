@@ -2,6 +2,7 @@
 title: RunWay 1.2 (5) TTS 마무리 & CloudKit 백업 기능
 writer: Harold
 date: 2026-07-28 11:00:00 +0900
+last_modified_at: 2026-10-08 17:46:00 +0900
 categories: [RunWay]
 tags: [AVFoundation, SwiftData, CloudKit]
 
@@ -366,6 +367,101 @@ enum PolylineSimplifier {
     // 생략
 }
 ```
+
+---
+
+### 케이스가 없는 enum 으로 둔 이유
+
+위 코드에서 `PolylineSimplifier` 를 `enum` 으로 선언했다. 케이스가 하나도 없는 `enum` 이다.
+**이 모양은 AI 가 제안한 것이고, 처음엔 왜 `enum` 인지 몰랐다.** 내가 아는 `enum` 은
+경우를 나열하는 것이었다.
+
+이유는 하나였다. **케이스가 없는 `enum` 은 만들 수가 없다.**
+
+```swift
+PolylineSimplifier()      // 컴파일 에러
+```
+
+`struct` 로 두면 이게 통과한다. 아무것도 안 들어 있는 값이 하나 생긴다. 쓸 데가 없는데
+만들 수 있고, 실수로 `let s = PolylineSimplifier()` 라고 써도 **컴파일러가 안 막는다.**
+
+이 타입 안에는 정적 상수 셋과 정적 함수들뿐이다. 인스턴스가 들고 있을 게 없다.
+좌표 배열을 받아 솎아낸 좌표를 돌려주고 끝이고, **다음 호출이 이전 호출을 모른다.**
+그러면 "이건 타입이 아니라 이름표다" 를 타입 시스템에 적어두는 쪽이 낫다. 주석으로
+"만들지 마세요" 라고 적는 것과 애초에 못 만들게 하는 것은 다르다.
+
+---
+
+### 셋을 가르는 한 가지 질문
+
+<svg viewBox="0 0 680 268" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;display:block;margin:22px auto;color:inherit" role="img" aria-labelledby="t3 d3">
+<title id="t3">Foo() 를 했을 때 class, struct, 케이스 없는 enum 이 각각 어떻게 되는가</title>
+<desc id="d3">왼쪽 class 는 상자 하나를 만들고 변수 둘이 그 하나를 함께 가리킨다. 가운데 struct 는 상자가 둘로 복사돼 각자 따로 있다. 오른쪽 케이스 없는 enum 은 만들 자리 자체가 없어 컴파일되지 않는다.</desc>
+<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+
+<text x="340" y="18" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">Foo() 를 하면</text>
+
+<g stroke-width="1" opacity="0.18"><path d="M227,34 L227,250 M453,34 L453,250"/></g>
+
+<!-- class -->
+<text x="113" y="58" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">class</text>
+<g font-size="11" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.75">
+<text x="113" y="80">let a = Foo()</text><text x="113" y="97">let b = a</text>
+</g>
+<g font-size="11" text-anchor="middle" fill="currentColor" stroke="none" font-weight="700">
+<text x="72" y="130">a</text><text x="154" y="130">b</text>
+</g>
+<g stroke-width="1.5"><path d="M72,138 L104,166 M154,138 L122,166"/></g>
+<rect x="83" y="170" width="60" height="42" rx="7" stroke-width="1.8"/>
+<text x="113" y="196" font-size="11" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.8">하나</text>
+<text x="113" y="240" font-size="11.5" text-anchor="middle" fill="currentColor" stroke="none" font-weight="700">둘이 같은 것을 본다</text>
+
+<!-- struct -->
+<text x="340" y="58" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">struct</text>
+<g font-size="11" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.75">
+<text x="340" y="80">let a = Foo()</text><text x="340" y="97">var b = a</text>
+</g>
+<g font-size="11" text-anchor="middle" fill="currentColor" stroke="none" font-weight="700">
+<text x="299" y="130">a</text><text x="381" y="130">b</text>
+</g>
+<g stroke-width="1.5"><path d="M299,138 L299,166 M381,138 L381,166"/></g>
+<rect x="269" y="170" width="60" height="42" rx="7" stroke-width="1.8"/>
+<rect x="351" y="170" width="60" height="42" rx="7" stroke-width="1.8"/>
+<text x="340" y="240" font-size="11.5" text-anchor="middle" fill="currentColor" stroke="none" font-weight="700">복사돼서 따로 있다</text>
+
+<!-- enum (케이스 없음) -->
+<text x="566" y="58" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">enum</text>
+<text x="566" y="74" font-size="10" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.6">케이스가 없을 때</text>
+<text x="566" y="95" font-size="11" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.75">let a = Foo()</text>
+<rect x="536" y="170" width="60" height="42" rx="7" stroke-width="1.6" stroke-dasharray="4 4" opacity="0.4"/>
+<g stroke-width="2"><path d="M545,179 L587,203 M587,179 L545,203"/></g>
+<text x="566" y="240" font-size="11.5" text-anchor="middle" fill="currentColor" stroke="none" font-weight="700">만들 수가 없다</text>
+
+</g>
+</svg>
+
+**만들면 무엇이 생기는가.** 이 하나로 셋이 갈린다.
+
+`class` 는 **하나를 만들고 그 자리를 가리킨다.** 변수 둘에 담으면 둘 다 같은 것을 본다.
+한쪽에서 값을 바꾸면 다른 쪽에서도 바뀐다. 그래서 **살아 있는 동안 상태가 변하는 것**에 쓴다.
+
+`struct` 는 **담을 때마다 복사된다.** 둘은 각자 따로다. 한쪽을 바꿔도 다른 쪽은 그대로다.
+그래서 **값 자체인 것**에 쓴다.
+
+케이스가 없는 `enum` 은 **만들 자리가 아예 없다.** 값으로 쓸 수 없으니 남는 쓰임이
+하나뿐이다. 정적 멤버를 묶어두는 이름표다.
+
+이 글에서 뒤에 나오는 `CloudBackupService` 와 `CloudSyncStatusService` 도 같은 이유로
+`enum` 이다. 셋 다 들고 있는 게 없다.
+
+지금 프로젝트를 세어보면 이렇게 갈라져 있다.
+
+| 무엇 | 왜 그 모양인가 | 예 |
+|---|---|---|
+| `class` | 살아 있는 동안 들고 있는 게 있다 | `LocationService` 는 위치 관리자와 델리게이트를, `SpeechAnnouncerService` 는 합성기와 오디오 세션을 들고 있다 |
+| `struct` | 값 그 자체다 | 러닝 중 화면으로 흐르는 `FlightData` 는 복사돼 돌아다녀야 한다 |
+| `enum` | 들고 있는 게 없다 | `PolylineSimplifier`, `CloudBackupService`. 입력을 받아 결과를 내고 끝난다 |
+
 
 좌표를 나중에 다른 용도로 더 쓰게 되더라도 문제는 없어 보인다. GPWS 경고 기록은 자기 위도/경도를 따로 저장하고 있고, 분석에 쓸 지표들도 이미 스플릿 단위로 집계돼 있어서, 좌표 배열의 해상도랑은 무관하기 때문이다. 이건 아직 생각만 정리한 단계라, 실제로 로컬 저장 방식까지 손볼지는 CloudKit 붙일 때 같이 정할 예정이다.
 
