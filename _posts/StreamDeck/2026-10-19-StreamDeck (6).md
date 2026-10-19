@@ -2,6 +2,7 @@
 title: StreamDeck (6) 무각 키보드 대신 쓰는 아이패드 숫자 키패드, 그리고 메시지 암호화
 writer: Harold
 date: 2026-10-19 18:50:00 +0900
+last_modified_at: 2026-10-20 00:18:00 +0900
 categories: [StreamDeck]
 tags: [CGEvent, CryptoKit, ChaChaPoly, SwiftUI]
 
@@ -190,7 +191,7 @@ public mutating func open(_ text: String) throws -> String {
 - [CGEvent.init(keyboardEventSource:virtualKey:keyDown:) (Apple)](https://developer.apple.com/documentation/coregraphics/cgevent/init(keyboardeventsource:virtualkey:keydown:))
 - [CGEvent.post(tap:) (Apple)](https://developer.apple.com/documentation/coregraphics/cgevent/post(tap:))
 - [ChaChaPoly (CryptoKit, Apple)](https://developer.apple.com/documentation/cryptokit/chachapoly)
-- [ChaChaPoly.seal(_:using:nonce:authenticating:) (Apple)](https://developer.apple.com/documentation/cryptokit/chachapoly/seal(_:using:nonce:authenticating:))
+- [ChaChaPoly.seal(\_:using:nonce:authenticating:) (Apple)](https://developer.apple.com/documentation/cryptokit/chachapoly/seal(%5F:using:nonce:authenticating:))
 - [RFC 8439: ChaCha20 and Poly1305](https://www.rfc-editor.org/rfc/rfc8439)
 - [Mbed TLS chachapoly.h (ESP32 쪽)](https://github.com/Mbed-TLS/mbedtls/blob/v3.6.0/include/mbedtls/chachapoly.h)
 - [AppStorage (Apple)](https://developer.apple.com/documentation/swiftui/appstorage)

@@ -10,6 +10,9 @@ toc_sticky: true
 published: true
 ---
 
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+{: .prompt-info }
+
 [이전글](https://haroldfromk.github.io/posts/RunningProject-(32)/){:target="_blank"}에서 심박 미션 버그를 다 잡고, 이번엔 다음 순서였던 km 단위 스플릿 기능으로 넘어왔다. 러닝 하나를 1km마다 끊어서 그 구간 페이스/심박/케이던스를 따로 기록하는 기능이다.
 
 ---

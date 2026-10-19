@@ -10,6 +10,9 @@ toc_sticky: true
 published: true
 ---
 
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+{: .prompt-info }
+
 심박 기반 러닝 모드를 만들다가 [이전글](https://haroldfromk.github.io/posts/RunningProject-(30)/){:target="_blank"}에서 `reset()`이 `modeAData`를 지우는 진짜 원인을 찾았다. 
 
 확인해보니 이 문제는 지금 작업 중인 브랜치에서 생긴 게 아니라 원래 배포된 버전(`v1.0`)에도 그대로 있는 문제였다. 

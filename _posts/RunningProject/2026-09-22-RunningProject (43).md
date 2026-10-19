@@ -11,6 +11,9 @@ toc_sticky: true
 published: true
 ---
 
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+{: .prompt-info }
+
 [이전 글](https://haroldfromk.github.io/posts/RunningProject-(41)/){:target="_blank"}에서 GPWS 경고와 건강 앱 중복 저장을 고쳤다. 1.3.2를 마무리하면서 두 개를 더 손봤는데, 앞의 둘과 성격이 달라서 따로 적는다.
 
 7일 리마인더와 Pre-flight Check의 APPLE WATCH 항목이다. 기능도 화면도 다른데 **틀린 자리가 같았다.**

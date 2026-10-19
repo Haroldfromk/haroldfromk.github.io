@@ -2,6 +2,7 @@
 title: StreamDeck (1) 아이패드와 맥이 같은 와이파이에서 서로를 찾아 붙기까지
 writer: Harold
 date: 2026-10-19 18:00:00 +0900
+last_modified_at: 2026-10-20 00:18:00 +0900
 categories: [StreamDeck]
 tags: [Network, Bonjour, WebSocket, NWListener]
 
@@ -142,11 +143,11 @@ server state failed(POSIXErrorCode(rawValue: 54): Connection reset by peer)
 
 | 클라이언트 연결 방법 | 결과 |
 |---|---|
-| WebSocket 옵션 + `host: "127.0.0.1", port:` | 실패 (POSIX 53) |
-| WebSocket 옵션 없이 TCP만 | 성공 |
-| WebSocket 옵션 + `maximumMessageSize` 빼기 | 실패 (POSIX 53) |
-| WebSocket 옵션 + `.url(ws://127.0.0.1:포트/)` | 성공 |
-| WebSocket 옵션 + Bonjour로 찾은 서비스 그대로 | 성공 |
+| WebSocket 옵션 + `host: "127.0.0.1", port:` | <span style="color:#e5534b">**실패**</span> (POSIX 53) |
+| WebSocket 옵션 없이 TCP만 | <span style="color:#2e9e4f">**성공**</span> |
+| WebSocket 옵션 + `maximumMessageSize` 빼기 | <span style="color:#e5534b">**실패**</span> (POSIX 53) |
+| WebSocket 옵션 + `.url(ws://127.0.0.1:포트/)` | <span style="color:#2e9e4f">**성공**</span> |
+| WebSocket 옵션 + Bonjour로 찾은 서비스 그대로 | <span style="color:#2e9e4f">**성공**</span> |
 
 TCP만 쓰면 되니까 와이파이나 방화벽 문제는 아니었고, 크기 옵션과도 상관없었다. 달라진 건 "어디로 붙는지"를 적는 방식뿐이었다. WebSocket은 처음 붙을 때 HTTP 요청(`GET / HTTP/1.1`과 `Host` 줄)을 한 번 보내고 WebSocket으로 바꿔 타는데, `host:port`로만 적으면 이 요청을 만드는 데 필요한 주소 정보가 모자라서 그런 것으로 보인다. 애플 문서에서 이 경우를 콕 집어 설명한 부분은 찾지 못해서 추정으로 남겨 둔다. `ws://` 주소로 적거나 Bonjour로 찾은 서비스로 붙으면 둘 다 바로 열렸다.
 
@@ -256,7 +257,7 @@ public init(path: NWPath) {
 - [maximumMessageSize (Apple)](https://developer.apple.com/documentation/network/nwprotocolwebsocket/options/maximummessagesize)
 - [NWBrowser (Apple)](https://developer.apple.com/documentation/network/nwbrowser)
 - [NWConnection (Apple)](https://developer.apple.com/documentation/network/nwconnection)
-- [NWEndpoint.url(_:) (Apple)](https://developer.apple.com/documentation/network/nwendpoint/url(_:))
+- [NWEndpoint.url(\_:) (Apple)](https://developer.apple.com/documentation/network/nwendpoint/url(%5F:))
 - [TN3179: Understanding local network privacy (Apple)](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy)
 - [NSBonjourServices (Apple)](https://developer.apple.com/documentation/bundleresources/information-property-list/nsbonjourservices)
 - [NSLocalNetworkUsageDescription (Apple)](https://developer.apple.com/documentation/bundleresources/information-property-list/nslocalnetworkusagedescription)

@@ -10,6 +10,9 @@ toc_sticky: true
 published: true
 ---
 
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+{: .prompt-info }
+
 네비게이션 헤더를 바꿔보려고한다.
 
 사실 의식을 하지 않고있었는데, 새로운 기능을 준비중이라 AI에게 관련 기능을 설명하고 mockui를 받고, 또 그걸 swiftui로 그리게 했는데 UI를 확인해보던 중 Custom Navigation Header 가 눈에 띄였다.

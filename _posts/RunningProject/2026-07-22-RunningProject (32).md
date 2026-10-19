@@ -10,6 +10,9 @@ toc_sticky: true
 published: true
 ---
 
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+{: .prompt-info }
+
 [이전글](https://haroldfromk.github.io/posts/RunningProject-(31)/){:target="_blank"}에서 1.1 핫픽스가 승인나고, 다시 심박 기능 브랜치로 돌아왔다. 
 
 버전을 1.2로 올리고(핫픽스가 이미 1.1을 써버려서), 핫픽스에서 고친 내용도 이 브랜치에 옮겨왔다.
