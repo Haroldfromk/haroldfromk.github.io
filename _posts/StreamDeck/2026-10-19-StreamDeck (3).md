@@ -144,6 +144,24 @@ func shellStillContinuesAfterBrokenCommand(_ command: String) throws {
 }
 ```
 
+그런데 창이 늘 남는 게 맞는 건 아니었다. `npm run dev`나 `bundle exec jekyll serve`처럼 서버를 띄우는 명령은 창이 켜져 있어야 하지만, `uploadimg`처럼 금방 끝나는 명령은 끝난 창이 계속 쌓인다. 그래서 명령어 편집 화면에 "명령이 끝나면 창 닫기" 토글을 두고 버튼마다 고르게 했다. 켜면 뒤의 `exec zsh`를 붙이지 않아서 명령이 끝날 때 창도 닫힌다. 대신 오류가 나도 창이 바로 닫히니, 결과를 봐야 하는 명령은 꺼 둔다.
+
+```swift
+// AlacrittyCommand.swift (DeckKit)
+/// keepOpen == false면 명령이 끝날 때 창도 닫힌다 (뒤에 exec zsh를 붙이지 않는다)
+public static func openArguments(command: String?, directory: String?, keepOpen: Bool = true) -> [String] {
+    let dir = directory.map(expandTilde) ?? NSHomeDirectory()
+    var args = ["-na", appPath, "--args", "--working-directory", dir]
+    if let command {
+        let script = "eval \(singleQuoted(command))"
+        args += ["-e", "/bin/zsh", "-ic", keepOpen ? "\(script); exec zsh" : script]
+    }
+    return args
+}
+```
+
+기본은 지금처럼 창 유지다. 이 값이 생기기 전에 만든 버튼은 설정 파일에 값이 없으니 창 유지로 읽고, 저장할 때도 "닫기"일 때만 `"keepOpen": false`를 적어서 기존 버튼의 저장 모양이 바뀌지 않게 했다.
+
 ---
 
 ## 있는 별칭을 없다고 하던 문제
