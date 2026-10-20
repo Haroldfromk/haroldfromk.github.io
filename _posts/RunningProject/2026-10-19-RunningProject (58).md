@@ -3,7 +3,7 @@ title: RunWay에 테스트를 붙이고 스토어 자산을 코드로 그렸다
 writer: Harold
 date: 2026-10-19 21:00:00 +0900
 categories: [RunWay, SwiftUI]
-tags: [SwiftUI, SwiftTesting, GitHubActions, 테스트, CI, AppStore]
+tags: [SwiftUI, SwiftTesting, GitHubActions, Test, CI, AppStore]
 
 toc: true
 toc_sticky: true

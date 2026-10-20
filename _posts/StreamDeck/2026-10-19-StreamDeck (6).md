@@ -2,7 +2,7 @@
 title: StreamDeck (6) 무각 키보드 대신 쓰는 아이패드 숫자 키패드, 그리고 메시지 암호화
 writer: Harold
 date: 2026-10-19 18:50:00 +0900
-last_modified_at: 2026-10-20 00:18:00 +0900
+last_modified_at: 2026-10-20 16:47:00 +0900
 categories: [StreamDeck]
 tags: [CGEvent, CryptoKit, ChaChaPoly, SwiftUI]
 
@@ -19,7 +19,7 @@ published: true
 
 ## 스트림덱과 바꿔 쓰는 키패드 화면
 
-상태 줄 옆에 "스트림덱 / 숫자 키패드" 전환을 두고, 마지막에 고른 화면을 `@AppStorage`로 기억하게 했다. 오른쪽 볼륨 게이지는 어느 화면이든 그대로 있다.
+상태 줄 옆에 "스트림덱 / 숫자 키패드" 전환을 두고, 마지막에 고른 화면을 `@AppStorage`로 기억하게 했다. `@AppStorage`는 값을 기기에 작게 저장해 두는 칸이라, 앱을 껐다 켜도 마지막에 고른 화면이 남는다. 오른쪽 볼륨 게이지는 어느 화면이든 그대로 있다.
 
 ```swift
 // DeckView.swift (iOS)
@@ -30,6 +30,12 @@ enum Screen: String, CaseIterable {
     case keypad = "숫자 키패드"
 }
 ```
+
+#### AppStorage로 고른 화면 기억하기
+
+[`@AppStorage`](https://developer.apple.com/documentation/swiftui/appstorage){:target="_blank"}는 `UserDefaults`(기기에 작게 저장하는 칸)에 값을 넣고 빼는 SwiftUI 표시다. 값이 바뀌면 화면도 다시 그린다. [`CaseIterable`](https://developer.apple.com/documentation/swift/caseiterable){:target="_blank"}을 붙인 enum은 `allCases`로 모든 경우를 꺼낼 수 있어서, 전환 버튼을 경우마다 하나씩 만들었다.
+
+`enum Screen: String`처럼 쓰면 경우마다 글자 값(raw value)이 붙는다. 이 글자가 화면에 보이는 이름이자 저장되는 값이다.
 
 키패드는 전화기처럼 3×4로 놓고 아래에 넓은 Enter를 뒀다. 마지막 줄의 Tab은 아이디 칸에서 비밀번호 칸으로 넘어갈 때 쓰고, 오른쪽은 지우기다. 키 크기는 남은 공간에 3열, 5줄이 다 들어가는 가장 큰 정사각형으로 정했다. 화면 전체는 스크롤되지 않는다.
 
@@ -52,6 +58,10 @@ var body: some View {
 }
 ```
 
+#### GeometryReader로 키 크기 정하기
+
+[`GeometryReader`](https://developer.apple.com/documentation/swiftui/geometryreader){:target="_blank"}가 알려 주는 자리 크기(`geo.size`)로, 3열 5줄이 다 들어가는 가장 큰 정사각형 키 크기를 계산했다.
+
 키 모양과 눌림, 진동은 스트림덱 버튼과 똑같이 했다. 친 숫자는 화면 어디에도 표시하지 않는다. 옆에서 아이패드를 보는 사람이 있을 수도 있어서다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-6/touchdeck-keypad.png)
@@ -70,6 +80,20 @@ var body: some View {
 ```
 
 맥은 이걸 받아서 키보드 이벤트를 만든다. 볼륨 키는 "시스템 정의 이벤트"였지만 숫자는 일반 키라서 `CGEvent(keyboardEventSource:virtualKey:keyDown:)`로 누름과 뗌을 만든다. 볼륨 키 때문에 이미 받아 둔 손쉬운 사용 권한을 그대로 쓴다.
+
+---
+
+### 키 이벤트와 키 번호란?
+
+키보드에서 키를 누르면 맥은 "몇 번 키가 눌렸다", "몇 번 키가 떼졌다"는 알림을 받는다. 이 알림이 키 이벤트이고, 몇 번 키인지가 키 번호다. 키 번호는 글자가 아니라 키보드 위의 자리다. 그 자리가 무슨 글자가 될지는 맥의 입력 상태(한글, 영어)가 정한다. 같은 자리라도 영어 상태면 a, 한글 상태면 ㅁ이 되는 이유다.
+
+![아이패드에서 7 키를 누르면 typeKey 7 메시지가 가고, 맥이 키 번호 26의 누름과 뗌 이벤트를 만들어 앞에 떠 있는 앱에 7이 들어간다](/assets/images/upload/touchdeck-key-event.png)
+
+`CGEvent`로 키 이벤트를 직접 만들면, 맥은 진짜 키보드에서 그 키를 누른 것과 똑같이 처리한다. 그래서 어떤 앱이든 따로 맞출 필요가 없다.
+
+---
+
+### 숫자를 키 번호로 보내기
 
 ```swift
 // KeyTyper.swift (맥)
@@ -100,6 +124,16 @@ static func type(_ key: TypedKey) -> Bool {
 }
 ```
 
+#### CGEvent로 키 누르고 떼기
+
+`type(_:)`은 키 하나를 이렇게 보낸다.
+
+1. 보낼 키 번호([`CGKeyCode`](https://developer.apple.com/documentation/coregraphics/cgkeycode){:target="_blank"})를 고른다. 이름은 Carbon `HIToolbox`(`Events.h`)에 `kVK_ANSI_7`(윗줄 7 키, 26), `kVK_Tab`, `kVK_Return`, `kVK_Delete`처럼 정의돼 있다. 따로 된 Apple 문서 페이지는 없다.
+2. [`CGEventSource(stateID:)`](https://developer.apple.com/documentation/coregraphics/cgeventsource/init%28stateid:%29){:target="_blank"}로 이벤트 출처를 정한다. `.hidSystemState`는 실제 키보드와 같은 출처다.
+3. [`CGEvent(keyboardEventSource:virtualKey:keyDown:)`](https://developer.apple.com/documentation/coregraphics/cgevent/init%28keyboardeventsource:virtualkey:keydown:%29){:target="_blank"}로 누름(`keyDown: true`)과 뗌 이벤트를 하나씩 만든다.
+4. [`flags`](https://developer.apple.com/documentation/coregraphics/cgevent/flags){:target="_blank"}(같이 눌린 Shift, Control, Command)를 빈 값으로 둔다. 맥에서 누르고 있는 다른 키가 섞이지 않는다.
+5. [`post(tap: .cghidEventTap)`](https://developer.apple.com/documentation/coregraphics/cgevent/post%28tap:%29){:target="_blank"}으로 누름, 뗌 순서로 시스템에 넣는다.
+
 숫자를 키보드 오른쪽 숫자 키패드의 키 번호가 아니라 윗줄 숫자 키 번호로 보낸 건, 맥 키보드에 원래 있는 키라서 어느 앱이든 똑같이 받기 때문이다. 한글 입력 상태여도 윗줄 숫자 키는 숫자로 들어간다. 키 번호는 `Carbon.HIToolbox`에 이름(`kVK_ANSI_7` 같은)으로 들어 있어서 그 이름으로 테스트했다.
 
 ```swift
@@ -112,6 +146,10 @@ static func type(_ key: TypedKey) -> Bool {
     }
 }
 ```
+
+#### enumerated로 순번과 값 같이 보기
+
+[`enumerated()`](https://developer.apple.com/documentation/swift/sequence/enumerated%28%29){:target="_blank"}는 배열을 돌면서 순번과 값을 같이 준다. 숫자 0~9와 키 번호를 짝지어 확인했다.
 
 맥 앱은 받은 메시지를 로그에 찍어 왔는데, 키패드 입력만은 찍지 않게 했다.
 
@@ -132,7 +170,27 @@ macOS는 일부 비밀번호 칸에서 다른 프로그램이 보낸 키 입력�
 
 5편에서 허락 뒤의 모든 메시지에 서명을 붙였다. 서명은 메시지를 바꾸거나 지어내는 걸 막지만 내용을 숨기지는 않는다. 봉투의 `body`는 누가 엿봐도 그대로 읽힌다. 버튼 누르기는 상관없지만 비밀번호 숫자는 다르다.
 
-그래서 봉투를 ChaChaPoly 암호화로 바꿨다. ChaChaPoly는 암호화와 위조 확인을 한 번에 하는 방식이다. 키가 없으면 내용을 못 읽고, 한 글자라도 바뀌면 열리지 않는다. 키는 5편에서 만든 이번 접속 전용 키(방향별로 따로)를 그대로 쓴다. 메시지 번호는 암호화할 때 "같이 확인할 값"으로 넣어서, 번호만 바꿔 다시 보내도 열리지 않게 했다. CryptoKit에 `ChaChaPoly`가 있고, ESP32 쪽 Mbed TLS에도 `chachapoly.h`가 있다.
+---
+
+### 서명과 암호화는 무엇이 다른가
+
+서명은 "이 내용을 키 가진 사람이 썼고, 중간에 안 바뀌었다"를 보장한다. 내용 자체는 그대로 보인다. 봉투에 도장을 찍었지만 봉투가 투명한 셈이다. 암호화는 키가 없으면 내용을 읽을 수 없게 바꾸는 것이다. 봉투를 불투명하게 만드는 쪽이다.
+
+![서명만 붙인 봉투는 body에 key 7이 그대로 보이고, 암호화한 봉투는 box가 알아볼 수 없는 글자라 엿봐도 무슨 키인지 모른다](/assets/images/upload/touchdeck-sign-vs-encrypt.png)
+
+비밀번호 숫자는 바꾸지 못하게 하는 것만으로는 모자라고, 아예 보이지 않아야 한다. 그래서 암호화가 필요했다.
+
+그래서 봉투를 ChaChaPoly 암호화로 바꿨다. ChaChaPoly는 암호화와 위조 확인을 한 번에 하는 방식이다. 키가 없으면 내용을 못 읽고, 한 글자라도 바뀌면 열리지 않는다. 키는 5편에서 만든 이번 접속 전용 키(방향별로 따로)를 그대로 쓴다. 메시지 번호는 암호화할 때 "같이 확인할 값"으로 넣어서, 번호만 바꿔 다시 보내도 열리지 않게 했다. CryptoKit에 [`ChaChaPoly`](https://developer.apple.com/documentation/cryptokit/chachapoly){:target="_blank"}가 있고, ESP32 쪽 Mbed TLS에도 `chachapoly.h`가 있다.
+
+---
+
+### ChaChaPoly란?
+
+ChaChaPoly는 두 가지를 묶은 이름이다. ChaCha20이 내용을 알아볼 수 없게 섞고(암호화), Poly1305가 "확인 값"을 만들어 붙인다. 이렇게 숨기기와 위조 확인을 한 번에 하는 방식을 묶어서 인증 암호화라고 부른다.
+
+![이번 접속 키, 원래 메시지, 같이 확인할 값인 번호를 ChaChaPoly에 넣으면 nonce 12바이트, 암호문, 확인 값 16바이트가 붙은 box가 나온다](/assets/images/upload/touchdeck-chachapoly.png)
+
+암호화할 때마다 nonce(한 번만 쓰는 무작위 값)를 새로 써서, 같은 메시지를 두 번 보내도 암호문이 매번 달라진다. "같이 확인할 값"은 숨기지는 않지만 확인 값 계산에 들어가는 값이다. 여기에 메시지 번호를 넣었다. 번호를 바꾸면 확인 값이 맞지 않아 열리지 않는다. CryptoKit의 `combined`는 nonce, 암호문, 확인 값을 순서대로 이어 붙인 한 덩어리다.
 
 ```swift
 // SecureSession.swift (DeckKit)
@@ -158,6 +216,15 @@ public mutating func open(_ text: String) throws -> String {
     return body
 }
 ```
+
+#### ChaChaPoly로 봉투 잠그고 열기
+
+잠글 때와 열 때가 서로 반대 순서다.
+
+1. [`ChaChaPoly.seal(_:using:nonce:authenticating:)`](https://developer.apple.com/documentation/cryptokit/chachapoly/seal%28%5F:using:nonce:authenticating:%29){:target="_blank"}로 내용을 키로 잠근 상자(`SealedBox`)를 만든다. nonce를 안 주면 무작위로 만들고, `authenticating`에 넣은 번호는 숨기지 않지만 확인 값 계산에 들어간다.
+2. 상자의 [`combined`](https://developer.apple.com/documentation/cryptokit/chachapoly/sealedbox/combined){:target="_blank"}(nonce, 암호문, 확인 값을 이어 붙인 바이트)를 base64로 바꿔 봉투에 싣는다.
+3. 받는 쪽은 [`SealedBox(combined:)`](https://developer.apple.com/documentation/cryptokit/chachapoly/sealedbox/init%28combined:%29){:target="_blank"}로 바이트를 다시 상자로 나눈다. 길이가 맞지 않으면 오류다.
+4. [`ChaChaPoly.open(_:using:authenticating:)`](https://developer.apple.com/documentation/cryptokit/chachapoly/open%28%5F:using:authenticating:%29){:target="_blank"}로 상자를 연다. 키, 내용, 같이 확인할 번호 중 하나라도 다르면 오류를 던진다.
 
 봉투는 이제 `{"box":"…","seq":2,"type":"secure"}` 모양이고, `box`에 무작위 nonce, 암호문, 확인용 값이 같이 들어 있다. 5편에서 만든 테스트(지어낸 봉투, 바꾼 봉투, 다시 보낸 봉투, 되돌려 보낸 봉투는 안 열린다)는 그대로 통과했고, 내용이 안 보이는지와 번호만 바꾼 봉투가 안 열리는지를 더했다.
 
@@ -188,10 +255,5 @@ public mutating func open(_ text: String) throws -> String {
 
 ## 참고자료
 
-- [CGEvent.init(keyboardEventSource:virtualKey:keyDown:) (Apple)](https://developer.apple.com/documentation/coregraphics/cgevent/init(keyboardeventsource:virtualkey:keydown:))
-- [CGEvent.post(tap:) (Apple)](https://developer.apple.com/documentation/coregraphics/cgevent/post(tap:))
-- [ChaChaPoly (CryptoKit, Apple)](https://developer.apple.com/documentation/cryptokit/chachapoly)
-- [ChaChaPoly.seal(\_:using:nonce:authenticating:) (Apple)](https://developer.apple.com/documentation/cryptokit/chachapoly/seal(%5F:using:nonce:authenticating:))
-- [RFC 8439: ChaCha20 and Poly1305](https://www.rfc-editor.org/rfc/rfc8439)
-- [Mbed TLS chachapoly.h (ESP32 쪽)](https://github.com/Mbed-TLS/mbedtls/blob/v3.6.0/include/mbedtls/chachapoly.h)
-- [AppStorage (Apple)](https://developer.apple.com/documentation/swiftui/appstorage)
+- [RFC 8439: ChaCha20 and Poly1305](https://www.rfc-editor.org/rfc/rfc8439){:target="_blank"}
+- [Mbed TLS chachapoly.h (ESP32 쪽)](https://github.com/Mbed-TLS/mbedtls/blob/v3.6.0/include/mbedtls/chachapoly.h){:target="_blank"}

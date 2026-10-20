@@ -2,7 +2,7 @@
 title: StreamDeck (1) 아이패드와 맥이 같은 와이파이에서 서로를 찾아 붙기까지
 writer: Harold
 date: 2026-10-19 18:00:00 +0900
-last_modified_at: 2026-10-20 00:18:00 +0900
+last_modified_at: 2026-10-20 16:47:00 +0900
 categories: [StreamDeck]
 tags: [Network, Bonjour, WebSocket, NWListener]
 
@@ -25,19 +25,50 @@ published: true
 
 맥과 아이패드는 계속 붙어 있어야 해서 블루투스가 아니라 와이파이로 붙기로 했다. 예전에 GestureClip에서 쓴 MultipeerConnectivity는 애플 기기끼리만 통해서 ESP32가 알아듣지 못한다. 그래서 보드도 쓸 수 있는 WebSocket으로 통일했다. WebSocket은 한 번 연결해 두면 양쪽이 아무 때나 메시지를 보낼 수 있는 방식이고, ESP32에도 이걸 쓰는 라이브러리(arduinoWebSockets)가 있다.
 
+---
+
+### 소켓과 WebSocket이란?
+
+두 컴퓨터가 네트워크로 말을 주고받으려면 양쪽에 글자를 넣고 빼는 창구가 하나씩 있어야 한다. 이 창구를 소켓이라고 부른다. 두 창구 사이에는 TCP라는 길이 깔린다. TCP는 보낸 것이 보낸 순서대로, 빠짐없이 도착하게 챙겨 준다. 중간에 하나가 빠지면 다시 보내고, 순서가 뒤바뀌면 바로잡는다.
+
+웹페이지를 열 때 쓰는 HTTP는 이 길 위에서 "물어보면 답한다"로 끝나는 방식이다. 아이패드가 물어봐야만 맥이 답할 수 있다. 스트림덱은 그걸로는 모자라다. 맥에서 소리 크기가 바뀌거나 다른 기기가 버튼 배치를 고치면, 아이패드가 묻지 않아도 맥이 먼저 알려 줘야 한다.
+
+WebSocket은 처음 한 번만 HTTP로 인사하고, 그 뒤로는 연결을 닫지 않고 열어 둔다. 열려 있는 동안은 양쪽 누구든 아무 때나 메시지를 보낼 수 있다. 전화를 걸어 놓고 끊지 않는 것과 비슷하다.
+
+![왼쪽 HTTP는 물어보고 답하고 연결을 닫기를 되풀이하고, 오른쪽 WebSocket은 연결을 열어 둔 채 아이패드와 맥이 아무 때나 메시지를 보낸다](/assets/images/upload/touchdeck-websocket-vs-http.png)
+
+처음 인사를 HTTP로 하는 건 이미 있는 웹 장비와 섞여 쓰기 위해서다. 아이패드가 "WebSocket으로 바꿔 타자"는 HTTP 요청을 한 번 보내고, 맥이 받아들이면 그때부터 같은 연결이 WebSocket이 된다. 이 첫 인사가 뒤에 나오는 host:port 문제와 이어진다.
+
+---
+
+### 메시지 모양과 맥 서버
+
 메시지는 JSON 글자로 주고받는다. 보드에서도 읽기 쉽게 하려고 최상위에 `type` 하나로 종류를 나눴다.
 
 ```json
 { "type": "press", "page": 0, "index": 3 }
 ```
 
-맥 서버는 처음엔 Hummingbird로 하려고 했다. 그런데 ChatBird 때 제대로 써 본 게 아니라 익숙하다는 장점이 거의 없었고, 아이패드는 어차피 애플 Network 프레임워크로 맥을 찾아야 했다. 그래서 맥 서버도 같은 프레임워크의 `NWListener`로 만들었다. 외부 라이브러리가 하나도 없다.
+맥 서버는 처음엔 Hummingbird로 하려고 했다. 그런데 ChatBird 때 제대로 써 본 게 아니라 익숙하다는 장점이 거의 없었고, 아이패드는 어차피 애플 Network 프레임워크로 맥을 찾아야 했다. 그래서 맥 서버도 같은 프레임워크의 [`NWListener`](https://developer.apple.com/documentation/network/nwlistener){:target="_blank"}로 만들었다. 외부 라이브러리가 하나도 없다.
 
 ---
 
 ## 맥이 기다리고 아이패드가 찾아오는 구조
 
-`NWListener`는 정해진 포트에서 들어오는 연결을 기다리는 객체다. 여기에 WebSocket 옵션을 얹으면 WebSocket 서버가 되고, `service`를 정해 주면 같은 와이파이에 "나 여기 있어"라고 알리는 것(Bonjour)까지 같이 한다. Bonjour는 IP 주소를 몰라도 같은 네트워크 안의 기기를 이름으로 찾게 해 주는 애플의 방식이다. 아이패드에서 맥 IP를 직접 칠 필요가 없어진다.
+`NWListener`는 정해진 포트에서 들어오는 연결을 기다리는 객체다. 여기에 WebSocket 옵션을 얹으면 WebSocket 서버가 되고, `service`를 정해 주면 같은 와이파이에 "나 여기 있어"라고 알리는 것(Bonjour)까지 같이 한다.
+
+---
+
+### Bonjour란?
+
+같은 와이파이 안의 기기에 붙으려면 원래 그 기기의 IP 주소와 포트를 알아야 한다. IP 주소는 네트워크 안에서 기기의 집 주소고, 포트는 그 집에서 어느 앱에게 갈지 정하는 방 번호다. 그런데 집 공유기는 기기가 붙을 때마다 IP 주소를 나눠 준다. 맥을 껐다 켜거나 공유기가 다시 켜지면 주소가 바뀔 수 있어서, 주소를 앱에 적어 두면 언젠가 못 찾게 된다.
+
+Bonjour는 주소 대신 이름으로 찾는 방식이다. 아이패드가 같은 와이파이의 모든 기기에게 한 번에 "TouchDeck 서비스 하는 기기 있어?"라고 묻고, 맥이 "나 여기 있어. 이름은 Dongik’s MacBook Pro, 주소와 포트는 이거야"라고 답한다. 교실에서 "TouchDeck 하는 사람?" 하고 외치면 손을 드는 것과 비슷하다.
+
+![아이패드가 같은 와이파이의 프린터, TV, 맥 모두에게 TouchDeck 하는 기기가 있는지 묻고, 맥만 이름과 주소와 포트로 답한다](/assets/images/upload/touchdeck-bonjour.png)
+ 이렇게 모두에게 한 번에 묻고 답하는 방식을 멀티캐스트 DNS(mDNS)라고 부른다. 공유기 바깥으로는 나가지 않아서 같은 와이파이 안에서만 통한다.
+
+아래에 나오는 서비스 타입 `_touchdeck._tcp`는 "TouchDeck이라는 종류의 서비스이고, TCP로 붙는다"는 뜻이다. 앞에 밑줄을 붙이는 건 이름 규칙이다. 아이패드는 이 이름 하나만 알고 있으면 맥 주소가 바뀌어도 다시 찾는다.
 
 연결 설정은 맥과 아이패드가 똑같은 걸 쓰게 한 곳에 뒀다.
 
@@ -55,6 +86,14 @@ public enum DeckNetwork {
     }
 }
 ```
+
+#### NWParameters에 WebSocket 얹기
+
+설정은 세 단계로 만든다.
+
+1. [`NWProtocolWebSocket.Options`](https://developer.apple.com/documentation/network/nwprotocolwebsocket/options){:target="_blank"}로 WebSocket 설정 묶음을 만든다. [`autoReplyPing`](https://developer.apple.com/documentation/network/nwprotocolwebsocket/options/autoreplyping){:target="_blank"}을 켜면 상대가 보낸 ping(살아 있니)에 pong을 자동으로 돌려주고, [`maximumMessageSize`](https://developer.apple.com/documentation/network/nwprotocolwebsocket/options/maximummessagesize){:target="_blank"}는 받을 수 있는 메시지 하나의 최대 바이트 수다.
+2. [`NWParameters`](https://developer.apple.com/documentation/network/nwparameters){:target="_blank"}`.tcp`로 TCP 기본 연결 설정을 가져온다. `NWParameters`는 연결을 어떤 방식(TCP, UDP, TLS)으로 만들지 담는 설정이다.
+3. [`defaultProtocolStack`](https://developer.apple.com/documentation/network/nwparameters/defaultprotocolstack){:target="_blank"}의 `applicationProtocols`(TCP 위에 얹을 프로토콜 목록) 0번 자리에 WebSocket 설정을 넣는다. 그러면 이 설정으로 만든 연결은 WebSocket 연결이 된다.
 
 `NWParameters.tcp`가 기본 연결이고, 그 위에 WebSocket 옵션을 끼워 넣는 모양이다. (이 설정은 나중에 맥이 잠들었을 때 끊김을 알아채려고 TCP keepalive를 켜는 쪽으로 바뀐다. 5편에 적었다.) `maximumMessageSize`는 메시지 하나의 최대 크기인데, 다음 글에서 다룰 앱 목록이 아이콘까지 담으면 2MB가 넘어서 넉넉하게 16MB로 잡았다.
 
@@ -80,6 +119,19 @@ func start() {
 }
 ```
 
+#### NWListener로 서버 열고 광고하기
+
+서버는 만들고, 알릴 이름을 붙이고, 콜백을 걸고, 시작하는 순서다.
+
+1. [`NWListener(using:on:)`](https://developer.apple.com/documentation/network/nwlistener/init%28using:on:%29){:target="_blank"}로 위 설정과 포트를 받아 연결을 기다리는 서버를 만든다. 포트를 이미 다른 앱이 쓰고 있으면 여기서 오류를 던진다.
+2. [`service`](https://developer.apple.com/documentation/network/nwlistener/service-swift.property){:target="_blank"}에 [`NWListener.Service`](https://developer.apple.com/documentation/network/nwlistener/service-swift.struct){:target="_blank"}(Bonjour 서비스 타입과 이름)를 넣는다. 서버가 시작될 때 광고도 같이 시작한다.
+3. [`stateUpdateHandler`](https://developer.apple.com/documentation/network/nwlistener/stateupdatehandler){:target="_blank"}는 서버 상태(준비됨, 실패)가 바뀔 때, [`newConnectionHandler`](https://developer.apple.com/documentation/network/nwlistener/newconnectionhandler){:target="_blank"}는 기기가 새로 붙을 때마다 그 연결([`NWConnection`](https://developer.apple.com/documentation/network/nwconnection){:target="_blank"})을 넘겨주며 불린다. 받은 연결도 `start(queue:)`를 불러야 움직인다.
+4. [`start(queue:)`](https://developer.apple.com/documentation/network/nwlistener/start%28queue:%29){:target="_blank"}로 기다리기를 시작한다. 위 콜백들은 여기서 정한 큐(메인)에서 불린다.
+
+콜백 안의 [`MainActor.assumeIsolated(_:file:line:)`](https://developer.apple.com/documentation/swift/mainactor/assumeisolated%28%5F:file:line:%29){:target="_blank"}는 "지금 메인 스레드에서 돌고 있다"고 컴파일러에 알리고 메인 전용 코드를 바로 실행한다.
+
+`assumeIsolated`는 확인 없이 믿는 게 아니라 실행할 때 검사한다. 정말 메인 스레드가 아니면 그 자리에서 앱이 멈춘다. 그래서 콜백 큐를 `.main`으로 정해 둔 곳에서만 썼다.
+
 서비스 타입은 `_touchdeck._tcp`로 정했다. 이름을 따로 안 주면 맥 컴퓨터 이름이 그대로 쓰인다. 포트는 52801로 고정했다. Bonjour로 찾으면 포트를 몰라도 되지만, 나중에 보드를 처음 붙일 때 IP와 포트를 코드에 직접 적고 시작할 생각이라 고정해 두는 게 편했다.
 
 네트워크 콜백을 전부 main 큐에서 받게 했다. 아이패드 몇 대가 버튼을 누르는 정도라 메시지 양이 아주 적어서, 상태를 한 곳(메인 스레드)에서만 바꾸는 쪽이 단순했다. 그래서 콜백 안에서 `MainActor.assumeIsolated`로 "여기는 이미 메인이다"라고 알려 주고 바로 상태를 바꾼다.
@@ -94,7 +146,7 @@ Timestamp     A/R    Flags  if Domain               Service Type         Instanc
 18:29:36.442  Add        2  14 local.               _touchdeck._tcp.     Dongik’s MacBook Pro
 ```
 
-같은 이름이 여러 줄 나오는 건 맥의 네트워크 장치(와이파이, 유선 등)마다 한 번씩 광고해서다. 아이패드 쪽은 `NWBrowser`로 같은 서비스 타입을 찾고, 찾은 결과로 바로 연결한다.
+같은 이름이 여러 줄 나오는 건 맥의 네트워크 장치(와이파이, 유선 등)마다 한 번씩 광고해서다. 아이패드 쪽은 [`NWBrowser`](https://developer.apple.com/documentation/network/nwbrowser){:target="_blank"}로 같은 서비스 타입을 찾고, 찾은 결과로 바로 연결한다.
 
 ```swift
 // DeckClient.swift (iOS)
@@ -105,6 +157,10 @@ browser.browseResultsChangedHandler = { [weak self] results, _ in
 browser.start(queue: .main)
 ```
 
+#### NWBrowser로 맥 찾기
+
+[`NWBrowser(for:using:)`](https://developer.apple.com/documentation/network/nwbrowser/init%28for:using:%29){:target="_blank"}는 같은 네트워크에서 서비스를 찾는 객체다. `.bonjour(type:domain:)`로 찾을 서비스 타입을 주고, domain을 nil로 두면 기본(`local.`)에서 찾는다. 찾은 결과가 늘거나 줄 때마다 [`browseResultsChangedHandler`](https://developer.apple.com/documentation/network/nwbrowser/browseresultschangedhandler){:target="_blank"}가 지금 결과 전체를 넘겨준다.
+
 ```swift
 // DeckClient.swift (iOS)
 private func found(_ results: Set<NWBrowser.Result>) {
@@ -113,6 +169,10 @@ private func found(_ results: Set<NWBrowser.Result>) {
     connect(to: result.endpoint)
 }
 ```
+
+#### 찾은 결과에서 이름과 주소 꺼내기
+
+결과 하나([`NWBrowser.Result`](https://developer.apple.com/documentation/network/nwbrowser/result){:target="_blank"})의 `endpoint`가 그 서비스의 주소([`NWEndpoint`](https://developer.apple.com/documentation/network/nwendpoint){:target="_blank"})다. Bonjour로 찾은 건 `.service(name:type:domain:interface:)` 모양이라 이름을 꺼낼 수 있고, 이 값 그대로 연결을 만들 수 있다.
 
 화면 위쪽 상태 줄에 뜨는 "Dongik’s MacBook Pro에 연결됨"의 이름이 여기서 꺼낸 서비스 이름이다.
 
@@ -128,6 +188,10 @@ private func found(_ results: Set<NWBrowser.Result>) {
 // WebSocketChannelTests.swift (처음 버전)
 let client = WebSocketChannel(connection: NWConnection(host: "127.0.0.1", port: port, using: DeckNetwork.parameters()))
 ```
+
+#### NWConnection을 호스트와 포트로 만들기
+
+[`NWConnection(host:port:using:)`](https://developer.apple.com/documentation/network/nwconnection/init%28host:port:using:%29){:target="_blank"}는 호스트와 포트로 연결을 만든다. 만들기만 하는 것이라, `start(queue:)`를 불러야 실제로 붙기 시작한다.
 
 테스트는 60초 시간 제한에 걸려 실패했다. 연결 상태를 찍어 보니 이렇게 나왔다.
 
@@ -161,6 +225,10 @@ let url = URL(string: "ws://127.0.0.1:\(port.rawValue)/")!
 let client = WebSocketChannel(connection: NWConnection(to: .url(url), using: DeckNetwork.parameters()))
 ```
 
+#### ws 주소로 NWConnection 만들기
+
+[`NWEndpoint.url(_:)`](https://developer.apple.com/documentation/network/nwendpoint/url%28%5F:%29){:target="_blank"}는 URL로 연결할 곳을 정하고, [`NWConnection(to:using:)`](https://developer.apple.com/documentation/network/nwconnection/init%28to:using:%29){:target="_blank"}는 그런 `NWEndpoint`(주소, Bonjour 서비스, URL)로 연결을 만든다. WebSocket은 `ws://` 주소를 받아야 첫 HTTP 인사에 넣을 주소를 안다.
+
 이 테스트가 통과한 뒤에 실제 맥 앱을 띄우고, 같은 방식의 작은 스크립트로 처음 보는 기기인 척 붙어 봤다. 맥은 처음 보는 기기에게 허락 숫자부터 요구하고, 허락 전에 보낸 버튼 누르기는 거절했다. 이 허락 과정은 5편에서 따로 정리한다.
 
 ```text
@@ -181,7 +249,16 @@ NSLocalNetworkUsageDescription: 같은 와이파이에 있는 맥의 TouchDeck�
 NSBonjourServices: [_touchdeck._tcp]
 ```
 
-`NSLocalNetworkUsageDescription`은 권한 창에 나오는 문구고, `NSBonjourServices`는 이 앱이 찾을 Bonjour 서비스 타입 목록이다. 목록에 없는 타입은 찾을 수 없다.
+[`NSLocalNetworkUsageDescription`](https://developer.apple.com/documentation/bundleresources/information-property-list/nslocalnetworkusagedescription){:target="_blank"}은 권한 창에 나오는 문구고, [`NSBonjourServices`](https://developer.apple.com/documentation/bundleresources/information-property-list/nsbonjourservices){:target="_blank"}는 이 앱이 찾을 Bonjour 서비스 타입 목록이다. 목록에 없는 타입은 찾을 수 없다.
+
+---
+
+### 왜 허락을 받아야 할까
+
+같은 와이파이의 기기를 마음대로 둘러볼 수 있으면, 앱이 우리 집에 어떤 기기(프린터, TV, 스피커, 다른 사람의 휴대폰)가 있는지 모을 수 있다. 그런 목록은 집마다 달라서 사용자를 알아보는 단서가 된다.
+
+![앱이 집 안의 프린터, TV, 스피커, 휴대폰, 맥을 둘러보려면 가운데의 로컬 네트워크 권한을 먼저 지나야 한다](/assets/images/upload/touchdeck-local-network.png)
+ 그래서 iOS 14부터는 앱이 로컬 네트워크에 처음 손댈 때 사용자에게 묻는다. TouchDeck은 맥 하나만 찾으면 되니까, 찾을 서비스 타입을 `NSBonjourServices`에 하나만 적었다.
 
 애플의 TN3179 문서에 두 가지 중요한 내용이 있었다. 하나는 시뮬레이터가 이 권한을 지원하지 않는다는 것이다. 시뮬레이터에서 잘 돌아도 실제 기기에서 권한 창이 뜨는지, 거부하면 어떻게 되는지는 실제 기기로 확인해야 한다. 다른 하나는 사용자가 거부하면 Bonjour 찾기가 `kDNSServiceErr_PolicyDenied`(-65570) 오류로 멈춰서 기다린다는 것이다. 그래서 `NWBrowser`가 이 오류로 기다리면 화면 위에 "설정 > 개인정보 보호 및 보안 > 로컬 네트워크에서 TouchDeck을 켜세요"를 띄우고 설정 열기 버튼을 두게 했다.
 
@@ -200,7 +277,11 @@ private func browserChanged(_ state: NWBrowser.State) {
 }
 ```
 
--65555(NoAuth)도 같이 본 건 예전에 정리해 둔 자료에 이 번호가 적혀 있어서다. TN3179에 적힌 번호는 -65570이다. 서명을 해서 실제 아이패드에 설치하는 건 아직 안 해서, 권한 창과 거부했을 때 이 안내가 실제로 뜨는지는 아직 확인 못 했다.
+#### NWBrowser 상태와 DNS 오류 읽기
+
+[`NWBrowser.State`](https://developer.apple.com/documentation/network/nwbrowser/state-swift.enum){:target="_blank"}는 찾기 상태다. `.waiting(error)`는 지금은 못 찾지만 원인이 고쳐지면 다시 찾는 중이고, `.failed(error)`는 멈춘 것이다. 그 안의 [`NWError`](https://developer.apple.com/documentation/network/nwerror){:target="_blank"}가 `.dns(code)`면 Bonjour(DNS 서비스) 쪽 오류이고, 숫자는 `kDNSServiceErr_` 값이다.
+
+-65555(NoAuth)도 같이 본 건 예전에 정리해 둔 자료에 이 번호가 적혀 있어서다. TN3179에 적힌 번호는 -65570이다.
 
 ---
 
@@ -208,7 +289,7 @@ private func browserChanged(_ state: NWBrowser.State) {
 
 Bonjour로 찾는 방식은 맥과 아이패드가 같은 와이파이(같은 공유기)에 있어야 한다. 집 책상에서는 늘 그렇지만, 핫스팟에 붙어 있거나 공유기가 바뀌면 서로를 못 찾는다. 블루투스로도 되냐는 얘기가 나와서 두 가지를 비교했다.
 
-하나는 애플 Network 프레임워크의 기기끼리 직접 연결이다. 에어드롭처럼 근처 기기를 블루투스로 찾고, 공유기 없이 와이파이 무선을 직접 써서 붙는다. 연결 설정에 `includePeerToPeer`를 켜기만 하면 되고, 지금 만든 WebSocket, 페어링, 암호화는 그대로 쓴다. 대신 양쪽 다 와이파이는 켜져 있어야 한다(공유기에 붙어 있을 필요는 없다).
+하나는 애플 Network 프레임워크의 기기끼리 직접 연결이다. 에어드롭처럼 공유기를 거치지 않고 와이파이 무선끼리 직접 붙는다. 연결 설정에 `includePeerToPeer`를 켜기만 하면 되고, 지금 만든 WebSocket, 페어링, 암호화는 그대로 쓴다. 대신 양쪽 다 와이파이는 켜져 있어야 한다(공유기에 붙어 있을 필요는 없다).
 
 다른 하나는 진짜 블루투스(BLE)로 주고받는 것이다. 와이파이가 꺼져 있어도 되지만 한 번에 보낼 수 있는 양이 수백 바이트라, 아이콘을 다 담은 2MB짜리 앱 목록 같은 건 잘게 쪼개 보내고 이어 붙이는 걸 새로 만들어야 한다. 아이패드는 와이파이를 잘 쓰는 기기라 BLE로 바꿔도 얻는 게 별로 없다. BLE는 아이콘을 띄워야 하는 ESP32 보드에서 해 보기로 하고, 지금은 직접 연결만 켰다.
 
@@ -218,9 +299,26 @@ Bonjour로 찾는 방식은 맥과 아이패드가 같은 와이파이(같은 �
 params.includePeerToPeer = true
 ```
 
+#### includePeerToPeer로 직접 연결 켜기
+
+[`includePeerToPeer`](https://developer.apple.com/documentation/network/nwparameters/includepeertopeer){:target="_blank"}를 켜면 애플 기기끼리의 와이파이 직접 연결도 쓴다. 서버(`NWListener`), 찾기(`NWBrowser`), 연결(`NWConnection`) 세 곳 모두 켜야 한다.
+
+---
+
+### 애플 기기끼리의 와이파이 직접 연결이란?
+
+보통 와이파이에서는 모든 기기가 공유기를 거친다. 아이패드가 맥에 보낸 것도 공유기에 먼저 갔다가 맥으로 간다. 애플 기기에는 공유기 없이 와이파이 무선끼리 직접 말하는 길이 하나 더 있다. 애플은 이걸 Apple peer-to-peer Wi-Fi라고 부르고, 이 길에 쓰는 네트워크 장치 이름을 따서 AWDL이라고도 한다. 에어드롭과 사이드카가 이 길을 쓴다.
+
+![위는 아이패드에서 공유기를 거쳐 맥으로 가는 평소 와이파이, 아래는 공유기 없이 아이패드와 맥이 바로 붙는 애플 기기끼리 직접 연결](/assets/images/upload/touchdeck-awdl.png)
+
+
+와이파이 무선 하나가 두 가지를 같이 한다. 공유기와 이어진 평소 와이파이, 그리고 근처 애플 기기와의 직접 연결이다. 그래서 둘 중 하나만 끊겨도 다른 하나는 남는다. 아래에서 아이패드 와이파이를 꺼도 맥에 그대로 붙어 있던 이유가 이것이다.
+
+이 길은 애플 기기끼리만 통한다. 애플이 주고받는 방식을 공개하지 않았기 때문이다. 그래서 나중에 붙일 ESP32 보드는 이 길을 쓸 수 없고, 같은 와이파이로 붙거나 블루투스를 써야 한다.
+
 맥의 `NWListener`, 아이패드의 `NWBrowser`와 `NWConnection` 셋 다 이 옵션이 켜져 있어야 한다. `NWBrowser`는 원래 `.tcp` 기본 설정으로 찾고 있어서, 직접 연결을 허용한 찾기용 설정을 따로 만들어 넣었다. 시뮬레이터에서는 이 연결을 시험할 수 없어서 실제 아이패드로 확인했다. 아이패드에서 와이파이를 끄고도 맥에 그대로 붙었다. 제어 센터에서 와이파이를 끄면 공유기와의 연결만 끊기고, 에어드롭 같은 기기끼리 연결에 쓰는 무선은 남아 있기 때문이다.
 
-붙고 나니 지금 어느 길로 붙어 있는지 궁금해졌다. 연결이 실제로 타는 네트워크 장치는 `NWConnection`의 `currentPath`에 있고, 바뀔 때마다 `pathUpdateHandler`로 알려 준다. 기기끼리 직접 연결이면 장치 이름이 `awdl`(에어드롭이 쓰는 장치)이나 `llw`로 시작한다. 그래서 상태 줄의 "연결됨" 옆에 "같은 와이파이"인지 "직접 연결"인지 작은 표시를 붙였다.
+붙고 나니 지금 어느 길로 붙어 있는지 궁금해졌다. 연결이 실제로 타는 네트워크 장치는 `NWConnection`의 [`currentPath`](https://developer.apple.com/documentation/network/nwconnection/currentpath){:target="_blank"}에 있고, 바뀔 때마다 `pathUpdateHandler`로 알려 준다. 기기끼리 직접 연결이면 장치 이름이 `awdl`(에어드롭이 쓰는 장치)이나 `llw`로 시작한다. 그래서 상태 줄의 "연결됨" 옆에 "같은 와이파이"인지 "직접 연결"인지 작은 표시를 붙였다.
 
 ```swift
 // ConnectionRoute.swift (DeckKit)
@@ -245,24 +343,20 @@ public init(path: NWPath) {
 }
 ```
 
-직접 연결 장치도 종류는 와이파이(`.wifi`)로 나와서, 이름을 먼저 본다. 이름 판단은 공용 코드에 두고 테스트로 정했다. 화면에서 이 표시가 실제로 어떻게 바뀌는지는 아직 확인 못 했다.
+#### NWPath로 지금 타는 네트워크 보기
+
+[`NWPath`](https://developer.apple.com/documentation/network/nwpath){:target="_blank"}는 연결이 지금 어떤 네트워크로 나가는지 담은 정보다. `NWConnection.currentPath`로 읽고, 바뀌면 `pathUpdateHandler`가 불린다. [`availableInterfaces`](https://developer.apple.com/documentation/network/nwpath/availableinterfaces){:target="_blank"}는 그 길에서 쓸 수 있는 네트워크 장치 목록인데 쓰는 순서대로 놓여 있어서, 첫째를 지금 타는 장치로 봤다. 장치 하나([`NWInterface`](https://developer.apple.com/documentation/network/nwinterface){:target="_blank"})는 `name`(en0, awdl0 같은 이름)과 `type`(`.wifi`, `.wiredEthernet` 등)을 갖는다.
+
+직접 연결 장치도 종류는 와이파이(`.wifi`)로 나와서, 이름을 먼저 본다. 이름 판단은 공용 코드에 두고 테스트로 정했다.
 
 ---
 
 ## 참고자료
 
-- [NWListener (Apple)](https://developer.apple.com/documentation/network/nwlistener)
-- [NWListener.Service (Apple)](https://developer.apple.com/documentation/network/nwlistener/service-swift.property)
-- [NWProtocolWebSocket.Options (Apple)](https://developer.apple.com/documentation/network/nwprotocolwebsocket/options)
-- [maximumMessageSize (Apple)](https://developer.apple.com/documentation/network/nwprotocolwebsocket/options/maximummessagesize)
-- [NWBrowser (Apple)](https://developer.apple.com/documentation/network/nwbrowser)
-- [NWConnection (Apple)](https://developer.apple.com/documentation/network/nwconnection)
-- [NWEndpoint.url(\_:) (Apple)](https://developer.apple.com/documentation/network/nwendpoint/url(%5F:))
-- [TN3179: Understanding local network privacy (Apple)](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy)
-- [NSBonjourServices (Apple)](https://developer.apple.com/documentation/bundleresources/information-property-list/nsbonjourservices)
-- [NSLocalNetworkUsageDescription (Apple)](https://developer.apple.com/documentation/bundleresources/information-property-list/nslocalnetworkusagedescription)
-- [WWDC25: Use structured concurrency with Network framework](https://developer.apple.com/videos/play/wwdc2025/250/)
-- [NWParameters.includePeerToPeer (Apple)](https://developer.apple.com/documentation/network/nwparameters/includepeertopeer)
-- [NWConnection.currentPath (Apple)](https://developer.apple.com/documentation/network/nwconnection/currentpath)
-- [NWPath.availableInterfaces (Apple)](https://developer.apple.com/documentation/network/nwpath/availableinterfaces)
-- [arduinoWebSockets (ESP32 쪽에서 쓸 라이브러리)](https://github.com/Links2004/arduinoWebSockets)
+- [TN3179: Understanding local network privacy (Apple)](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy){:target="_blank"}
+- [WWDC25: Use structured concurrency with Network framework](https://developer.apple.com/videos/play/wwdc2025/250/){:target="_blank"}
+- [arduinoWebSockets (ESP32 쪽에서 쓸 라이브러리)](https://github.com/Links2004/arduinoWebSockets){:target="_blank"}
+- [RFC 6455: The WebSocket Protocol (처음 HTTP로 인사하고 바꿔 타는 과정)](https://www.rfc-editor.org/rfc/rfc6455.html){:target="_blank"}
+- [RFC 6762: Multicast DNS](https://www.rfc-editor.org/rfc/rfc6762.html){:target="_blank"}
+- [RFC 6763: DNS-Based Service Discovery (서비스 타입 이름 규칙)](https://www.rfc-editor.org/rfc/rfc6763.html){:target="_blank"}
+- [TN3151: Choosing the right networking API (Apple peer-to-peer Wi-Fi)](https://developer.apple.com/documentation/technotes/tn3151-choosing-the-right-networking-api){:target="_blank"}
