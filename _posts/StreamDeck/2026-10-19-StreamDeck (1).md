@@ -35,7 +35,7 @@ published: true
 
 WebSocket은 처음 한 번만 HTTP로 인사하고, 그 뒤로는 연결을 닫지 않고 열어 둔다. 열려 있는 동안은 양쪽 누구든 아무 때나 메시지를 보낼 수 있다. 전화를 걸어 놓고 끊지 않는 것과 비슷하다.
 
-![왼쪽 HTTP는 물어보고 답하고 연결을 닫기를 되풀이하고, 오른쪽 WebSocket은 연결을 열어 둔 채 아이패드와 맥이 아무 때나 메시지를 보낸다](/assets/images/upload/touchdeck-websocket-vs-http.png)
+![왼쪽 HTTP는 물어보고 답하고 연결을 닫기를 되풀이하고, 오른쪽 WebSocket은 연결을 열어 둔 채 아이패드와 맥이 아무 때나 메시지를 보낸다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-1/touchdeck-websocket-vs-http.png)
 
 처음 인사를 HTTP로 하는 건 이미 있는 웹 장비와 섞여 쓰기 위해서다. 아이패드가 "WebSocket으로 바꿔 타자"는 HTTP 요청을 한 번 보내고, 맥이 받아들이면 그때부터 같은 연결이 WebSocket이 된다. 이 첫 인사가 뒤에 나오는 host:port 문제와 이어진다.
 
@@ -65,7 +65,7 @@ WebSocket은 처음 한 번만 HTTP로 인사하고, 그 뒤로는 연결을 닫
 
 Bonjour는 주소 대신 이름으로 찾는 방식이다. 아이패드가 같은 와이파이의 모든 기기에게 한 번에 "TouchDeck 서비스 하는 기기 있어?"라고 묻고, 맥이 "나 여기 있어. 이름은 Dongik’s MacBook Pro, 주소와 포트는 이거야"라고 답한다. 교실에서 "TouchDeck 하는 사람?" 하고 외치면 손을 드는 것과 비슷하다.
 
-![아이패드가 같은 와이파이의 프린터, TV, 맥 모두에게 TouchDeck 하는 기기가 있는지 묻고, 맥만 이름과 주소와 포트로 답한다](/assets/images/upload/touchdeck-bonjour.png)
+![아이패드가 같은 와이파이의 프린터, TV, 맥 모두에게 TouchDeck 하는 기기가 있는지 묻고, 맥만 이름과 주소와 포트로 답한다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-1/touchdeck-bonjour.png)
  이렇게 모두에게 한 번에 묻고 답하는 방식을 멀티캐스트 DNS(mDNS)라고 부른다. 공유기 바깥으로는 나가지 않아서 같은 와이파이 안에서만 통한다.
 
 아래에 나오는 서비스 타입 `_touchdeck._tcp`는 "TouchDeck이라는 종류의 서비스이고, TCP로 붙는다"는 뜻이다. 앞에 밑줄을 붙이는 건 이름 규칙이다. 아이패드는 이 이름 하나만 알고 있으면 맥 주소가 바뀌어도 다시 찾는다.
@@ -257,7 +257,7 @@ NSBonjourServices: [_touchdeck._tcp]
 
 같은 와이파이의 기기를 마음대로 둘러볼 수 있으면, 앱이 우리 집에 어떤 기기(프린터, TV, 스피커, 다른 사람의 휴대폰)가 있는지 모을 수 있다. 그런 목록은 집마다 달라서 사용자를 알아보는 단서가 된다.
 
-![앱이 집 안의 프린터, TV, 스피커, 휴대폰, 맥을 둘러보려면 가운데의 로컬 네트워크 권한을 먼저 지나야 한다](/assets/images/upload/touchdeck-local-network.png)
+![앱이 집 안의 프린터, TV, 스피커, 휴대폰, 맥을 둘러보려면 가운데의 로컬 네트워크 권한을 먼저 지나야 한다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-1/touchdeck-local-network.png)
  그래서 iOS 14부터는 앱이 로컬 네트워크에 처음 손댈 때 사용자에게 묻는다. TouchDeck은 맥 하나만 찾으면 되니까, 찾을 서비스 타입을 `NSBonjourServices`에 하나만 적었다.
 
 애플의 TN3179 문서에 두 가지 중요한 내용이 있었다. 하나는 시뮬레이터가 이 권한을 지원하지 않는다는 것이다. 시뮬레이터에서 잘 돌아도 실제 기기에서 권한 창이 뜨는지, 거부하면 어떻게 되는지는 실제 기기로 확인해야 한다. 다른 하나는 사용자가 거부하면 Bonjour 찾기가 `kDNSServiceErr_PolicyDenied`(-65570) 오류로 멈춰서 기다린다는 것이다. 그래서 `NWBrowser`가 이 오류로 기다리면 화면 위에 "설정 > 개인정보 보호 및 보안 > 로컬 네트워크에서 TouchDeck을 켜세요"를 띄우고 설정 열기 버튼을 두게 했다.
@@ -309,7 +309,7 @@ params.includePeerToPeer = true
 
 보통 와이파이에서는 모든 기기가 공유기를 거친다. 아이패드가 맥에 보낸 것도 공유기에 먼저 갔다가 맥으로 간다. 애플 기기에는 공유기 없이 와이파이 무선끼리 직접 말하는 길이 하나 더 있다. 애플은 이걸 Apple peer-to-peer Wi-Fi라고 부르고, 이 길에 쓰는 네트워크 장치 이름을 따서 AWDL이라고도 한다. 에어드롭과 사이드카가 이 길을 쓴다.
 
-![위는 아이패드에서 공유기를 거쳐 맥으로 가는 평소 와이파이, 아래는 공유기 없이 아이패드와 맥이 바로 붙는 애플 기기끼리 직접 연결](/assets/images/upload/touchdeck-awdl.png)
+![위는 아이패드에서 공유기를 거쳐 맥으로 가는 평소 와이파이, 아래는 공유기 없이 아이패드와 맥이 바로 붙는 애플 기기끼리 직접 연결](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-1/touchdeck-awdl.png)
 
 
 와이파이 무선 하나가 두 가지를 같이 한다. 공유기와 이어진 평소 와이파이, 그리고 근처 애플 기기와의 직접 연결이다. 그래서 둘 중 하나만 끊겨도 다른 하나는 남는다. 아래에서 아이패드 와이파이를 꺼도 맥에 그대로 붙어 있던 이유가 이것이다.

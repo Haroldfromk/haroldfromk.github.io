@@ -57,7 +57,7 @@ public static func openArguments(command: String?, directory: String?) -> [Strin
 
 터미널에 명령을 치면 그 글자를 먼저 읽는 프로그램이 있다. 이게 셸이고, 맥의 기본 셸이 zsh다. 셸은 한 줄을 공백으로 잘라 단어로 나누고, 따옴표로 묶인 부분은 한 단어로 본 뒤 따옴표는 떼어 낸다. 그렇게 만든 단어 목록을 실행할 프로그램에 넘기는데, 이 단어 하나하나를 인자라고 부른다.
 
-![셸 한 줄 git commit -m "a b"를 셸이 git, commit, -m, a b 네 인자로 나누고, Process.arguments에 배열로 직접 넘기면 셸 없이 같은 네 인자가 된다](/assets/images/upload/touchdeck-shell-args.png)
+![셸 한 줄 git commit -m "a b"를 셸이 git, commit, -m, a b 네 인자로 나누고, Process.arguments에 배열로 직접 넘기면 셸 없이 같은 네 인자가 된다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-shell-args.png)
 
 프로그램 입장에서는 셸을 거쳤든 아니든 받는 건 같은 인자 목록이다. 그러니 셸에게 한 줄을 읽히는 대신 목록을 직접 만들어 넘기면 따옴표를 맞출 일이 사라진다.
 
@@ -121,7 +121,7 @@ func runProcess(_ path: String, _ arguments: [String], output: Pipe? = nil) thro
 
 별칭은 긴 명령에 붙인 짧은 이름이다. `~/.zshrc`에 `alias blogrun='bundle exec jekyll serve --unpublished --livereload --limit_posts 10'`처럼 적어 두면, 셸이 명령을 읽을 때 `blogrun`을 긴 명령으로 바꿔 끼운다.
 
-![내가 친 blogrun을 셸이 bundle exec jekyll serve 같은 긴 명령으로 바꿔 끼운다. 별칭은 셸이 기억하는 줄임말이라 셸 밖에서는 찾을 수 없다](/assets/images/upload/touchdeck-alias.png)
+![내가 친 blogrun을 셸이 bundle exec jekyll serve 같은 긴 명령으로 바꿔 끼운다. 별칭은 셸이 기억하는 줄임말이라 셸 밖에서는 찾을 수 없다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-alias.png)
 
 그래서 별칭은 셸 안에서만 산다. `open` 명령이나 `Process`는 셸을 거치지 않고 프로그램 파일을 바로 찾기 때문에 `blogrun`이라는 이름을 모른다. 버튼이 꼭 zsh를 거쳐야 하는 이유다.
 
@@ -131,7 +131,7 @@ func runProcess(_ path: String, _ arguments: [String], output: Pipe? = nil) thro
 
 대화형 셸은 사람이 한 줄씩 치고 결과를 보는 셸이다. 터미널 창을 열면 뜨는 그 셸이다. zsh는 대화형으로 켜질 때만 `~/.zshrc`를 읽는다. 별칭, 프롬프트 모양, oh-my-zsh 같은 플러그인은 사람이 쓰는 창을 위한 설정이라, 스크립트를 돌릴 때까지 읽으면 느리고 결과가 설정에 따라 달라질 수 있어서다.
 
-![터미널 창과 zsh -ic는 대화형이라 .zshrc를 읽어 blogrun을 알고, zsh -c는 대화형이 아니라 .zshrc를 건너뛰어 blogrun을 모른다](/assets/images/upload/touchdeck-interactive-shell.png)
+![터미널 창과 zsh -ic는 대화형이라 .zshrc를 읽어 blogrun을 알고, zsh -c는 대화형이 아니라 .zshrc를 건너뛰어 blogrun을 모른다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-interactive-shell.png)
 
 `zsh -c '명령'`은 명령 한 줄만 실행하는 대화형 아닌 셸이라 `~/.zshrc`를 건너뛴다. 여기에 `-i`를 더하면 대화형으로 켜져서 읽는다.
 
@@ -179,7 +179,7 @@ AFTER
 
 `eval`은 글자를 받아서 그 자리에서 셸 명령으로 읽고 실행한다. 바깥 스크립트 입장에서 사용자 명령은 작은따옴표 안의 글자 하나일 뿐이라, 그 안에 주석 기호나 안 닫힌 따옴표가 있어도 바깥 문법은 멀쩡하다. 문제가 있으면 `eval`이 그 글자를 실행할 때 안에서만 오류가 난다.
 
-![바깥 스크립트는 eval '사용자 명령'; exec zsh 모양이 늘 같다. 사용자 명령의 오류는 eval 안에서만 나고, 뒤의 exec zsh는 그래도 실행된다](/assets/images/upload/touchdeck-eval.png)
+![바깥 스크립트는 eval '사용자 명령'; exec zsh 모양이 늘 같다. 사용자 명령의 오류는 eval 안에서만 나고, 뒤의 exec zsh는 그래도 실행된다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-eval.png)
 
 작은따옴표 안에서는 셸이 아무 글자도 특별하게 보지 않는다. 그래서 명령 안의 작은따옴표 하나만 따로 처리하면 된다.
 
@@ -263,7 +263,7 @@ zsh의 `whence`가 이름을 찾으면 0, 못 찾으면 1로 끝나서 이걸 �
 
 프로그램은 끝날 때 운영체제에 숫자 하나를 남긴다. 이걸 종료 코드라고 하고, 0이면 성공, 0이 아니면 실패라는 약속이다. 셸에서는 `echo $?`로 바로 앞 명령의 종료 코드를 볼 수 있고, 맥 앱은 `Process`의 `terminationStatus`로 읽는다.
 
-![whence blogrun은 0으로 끝나 찾음, Alacritty 창을 연다. whence blogrn은 1로 끝나 못 찾음, 아이패드에 이유를 보낸다](/assets/images/upload/touchdeck-exit-code.png)
+![whence blogrun은 0으로 끝나 찾음, Alacritty 창을 연다. whence blogrn은 1로 끝나 못 찾음, 아이패드에 이유를 보낸다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-exit-code.png)
 
 ---
 
@@ -356,7 +356,7 @@ public static func preflight(command: String, directory: String?) -> Preflight {
 
 시그널은 운영체제가 실행 중인 프로그램(프로세스)에 보내는 짧은 알림이다. SIGTERM은 "이제 끝내 줘"라는 부탁이라, 받은 프로그램이 하던 일을 정리하고 끝낼 수도 있고 무시할 수도 있다. SIGKILL은 운영체제가 그 프로그램을 바로 끝내 버리는 것이라 무시할 수 없다. 대화형 zsh는 실수로 창이 꺼지지 않게 SIGTERM을 무시한다.
 
-![맥 앱이 보낸 SIGTERM은 대화형 zsh가 무시하고 계속 돌고, SIGKILL은 운영체제가 강제로 끝내서 zsh가 바로 끝난다](/assets/images/upload/touchdeck-signals.png)
+![맥 앱이 보낸 SIGTERM은 대화형 zsh가 무시하고 계속 돌고, SIGKILL은 운영체제가 강제로 끝내서 zsh가 바로 끝난다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-signals.png)
 
 ```text
 $ zsh -fic 'kill -TERM $$; echo survived'
@@ -527,7 +527,7 @@ macOS는 정말로 이 모니터 소리를 못 바꾼다. 그럼 키보드 키�
 
 모니터 케이블(DisplayPort, HDMI) 안에는 화면 신호 말고도, 컴퓨터와 모니터가 설정을 주고받는 작은 통로가 따로 있다. 이 통로를 DDC(Display Data Channel)라고 부른다. 원래는 모니터가 "나는 이런 해상도를 지원해"라고 알려 주는 데 쓰였고, 지금은 컴퓨터가 밝기, 소리 크기, 입력 전환 같은 명령도 보낸다. 모니터 아래쪽 버튼으로 바꾸는 설정을 컴퓨터가 대신 눌러 주는 셈이다.
 
-![맥과 LG 모니터 사이 DisplayPort 케이블 안에 화면 신호와 따로, BetterDisplay가 보내는 소리 키워 같은 설정 명령이 다니는 DDC 통로가 있다](/assets/images/upload/touchdeck-ddc.png)
+![맥과 LG 모니터 사이 DisplayPort 케이블 안에 화면 신호와 따로, BetterDisplay가 보내는 소리 키워 같은 설정 명령이 다니는 DDC 통로가 있다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-ddc.png)
 
 macOS는 외부 모니터 스피커의 소리 크기를 이 통로로 바꾸지 않아서 값을 모르고, BetterDisplay는 이 통로로 모니터에 직접 명령을 보낸다.
 
@@ -588,7 +588,7 @@ static func press(_ key: VolumeKey) -> Bool {
 
 손쉬운 사용은 원래 화면 읽기 프로그램이나 음성 제어처럼, 몸이 불편한 사람을 위해 다른 앱을 대신 조작해 주는 기능이다. 그래서 이 권한을 받은 앱은 다른 앱에 키를 누르고 마우스를 움직일 수 있다. 나쁜 앱이 받으면 비밀번호를 대신 칠 수도 있는 힘이라, macOS는 사용자가 시스템 설정에서 직접 켜야만 준다.
 
-![TouchDeck이 다른 앱에 키를 입력하려면 사용자가 켠 손쉬운 사용 권한을 지나야 한다. 권한은 앱 서명에 묶여서 임시 서명으로 다시 빌드하면 풀리고, 팀 서명을 고정하면 남는다](/assets/images/upload/touchdeck-accessibility.png)
+![TouchDeck이 다른 앱에 키를 입력하려면 사용자가 켠 손쉬운 사용 권한을 지나야 한다. 권한은 앱 서명에 묶여서 임시 서명으로 다시 빌드하면 풀리고, 팀 서명을 고정하면 남는다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-accessibility.png)
 
 서명은 "누가 만든 이 앱인지"를 증명하는 도장이다. macOS는 권한을 앱 이름이 아니라 이 도장에 붙여 둔다.
 

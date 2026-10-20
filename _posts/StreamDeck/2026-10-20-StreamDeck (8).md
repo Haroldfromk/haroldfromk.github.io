@@ -140,7 +140,7 @@ try stream.addStreamOutput(self, type: .audio, sampleHandlerQueue: audioQueue)
 
 영상과 소리는 같은 바이너리 메시지 통로와 같은 봉인(7편의 `sealBinary`)을 쓴다. 봉인을 푼 뒤 첫 바이트로 나눈다.
 
-![영상 묶음(첫 바이트 1)과 소리 묶음(첫 바이트 2)을 같은 WebSocket 바이너리로 봉인해 보내고, 아이패드는 봉인을 푼 뒤 첫 바이트를 보고 영상은 화면 레이어로, 소리는 오디오 엔진으로 보낸다](/assets/images/upload/touchdeck-media-channel.png)
+![영상 묶음(첫 바이트 1)과 소리 묶음(첫 바이트 2)을 같은 WebSocket 바이너리로 봉인해 보내고, 아이패드는 봉인을 푼 뒤 첫 바이트를 보고 영상은 화면 레이어로, 소리는 오디오 엔진으로 보낸다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-media-channel.png)
 
 ---
 
@@ -148,7 +148,7 @@ try stream.addStreamOutput(self, type: .audio, sampleHandlerQueue: audioQueue)
 
 소리는 공기가 떨리는 모양이다. 마이크나 컴퓨터는 이 떨림의 높이를 아주 짧은 간격으로 재서 숫자로 적는다. 1초에 몇 번 재는지가 샘플레이트이고, 한 번 잰 높이를 몇 비트 숫자로 적는지가 비트 깊이다. 48kHz 16비트는 1초에 48,000번 재고, 잴 때마다 -32768~32767 사이 정수 하나로 적는다는 뜻이다.
 
-![소리의 떨림 모양을 짧은 간격마다 재서 숫자로 적는다. 1초에 48,000번, 잴 때마다 16비트 정수 하나, 왼쪽과 오른쪽 두 채널이라 1초에 약 1.5Mbps](/assets/images/upload/touchdeck-sampling.png)
+![소리의 떨림 모양을 짧은 간격마다 재서 숫자로 적는다. 1초에 48,000번, 잴 때마다 16비트 정수 하나, 왼쪽과 오른쪽 두 채널이라 1초에 약 1.5Mbps](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-sampling.png)
 
 맥이 주는 소리는 높이를 -1~1 사이 실수로 적어 둔 것이라, 이걸 16비트 정수로 바꿔서 보낸다.
 
@@ -200,7 +200,7 @@ public static func interleave(_ planar: [[Float]]) -> [Int16] {
 
 이렇게 도착 간격이 흔들리는 걸 지터(jitter)라고 하고, 그 흔들림을 흡수하려고 짧게 쌓아 두는 칸을 지터 버퍼라고 부른다.
 
-![들쭉날쭉하게 도착한 소리 묶음을 지터 버퍼에 0.06초쯤 쌓아 두었다가 일정한 간격으로 끊김 없이 틀어 준다](/assets/images/upload/touchdeck-jitter.png)
+![들쭉날쭉하게 도착한 소리 묶음을 지터 버퍼에 0.06초쯤 쌓아 두었다가 일정한 간격으로 끊김 없이 틀어 준다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-jitter.png)
 
 | 상황 | 하는 일 |
 |---|---|
@@ -241,7 +241,7 @@ if decision == .queueAndStart { player.play() }
 
 컴퓨터는 수를 2진수로 담는다. 0.02는 2진수로 쓰면 끝없이 이어지는 수라서, 가장 가까운 값으로 잘라 담는다. 1/3을 0.333…으로 적다가 끊는 것과 같다. 그래서 0.02를 더할 때마다 아주 작은 차이가 붙는다.
 
-![0.02는 컴퓨터 안에 0.0200000000000000004…로 담기고, 열 번 더하면 0.2가 아니라 0.19999999999999998이 된다](/assets/images/upload/touchdeck-float.png)
+![0.02는 컴퓨터 안에 0.0200000000000000004…로 담기고, 열 번 더하면 0.2가 아니라 0.19999999999999998이 된다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-float.png)
 
 이 오차가 위로 붙느냐 아래로 붙느냐에 따라, 경계에 딱 걸린 묶음을 버릴지 넣을지가 달라질 수 있다. 같은 양이 쌓였는데 더한 순서에 따라 판단이 바뀌면 안 되니까, 경계는 아주 작은 여유를 두고 비교했다.
 
@@ -318,7 +318,7 @@ AppleScript나 BetterDisplay를 부르면 프로세스를 하나 띄우는 거�
 
 큐는 들어온 일을 들어온 순서대로 하나씩 처리하는 줄이다. 은행 번호표처럼 앞사람 일이 끝나야 다음 사람이 창구에 간다. 일을 여러 군데서 동시에 맡기면 오래 걸리는 일이 나중에 끝나면서 순서가 뒤집힐 수 있는데, 한 줄로 세우면 그럴 일이 없다.
 
-![한 줄로 세우지 않으면 0.2초 걸리는 스피커 끄기보다 되돌리기가 먼저 끝나서 스피커가 꺼진 채로 남는다. 큐로 한 줄로 세우면 되돌리기는 늘 끄기 뒤에 온다](/assets/images/upload/touchdeck-queue.png)
+![한 줄로 세우지 않으면 0.2초 걸리는 스피커 끄기보다 되돌리기가 먼저 끝나서 스피커가 꺼진 채로 남는다. 큐로 한 줄로 세우면 되돌리기는 늘 끄기 뒤에 온다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-queue.png)
 
 둘을 같은 큐 하나에 세워서 들어온 순서대로 돌게 했다. 그러면 되돌리기는 언제나 끄기 뒤에 온다.
 
@@ -381,7 +381,7 @@ public static func decide(_ current: TwoFinger, scale: CGFloat, moved: CGFloat, 
 
 한글은 자음과 모음을 모아 한 글자를 만든다. 그래서 입력기는 키를 누를 때마다 지금 만들고 있는 글자를 바꿔 끼운다. ㄱ을 누르면 "ㄱ", ㅏ를 누르면 그 자리가 "가", ㄹ을 누르면 "갈"이 된다. 이렇게 아직 완성되지 않은 글자를 고치고 있는 상태를 조합 중이라고 한다.
 
-![한글은 ㄱ, 가, 갈처럼 치는 동안 글자가 계속 바뀐다. 바뀔 때마다 맥에 보내면 ㄱ가갈로 겹쳐 찍히고, 다 쓰고 한 번에 보내면 아이패드가 조합을 끝낸 갈만 간다](/assets/images/upload/touchdeck-ime.png)
+![한글은 ㄱ, 가, 갈처럼 치는 동안 글자가 계속 바뀐다. 바뀔 때마다 맥에 보내면 ㄱ가갈로 겹쳐 찍히고, 다 쓰고 한 번에 보내면 아이패드가 조합을 끝낸 갈만 간다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-ime.png)
 
 맥에 글자를 보내는 쪽은 "그 자리를 바꿔 끼운다"는 걸 전하지 못하고 글자를 더하기만 한다. 그래서 조합이 끝난 뒤에 보내야 맞게 들어간다.
 
@@ -416,7 +416,7 @@ Swift의 `Character`는 사람이 보는 글자 하나라서, 글자 단위로 �
 
 컴퓨터 안의 글자는 모두 번호다. 세계의 글자마다 붙인 번호표가 유니코드이고, "가"는 U+AC00번이다. 이 번호를 실제로 저장할 때는 칸에 나눠 적는데, 16비트짜리 칸에 적는 방법이 UTF-16이다. 작은 번호는 한 칸, 이모지처럼 큰 번호는 두 칸을 쓴다.
 
-![가는 글자 1개, 번호 1개, UTF-16 1칸이다. 피부색을 넣은 엄지 이모지는 사람 눈에 글자 1개지만 번호 2개가 합쳐진 것이라 UTF-16으로 4칸이다](/assets/images/upload/touchdeck-unicode.png)
+![가는 글자 1개, 번호 1개, UTF-16 1칸이다. 피부색을 넣은 엄지 이모지는 사람 눈에 글자 1개지만 번호 2개가 합쳐진 것이라 UTF-16으로 4칸이다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-unicode.png)
 
 사람 눈에 글자 하나로 보이는 것이 번호 여러 개로 이루어지기도 한다. 피부색을 넣은 엄지 이모지는 엄지 번호와 피부색 번호가 합쳐진 글자 하나다. Swift의 `Character`는 이렇게 합쳐진 것까지 사람이 보는 글자 하나로 세서, `Character` 단위로 자르면 반쪽이 나지 않는다. UTF-16 칸 수로 자르면 엄지와 피부색 사이가 갈라질 수 있다.
 
@@ -552,7 +552,7 @@ public static func clampOffset(_ offset: CGSize, zoom: CGFloat, view: CGSize, co
 
 요즘 아이폰과 아이패드 화면에는 모서리가 둥글고, 다이내믹 아일랜드나 홈 막대처럼 화면을 가리는 곳이 있다. 그걸 피해서 내용이 온전히 보이고 눌리는 안쪽 영역을 안전 영역이라고 한다. SwiftUI는 기본으로 안전 영역 안에 그리고, `ignoresSafeArea()`를 붙인 것만 화면 끝까지 채운다.
 
-![가로로 눕힌 아이폰에서 다이내믹 아일랜드와 홈 막대를 피한 안쪽이 안전 영역이다. 영상은 화면 끝까지 채우고, 툴바와 입력칸처럼 누르는 것은 안전 영역 안에 둔다](/assets/images/upload/touchdeck-safe-area.png)
+![가로로 눕힌 아이폰에서 다이내믹 아일랜드와 홈 막대를 피한 안쪽이 안전 영역이다. 영상은 화면 끝까지 채우고, 툴바와 입력칸처럼 누르는 것은 안전 영역 안에 둔다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-safe-area.png)
 
 영상은 가려져도 괜찮지만 버튼은 가려지면 누를 수 없다. 그래서 영상에만 `ignoresSafeArea()`를 붙였다.
 
@@ -570,7 +570,7 @@ public static func clampOffset(_ offset: CGSize, zoom: CGFloat, view: CGSize, co
 
 서로 다른 때 만든 앱이 만나면, 한쪽은 아는 메시지를 다른 쪽은 모를 수 있다. 그래서 연결하자마자 "나는 몇 번까지 안다"를 먼저 알려 주고, 둘 중 낮은 쪽에 맞춰 쓴다. 이렇게 맞추는 걸 흔히 버전 협상이라고 부른다.
 
-![아이패드는 hello에 기능 번호 2를 싣고, 예전 맥 앱은 authorized에 번호가 없어 1로 읽힌다. 아이패드는 설치 안내를 띄우고 키보드 버튼을 흐리게 하지만 연결은 끊지 않는다](/assets/images/upload/touchdeck-protocol.png)
+![아이패드는 hello에 기능 번호 2를 싣고, 예전 맥 앱은 authorized에 번호가 없어 1로 읽힌다. 아이패드는 설치 안내를 띄우고 키보드 버튼을 흐리게 하지만 연결은 끊지 않는다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-8/touchdeck-protocol.png)
 
 ```swift
 /// 연결할 때 서로 알려 주는 기능 번호. 번호를 안 보내는 예전 앱과 ESP32 보드는 1로 본다.

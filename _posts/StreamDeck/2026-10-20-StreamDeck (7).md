@@ -24,7 +24,7 @@ macOS에도 화면 공유가 있지만 TouchDeck 안에 넣은 이유는 세 가
 
 ## 맥 화면이 아이패드까지 가는 길
 
-![맥에서 고른 모니터를 ScreenCaptureKit으로 찍고 VideoToolbox로 H.264 압축한 뒤 이번 접속 키로 봉인해 WebSocket 바이너리로 보낸다. 아이패드는 봉인을 풀고 H.264를 풀어 그린다. 터치는 JSON 봉투로 맥에 돌아가 마우스 이벤트가 된다](/assets/images/upload/touchdeck-screen-pipeline.png)
+![맥에서 고른 모니터를 ScreenCaptureKit으로 찍고 VideoToolbox로 H.264 압축한 뒤 이번 접속 키로 봉인해 WebSocket 바이너리로 보낸다. 아이패드는 봉인을 풀고 H.264를 풀어 그린다. 터치는 JSON 봉투로 맥에 돌아가 마우스 이벤트가 된다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-screen-pipeline.png)
 
 맥 쪽은 모니터를 찍어서 압축하고 봉인해서 보낸다. 아이패드는 반대 순서로 풀어서 그린다. 터치는 기존 버튼 메시지처럼 JSON으로 봉투에 넣어 맥으로 보내고, 맥이 마우스 이벤트로 바꾼다.
 
@@ -60,7 +60,7 @@ macOS에도 화면 공유가 있지만 TouchDeck 안에 넣은 이유는 세 가
 
 WebSocket 메시지는 두 종류다. 글자 메시지는 사람이 읽는 글자(UTF-8)만 담을 수 있고, 지금까지 쓴 JSON이 이쪽이다. 바이너리 메시지는 0~255 사이 바이트를 아무거나 그대로 담는다. 압축된 영상은 글자가 아니라 바이트 덩어리라서, 글자 메시지에 넣으려면 2편의 base64처럼 글자로 바꿔야 하고 그만큼 커진다.
 
-![글자 메시지에 영상을 넣으면 base64 글자로 바꿔야 해서 약 1.33배 커지고, 바이너리 메시지는 영상 바이트를 그대로 싣고 봉인 36바이트만 더 붙는다](/assets/images/upload/touchdeck-text-vs-binary.png)
+![글자 메시지에 영상을 넣으면 base64 글자로 바꿔야 해서 약 1.33배 커지고, 바이너리 메시지는 영상 바이트를 그대로 싣고 봉인 36바이트만 더 붙는다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-text-vs-binary.png)
 
 WebSocket은 한 연결에서 글자 메시지와 바이너리 메시지를 섞어 보낼 수 있다(RFC 6455의 opcode). 그래서 허락받은 그 연결에 바이너리 메시지만 추가했다. 나중에 붙일 ESP32는 글자 메시지만 쓰니까 JSON 형식은 하나도 안 바뀐다.
 
@@ -197,7 +197,7 @@ ScreenCaptureKit은 macOS가 화면을 찍어서 앱에 넘겨주는 프레임�
 
 영상은 그림을 아주 빠르게 넘겨 보여 주는 것이다. 한 장 한 장을 프레임이라고 하고, 1초에 몇 장을 넘기는지를 fps(frames per second)라고 한다. 30fps면 1/30초마다 새 그림이 나온다. 장수가 많을수록 움직임이 부드럽지만 보낼 양도 늘어난다.
 
-![영상은 1/30초마다 한 장씩 넘기는 그림이라, 창이 조금씩 옮겨 간 그림이 이어지면 움직이는 것처럼 보인다](/assets/images/upload/touchdeck-frames.png)
+![영상은 1/30초마다 한 장씩 넘기는 그림이라, 창이 조금씩 옮겨 간 그림이 이어지면 움직이는 것처럼 보인다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-frames.png)
 
 `SCStream`은 화면이 바뀔 때마다 이 한 장을 앱에 넘겨준다. 화면이 그대로면 새 장이 오지 않는다.
 
@@ -277,7 +277,7 @@ private static func isComplete(_ sample: CMSampleBuffer) -> Bool {
 
 픽셀은 화면에서 실제로 빛나는 작은 점이다. 포인트는 앱이 화면 위 크기를 잴 때 쓰는 단위다. 레티나 화면은 같은 크기에 점을 두 배씩 촘촘히 넣어서, 1포인트가 가로세로 2픽셀(점 4개)이다. 앱은 포인트로 그리고, 화면은 그걸 픽셀로 바꿔 또렷하게 보여 준다.
 
-![레티나가 아닌 화면은 1포인트가 1픽셀이고, 레티나 화면은 1포인트가 2×2픽셀이다. 맥북은 1512포인트지만 픽셀은 3024개다](/assets/images/upload/touchdeck-points-pixels.png)
+![레티나가 아닌 화면은 1포인트가 1픽셀이고, 레티나 화면은 1포인트가 2×2픽셀이다. 맥북은 1512포인트지만 픽셀은 3024개다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-points-pixels.png)
 
 화면을 찍을 때는 포인트가 아니라 픽셀 수만큼 찍어야 원래 선명함이 남는다. 포인트 수만큼만 찍으면 점을 절반으로 줄여 찍은 셈이라 작은 글자가 뭉개진다.
 
@@ -370,7 +370,7 @@ static func start(displayId: CGDirectDisplayID, maxSide: Int, onPacket: @escapin
 
 압축은 보내는 양을 줄이는 것이다. 영상 압축은 두 가지를 덜어 낸다. 하나는 사람 눈에 잘 띄지 않는 아주 작은 차이이고, 다른 하나는 앞 장과 똑같은 부분이다. 화면 공유는 대부분 가만히 있고 일부만 바뀌어서 많이 줄어든다. H.264는 이렇게 줄이고 다시 푸는 방법을 정한 약속(코덱) 중 하나다. 오래되고 흔해서 맥과 아이패드 둘 다 전용 칩(하드웨어)으로 빠르게 압축하고 푼다.
 
-![찍은 한 장 그대로는 2388×1000에 약 3.6MB이고, H.264로 압축하면 보통 수십 KB, 키프레임은 수백 KB가 된다](/assets/images/upload/touchdeck-compression.png)
+![찍은 한 장 그대로는 2388×1000에 약 3.6MB이고, H.264로 압축하면 보통 수십 KB, 키프레임은 수백 KB가 된다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-compression.png)
 
 ---
 
@@ -378,7 +378,7 @@ static func start(displayId: CGDirectDisplayID, maxSide: Int, onPacket: @escapin
 
 비트레이트는 1초 동안 영상에 쓸 수 있는 데이터 양이다. 압축기에게 주는 예산이라고 보면 된다. 예산이 넉넉하면 덜어 내는 게 적어 또렷하고, 빠듯하면 작은 글자의 가장자리부터 뭉개진다. 대신 예산이 클수록 와이파이가 그만큼 실어 날라야 한다.
 
-![비트레이트는 1초에 쓸 수 있는 데이터 예산이라, 10Mbps처럼 빠듯하면 작은 글자 가장자리가 뭉개지고 25Mbps처럼 넉넉하면 또렷하다](/assets/images/upload/touchdeck-bitrate.png)
+![비트레이트는 1초에 쓸 수 있는 데이터 예산이라, 10Mbps처럼 빠듯하면 작은 글자 가장자리가 뭉개지고 25Mbps처럼 넉넉하면 또렷하다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-bitrate.png)
 
 ---
 
@@ -484,7 +484,7 @@ public func encoded() -> Data {
 
 압축된 영상의 프레임은 두 종류다. 키프레임(K)은 그 한 장만으로 온전한 그림이 되는 프레임이다. 차이 프레임(P)은 "앞 장에서 어디가 바뀌었는지"만 적은 프레임이라 훨씬 작다. 그래서 영상은 키프레임 하나 뒤에 차이 프레임이 줄줄이 이어진다.
 
-![키프레임 K 뒤에 바뀐 부분만 담은 P가 이어진다. P 하나를 버리면 그 뒤 P들은 기준이 되는 앞 장이 없어 깨지고, 다음 K가 와야 다시 또렷해진다](/assets/images/upload/touchdeck-keyframe.png)
+![키프레임 K 뒤에 바뀐 부분만 담은 P가 이어진다. P 하나를 버리면 그 뒤 P들은 기준이 되는 앞 장이 없어 깨지고, 다음 K가 와야 다시 또렷해진다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-keyframe.png)
 
 차이 프레임은 앞 장이 있어야 그릴 수 있다. 중간 하나가 빠지면 그 뒤 차이 프레임들은 없는 그림을 기준으로 고치게 돼서 화면이 깨진다. 다음 키프레임이 와야 다시 온전해진다.
 
@@ -661,7 +661,7 @@ CFDictionarySetValue(dict, Unmanaged.passUnretained(kCMSampleAttachmentKey_Displ
 
 비율이 다른 영상을 화면에 넣을 때, 잘리지 않게 비율을 지키며 꽉 차게 넣으면 남는 쪽이 빈 띠가 된다. 극장 영화를 TV로 볼 때 위아래에 생기는 검은 띠가 이것이고, 레터박스라고 부른다. 21:9 울트라와이드를 4:3 아이패드에 넣으면 위아래가 넓게 빈다.
 
-![4:3 아이패드 화면에 21:9 울트라와이드 영상을 비율을 지키며 넣으면 위아래가 빈 띠가 되고, 빈 띠를 누르면 맥에는 아무것도 보내지 않는다](/assets/images/upload/touchdeck-letterbox.png)
+![4:3 아이패드 화면에 21:9 울트라와이드 영상을 비율을 지키며 넣으면 위아래가 빈 띠가 되고, 빈 띠를 누르면 맥에는 아무것도 보내지 않는다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-letterbox.png)
 
 ---
 
@@ -669,7 +669,7 @@ CFDictionarySetValue(dict, Unmanaged.passUnretained(kCMSampleAttachmentKey_Displ
 
 맥은 모니터가 여러 개여도 큰 도화지 하나로 본다. 시스템 설정의 디스플레이 배치 그대로 모니터들이 이 도화지 위에 놓이고, 주 모니터의 왼쪽 위가 (0, 0)이다. 그래서 주 모니터 왼쪽에 놓인 모니터는 x가 음수에서 시작한다. 마우스를 어느 모니터로 옮기든 이 하나의 좌표로 말한다.
 
-![주 모니터 왼쪽 위가 (0, 0)이고, 왼쪽 모니터는 x가 -1512부터, 오른쪽 모니터는 주 모니터 너비부터 시작한다](/assets/images/upload/touchdeck-global-coords.png)
+![주 모니터 왼쪽 위가 (0, 0)이고, 왼쪽 모니터는 x가 -1512부터, 오른쪽 모니터는 주 모니터 너비부터 시작한다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-7/touchdeck-global-coords.png)
 
 ---
 

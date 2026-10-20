@@ -86,7 +86,7 @@ struct NavigationHeader: View {
 
 이번엔 실제 코드에 써먹은 김에 `<T: View>`가 뭘 뜻하는지 제대로 정리하고 넘어간다. 이건 "`NavigationHeader`는 `T`라는 미지의 타입 하나를 받는데, 그 `T`는 반드시 `View` 프로토콜을 따라야 한다"는 뜻이다. `T`가 정확히 어떤 타입인지는 이 구조체를 실제로 쓰는 시점에 결정된다. 예를 들어 `trailing`에 `Button`을 넘기면 그 순간 `T`는 `Button`이 되고, `Image`를 넘기면 `T`는 `Image`가 되는 식이다.
 
-![NavigationHeader 는 T 하나를 받고, trailing 에 Button 을 넘기면 T 가 Button 으로, Image 를 넘기면 Image 로 정해진다](/assets/images/upload/nav-header-type.png)
+![NavigationHeader 는 T 하나를 받고, trailing 에 Button 을 넘기면 T 가 Button 으로, Image 를 넘기면 Image 로 정해진다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/nav-header-type.png)
 
 이렇게 제네릭으로 만든 이유는, `trailing: () -> T`처럼 클로저가 정확히 어떤 뷰를 돌려주는지 Swift가 미리 알고 있어야 하기 때문이다.
 
@@ -190,7 +190,7 @@ extension View {
 
 글로만 따라오면 헷갈릴 수 있어서 지금까지 나온 구조를 그림으로 정리해봤다.
 
-![NavigationHeader 안에서는 ZStack 이 타이틀 레이어와 뒤로가기 레이어를 겹쳐 쌓고, 화면에 customNavHeader 를 붙이면 CustomNavHeaderModifier 가 VStack 으로 헤더와 원래 화면을 쌓아 올린다](/assets/images/upload/nav-header-layers.png)
+![NavigationHeader 안에서는 ZStack 이 타이틀 레이어와 뒤로가기 레이어를 겹쳐 쌓고, 화면에 customNavHeader 를 붙이면 CustomNavHeaderModifier 가 VStack 으로 헤더와 원래 화면을 쌓아 올린다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/nav-header-layers.png)
 
 위쪽은 `NavigationHeader` 내부에서 `ZStack`이 타이틀 레이어와 뒤로가기/trailing 레이어를 어떻게 겹치는지, 아래쪽은 화면에 `.customNavHeader(...)`를 붙였을 때 `CustomNavHeaderModifier`가 `VStack`으로 헤더와 콘텐츠를 쌓아 올리는 흐름이다.
 

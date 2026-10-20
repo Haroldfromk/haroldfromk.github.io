@@ -26,7 +26,7 @@ published: true
 
 공유기는 집 안 기기마다 192.168로 시작하는 주소를 나눠 준다. 이런 주소를 사설 주소라고 한다. 집 안에서만 통하는 내선 번호와 같다. 인터넷 쪽에서 보이는 주소는 공유기가 가진 하나뿐이다. 회사 대표 번호 하나 뒤에 내선이 여러 개 있는 것과 비슷하다.
 
-![집 와이파이 안의 맥과 아이패드는 192.168로 시작하는 사설 주소를 쓰고, 밖의 아이폰에게는 공유기 주소 하나만 보인다. 밖에서 먼저 걸어온 연결은 공유기가 안쪽 누구에게 줄지 몰라 버린다](/assets/images/upload/touchdeck-nat.png)
+![집 와이파이 안의 맥과 아이패드는 192.168로 시작하는 사설 주소를 쓰고, 밖의 아이폰에게는 공유기 주소 하나만 보인다. 밖에서 먼저 걸어온 연결은 공유기가 안쪽 누구에게 줄지 몰라 버린다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-nat.png)
 
 안에서 밖으로 먼저 건 연결은 공유기가 기억해 두었다가, 돌아오는 답을 그 기기에게 넘겨준다. 그런데 밖에서 먼저 걸어온 연결은 안쪽 누구에게 줄지 모르니 버린다. 그래서 밖의 아이폰은 집 맥에 먼저 말을 걸 수 없다.
 
@@ -50,7 +50,7 @@ published: true
 
 VPN(가상 사설망)은 멀리 떨어진 기기들을 같은 사설망에 있는 것처럼 묶는 방법이다. Tailscale은 이걸 쉽게 해 주는 서비스다. 같은 계정으로 로그인한 기기마다 100으로 시작하는 주소를 하나씩 주고, 그 주소끼리는 어디에 있든 바로 붙게 해 준다. 오가는 데이터는 WireGuard라는 방식으로 암호화된다. 주소 대신 Tailscale이 기기에 붙인 이름(MagicDNS)으로도 부를 수 있다.
 
-![맥은 100.80.12.3, 아이폰은 100.92.40.7처럼 Tailscale 주소를 받고, 서로의 100 주소로 바로 붙는다. 실제 데이터는 암호화된 채로 공유기와 인터넷, LTE를 지난다](/assets/images/upload/touchdeck-tailscale.png)
+![맥은 100.80.12.3, 아이폰은 100.92.40.7처럼 Tailscale 주소를 받고, 서로의 100 주소로 바로 붙는다. 실제 데이터는 암호화된 채로 공유기와 인터넷, LTE를 지난다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-tailscale.png)
 
 밖에서 먼저 온 연결을 공유기가 버리는 문제는 Tailscale이 알아서 푼다. 두 기기가 동시에 서로에게 연결을 걸어 공유기에 길을 내고, 그게 안 되면 Tailscale의 중계 서버를 거친다. 그 서버를 내가 돌릴 필요는 없다. 앱 입장에서는 맥 주소가 192.168 대신 100으로 바뀌었을 뿐이다.
 
@@ -60,7 +60,7 @@ VPN(가상 사설망)은 멀리 떨어진 기기들을 같은 사설망에 있�
 
 아이패드는 이제 두 가지로 맥을 찾는다. 집에서는 지금처럼 Bonjour로 바로 붙어야 하고, 밖에서는 넣어 둔 주소로 붙어야 한다. 순서는 이렇게 정했다.
 
-![Bonjour로 찾다가 찾으면 바로 붙고, 3초 동안 못 찾으면 ws://맥이름:52801/로 붙는다. 10초 안에 허락까지 못 가면 실패 안내를 띄우고, 끊기거나 실패하면 2초 뒤 처음부터 다시 한다](/assets/images/upload/touchdeck-connect-order.png)
+![Bonjour로 찾다가 찾으면 바로 붙고, 3초 동안 못 찾으면 ws://맥이름:52801/로 붙는다. 10초 안에 허락까지 못 가면 실패 안내를 띄우고, 끊기거나 실패하면 2초 뒤 처음부터 다시 한다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-connect-order.png)
 
 1. 지금처럼 Bonjour로 찾는다.
 2. 3초 안에 못 찾았고 넣어 둔 주소가 있으면 `ws://주소:52801/`로 붙는다. 1편에서 본 것처럼 `host:port`로는 WebSocket이 안 열려서 URL로 붙는다.
@@ -217,7 +217,7 @@ if let name = interfaceName, name.hasPrefix("awdl") || name.hasPrefix("llw") {
 
 기기 안에서 데이터가 나가는 출구 하나하나를 네트워크 장치(인터페이스)라고 한다. 와이파이는 `en0`, 아이폰의 LTE는 `pdp_ip0`, 에어드롭 직접 연결은 `awdl0` 같은 이름이 붙는다. VPN 앱은 여기에 `utun`이라는 가상의 장치를 하나 더 만든다. 선도 안테나도 없는 장치라서, 받은 데이터를 암호화한 뒤 아래의 진짜 장치로 넘긴다.
 
-![TouchDeck이 100 주소로 보낸 연결은 utun이라는 가상 장치를 지나 암호화된 뒤, 실제로는 와이파이(en0)나 LTE(pdp_ip0)로 나간다](/assets/images/upload/touchdeck-interface.png)
+![TouchDeck이 100 주소로 보낸 연결은 utun이라는 가상 장치를 지나 암호화된 뒤, 실제로는 와이파이(en0)나 LTE(pdp_ip0)로 나간다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-interface.png)
 
 그래서 Tailscale로 붙은 연결은 utun과 진짜 장치를 둘 다 거친다. 그런데 앱이 연결 길을 물었을 때 utun까지 알려 준다는 보장은 없다.
 
@@ -356,7 +356,7 @@ public struct Limits: Equatable, Sendable {
 
 macOS는 보통 "화면 보호기가 시작되거나 디스플레이가 꺼지면 암호 요구"로 설정돼 있다. 디스플레이가 꺼지는 순간 맥이 잠긴다는 뜻이다. 그리고 7편에서 맥이 잠겨 있으면 화면을 보내지 않게 만들었다. 시스템 잠자기만 막아 두면 맥은 깨어 있는데, 디스플레이가 꺼지면서 잠겨 버려 밖에서 화면을 볼 수 없다.
 
-![평소에는 가만히 두면 디스플레이가 꺼지고 맥이 잠겨 화면 보기가 멈춘다. 잠자기 막기를 켜면 디스플레이가 켜진 채라 잠기지 않고, 밖에서 화면을 볼 수 있다](/assets/images/upload/touchdeck-sleep-chain.png)
+![평소에는 가만히 두면 디스플레이가 꺼지고 맥이 잠겨 화면 보기가 멈춘다. 잠자기 막기를 켜면 디스플레이가 켜진 채라 잠기지 않고, 밖에서 화면을 볼 수 있다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-sleep-chain.png)
 
 그래서 "잠자기 막기"를 켜면 시스템 잠자기와 함께 디스플레이 꺼짐도 막는다. 대가는 맥 앞을 지나는 누구나 그 맥을 쓸 수 있다는 것이다. 알고 고른 것이라 메뉴의 체크 아래에 "켜 두면 맥이 잠들지도 잠기지도 않아요"를 적었다.
 
@@ -435,7 +435,7 @@ final class PowerAssertions {
 
 주의할 점은 딱 한 번만 알린다는 것이다. 알린 뒤에는 지켜보기가 끝나서, 계속 지켜보려면 다시 걸어야 한다.
 
-![withObservationTracking은 한 번 알리고 끝난다. 다시 거는 곳이 두 군데면 지켜보기가 하나씩 쌓여 한 번 바뀔 때 셋이 다 울리고, 한 군데면 늘 하나다](/assets/images/upload/touchdeck-observation.png)
+![withObservationTracking은 한 번 알리고 끝난다. 다시 거는 곳이 두 군데면 지켜보기가 하나씩 쌓여 한 번 바뀔 때 셋이 다 울리고, 한 군데면 늘 하나다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-observation.png)
 
 처음에는 요청을 다시 맞추는 `refresh()` 안에서 지켜보기를 걸었다. 그러면 체크를 바꿔서 `refresh()`를 부를 때마다 지켜보기가 하나씩 더 걸린다. 앞서 건 지켜보기는 아직 안 울렸으니 살아 있다. 체크를 세 번 바꾸면 지켜보기가 셋이 되고, 보는 기기가 한 번 바뀌면 셋이 다 울린다. 요청 맞추기는 여러 번 불러도 결과가 같아서 겉으로 드러나지는 않지만, 체크를 바꿀수록 계속 늘어난다.
 
@@ -557,7 +557,7 @@ NavigationStack {
 1. 맥과 아이패드(아이폰)에 App Store에서 Tailscale을 깔고, 같은 계정으로 로그인한다.
 2. 맥의 Tailscale 메뉴(또는 아이폰 Tailscale 앱의 기기 목록)에서 맥 이름이나 100으로 시작하는 주소를 확인한다.
 
-![](/assets/images/upload/touchdeck-tailscale-app.webp){: width="360" }
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-tailscale-app.webp){: width="360" }
 
 아이폰 Tailscale 앱 첫 화면이다. 위쪽 스위치가 켜져 있고 "Connected"면 Tailscale에 붙어 있는 것이다. 아래 목록에 같은 계정의 기기가 나오는데, `dongiks-macbook-pro`가 TouchDeck에 넣을 맥 이름이다. 이름 아래 가린 자리에 100으로 시작하는 주소가 있다. 기기 이름 옆 초록 점은 그 기기가 지금 Tailscale에 붙어 있다는 뜻이다.
 3. TouchDeck 상태 줄 오른쪽의 "밖에서 붙기"를 눌러 그 이름을 넣는다.
