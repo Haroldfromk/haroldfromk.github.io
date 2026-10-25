@@ -239,6 +239,8 @@ private func startSignalWatchdog() {
 
 [`sink`](https://developer.apple.com/documentation/combine/publisher/sink%28receivevalue%3A%29){:target="_blank"}는 값이 올 때마다 실행할 블록을 건다. 돌려주는 값을 **들고 있어야 구독이 유지된다.** 변수에 안 담으면 그 자리에서 사라지고 타이머도 같이 멈춘다. 여기서 `signalCancellable` 에 담아두는 이유다.
 
+![sink 가 돌려준 값을 버리면 구독이 사라져 타이머도 멈추고 변수에 담으면 들고 있는 동안 계속 돈다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-06-RunningProject-42-hide/sink-retain.png)
+
 기존 타이머를 재사용하지 않고 따로 만드는 게 핵심이다. 기존 것은 `elapsedTime` 을 직접 올리는데, 미러링 중에는 그 값의 주인이 아이폰이라 둘이 충돌한다. **시간을 세지 않고 간격만 재는 타이머**가 따로 필요하다.
 
 **자동으로 끝내지는 않는다.** 이유는 아래 "버린 선택지"에 적었다.

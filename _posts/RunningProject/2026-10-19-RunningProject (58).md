@@ -109,6 +109,8 @@ func 읽을_수_없는_값은_빈_눈금으로(pace: Double) {
 
 [`@Test(arguments:)`](https://developer.apple.com/documentation/testing/test%28%5F%3A%5F%3Aarguments%3A%29-3rzok){:target="_blank"}에 모음을 넘기면 **값 하나당 독립된 테스트가 하나씩** 생긴다. 함수는 한 번만 쓰고 안에서 반복문을 돌리는 것과 결과가 다르다.
 
+![안에서 반복문을 돌면 테스트가 하나지만 arguments 로 넘기면 값마다 독립된 테스트가 생긴다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-RunningProject-58/test-arguments.png)
+
 반복문이면 중간에 하나가 터졌을 때 그 뒤가 안 돌고, 결과 목록에도 한 줄만 남는다. `arguments:` 로 나누면 넷 중 하나가 깨져도 **나머지 셋의 결과를 그대로 볼 수 있고**, 어떤 값에서 깨졌는지가 목록에 그대로 뜬다.
 
 Swift Testing의 `arguments:`는 값 하나마다 테스트를 따로 만들어준다. 네 값이 각각 독립된 케이스로 돈다. 하나가 깨져도 나머지 셋의 결과를 볼 수 있다.

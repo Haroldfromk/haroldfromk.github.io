@@ -216,6 +216,8 @@ private func playHapticPattern() {
 
 [`Task.sleep(for:)`](https://developer.apple.com/documentation/swift/task/sleep%28for%3Atolerance%3Aclock%3A%29){:target="_blank"}는 정해진 시간만큼 기다린다. 스레드를 붙잡고 멈춰 있는 게 아니라 그 시간 동안 자리를 내주므로, 기다리는 사이 다른 일이 돈다. 취소되면 기다리다 말고 오류를 던지는데, 여기서는 어차피 다음 바퀴에서 걸러지므로 `try?` 로 흘렸다.
 
+![cancel 을 불러도 isCancelled 를 안 보면 남은 횟수만큼 계속 울리고 반복문에서 직접 확인해야 그 자리에서 빠져나온다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-19-RunningProject-37/task-cancel.png)
+
 `hapticTask?.cancel()` 을 맨 앞에 둔 건 **경고가 연달아 뜰 때 앞 패턴이 겹쳐 울리는 걸 막기 위해서**다.
 
 페이스가 목표보다 느리면(ADD THRUST) 위로 두 번, 빠르면(REDUCE THRUST) 아래로 세 번 빠르게, MINIMUMS는 부드럽게 한 번만 울린다. 손목을 안 보고도 세 가지를 구분할 수 있게 됐다.
@@ -287,6 +289,8 @@ enum RunReminderService {
 [`FetchDescriptor`](https://developer.apple.com/documentation/swiftdata/fetchdescriptor){:target="_blank"}는 SwiftData 에 "이런 조건으로 꺼내 달라"고 적어 넘기는 주문서다. 정렬과 조건, 개수 제한을 담는다.
 
 [`SortDescriptor`](https://developer.apple.com/documentation/foundation/sortdescriptor){:target="_blank"}로 정렬 기준을 준다. `\.date` 는 어느 속성으로 줄 세울지 가리키는 것이고, `order: .reverse` 라 최근 것이 앞에 온다.
+
+![전부 꺼낸 뒤 첫 개를 고르면 수백 건을 다 읽지만 fetchLimit 을 주면 한 건만 읽어 온다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-19-RunningProject-37/fetch-limit.png)
 
 `fetchLimit = 1` 이 중요하다. **저장소에서 한 건만 읽어 온다.** 전부 꺼낸 뒤 첫 개를 고르는 것과 결과는 같지만, 기록이 수백 건 쌓였을 때 읽는 양이 다르다.
 

@@ -198,6 +198,8 @@ let samples = flight.samples
 
 [`Path`](https://developer.apple.com/documentation/swiftui/path){:target="_blank"}는 점과 선을 모아둔 **도형 하나**다. `move(to:)` 로 펜을 들어 옮기고 `addLine(to:)` 로 내려 그으면서 모양을 쌓는다.
 
+![addLine 만 쓰면 값이 없는 구간을 가로지르는 직선이 생기고 move 로 건너뛰면 선이 끊겨 비어 보인다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-02-RunningProject-46/path-move.png)
+
 여기서 핵심은 **펜을 드는 것과 긋는 것이 다르다**는 점이다. 값이 없는 구간을 만나면 `move(to:)` 로 건너뛰므로 선이 이어지지 않는다. 그냥 다음 값으로 `addLine` 을 하면 빈 구간을 가로지르는 긴 직선이 생겨서, 기록이 없는 자리가 멀쩡히 이어진 것처럼 보인다.
 
 ```swift

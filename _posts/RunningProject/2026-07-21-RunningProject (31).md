@@ -124,6 +124,8 @@ var gpwsDeviation: Int {
 
 [`allowsHitTesting(_:)`](https://developer.apple.com/documentation/swiftui/view/allowshittesting%28%5F%3A%29){:target="_blank"}에 `false` 를 주면 그 뷰는 **보이기는 하는데 터치를 안 받는다.** 손가락이 그 위를 그냥 지나쳐 뒤에 있는 뷰에 닿는다. 숨기는 `hidden()` 과 다른 점이 여기다.
 
+![GPWS 오버레이는 아래 버튼을 막지만 allowsHitTesting 을 false 로 준 일시정지 오버레이는 손가락을 통과시킨다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-21-RunningProject-31/hit-testing.png)
+
 `isPaused` 오버레이에는 이게 걸려 있었고 GPWS 오버레이에는 없었다. 그래서 같은 `ZStack` 안에 얹혀 있어도 한쪽만 아래 버튼을 막고 있었다.
 
 터치를 통과시키는 쪽으로 고칠 수도 있었지만, 그러면 경고 화면 뒤에 가려진 버튼을 눈에 안 보이는 채로 더듬어 눌러야 하는 구조가 된다. 그래서 END FLIGHT 버튼을 오버레이 화면에도 하나 더 넣는 쪽으로 갔다. `WatchFlightPaceTab` 안에 있던 2초 홀드 버튼 로직을 `EndFlightHoldButton`이라는 별도 뷰로 빼서, `WatchFlightPaceTab`과 `WatchGPWSView` 양쪽에서 같이 쓰게 만들었다.

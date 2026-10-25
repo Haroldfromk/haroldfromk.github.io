@@ -290,6 +290,8 @@ try await builder?.beginCollection(at: startDate)
 
 [`HKLiveWorkoutDataSource`](https://developer.apple.com/documentation/healthkit/hkliveworkoutdatasource){:target="_blank"}를 붙이면 센서에서 오는 값이 **자동으로** 빌더에 들어간다. 앱이 한 건씩 넣어주는 게 아니라 데이터 원천을 꽂아두는 쪽에 가깝다.
 
+![세션은 시작부터 끝까지의 시간이고 빌더는 그 시간 동안 쌓이는 표본이며 데이터 소스를 붙이면 센서 값이 알아서 들어온다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-05-RunningProject-41/session-builder.png)
+
 `beginCollection` 은 수집을 시작하라는 신호다. 여기까지가 평범한데, 다음이 이 글의 출발점이다.
 
 그리고 종료할 때는 세션만 끝내고 빌더는 손대지 않는다. **마무리를 안 해도 시스템이 그때까지 모인 데이터로 워크아웃을 마감해 저장한다.** 그래서 앱이 저장을 지시한 적이 없는데도 Source가 RunWay로 찍힌다.

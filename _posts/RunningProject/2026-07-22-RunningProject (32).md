@@ -345,6 +345,8 @@ session.sendMessage(message, replyHandler: nil, errorHandler: nil)
 
 [`sendMessage(_:replyHandler:errorHandler:)`](https://developer.apple.com/documentation/watchconnectivity/wcsession/sendmessage%28%5F%3Areplyhandler%3Aerrorhandler%3A%29){:target="_blank"}의 두 클로저는 **내가 부른 자리가 아니라 시스템이 나중에 부르는 자리**다. 전송 결과가 나와야 불리므로 호출한 함수는 이미 끝나 있다.
 
+![sendMessage 를 부른 함수는 이미 끝났고 한참 뒤 전송이 실패해야 errorHandler 가 불린다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/errorhandler-timing.png)
+
 그래서 어느 스레드에서 불릴지를 내가 정하지 못한다. 문서가 백그라운드 스레드라고 못박아 두었다. 여기에 메인에서만 만져야 하는 것을 넣으면 어긋난다.
 
 [`@Sendable`](https://developer.apple.com/documentation/swift/sendable){:target="_blank"}은 **이 클로저가 어느 스레드로 넘어가도 안전하다**고 컴파일러에 알리는 표시다. 붙이면 컴파일러가 그 안에서 위험한 접근을 하는지 같이 검사해준다.

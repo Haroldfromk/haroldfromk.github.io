@@ -464,6 +464,8 @@ Task { @MainActor in
 
 [`@MainActor`](https://developer.apple.com/documentation/swift/mainactor){:target="_blank"}는 **그 코드를 메인 스레드에서 돌리라는 표시**다. `Task { @MainActor in ... }` 으로 감싸면 그 블록만 메인으로 옮겨서 실행한다. 화면을 그리는 일은 전부 메인 스레드 몫이므로, 화면이 읽는 값도 거기서 고쳐야 중간에 깨진 상태가 보이지 않는다.
 
+![백그라운드 큐에서 화면 값을 그냥 고치면 깨진 상태가 보이고 Task 에 MainActor 를 붙이면 그 블록만 메인으로 옮겨진다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/mainactor-hop.png)
+
 같은 블록 안에서 `healthCenter.processHeartRate` 는 `await` 를 거친다. 이쪽은 메인이 아니라 actor 안으로 들어가는 길이라, 두 종류의 격리가 한 블록에 나란히 있는 셈이다.
 
 ---
@@ -697,6 +699,8 @@ Task {
 #### for await로 스트림을 구독하기
 
 `streamHealthData()` 는 값이 생길 때마다 하나씩 건네주는 통로를 돌려준다. `for await` 는 그 통로에 값이 올 때까지 **기다렸다가** 한 바퀴를 돈다. 보통 `for` 문처럼 미리 있는 것들을 훑는 게 아니라, 아직 안 온 값을 기다리는 반복문이다.
+
+![보통 for 는 이미 있는 것을 돌지만 for await 는 온 것만 돌고 다음이 올 때까지 멈춰 선다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/for-await.png)
 
 통로가 닫힐 때까지 끝나지 않으므로 [`Task`](https://developer.apple.com/documentation/swift/task){:target="_blank"} 로 감싸 따로 돌린다. 안 그러면 이 줄에서 멈춰 다음 코드가 실행되지 않는다.
 

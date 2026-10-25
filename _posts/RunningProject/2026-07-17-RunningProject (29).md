@@ -131,6 +131,8 @@ struct NavigationHeader<T: View>: View {
 
 [`@ViewBuilder`](https://developer.apple.com/documentation/swiftui/viewbuilder){:target="_blank"}는 클로저 안에 뷰를 여러 개 써도 그걸 하나의 뷰로 묶어주는 result builder다. 이게 없으면 클로저는 뷰를 딱 하나만 돌려줄 수 있어서, 트레일링 자리에 버튼 두 개를 넣고 싶을 때 `HStack`으로 직접 감싸야 한다. 붙여두면 쓰는 쪽에서 그냥 나란히 쓰기만 하면 된다.
 
+![@ViewBuilder 가 없으면 클로저가 뷰를 하나만 돌려줄 수 있어 HStack 으로 감싸야 하고 붙이면 여러 개가 하나로 묶인다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/viewbuilder.png)
+
 `SwiftUI`의 `body`에 이미 이게 붙어 있다. 평소에 `VStack` 안에 뷰를 여러 개 쓰는 게 되는 이유가 이것이다.
 
 [`ZStack`](https://developer.apple.com/documentation/swiftui/zstack){:target="_blank"}은 자식 뷰를 **앞뒤로 겹쳐 쌓는다.** `HStack`이나 `VStack`처럼 자리를 나눠 갖는 게 아니라 같은 자리에 포개진다. 나중에 쓴 뷰가 위로 온다.
@@ -162,6 +164,8 @@ private struct CustomNavHeaderModifier<T: View>: ViewModifier {
 #### ViewModifier로 화면을 감싸기
 
 [`ViewModifier`](https://developer.apple.com/documentation/swiftui/viewmodifier){:target="_blank"}는 **뷰 하나를 받아서 바꾼 뷰를 돌려주는** 규칙이다. 지켜야 할 건 `body(content:)` 하나뿐이다. 여기서 `content`는 이 modifier가 붙은 원래 화면이고, 타입은 `Content`다. 구체적으로 어떤 뷰가 올지는 붙이는 쪽에서 정해지므로 이름만 있는 타입으로 받는다.
+
+![ViewModifier 는 화면 View 를 받아 헤더와 원래 content 를 쌓은 새 뷰를 돌려주므로 화면 쪽 코드는 그대로다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-17-RunningProject-29/viewmodifier-wrap.png)
 
 여기서는 받아온 `content` 위에 헤더를 올린 `VStack` 을 돌려준다. 원래 화면을 고치는 게 아니라 **감싸는 것**이라, 화면 쪽 코드는 한 줄도 바뀌지 않는다.
 

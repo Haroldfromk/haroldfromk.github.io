@@ -357,9 +357,13 @@ func everyDialValueRoundTrips() {
 
 [`@Test`](https://developer.apple.com/documentation/testing/test%28%5F%3A%5F%3A%29){:target="_blank"}는 이 함수가 테스트라고 표시한다. 괄호 안 문자열은 결과 목록에 그대로 뜨는 이름이라, 함수 이름 대신 읽을 문장을 쓸 수 있다.
 
-[`#expect`](https://developer.apple.com/documentation/testing/expectations){:target="_blank"}는 조건이 참인지 본다. 거짓이면 **멈추지 않고 기록만 남기고 계속 간다.** 그래서 반복문 안에 두면 145개를 끝까지 돌려 틀린 것을 전부 모을 수 있다. 뒤에 붙인 문자열은 틀렸을 때 같이 찍히는 설명이다.
+[`#expect`](https://developer.apple.com/documentation/testing/expectations){:target="_blank"}는 조건이 참인지 본다. 거짓이면 **멈추지 않고 기록만 남기고 계속 간다.** ![첫 실패에서 멈추는 방식이면 뒤를 못 보지만 expect 는 끝까지 돌아 틀린 48개를 한 번에 모은다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-04-RunningProject-51/expect-continue.png)
 
-[`stride(from:through:by:)`](https://developer.apple.com/documentation/swift/stride%28from%3Athrough%3Aby%3A%29){:target="_blank"}는 일정 간격으로 값을 훑는다. `through` 는 끝 값을 **포함**하고 `to` 는 안 포함한다. 900초도 고를 수 있는 값이라 `through` 를 썼다.
+그래서 반복문 안에 두면 145개를 끝까지 돌려 틀린 것을 전부 모을 수 있다. 뒤에 붙인 문자열은 틀렸을 때 같이 찍히는 설명이다.
+
+[`stride(from:through:by:)`](https://developer.apple.com/documentation/swift/stride%28from%3Athrough%3Aby%3A%29){:target="_blank"}는 일정 간격으로 값을 훑는다. ![to 로 쓰면 끝 값이 빠져 144개가 되고 through 로 쓰면 900초까지 포함해 145개가 된다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-04-RunningProject-51/stride-through.png)
+
+`through` 는 끝 값을 **포함**하고 `to` 는 안 포함한다. 900초도 고를 수 있는 값이라 `through` 를 썼다.
 
 고치기 전 코드로 돌려봤다.
 

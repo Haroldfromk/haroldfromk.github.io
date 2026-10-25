@@ -213,7 +213,9 @@ final class SpeechAnnouncerService {
 
 [`setCategory(_:options:)`](https://developer.apple.com/documentation/avfaudio/avaudiosession/setcategory%28%5F%3Aoptions%3A%29){:target="_blank"}로 성격을 정한다. [`.playback`](https://developer.apple.com/documentation/avfaudio/avaudiosession/category-swift.struct/playback){:target="_blank"}은 소리를 들려주는 게 앱의 목적이라는 뜻이라, 무음 스위치를 켜두거나 화면을 꺼도 계속 난다.
 
-[`.duckOthers`](https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions-swift.struct/duckothers){:target="_blank"}는 **내 소리가 나는 동안만 다른 앱 소리를 낮춘다.** 끄는 게 아니라 줄이는 것이고, 끝나면 알아서 원래 음량으로 돌아온다. 이게 없으면 음악이 아예 끊기거나 안내가 음악에 묻힌다.
+[`.duckOthers`](https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions-swift.struct/duckothers){:target="_blank"}는 **내 소리가 나는 동안만 다른 앱 소리를 낮춘다.** 끄는 게 아니라 줄이는 것이고, 끝나면 알아서 원래 음량으로 돌아온다. ![음성 안내가 나가는 동안만 음악이 낮아졌다가 끝나면 원래 음량으로 돌아온다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-34/duck-others.png)
+
+이게 없으면 음악이 아예 끊기거나 안내가 음악에 묻힌다.
 
 `RunViewModel`/`WatchViewModel` 양쪽 다 `streamPhaseData()`를 구독하는 자리 옆에 똑같은 패턴으로 하나 더 추가했다.
 
