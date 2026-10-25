@@ -11,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 심박 기반 러닝 모드를 만들다가 [이전글](https://haroldfromk.github.io/posts/RunningProject-(30)/){:target="_blank"}에서 `reset()`이 `modeAData`를 지우는 진짜 원인을 찾았다. 

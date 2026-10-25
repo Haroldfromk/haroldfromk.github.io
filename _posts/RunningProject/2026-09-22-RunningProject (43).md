@@ -2,7 +2,7 @@
 title: RunWay 1.3.2 (2) 기준을 잘못 고른 두 가지
 writer: Harold
 date: 2026-09-22 09:00:00 +0900
-last_modified_at: 2026-09-27 21:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [UserNotifications, WatchConnectivity]
 
@@ -11,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 [이전 글](https://haroldfromk.github.io/posts/RunningProject-(41)/){:target="_blank"}에서 GPWS 경고와 건강 앱 중복 저장을 고쳤다. 1.3.2를 마무리하면서 두 개를 더 손봤는데, 앞의 둘과 성격이 달라서 따로 적는다.

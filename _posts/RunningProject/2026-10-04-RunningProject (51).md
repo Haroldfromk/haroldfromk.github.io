@@ -2,6 +2,7 @@
 title: RunWay 1.4 (8) 멈춰 있는 동안에도 가고 있던 시계
 writer: Harold
 date: 2026-10-04 18:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [CoreLocation, SwiftUI]
 
@@ -10,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 고친 빌드를 깔고 짧게 나갔다. 3분쯤 걷고, 중간에 1분 정도 그냥 서 있었다. 거리로는 250m밖에 안 되는 기록이다.

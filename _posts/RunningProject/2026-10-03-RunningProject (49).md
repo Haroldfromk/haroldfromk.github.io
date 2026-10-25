@@ -2,6 +2,7 @@
 title: RunWay 1.4 (6) 납작한 페이스 줄과 안 돌아오는 PFD
 writer: Harold
 date: 2026-10-03 18:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [CoreLocation, WatchConnectivity, SwiftUI]
 
@@ -10,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 Flight Data Recorder를 만들어놓고 3km를 왕복으로 뛰었다. 시뮬레이터로는 끝까지 확인할 수 없던 것들이 거기서 나왔다. 그래프가 못 쓸 모양으로 나온 것, 그 원인이 엉뚱한 데서 한 번 더 터진 것, 그리고 아직 원인을 못 잡은 것 세 가지다.

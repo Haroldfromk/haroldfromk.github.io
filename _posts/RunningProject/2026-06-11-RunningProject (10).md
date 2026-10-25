@@ -213,8 +213,6 @@ func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:
 
 이건 오늘 `simultaneousGesture` 기능까지 구현하고 확인겸 잠시 나갔다가 발견하게 된 부분이라 급하게 추가를 하였다.
 
-![](/assets/images/upload/runninglocation.png)
-
 앱을 켜자마자 위치 추적이 활성화되면서 `didUpdateLocations`이 바로 호출되기 시작한다.
 
 이 상태에서 러닝을 시작하면 그 사이에 쌓인 위치 데이터가 그대로 `processLocation()`으로 넘어가 거리가 튀는 문제가 생긴다.

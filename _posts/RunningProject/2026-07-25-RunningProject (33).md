@@ -2,6 +2,7 @@
 title: RunWay 1.2 (2) km 스플릿, 상대고도 추가
 writer: Harold
 date: 2026-07-25 20:40:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [SwiftData, CoreMotion, WatchConnectivity]
 
@@ -10,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 [이전글](https://haroldfromk.github.io/posts/RunningProject-(32)/){:target="_blank"}에서 심박 미션 버그를 다 잡고, 이번엔 다음 순서였던 km 단위 스플릿 기능으로 넘어왔다. 러닝 하나를 1km마다 끊어서 그 구간 페이스/심박/케이던스를 따로 기록하는 기능이다.

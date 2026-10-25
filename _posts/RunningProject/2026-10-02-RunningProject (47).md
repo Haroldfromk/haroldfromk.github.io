@@ -2,6 +2,7 @@
 title: RunWay 1.4 (4) 캘린더 날짜 탭과 끝났는데 안 끝나던 러닝
 writer: Harold
 date: 2026-10-02 18:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [SwiftUI, SwiftData]
 
@@ -10,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 Flight Calendar는 한 달치 러닝을 잔디밭처럼 보여주는 화면이다. 뛴 날은 거리에 따라 초록이 진해지고, 안 뛴 날은 비어 있다.

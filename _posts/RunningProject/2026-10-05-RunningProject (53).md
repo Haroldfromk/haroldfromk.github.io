@@ -2,6 +2,7 @@
 title: RunWay 1.4 (10) 보내지 않은 종료 신호
 writer: Harold
 date: 2026-10-05 14:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [WatchConnectivity, HealthKit, SwiftUI]
 
@@ -10,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 워치에서 러닝을 끝냈는데 아이폰이 계속 도는 문제를 반년 가까이 못 잡고 있었다. 간헐적이라 조건을 모르고, 다시 해보면 멀쩡했다.

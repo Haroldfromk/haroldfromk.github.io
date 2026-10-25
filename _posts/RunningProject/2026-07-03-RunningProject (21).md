@@ -13,7 +13,7 @@ published: true
 
 지금 TakeoffView의 값들이 하드코딩 되어있는데 이걸 실기기 반영을 해보도록 한다.
 
-![](/assets/images/upload/takeoffbefore.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/takeoffbefore.png)
 
 현재는 하드코딩되어있는데, 워치 연동 그리고 battery 상태 등을 활용해서 실기기를 반영하도록 수정해본다.
 
@@ -31,7 +31,7 @@ published: true
 
 이름이 "정확도"라서 클수록 좋을 것 같은데 반대다. 이 값은 **"지금 알려준 위치가 이 정도 반경 안 어딘가에 있다"는 뜻**이라, 작을수록 좁게 짚었다는 의미다. 5m면 반경 5m 원 안, 50m면 반경 50m 원 안이다. 그래서 10 미만을 STRONG으로 잡았다.
 
-[CLLocation.horizontalAccuracy Docs](https://developer.apple.com/documentation/corelocation/cllocation/horizontalaccuracy)
+[CLLocation.horizontalAccuracy Docs](https://developer.apple.com/documentation/corelocation/cllocation/horizontalaccuracy){:target="_blank"}
 
 ```swift
 var gpsSignalStatus: (label: String, ok: Bool) {
@@ -158,7 +158,7 @@ Watch 앱이 포그라운드로 실행 중일 때
 
 배터리 잔량은 `UIDevice.current.batteryLevel`로 가져올 수 있다. 다만 기본적으로 배터리 모니터링이 비활성화되어 있어서 `UIDevice.current.isBatteryMonitoringEnabled = true`를 먼저 설정해야 한다.
 
-[UIDevice.batteryLevel Docs](https://developer.apple.com/documentation/uikit/uidevice/batterylevel)
+[UIDevice.batteryLevel Docs](https://developer.apple.com/documentation/uikit/uidevice/batterylevel){:target="_blank"}
 
 VM은 UI와 무관한 레이어라 UIKit을 임포트할 이유가 없다. 배터리 상태는 `TakeoffView` 안에서 직접 computed property로 처리했다.
 
@@ -181,7 +181,7 @@ var batteryStatus: (label: String, ok: Bool) {
 
 날씨 정보는 Apple의 WeatherKit을 사용했다. WeatherKit은 WWDC22에서 공개된 Apple 자체 날씨 프레임워크로, 서드파티 SDK 없이 `async/await`으로 간결하게 날씨 데이터를 받아올 수 있다. Apple Developer 계정당 월 500,000 API 호출이 무료로 제공된다.
 
-[WeatherKit Docs](https://developer.apple.com/documentation/weatherkit/)
+[WeatherKit Docs](https://developer.apple.com/documentation/weatherkit/){:target="_blank"}
 
 **Capabilities 추가**
 
@@ -281,11 +281,11 @@ JWT 인증 에러였다. Xcode에서 Signing & Capabilities에 WeatherKit을 추
 
 구글링 결과, [developer](https://developer.apple.com/account/resources/identifiers/list){:target="_blank"} 사이트에서 프로젝트에 해당하는 Identifier에 들어가서 Capabilities 탭이 아닌 **App Services 탭**에도 별도로 WeatherKit을 체크해줘야 한다는 걸 알게 됐다. 
 
-![](/assets/images/upload/weather.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/weather.png)
 
-![](/assets/images/upload/done1.gif)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/done1.gif)
 
-![](/assets/images/upload/done2.png)
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-03-RunningProject-21/done2.png)
 
 시뮬레이터에서 이렇게 나오는걸 알 수 있다.
 

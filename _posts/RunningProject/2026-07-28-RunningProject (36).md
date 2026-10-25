@@ -2,7 +2,7 @@
 title: RunWay 1.2 (5) TTS 마무리 & CloudKit 백업 기능
 writer: Harold
 date: 2026-07-28 11:00:00 +0900
-last_modified_at: 2026-10-08 17:46:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [AVFoundation, SwiftData, CloudKit]
 
@@ -11,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 km 스플릿 음성 안내는 이미 붙였는데, 원래 계획했던 오디오 콜아웃엔 시작 카운트다운이랑 터치다운 때 안내도 포함돼 있었다. 그리고 v1.2b 로드맵에 남은 큰 항목이 로컬 기록 CloudKit 백업이라 먼저 어떻게 할지 생각을 해보고 구현을 해보기로한다.
@@ -620,8 +620,6 @@ query.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
 이렇게 인덱스를 한 번 추가해두면, 그다음부턴 Query Records를 조건 없이 눌러도 에러가 안 난다.
 
 이 두 가지를 고치고 나서야 기기에서 기록을 전부 지운 다음 복원 버튼으로 CloudKit에 있던 기록을 다시 받아오는 것까지 확인됐다.
-
-![](/assets/images/upload/cloudresult.png)
 
 ---
 

@@ -2,7 +2,7 @@
 title: RunWay 1.4.1 실기기에서만 보이던 것들
 writer: Harold
 date: 2026-10-11 15:00:00 +0900
-last_modified_at: 2026-10-17 14:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay, SwiftUI]
 tags: [SwiftUI, Canvas, CoreLocation, SwiftData, WatchConnectivity, watchOS]
 
@@ -11,7 +11,7 @@ toc_sticky: true
 published: true
 ---
 
-> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
+> RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다. 그래도 과정을 글로 남기는 건 업데이트를 AI 에게 맡기고 끝내지 않으려는 것이다. 거기서 배울 점을 찾아 적어 두고 나중에 공부하려고 한다.
 {: .prompt-info }
 
 1.4가 10월 6일에 나갔다. 그 뒤로 지인과 내가 쓰면서 걸린 것들을 모았다. 전부 새 기능이 아니라 **이미 있는 것이 잘못 보이거나 아예 안 나오던 것**이라 세 번째 자리를 붙여 1.4.1로 낸다.
