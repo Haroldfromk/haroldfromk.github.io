@@ -2,6 +2,7 @@
 title: StreamDeck (9) 밖에서 맥에 붙기, Tailscale과 잠자기 막기
 writer: Harold
 date: 2026-10-20 21:00:00 +0900
+last_modified_at: 2026-10-26 04:30:00 +0900
 categories: [StreamDeck]
 tags: [Tailscale, Network, IOKit, Observation, SwiftUI]
 
@@ -496,6 +497,10 @@ Text(keepAwakeOn ? "잠자기 막는 중. 맥이 잠들지도 잠기지도 않�
 ## 밖에서 붙기 버튼과 시트
 
 처음에는 상태 줄 자체를 누르면 주소를 넣는 시트가 뜨게 했다. 써 보니 상태 줄이 눌린다는 걸 알 방법이 없었다. 그래서 상태 줄 오른쪽에 "밖에서 붙기" 버튼을 따로 뒀다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-remote-button.webp){: width="360" }
+
+아이폰 세로 화면이다. 맨 위 상태 줄의 초록 점과 와이파이 표시 오른쪽에 있는 파란 지구본이 "밖에서 붙기" 버튼이다. 누르면 아래의 주소 시트가 뜬다.
 
 맥과 끊겨 있으면 화면 아래쪽은 흐리게 하고 누를 수 없게 막아 둔다. 원래는 상태 줄까지 같이 막혀 있었는데, 주소는 끊겨 있을 때 넣어야 하니 이 버튼은 눌려야 한다. 그래서 `disabled`(4편)를 화면 전체가 아니라 화면 고르기와 아래 본문에만 붙였다.
 
