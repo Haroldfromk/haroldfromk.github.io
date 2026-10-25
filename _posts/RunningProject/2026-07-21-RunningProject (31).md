@@ -2,6 +2,7 @@
 title: RunWay 1.1 (3) - 핫픽스
 writer: Harold
 date: 2026-07-21 10:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [WatchConnectivity, watchOS]
 
@@ -113,9 +114,17 @@ var gpwsDeviation: Int {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchgpws.png)
 
+워치에 SINK RATE 경고가 화면을 덮은 모습이다. 아래 END FLIGHT 버튼이 가려져 있다.
+
 여기까지 고치고 다시 실기기로 테스트해보니 새로운 문제가 나왔다. GPWS 상태 자체는 이제 제대로 뜨는데, sink rate나 minimums 경고가 화면을 덮는 동안에는 러닝을 끝낼 방법이 없었다.
 
 원인은 `WatchGPWSView`를 열어보니 바로 보였다. 이 뷰는 배경을 화면 전체에 깔고 아이콘과 텍스트만 보여주는 순수 표시용 화면이라 탭이나 버튼이 하나도 없었다. 근데 이 뷰가 `WatchPFDView`의 ZStack 안에서 실제 계기판 위에 그대로 얹히는 구조라, 경고가 뜨는 동안엔 그 밑에 있는 END FLIGHT 버튼까지 같이 가려졌다. 바로 아래에 있는 `isPaused` 오버레이는 `.allowsHitTesting(false)`를 걸어서 터치가 그대로 통과하게 해뒀는데, GPWS 오버레이는 그런 처리가 없었다.
+
+#### allowsHitTesting으로 터치를 통과시키기
+
+[`allowsHitTesting(_:)`](https://developer.apple.com/documentation/swiftui/view/allowshittesting%28%5F%3A%29){:target="_blank"}에 `false` 를 주면 그 뷰는 **보이기는 하는데 터치를 안 받는다.** 손가락이 그 위를 그냥 지나쳐 뒤에 있는 뷰에 닿는다. 숨기는 `hidden()` 과 다른 점이 여기다.
+
+`isPaused` 오버레이에는 이게 걸려 있었고 GPWS 오버레이에는 없었다. 그래서 같은 `ZStack` 안에 얹혀 있어도 한쪽만 아래 버튼을 막고 있었다.
 
 터치를 통과시키는 쪽으로 고칠 수도 있었지만, 그러면 경고 화면 뒤에 가려진 버튼을 눈에 안 보이는 채로 더듬어 눌러야 하는 구조가 된다. 그래서 END FLIGHT 버튼을 오버레이 화면에도 하나 더 넣는 쪽으로 갔다. `WatchFlightPaceTab` 안에 있던 2초 홀드 버튼 로직을 `EndFlightHoldButton`이라는 별도 뷰로 빼서, `WatchFlightPaceTab`과 `WatchGPWSView` 양쪽에서 같이 쓰게 만들었다.
 
@@ -142,11 +151,15 @@ if let gpwsType = gpwsOverlayType {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchrunninggpws.gif)
 
+경고 화면 안에 END FLIGHT 를 넣은 뒤다. 경고가 뜬 채로도 길게 눌러 러닝을 끝낼 수 있다.
+
 ---
 
 ## MINIMUMS 거리 안 바뀜
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchminimus.png)
+
+MINIMUMS 경고 화면이다. 서브타이틀이 항상 50 m 로 고정돼 있었다.
 
 이 김에 워치 MINIMUMS 화면도 다시 봤다. 목표 거리 50m 전부터 뜨는 경고인데, 그 안에서 얼마나 더 가까워졌든 서브타이틀은 항상 "50 m"로 고정이었다.
 
@@ -173,11 +186,15 @@ var gpwsRemainingMeters: Int {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchminimums.gif)
 
+남은 거리를 5m 단위로 내림해 보여준다. 가까워질수록 숫자가 줄어든다.
+
 ---
 
 ## STATUS 칸에 미션 여부 안 보임
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpace.png)
+
+워치 계기판의 STATUS 칸이다. 어떤 러닝이든 PACE 로 고정돼 있었다.
 
 워치 화면을 다시 보다가 하나 더 걸렸다. STATUS 칸이 어떤 러닝을 하든 항상 "PACE"라는 고정 텍스트만 보여주고 있었다. Free Flight인지, 목표 페이스를 설정한 Mission Flight인지 구분이 전혀 안 됐고, 목표 페이스가 몇인지도 워치 화면 어디서도 확인할 방법이 없었다.
 
@@ -192,6 +209,12 @@ private var statusText: String {
 
 번갈아 보여주는 건 END FLIGHT 버튼 홀드에 쓰던 것과 같은 방식으로 `Timer`를 하나 돌려서 처리했다.
 
+#### Timer로 3초마다 번갈아 보여주기
+
+[`Timer.scheduledTimer(withTimeInterval:repeats:block:)`](https://developer.apple.com/documentation/foundation/timer/scheduledtimer%28withtimeinterval%3Arepeats%3Ablock%3A%29){:target="_blank"}는 타이머를 만들면서 **바로 시작까지 한다.** 만들어두고 따로 켜는 단계가 없다.
+
+[`invalidate()`](https://developer.apple.com/documentation/foundation/timer/invalidate%28%29){:target="_blank"}는 타이머를 멈추는 유일한 방법이다. 이걸 안 부르면 화면이 사라져도 계속 돈다. 그래서 `onDisappear` 에서 멈추고 `nil` 로 비운다. 둘을 짝으로 두는 게 습관이 되어야 하는 종류다.
+
 ```swift
 .onAppear {
     statusCycleTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
@@ -205,6 +228,8 @@ private var statusText: String {
 ```
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpacegpws.png)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchpacegpws1.png)![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchfree.png)
+
+차례로 Mission Flight 의 PACE, 3초 뒤 목표 페이스, 그리고 Free Flight 일 때의 FREE 다.
 
 ---
 
@@ -306,9 +331,19 @@ private func drainPendingWatchData(_ queue: [SwiftDataFlight]) {
 }
 ```
 
+#### onAppear로 이미 도착해 있던 값 읽기
+
+[`onChange(of:_:)`](https://developer.apple.com/documentation/swiftui/view/onchange%28of%3Ainitial%3A%5F%3A%29){:target="_blank"}는 **지켜보기 시작한 뒤의 변화만** 받는다. 이미 바뀐 뒤에 지켜보기 시작하면 그 변화는 영영 못 본다.
+
+[`onAppear(perform:)`](https://developer.apple.com/documentation/swiftui/view/onappear%28perform%3A%29){:target="_blank"}는 그 뷰가 화면에 나타날 때 한 번 불린다. 변화를 기다리는 게 아니라 **그 순간의 값을 그냥 읽는다.**
+
+그래서 둘을 같이 걸면 빈자리가 메워진다. 두 곳이 같은 일을 하므로 `drainPendingWatchData` 로 함수를 하나 빼서 양쪽이 부르게 했다. 큐를 비우는 코드가 두 벌이면 한쪽만 고치는 실수가 나온다.
+
 `.onChange`가 문 앞을 지켜보는 역할이라면, `.onAppear`는 지켜보기 시작하기 전에 문 앞에 이미 뭐가 와 있는지 한 번 미리 확인하는 역할이다. 화면이 떠 있는 동안 도착하는 기록은 `.onChange`가, 화면이 뜨기 전에 이미 도착해있던 기록은 `.onAppear`가 나눠서 맡는 구조가 됐다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-21-RunningProject-31/sum1.png)
+
+콜드 런치에서 onChange 가 왜 한 번도 안 불렸는지, onAppear 를 같이 걸어 어떻게 메웠는지를 정리한 그림이다.
 
 ---
 

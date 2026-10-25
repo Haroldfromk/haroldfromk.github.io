@@ -256,6 +256,16 @@ let normalized = span > 0 ? (value - range.min) / span : 0.5
 
 CloudKit이 뭔가 거절한 줄 알았는데 아니었다. 이 문구는 `JSONEncoder`가 던지는 에러를 번역한 것이다. 같은 상황을 따로 만들어보면 바로 나온다.
 
+#### Codable이 무한대를 거부하는 이유
+
+[`Codable`](https://developer.apple.com/documentation/swift/codable){:target="_blank"}은 타입을 JSON 같은 형식으로 바꾸고 되돌리는 규약이다. 속성이 전부 바꿀 수 있는 타입이면 `Codable` 만 적어도 나머지는 컴파일러가 만들어준다.
+
+막히는 건 **JSON 에 무한대와 NaN 을 적을 자리가 없기 때문**이다. 숫자 자리에 `inf` 라고 쓰는 표준이 없다. 그래서 [`JSONEncoder`](https://developer.apple.com/documentation/foundation/jsonencoder){:target="_blank"}는 기본 설정에서 그 값을 만나면 쓰기를 포기하고 오류를 던진다.
+
+![러닝 기록 15건 중 한 건의 pace 가 무한대라 JSONEncoder 가 통째로 실패하고 CloudKit 에 0건이 올라간다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-03-RunningProject-49/backup-blocked.png)
+
+이게 이 글의 문제와 닿는다. 기록 하나에 무한대가 들어가 있으면 그 기록만 못 쓰는 게 아니라 **같이 올라가던 전체가 멈춘다.**
+
 ```swift
 struct S: Codable { let pace: Double }
 
@@ -304,6 +314,12 @@ if location.speedAccuracy >= 0 {
 ### 기록 하나가 전부를 막는 구조
 
 백업은 이렇게 생겼다.
+
+#### CKRecord로 묶어 올릴 때의 전부 아니면 전무
+
+[`CKRecord`](https://developer.apple.com/documentation/cloudkit/ckrecord){:target="_blank"}는 CloudKit 에 올라가는 레코드 하나다. 키와 값으로 채워 넣는 사전에 가깝다.
+
+여러 개를 한 번에 올릴 때 **만드는 단계에서 터지면 아직 하나도 안 올라간 상태**가 된다. `try` 가 걸린 `map` 은 중간에 실패하면 그때까지 만든 것을 버리고 통째로 빠져나오기 때문이다. 기록 하나 때문에 백업 전체가 멈추던 모양이 이것이다.
 
 ```swift
 let records = try flights.map { flight -> CKRecord in

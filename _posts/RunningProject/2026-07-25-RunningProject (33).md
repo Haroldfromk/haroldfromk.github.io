@@ -105,6 +105,8 @@ private func recordSplitSample(at timestamp: Date) async {
 
 ### if가 아니라 while을 쓴 이유
 
+![직전 위치와 새 위치 사이에 1km 경계가 여러 개 들어오면 while 로 돌며 넘은 만큼 스플릿을 만든다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-25-RunningProject-33/split-while.png)
+
 `if`가 아니라 `while`을 쓴 이유는 GPS 업데이트 한 번에 1km를 훌쩍 넘겨버리는 경우 때문이다. 
 
 예를 들어 신호가 잠깐 끊겼다가 몇 초 뒤에 다시 들어오면, 그 사이 실제로는 1.3km를 이동했는데 위치 업데이트는 한 번만 오는 상황이 생길 수 있다. 
@@ -178,6 +180,22 @@ class SwiftDataSplit {
 ```
 
 `SwiftDataFlight`에도 `splits` 관계를 하나 추가했다.
+
+#### Relationship의 deleteRule
+
+[`@Relationship`](https://developer.apple.com/documentation/swiftdata/relationship%28%5F%3Adeleterule%3Aminimummodelcount%3Amaximummodelcount%3Aoriginalname%3Ainverse%3Ahashmodifier%3A%29){:target="_blank"}은 모델 사이의 연결을 어떻게 다룰지 정한다.
+
+`deleteRule: .cascade` 는 **부모를 지우면 딸린 것도 같이 지운다**는 뜻이다. 러닝 기록 하나를 지우면 그 안의 스플릿도 따라간다. 이걸 안 주면 기본값인 `.nullify` 라, 러닝은 사라지는데 스플릿은 주인 없이 저장소에 남는다.
+
+러닝과 스플릿처럼 **딸린 쪽이 혼자서는 의미가 없는 관계**에 쓴다. 반대로 둘 다 독립적으로 쓸모가 있다면 안 쓰는 게 맞다.
+
+#### Relationship의 deleteRule
+
+[`@Relationship`](https://developer.apple.com/documentation/swiftdata/relationship%28%5F%3Adeleterule%3Aminimummodelcount%3Amaximummodelcount%3Aoriginalname%3Ainverse%3Ahashmodifier%3A%29){:target="_blank"}은 모델 사이의 연결을 어떻게 다룰지 정한다.
+
+`deleteRule: .cascade` 는 **부모를 지우면 딸린 것도 같이 지운다**는 뜻이다. 러닝 기록 하나를 지우면 그 안의 스플릿도 따라간다. 이걸 안 주면 기본값인 `.nullify` 라, 러닝은 사라지는데 스플릿은 주인 없이 저장소에 남는다.
+
+러닝과 스플릿처럼 **딸린 쪽이 혼자서는 의미가 없는 관계**에 쓴다.
 
 ```swift
 @Relationship(deleteRule: .cascade) var splits: [SwiftDataSplit] = []

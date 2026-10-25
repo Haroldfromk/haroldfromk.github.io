@@ -2,6 +2,7 @@
 title: RunWay () 앱 강제종료 시 워치에 남는 것들 다시 열어볼 때
 writer: Harold
 date: 2026-09-06 03:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [HealthKit, WatchConnectivity, ActivityKit]
 
@@ -29,7 +30,7 @@ published: false
 
 ---
 
-## 층을 나눠서 봐야 한다
+## 층으로 나눠 보기
 
 이 문제를 한 덩어리로 보면 "강제 종료하면 이상해진다"에서 더 나아가지 못한다. **일곱 개 층이 각각 다르게 반응하고, 고칠 수 있는 층과 없는 층이 나뉜다.**
 
@@ -52,7 +53,11 @@ published: false
 
 핵심은 **앱 주도 미러링에서 워치가 자기 타이머조차 안 만든다**는 것이다. 이걸 모르면 엉뚱한 데를 고치게 된다.
 
-### 워치가 시작되는 경로가 두 개다
+---
+
+### 워치가 시작되는 두 경로
+
+![워치에서 시작하면 start 를 거쳐 타이머와 GPS 와 안전망을 챙기지만 아이폰이 시작하면 startWorkout 만 불려 셋 다 없다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-06-RunningProject-42-hide/watch-two-entry.png)
 
 ```swift
 // AppDelegate.swift - 앱 주도. startWatchApp(toHandle:)이 여기를 부른다
@@ -93,6 +98,8 @@ if isRunning && Date().timeIntervalSince(lastReceivedTime) >= 15 {
 ```
 
 **미러링에서는 이 블록이 아예 실행되지 않는다.** 처음에 나는 이걸 보고 "미러링 중에도 15초마다 이게 돌면 매번 일시정지되는 것 아닌가" 하고 의심했는데, 타이머 자체가 안 만들어져서 그런 일은 없다. 대신 **값이 안 온다는 걸 알아챌 장치도 없다**는 뜻이 된다.
+
+---
 
 ### 그러면 워치 화면의 숫자는 어디서 오는가
 
@@ -142,6 +149,14 @@ func finishWatchWorkout(at date: Date) async {
 }
 ```
 
+#### 워치가 워크아웃을 마감하는 세 단계
+
+`finishWatchWorkout(at:)` 안의 세 줄은 순서가 정해져 있다. `endCollection` 으로 표본 수집을 끊고, `finishWorkout` 으로 모인 것을 [`HKWorkout`](https://developer.apple.com/documentation/healthkit/hkworkout){:target="_blank"} 으로 만들어 저장하고, 마지막에 `session?.end()` 로 세션을 닫는다.
+
+**셋 중 하나라도 빠지면 어긋난다.** 수집을 안 끊으면 마감할 수 없고, 마감을 안 하면 건강 앱에 안 남고, 세션을 안 닫으면 끝나지 않은 세션이 시스템에 남는다. 이 글 뒤쪽에서 다루는 문제가 **세 번째**다.
+
+`at:` 으로 넘기는 시각이 그 워크아웃의 끝으로 기록된다. 지금은 버튼을 누른 순간이 들어가는데, 그래서 방치한 시간까지 포함된다.
+
 그런데 앱 Logbook용 기록은 만들지 않는다. 첫 줄에 가드가 있다.
 
 ```swift
@@ -170,7 +185,9 @@ func saveRunningData() async {
 
 세 가지다. 순서대로 위험이 낮다.
 
-### 1. 워치에 신호 끊김 오버레이
+---
+
+### 워치의 신호 끊김 오버레이
 
 값이 N초 동안 안 오면 워치 화면에 오버레이를 띄우고 **종료 버튼을 함께 준다.** 일시정지 화면과 비슷한 모양이면 된다.
 
@@ -214,9 +231,21 @@ private func startSignalWatchdog() {
 }
 ```
 
+#### Timer publisher로 감시만 하는 타이머 만들기
+
+[`Timer.publish(every:on:in:)`](https://developer.apple.com/documentation/foundation/timer/publish%28every%3Atolerance%3Aon%3Ain%3Aoptions%3A%29){:target="_blank"}는 일정 간격으로 값을 내보내는 Combine publisher 를 만든다. 만들기만 해서는 아무 일도 안 일어난다.
+
+[`autoconnect()`](https://developer.apple.com/documentation/combine/connectablepublisher/autoconnect%28%29){:target="_blank"}가 그걸 켜준다. 이 publisher 는 구독자가 붙어도 저절로 시작하지 않는 종류라, 이걸 붙여야 첫 구독과 동시에 돌기 시작한다.
+
+[`sink`](https://developer.apple.com/documentation/combine/publisher/sink%28receivevalue%3A%29){:target="_blank"}는 값이 올 때마다 실행할 블록을 건다. 돌려주는 값을 **들고 있어야 구독이 유지된다.** 변수에 안 담으면 그 자리에서 사라지고 타이머도 같이 멈춘다. 여기서 `signalCancellable` 에 담아두는 이유다.
+
+기존 타이머를 재사용하지 않고 따로 만드는 게 핵심이다. 기존 것은 `elapsedTime` 을 직접 올리는데, 미러링 중에는 그 값의 주인이 아이폰이라 둘이 충돌한다. **시간을 세지 않고 간격만 재는 타이머**가 따로 필요하다.
+
 **자동으로 끝내지는 않는다.** 이유는 아래 "버린 선택지"에 적었다.
 
-### 2. 종료 시 마감 시각 보정
+---
+
+### 종료 시 마감 시각 보정
 
 ```swift
 // before - 누른 순간으로 마감한다
@@ -230,7 +259,9 @@ await finishWatchWorkout(at: isSignalLost ? lastReceivedTime : date)
 
 한 줄이지만 효과가 크다. 건강 앱에 남는 기록이 실제 뛴 만큼으로 줄어든다.
 
-### 3. 그 기록을 아이폰 Logbook으로 보내기
+---
+
+### 그 기록을 아이폰 Logbook 으로 보내기
 
 워치에는 아이폰이 꺼져 있어도 기록을 보낼 수 있는 경로가 이미 있다.
 
@@ -263,6 +294,8 @@ guard HealthKitService.shared.startOrigin == .local || isSignalLost else { retur
 
 다시 시작할 때 여기부터 보면 된다.
 
+---
+
 ### 좌표를 누가 들고 있는가
 
 `saveRunningData()`가 좌표를 가져오는 곳은 워치의 계산기다.
@@ -283,6 +316,8 @@ func getCoordinates() async -> [CLLocationCoordinate2D] {
 
 2번이 맞아 보인다. 다만 아이폰이 `sendFlightData()`를 보내는 주기가 워치가 보내는 주기(3초 스로틀)와 같은지 확인하지 않았다. 주기가 성기면 지도가 각지게 나온다.
 
+---
+
 ### 아이폰의 남은 세션은 어떻게 되는가
 
 v1.3.2에서 미러링 러닝의 중복 저장을 고쳤는데, 그 `discardWorkout()`은 **정상 종료 경로에만 있다.**
@@ -301,6 +336,8 @@ session?.end()
 
 두 건이 맞다면 `recoverActiveWorkoutSession()`으로 회수해서 `discardWorkout()`으로 버리는 방향이 필요하다. 이 API는 iOS 26.0부터 쓸 수 있고 이 프로젝트의 배포 타겟이 26.0이라 조건은 맞는데, **회수한 세션에서 빌더를 다시 얻을 수 있는지, 시스템이 마감하기 전에 손이 닿는지를 확인하지 못했다.**
 
+---
+
 ### 오버레이 임계값은 몇 초인가
 
 기존 GPS 유실 안전망이 15초다(원래 8초였다가 상향). 미러링 신호 끊김도 같은 값으로 맞출지, 더 짧게 잡을지 정해야 한다.
@@ -313,7 +350,9 @@ session?.end()
 
 여기가 이 문서에서 제일 중요한 부분일 수 있다. **다시 시작할 때 같은 길을 또 걸어보지 않으려고 적는다.**
 
-### 신호가 끊기면 워치가 자동으로 러닝을 종료한다
+---
+
+### 신호가 끊겼을 때의 자동 종료
 
 **버렸다.** 값이 안 온다는 게 앱이 죽었다는 뜻이 아니기 때문이다. 아이폰을 주머니에 넣었다가 블루투스가 잠깐 흔들리거나, 전화가 오거나, 아이폰이 잠깐 버벅이기만 해도 몇십 초는 쉽게 빈다. 그때마다 러닝을 끝내면 **멀쩡히 뛰던 사용자가 기록을 잃는다.**
 
@@ -324,11 +363,15 @@ session?.end()
 | 자동 종료 | 뛰고 있던 러닝이 끝난다 |
 | 오버레이 표시 | 잘못 뜬 오버레이 하나 |
 
-### 워치 앱이 스스로 종료한다
+---
+
+### 워치 앱의 자가 종료
 
 **버렸다.** 앱이 스스로 종료하는 건 애플이 권장하지 않아 심사에서 문제가 될 수 있고, 무엇보다 세션이 정리 없이 죽으면 **지금 아이폰에서 겪는 것과 똑같은 상태를 워치에서 만들게 된다.** 문제를 옮기는 것뿐이다.
 
-### 신호가 끊기면 워치가 GPS를 켜서 이어 달린다
+---
+
+### 워치가 GPS 를 켜서 이어 달리기
 
 **보류했다.** 사용자에게는 이게 제일 좋은 결과다. 러닝이 안 끊긴다.
 
@@ -336,7 +379,9 @@ session?.end()
 
 강제 종료는 드문 상황인데 이건 평상시 코드 경로를 바꾸는 일이다. 손익이 안 맞는다.
 
-### Live Activity를 앱이 정리한다
+---
+
+### 앱이 하는 Live Activity 정리
 
 **필요 없었다.** 강제 종료하면 다이나믹 아일랜드에 러닝이 남길래 앱 시작 시 `Activity<FlightActivityAttributes>.activities`를 순회해 끝내는 코드를 준비했는데, **그 코드 없이도 앱을 다시 켜면 시스템이 정리한다.** 실기기에서 확인했다.
 
@@ -392,3 +437,10 @@ session?.end()
 지금 남은 것들도 같은 방식으로 갈린다. 아이폰이 죽어 있는 동안 아이폰에서 할 수 있는 일은 없다. 반면 **워치는 살아 있고 자기 세션의 주인이다.** 그래서 고칠 수 있다.
 
 무엇을 고칠 수 있는지는 그 자원을 누가 들고 있느냐로 결정된다. 다음에 이 문제를 열 때도 그 질문부터 하면 된다.
+
+---
+
+## 참고자료
+
+- [HKWorkoutSession (HealthKit, Apple)](https://developer.apple.com/documentation/healthkit/hkworkoutsession){:target="_blank"}
+- [Displaying live data with Live Activities (Apple)](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities){:target="_blank"}

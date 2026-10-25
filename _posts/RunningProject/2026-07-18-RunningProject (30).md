@@ -2,6 +2,7 @@
 title: RunWay 1.1 (2) - 심박 기반 러닝 모드
 writer: Harold
 date: 2026-07-18 11:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [HealthKit, WatchConnectivity]
 
@@ -44,6 +45,8 @@ published: true
 지금 앱에는 `isWatchConnected`라는 프로퍼티가 하나 있는데, 이게 `isReachable`을 그대로 감싼 거였다. `TakeoffView`의 사전 점검 화면은 "지금 당장 뛸 수 있는가"를 확인하는 자리라 `isReachable` 그대로 쓰는 게 맞다. 근데 이번에 심박 모드 옵션을 `ModeAView`에 추가하면서 보니, 이건 설정하는 시점과 실제로 뛰는 시점 사이에 간격이 있는 화면이라 계속 흔들리는 `isReachable`보다 `isPaired`(+ `isWatchAppInstalled`)로 옵션 노출 여부를 판단하는 게 더 맞아 보였다. 같은 "워치 연결"이라는 말이어도 화면마다 원하는 값이 달랐다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/reachable.png)
+
+세 프로퍼티가 각각 무엇을 보장하고 무엇을 보장하지 않는지 정리한 그림이다.
 
 ---
 
@@ -157,6 +160,14 @@ HStack(spacing: 6) {
 }
 ```
 
+#### disabled로 탭을 막고 흐리게 보이기
+
+[`ForEach`](https://developer.apple.com/documentation/swiftui/foreach){:target="_blank"}는 모음을 돌면서 뷰를 하나씩 만든다. `id:` 는 각 항목을 구별할 기준인데, `\.self` 는 값 자체를 신분증으로 쓰겠다는 뜻이다.
+
+[`.disabled(_:)`](https://developer.apple.com/documentation/swiftui/view/disabled%28%5F%3A%29){:target="_blank"}는 `true` 를 주면 그 뷰와 그 안의 모든 뷰가 입력을 안 받는다. 눌러도 아무 일이 없고 손댈 수 없는 상태라는 게 접근성 쪽에도 함께 전달된다. 다만 **흐리게 보이는 건 알아서 해주지 않는다.** 버튼 모양을 직접 그린 경우에는 색을 따로 낮춰줘야 해서, 여기서도 `disabled` 값을 글자색 계산에 한 번 더 썼다.
+
+[`clipShape(_:style:)`](https://developer.apple.com/documentation/swiftui/view/clipshape%28%5F%3Astyle%3A%29){:target="_blank"}는 뷰를 넘겨준 도형 모양으로 잘라낸다. [`Capsule`](https://developer.apple.com/documentation/swiftui/capsule){:target="_blank"}은 양 끝이 반원인 도형이라, 배경을 칠한 뒤 이걸로 자르면 알약 모양 세그먼트가 된다.
+
 `ForEach([ModeATarget.pace, .heartRate], id: \.self)`처럼 그냥 배열 두 개를 직접 순회하게 했다. `CaseIterable` 붙이고 `allCases`를 쓰는 방법도 있었는데([이전글](https://haroldfromk.github.io/posts/Build-the-unofficial-Udemy-Home-Screen-(5)/){:target="_blank"}), 어차피 둘뿐이고 PACE가 항상 왼쪽에 오는 순서도 고정이라 이게 더 단순했다.
 
 `disabled`는 PACE 버튼이면 항상 `false`, HEART RATE 버튼일 때만 `isHeartRateModeAvailable`을 뒤집어서 넣었다. 이 값을 탭 막기, 글자색, `.disabled()` 세 군데에 그대로 재사용했다.
@@ -228,7 +239,11 @@ runViewModel.getModeData(modeAData)
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/nopair.png)
 
+워치가 페어링돼 있지 않을 때다. HEART RATE 탭이 흐리게 눌리지 않고, 아래에 "Apple Watch 페어링이 필요한 기능입니다"가 뜬다. 패널은 TARGET PACE 와 PACE DEVIATION 그대로다.
+
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/pair.png)
+
+페어링된 상태에서 HEART RATE 를 고른 화면이다. 같은 자리의 패널이 TARGET HEART RATE 와 HEART RATE DEVIATION 으로 통째로 바뀌었고, MISSION BRIEF 의 OVERSPEED 와 SINK RATE 기준도 bpm 으로 따라 바뀐다.
 
 ---
 
@@ -252,7 +267,7 @@ runViewModel.getModeData(modeAData)
 
 스트림을 합칠 필요 없이 `RunningCenter`가 필요할 때 `HealthCenter`의 현재값만 물어보면 된다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/healthcenter-split-scenarios.png)
+![옵션 A 는 HealthCenter 와 RunningCenter 가 각자 스트림을 내보내 RunViewModel 에서 합쳐야 하고, 옵션 B 는 HealthCenter 가 값만 들고 RunningCenter 가 최종 판정을 혼자 맡는다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/hc-split.png)
 
 대략 이런 모양이 될 것 같다.
 
@@ -285,6 +300,8 @@ if let modeA = modeAData, modeA.target == .heartRate {
 옵션 B로 정했다. 판정을 한 곳(`RunningCenter`)에서만 하니까 MINIMUMS 우선순위가 그대로 지켜지고, 스트림을 합칠 필요도 없어진다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/center.png)
+
+옵션 A 와 옵션 B 를 한 장으로 비교한 그림이다.
 
 ---
 
@@ -343,6 +360,10 @@ DispatchQueue.global().async {
 }
 ```
 
+#### DispatchQueue로 다른 스레드에서 같은 값 만지기
+
+[`DispatchQueue.global(qos:)`](https://developer.apple.com/documentation/dispatch/dispatchqueue/global%28qos%3A%29){:target="_blank"}는 시스템이 들고 있는 공용 작업 큐를 가져온다. 여기에 `async` 로 넘긴 블록은 **지금 스레드를 막지 않고** 비어 있는 다른 스레드에서 실행된다. 위 예시에서 두 블록을 각각 넘겼으니, 둘이 같은 시각에 나란히 돌 수 있다.
+
 컴파일은 되는데, 두 스레드가 같은 값을 동시에 읽고 쓸 수 있어서 data race다. 
 
 actor로 감싸면:
@@ -359,9 +380,11 @@ actor HealthCenter {
 
 쓰는 쪽도 읽는 쪽도 `await`를 거쳐야 하고, actor 안에서는 한 번에 하나의 작업만 실행된다는 걸 Swift가 보장해준다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/actor-race-timeline.png)
+![actor 없이 두면 쓰는 구간과 읽는 구간이 겹쳐 동시 접근이 되고, actor 로 감싸면 읽는 쪽이 await 로 기다려 한 번에 하나만 들어간다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/actor-race.png)
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/actor.png)
+
+actor 가 왜 필요한지를 정리한 그림이다.
 
 ---
 
@@ -378,7 +401,7 @@ actor HealthCenter {
 
 `HealthCenter`는 그 중립적인 자리이고, 판단 로직 없이 값만 들고 있는다. 오차 범위/OVERSPEED/SINK RATE 판정은 전부 `RunningCenter`가 한다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/vm-vs-healthcenter.png)
+![도착한 심박이 화면 표시용 뷰모델과 HealthCenter 두 갈래로 나뉘고, 뷰모델 쪽은 화면에 찍고 끝나지만 HealthCenter 쪽은 RunningCenter 가 await 로 읽어 판정에 쓴다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/vm-vs-hc.png)
 
 ---
 
@@ -399,6 +422,12 @@ func sendHealthData() {
 }
 ```
 
+#### sendMessage로 지금 당장 보내기
+
+[`sendMessage(_:replyHandler:errorHandler:)`](https://developer.apple.com/documentation/watchconnectivity/wcsession/sendmessage%28%5F%3Areplyhandler%3Aerrorhandler%3A%29){:target="_blank"}는 딕셔너리를 상대 기기로 **즉시** 보낸다. 앞 글에서 쓴 `transferUserInfo` 와 달리 큐에 쌓아두지 않아서, 상대가 지금 안 닿으면 그냥 실패한다. 그래서 바로 위에 `isReachable` 가드가 있는 게 여기서는 맞다. 실시간 심박처럼 늦게 도착하면 의미가 없는 값에 쓰는 방식이다.
+
+`replyHandler` 는 상대가 답을 돌려줄 때 받는 자리이고 `errorHandler` 는 실패를 받는 자리인데, 둘 다 `nil` 로 뒀다. 심박은 3초 뒤에 또 보내므로 한 번 놓친 값을 되살릴 이유가 없다.
+
 `HealthKitService.streamHealthData()`가 새 통계를 줄 때마다 이 함수가 불리긴 하는데, 안에서 3초 지나지 않았으면 그냥 리턴해버린다. 즉 iOS 쪽 `HealthCenter.currentHeartRate`는 GPS(대략 1초 간격)보다 훨씬 느리게, 최대 3초 텀으로만 갱신된다. `RunningCenter.processLocation()`은 GPS 들어올 때마다 도니까, 그 사이 2~3번은 같은 심박값을 재사용하게 된다.
 
 근데 이건 걱정 안 해도 될 것 같다. 앞에서 확인했듯 HealthKit 자체도 심박을 5초 간격으로 내려주는 거였다. 3초 relay throttle이 원본 데이터의 자연스러운 갱신 주기보다 오히려 촘촘한 편이라, 추가로 지연이 생기는 느낌은 아니다. 페이스처럼 매 GPS 업데이트마다 반응하는 값이 아니라 몇 초 단위로 갱신되는 값이라는 특성 자체를 그냥 받아들이기로 했다.
@@ -406,6 +435,10 @@ func sendHealthData() {
 ---
 
 ## RunningCenter 수정
+
+여기까지가 설계였고, 이제 실제로 배선할 차례다. 심박이 들어오는 입구에 한 줄을 더하는 것부터 시작해서, 커져버린 함수를 쪼개고, 마지막에 `RunningCenter` 가 `HealthCenter` 를 어떻게 건네받을지까지 간다.
+
+---
 
 ### didReceiveMessage 수정
 
@@ -424,6 +457,14 @@ Task { @MainActor in
     await vm?.healthCenter.processHeartRate(heartRate)  // add
 }
 ```
+
+#### MainActor로 화면 값을 건드리기
+
+이 콜백은 백그라운드 큐에서 불린다. 그런데 안에서 건드리는 `vm` 은 화면이 보고 있는 값이라, 아무 스레드에서나 고치면 안 된다.
+
+[`@MainActor`](https://developer.apple.com/documentation/swift/mainactor){:target="_blank"}는 **그 코드를 메인 스레드에서 돌리라는 표시**다. `Task { @MainActor in ... }` 으로 감싸면 그 블록만 메인으로 옮겨서 실행한다. 화면을 그리는 일은 전부 메인 스레드 몫이므로, 화면이 읽는 값도 거기서 고쳐야 중간에 깨진 상태가 보이지 않는다.
+
+같은 블록 안에서 `healthCenter.processHeartRate` 는 `await` 를 거친다. 이쪽은 메인이 아니라 actor 안으로 들어가는 길이라, 두 종류의 격리가 한 블록에 나란히 있는 셈이다.
 
 ---
 
@@ -550,7 +591,13 @@ var healthCenter = HealthCenter()
 
 근데 컴파일이 안 됐다. 스위프트에서는 저장 프로퍼티의 기본값이 `self`가 다 갖춰지기도 전에, 그러니까 다른 프로퍼티보다 먼저 적용된다. 그 시점엔 `healthCenter`가 준비돼 있다는 보장이 없어서, 같은 자리에서 다른 프로퍼티를 끌어다 쓰는 걸 막아둔 거였다. 선언 순서를 바꿔서 `healthCenter`를 위로 올려도 안 됐다. 소스 코드에서 몇 번째 줄에 있느냐가 아니라, 어느 단계에서 실행되느냐의 문제였다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/init-timing.png)
+![저장 프로퍼티 기본값이 적용되는 단계에서는 self 가 아직 안 갖춰져 다른 프로퍼티를 못 읽고, init 본문이 실행되는 단계에서는 이미 채워져 있어 끌어다 쓸 수 있다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/init-timing2.png)
+
+#### ObservationIgnored로 관찰 대상에서 빼기
+
+[`@Observable`](https://developer.apple.com/documentation/observation/observable%28%29){:target="_blank"}을 붙인 타입은 **저장 프로퍼티가 전부 관찰 대상이 된다.** 값이 바뀌면 그 값을 읽던 화면이 알아서 다시 그려진다.
+
+[`@ObservationIgnored`](https://developer.apple.com/documentation/observation/observationignored%28%29){:target="_blank"}는 거기서 특정 프로퍼티만 빼준다. `runningCenter` 와 `healthCenter` 는 화면이 직접 읽는 값이 아니라 계산을 맡기는 객체라서, 관찰 대상에 두면 쓸데없는 다시 그리기만 생긴다. 그리고 `actor` 는 바깥에서 그냥 읽을 수 없는 타입이라 관찰 대상으로 두는 것 자체가 맞지 않는다.
 
 그래서 `runningCenter`는 선언 줄에서 타입만 적어두고, 값을 채우는 건 `init()` 본문으로 옮겼다. `init()` 본문이 실행되는 시점엔 `healthCenter`가 이미 자기 기본값으로 채워진 뒤라, 여기서는 갖다 써도 문제가 없다.
 
@@ -566,7 +613,7 @@ init() {
 
 AI가 설명해준 내용을 그림으로 정리하면 이렇다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/healthcenter-init.png)
+![init 으로 안 넘기면 RunningCenter 가 기본값으로 두 번째 healthCenter 를 혼자 만들어 서로 남남이 되고, 넘기면 양쪽이 같은 하나를 본다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/hc-init.png)
 
 `init`으로 넘기지 않고 그냥 `RunningCenter()`라고만 썼다면, `healthCenter` 매개변수는 기본값(`= HealthCenter()`)을 타면서 빈 인스턴스를 하나 더 만들어버렸을 거다. 이름은 똑같이 `healthCenter`라서 코드만 보면 헷갈리기 쉬운데, 실제로는 서로 다른 두 객체다. 하나는 심박이 실제로 들어오는 쪽이고, 하나는 `RunningCenter`가 판정할 때 들여다보는 쪽인데, 이 둘이 남남이면 `RunningCenter`는 영원히 0만 보게 되고 심박 GPWS는 계속 SINK RATE로만 뜬다. `RunViewModel`이 만들어질 때 자기 `healthCenter`를 `RunningCenter`한테 그대로 넘겨서, 쓰는 쪽과 읽는 쪽이 같은 인스턴스 하나를 보게 만든 거다.
 
@@ -594,13 +641,13 @@ actor HealthCenter {
 
 다만 나는 이 방식을 그동안 별로 안 써봐서 낯설었다. 싱글턴은 그냥 `.shared`라고 쓰면 끝인데, 이건 왜 굳이 `init`에 매개변수를 넣고 밖에서 넘겨주는 절차를 거치는지 감이 잘 안 왔다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/singleton-vs-injection.png)
+![싱글턴은 이름만 알면 어디서든 닿아 누가 쓰는지 타입에 안 드러나고, 생성자 주입은 건네준 경로로만 닿아 관계가 init 시그니처에 그대로 보인다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/singleton-vs-inject.png)
 
 싱글턴은 코드 어디서든 이름만 알면 접근이 된다. 반대로 지금 방식은, `RunViewModel`이 `RunningCenter(healthCenter:)`를 호출하면서 직접 건네준 경우에만 `RunningCenter`가 `healthCenter`를 갖게 된다. 그 경로 말고는 접근할 방법이 없고, 그 관계 자체가 `init` 매개변수에 그대로 드러난다.
 
 이 프로젝트에서 실제로 어디까지가 어떤 방식인지도 짚어봤다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/environment-boundary.png)
+![@Environment 는 뷰에서 뷰모델까지 한 층만 담당하고, 그 아래 서비스들이 서로 연결되는 건 전부 뷰모델 init 안에서 손으로 잇는 영역이며 HealthKitService 만 싱글턴이다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/env-boundary.png)
 
 `@Environment`는 `RunViewModel`/`WatchViewModel`을 화면에 넘기는 딱 한 층만 담당한다. 그 밑에서 `runningCenter`, `healthCenter`, `HealthKitService`, `watchConnectivityService`가 서로 연결되는 건 전부 뷰모델 `init()` 안에서 손으로 짜는 영역이다. 그중에서도 `HealthKitService`만 예외적으로 `.shared` 싱글턴이고, 나머지는 다 뷰모델이 만들 때 직접 넘겨주는 방식이다. `RunningCenter` 자체도 뷰모델마다 따로 만들어지는 애라서, `HealthCenter`만 전역으로 튀는 것보다는 지금처럼 넘겨주는 쪽이 이 층의 기존 모양이랑 더 잘 맞았다.
 
@@ -647,7 +694,13 @@ Task {
 }
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watch-ios-dual-write.png)
+#### for await로 스트림을 구독하기
+
+`streamHealthData()` 는 값이 생길 때마다 하나씩 건네주는 통로를 돌려준다. `for await` 는 그 통로에 값이 올 때까지 **기다렸다가** 한 바퀴를 돈다. 보통 `for` 문처럼 미리 있는 것들을 훑는 게 아니라, 아직 안 온 값을 기다리는 반복문이다.
+
+통로가 닫힐 때까지 끝나지 않으므로 [`Task`](https://developer.apple.com/documentation/swift/task){:target="_blank"} 로 감싸 따로 돌린다. 안 그러면 이 줄에서 멈춰 다음 코드가 실행되지 않는다.
+
+![iOS 는 워치가 보낸 메시지로, watchOS 는 HealthKit 에서 직접 심박을 받지만 받은 뒤 화면용과 판정용으로 나누는 모양은 양쪽이 같다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/dual-write.png)
 
 두 플랫폼이 심박을 받는 경로 자체는 다르지만(iOS는 워치가 보낸 메시지, 워치는 HealthKit 직접), 받은 다음 화면용과 판정용 두 군데로 나눠 보내는 모양은 똑같다. `HealthCenter`가 두 기기에 동시에 떠 있는 하나의 객체는 아니고, 각자 자기 프로세스 안에서 따로 갖고 있는 별개의 인스턴스라는 점은 짚어둘 만하다. 같은 타입을 양쪽이 각자 한 번씩 쓰는 것뿐이다.
 
@@ -675,7 +728,7 @@ viewModel.navigateTo(.targetSelection(preset: MissionPreset(
 )))
 ```
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watch-mission-flow.png)
+![거리를 고르는 두 진입점 뒤에 WatchTargetSelectionView 가 새로 끼어들고, 거기서 PACE 와 HEART RATE 로 갈라진 뒤 각자의 설정과 오차 화면을 거쳐 요약 화면에서 다시 만난다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watch-flow.png)
 
 거리를 정하고 나면 `WatchTargetSelectionView`가 새로 끼어든다. PACE / HEART RATE 두 버튼뿐인 화면이라 코드도 단순하다.
 
@@ -707,6 +760,12 @@ case .heartRateDeviation(let preset, let heartRate):
     WatchHeartRateDeviationView(preset: preset, heartRate: heartRate)
 ```
 
+#### navigationDestination으로 값과 화면을 잇기
+
+[`navigationDestination(for:destination:)`](https://developer.apple.com/documentation/swiftui/view/navigationdestination%28for%3Adestination%3A%29){:target="_blank"}는 **어떤 타입의 값이 넘어오면 어떤 화면을 띄울지**를 한 곳에 모아 적는 자리다. 화면을 미는 쪽은 `navigateTo(.heartRateSetting(preset:))` 처럼 값만 던지고, 그 값이 어떤 뷰가 될지는 몰라도 된다.
+
+그래서 화면이 늘어날 때 고칠 곳이 두 군데다. `WatchDestination` 에 케이스를 더하고, 여기 라우터에 그 케이스를 받는 줄을 더한다. 둘 중 하나를 빼먹으면 컴파일 단계에서 걸린다.
+
 허용 오차까지 정하고 나면 `WatchHeartRateDeviationView`가 그 값들로 `ModeA`를 만든다.
 
 ```swift
@@ -723,6 +782,8 @@ Button {
 여기서 하나 정리한 것도 있다. `WatchDestination.missionSummary`가 원래 `preset`, `paceSeconds`, `deviation` 세 개를 들고 다녔는데, 정작 `WatchMissionSummaryView`는 그 값들을 하나도 안 쓰고 `viewModel.modeAData`만 직접 읽고 있었다. 심박 경로를 추가하면서 이 케이스를 어차피 다 손대야 했던 김에, 안 쓰는 값들을 걷어내고 `case missionSummary`로 단순하게 바꿨다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watchtarget.png)
+
+거리를 고른 다음 새로 끼어든 WatchTargetSelectionView 다. PACE 와 HEART RATE 두 버튼뿐이다.
 
 ---
 
@@ -748,7 +809,7 @@ if isHeartRateTarget {
 
 워치에서 미션을 시작하면 같은 설정을 아이폰에도 보낸다(`sendModeData`). 반대쪽 `didReceiveMessage`는 그 메시지를 받아서 다시 `ModeA`로 조립한다. 둘 다 필드를 하나하나 꺼내 쓰는 구조라서, 심박 관련 필드를 양쪽에 다 추가해줘야 했다. `ModeATarget`은 문자열로 실어 보내기 편하게 `String` raw value를 붙였다.
 
-![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/watch-modea-sync.png)
+![워치가 보내는 딕셔너리와 아이폰이 되살리는 코드가 짝을 이루고, target 과 targetHeartRate 와 heartRateDeviation 세 필드가 이번에 양쪽에 같이 추가됐다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/modea-sync.png)
 
 ```swift
 // watchOS, sendModeData
@@ -816,6 +877,8 @@ if target == .pace {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/appbpm.png)
 
+심박 미션으로 뛸 때의 PFDView 다. 왼쪽 위 TARGET HEART RATE 가 150 bpm 으로 떠 있고, 아래 GPWS 줄에 SINK RATE 경고가 함께 보인다.
+
 ---
 
 ### 워치: GPWS 오버레이 단위 분기
@@ -837,6 +900,8 @@ var gpwsDeviation: Int {
 그리고 `WatchGPWSView`가 편차를 표시할 때 단위를 `"sec"`로 하드코딩하고 있었다. 심박 모드에서 SINK RATE가 뜨면 "+18 sec"라고 나왔을 텐데, 실제로는 bpm 차이인데 초 단위인 것처럼 보였을 거다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/gpwswarn.gif)
+
+고치기 전이다. 심박 모드인데 편차 단위가 `sec` 으로 떠 있다.
 
 ```swift
 var deviationUnit: String = "sec"
@@ -860,6 +925,8 @@ var gpwsDeviationUnit: String {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/gpwswarn1.gif)
 
+고친 뒤다. 같은 자리가 `bpm` 으로 바뀌었다.
+
 전체 계기판 탭의 STATUS 칸도 항상 "PACE"로 고정돼 있던 걸, 실제 미션 기준에 맞게 바꿨다.
 
 ```swift
@@ -867,6 +934,8 @@ Text(missionTarget == .heartRate ? "HEART RATE" : "PACE")
 ```
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-18-RunningProject-30/heartrate.png)
+
+워치 계기판 탭의 STATUS 칸이다. 항상 PACE 로 고정돼 있던 자리가 실제 미션 기준에 맞게 바뀐다.
 
 ---
 
@@ -887,6 +956,14 @@ init(missionName: String, targetPace: String, target: ModeATarget = .pace) {
     self.target = target
 }
 ```
+
+#### ActivityAttributes로 위젯에 값 싣기
+
+[`ActivityAttributes`](https://developer.apple.com/documentation/activitykit/activityattributes){:target="_blank"}는 Live Activity 가 들고 다니는 값의 모양을 정한다. 두 종류로 나뉜다.
+
+**고정 필드**는 활동이 시작될 때 한 번 정해지고 끝날 때까지 안 바뀐다. 미션 이름이나 목표 기준이 여기다. **`ContentState`** 는 그 안에 중첩해 두는 타입으로, 갱신할 때마다 새로 넘기는 값이다. 현재 페이스나 심박이 여기 들어간다.
+
+`target` 을 고정 필드로 넣은 건 **러닝 중에 목표 기준이 바뀌지 않기 때문**이다. 매번 갱신 값에 실어 보낼 이유가 없고, 고정 필드는 위젯이 처음 뜰 때부터 들고 있어서 첫 화면부터 바로 제대로 그려진다.
 
 `startActivity`를 호출하는 두 지점(`TakeoffView`, `RunViewModel`)에서 `modeAData?.target`을 같이 넘겨주게 했다.
 
@@ -1006,3 +1083,10 @@ func clearModeAData() {
 ```
 
 `RunViewModel.resetState()`, `WatchViewModel.resetState()` 양쪽 다 러닝이 완전히 끝난 뒤 `runningCenter.clearModeAData()`를 부르도록 추가했다. `start()` 쪽은 그대로 `reset()`만 부르고, 더 이상 `modeAData`를 건드리지 않는다.
+
+---
+
+## 참고자료
+
+- [Observation (Apple)](https://developer.apple.com/documentation/observation){:target="_blank"}
+- [Updating an app to use Swift concurrency (Apple)](https://developer.apple.com/documentation/swift/updating-an-app-to-use-swift-concurrency){:target="_blank"}

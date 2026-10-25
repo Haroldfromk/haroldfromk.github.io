@@ -113,6 +113,8 @@ Flight Summary에는 지도, 숫자 세 칸, 그리고 1km 스플릿 목록이 �
 
 간격은 5초로 정했다. 1초마다 담으면 러닝 페이스가 그렇게 자주 의미 있게 변하지도 않는데 용량만 다섯 배가 된다. 화면 갱신도 이미 3초 간격으로 돈다. 10km를 5초마다 담으면 약 720개라 부담이 없다.
 
+![위치는 1초마다 들어와 30초에 31개지만 담는 표본은 5초마다라 7개다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-02-RunningProject-46/sample-interval.png)
+
 수집은 `RunningCenter`에서 한다. 위치 갱신마다 호출되지만 마지막으로 담은 시점에서 5초가 지나야 실제로 쌓는다.
 
 ```swift
@@ -174,6 +176,8 @@ let samples = flight.samples
 
 ## 같은 시간축에 세운 네 줄
 
+![PACE 와 HR, CAD, ALT 네 줄이 같은 가로 시간축을 공유해서 한 시점을 세로로 읽으면 네 값이 같이 나온다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-02-RunningProject-46/four-lanes.png)
+
 화면은 나이키 러닝처럼 지도 위를 손가락으로 따라가는 방식을 생각해봤는데, 그대로 따라 하는 건 별로였다. 그리고 지도는 어디를 달렸는지는 알려주지만 "같은 페이스인데 왜 심박이 올랐나"처럼 **두 지표를 나란히 놓고 봐야 하는 질문**에는 답이 안 된다.
 
 그래서 비행기록장치 판독지처럼 계기별 추이를 각각 한 줄로 뽑아 같은 시간축 위에 세웠다. PACE, BPM, SPM, ALT 네 줄이고, 세로선 하나가 네 줄을 관통한다. 선 위를 밀면 위쪽 판독 패널이 그 시점 값으로 바뀐다.
@@ -189,6 +193,12 @@ let samples = flight.samples
 워치 없이 뛰면 심박과 케이던스가 안 들어온다. 그 값은 0으로 저장된다.
 
 0을 그대로 그으면 심박이 바닥을 찍은 것처럼 보인다. 실제로는 "0이었다"가 아니라 "기록이 없다"인데 그림은 전자로 읽힌다. 그래서 0인 구간은 선을 그리지 않고 끊었다.
+
+#### Path로 끊어지는 선 그리기
+
+[`Path`](https://developer.apple.com/documentation/swiftui/path){:target="_blank"}는 점과 선을 모아둔 **도형 하나**다. `move(to:)` 로 펜을 들어 옮기고 `addLine(to:)` 로 내려 그으면서 모양을 쌓는다.
+
+여기서 핵심은 **펜을 드는 것과 긋는 것이 다르다**는 점이다. 값이 없는 구간을 만나면 `move(to:)` 로 건너뛰므로 선이 이어지지 않는다. 그냥 다음 값으로 `addLine` 을 하면 빈 구간을 가로지르는 긴 직선이 생겨서, 기록이 없는 자리가 멀쩡히 이어진 것처럼 보인다.
 
 ```swift
 var path = Path()
@@ -355,6 +365,12 @@ scale = min(usableWidth / longitudeSpan, usableHeight / latitudeSpan)
 **꼬리 길이를 거리가 아니라 시간으로 잡았다.** 거리로 잡으면 쉬거나 걸은 구간에서 꼬리가 거의 안 자란다. 멈춰 있던 시간이 그림에서 사라지는 셈이다.
 
 **그라디언트로 한 번에 칠하지 않고 토막마다 진하기를 올렸다.** `GraphicsContext`의 선형 그라디언트는 색이 직선 방향으로만 변한다. 꼬리가 코너를 돌거나 되돌아오는 구간이면 진하기가 거꾸로 뒤집힌다. 왕복 때문에 바꾸는 건데 왕복에서 깨지면 의미가 없다.
+
+#### GraphicsContext로 한 획씩 색을 바꾸기
+
+[`GraphicsContext`](https://developer.apple.com/documentation/swiftui/graphicscontext){:target="_blank"}는 [`Canvas`](https://developer.apple.com/documentation/swiftui/canvas){:target="_blank"} 안에서 직접 그릴 때 쓰는 붓이다. 뷰를 쌓아 만드는 게 아니라 명령으로 그리는 방식이라, 점이 수백 개여도 뷰가 수백 개 생기지 않는다.
+
+`context.stroke(_:with:style:)` 가 한 번 긋는 동작이다. 전체를 한 `Path` 로 긋지 않고 **구간마다 따로 긋는** 이유가 색 때문이다. 한 `Path` 에는 색을 하나만 줄 수 있어서, 지나온 정도에 따라 진하기를 바꾸려면 구간을 쪼개야 한다.
 
 ```swift
 private func drawTrail(in context: inout GraphicsContext, using projection: Projection) {

@@ -2,7 +2,7 @@
 title: StreamDeck (3) 버튼 하나로 Alacritty 새 창에서 별칭 명령 실행하기, 그리고 볼륨 키
 writer: Harold
 date: 2026-10-19 18:20:00 +0900
-last_modified_at: 2026-10-20 16:47:00 +0900
+last_modified_at: 2026-10-25 22:34:00 +0900
 categories: [StreamDeck]
 tags: [Process, zsh, Alacritty, AppleScript]
 
@@ -10,6 +10,9 @@ toc: true
 toc_sticky: true
 published: true
 ---
+
+> 이 시리즈는 내가 직접 쓴 개발기가 아니다. 무엇을 만들지 정해 Claude Code 에게 앱을 만들게 했고, 만든 과정과 쓰인 기술은 Claude Code 가 정리했다. 나는 방향을 정하고, 실기기에서 써 보며 고칠 곳을 찾아 다시 맡겼다. 그래도 글로 남기는 건 공부 때문이다. 아직 내가 아는 프레임워크가 몇 개 없어서, 이 앱에 쓰인 여러 프레임워크를 정리해 두고 나중에 하나씩 찾아보며 익히려고 한다.
+{: .prompt-info }
 
 앱 실행 다음으로 넣고 싶었던 건 터미널 명령이다. 블로그 작업할 때 쓰는 `blogrun`, `postblog`, `uploadimg` 같은 별칭을 `~/.zshrc`에 만들어 두고 쓰는데, 이걸 버튼 하나로 실행하고 싶었다. 메인 터미널이 Alacritty라서 버튼을 누르면 Alacritty 새 창이 열리고 그 안에서 명령이 돌게 했다. 빈 Alacritty 창을 하나 더 여는 버튼과 맥 소리 크기 조절도 이번 글에서 같이 다룬다.
 
@@ -151,6 +154,58 @@ $ ps -axo pid,args | grep -E "[A]lacritty|[j]ekyll serve"
 ```
 
 첫 줄이 "새 터미널" 버튼으로 연 빈 창, 둘째 줄이 `blogrun` 버튼으로 연 창이다. 셋째 줄은 그 창 안에서 별칭이 풀려 실제로 돌고 있는 jekyll 서버다.
+
+---
+
+## Homebrew 명령을 못 찾던 버튼
+
+한참 쓰다가 `uploadimg` 버튼을 눌렀더니 창이 이렇게 시작했다.
+
+```text
+/Users/dongik/.zshrc:130: command not found: rbenv
+/Users/dongik/.zshrc:155: command not found: zoxide
+/Users/dongik/.zshrc:162: command not found: fzf
+// 생략
+FileNotFoundError: [Errno 2] No such file or directory: 'pngquant'
+```
+
+별칭은 풀렸는데(`uploadimg`가 파이썬 스크립트를 실행했다), 그 안에서 부른 `pngquant`를 못 찾았다. `~/.zshrc`가 부르는 `rbenv`, `zoxide`도 다 못 찾았다. 셋 다 Homebrew로 깐 명령이다. 같은 명령을 터미널에서 직접 치면 잘 된다.
+
+---
+
+### 로그인 셸과 .zprofile이란?
+
+zsh가 켜질 때 읽는 설정 파일은 셸 종류마다 다르다. `~/.zshrc`는 대화형 셸(`-i`)일 때 읽는다. `~/.zprofile`은 로그인 셸(`-l`)일 때 읽는다. 로그인 셸은 "이 사용자로 처음 들어올 때" 한 번 켜는 셸이라, PATH처럼 한 번만 정해 두면 되는 것을 여기에 둔다. Homebrew도 설치할 때 `~/.zprofile`에 자기 경로(`/opt/homebrew/bin`)를 넣는다. 맥의 터미널 앱은 창을 열 때 로그인 셸로 켜서 둘 다 읽는다.
+
+PATH는 명령 이름을 받았을 때 실행 파일을 찾아볼 폴더 목록이다. `pngquant`라고 치면 셸이 이 목록의 폴더를 차례로 열어 `pngquant` 파일을 찾는다.
+
+![zsh -c는 두 파일을 다 건너뛰어 별칭을 모르고, zsh -ic는 .zshrc만 읽어 pngquant를 모르고, zsh -lic는 .zprofile과 .zshrc를 둘 다 읽어 별칭과 Homebrew 명령이 다 된다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-19-StreamDeck-3/touchdeck-login-shell.png)
+
+버튼은 `zsh -ic`로 띄웠다. 대화형이라 `~/.zshrc`는 읽었지만 로그인 셸이 아니라 `~/.zprofile`을 건너뛰었다. 그리고 맥 앱을 로그인 항목이나 Finder로 켜면 터미널을 거치지 않아서, 앱이 받는 PATH는 `/usr/bin:/bin:/usr/sbin:/sbin`뿐이다. 버튼이 연 셸도 이 PATH를 그대로 물려받는다. 그래서 `/usr/bin/python3`(Xcode에 딸린 3.9)가 잡혔고 Homebrew 명령은 하나도 안 보였다.
+
+---
+
+### -lic로 바꾸기
+
+로그인이면서 대화형인 `-lic`로 바꿨다. 명령을 실행할 때와, 실행 전에 이름이 있는지 확인할 때(아래 사전 확인) 같은 셸을 쓰게 한 곳에 뒀다.
+
+```swift
+/// 로그인(-l)이면서 대화형(-i). 로그인 항목으로 켜진 맥 앱은 PATH가 /usr/bin:/bin 정도라
+/// Homebrew 경로를 넣는 ~/.zprofile까지 읽어야 pngquant 같은 명령이 보인다. 별칭은 ~/.zshrc(-i)에서 온다
+public static let shellFlags = "-lic"
+
+args += ["-e", "/bin/zsh", shellFlags, keepOpen ? "\(script); exec zsh" : script]
+```
+
+로그인 항목으로 켜진 앱과 같은 PATH를 주고 확인했다. `env -i`는 환경 변수를 다 비우고 정한 것만 넣어 실행한다.
+
+```text
+$ env -i HOME=$HOME PATH=/usr/bin:/bin:/usr/sbin:/sbin /bin/zsh -lic 'command -v pngquant; command -v python3'
+/opt/homebrew/bin/pngquant
+/opt/homebrew/bin/python3
+```
+
+창을 남겨 두는 뒤쪽 `exec zsh`는 그대로 대화형 셸이다. 앞의 로그인 셸이 정한 PATH를 물려받으니 다시 읽을 필요가 없다.
 
 ---
 

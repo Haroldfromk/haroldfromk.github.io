@@ -171,6 +171,14 @@ init() {
 }
 ```
 
+#### mainContext를 앱이 뜰 때 쥐기
+
+[`ModelContainer`](https://developer.apple.com/documentation/swiftdata/modelcontainer){:target="_blank"}는 저장소 전체를 들고 있는 그릇이고, [`ModelContext`](https://developer.apple.com/documentation/swiftdata/modelcontext){:target="_blank"}는 그 안에서 실제로 넣고 빼는 창구다. 화면에서 `@Environment(\.modelContext)` 로 받아 쓰는 게 이것이다.
+
+[`mainContext`](https://developer.apple.com/documentation/swiftdata/modelcontainer/maincontext){:target="_blank"}는 컨테이너가 만들어질 때부터 하나 쥐고 있는 창구다. **화면이 뜨기를 기다릴 필요가 없다.** 앱 구조체의 `init()` 안에서 바로 꺼낼 수 있고, 이름 그대로 메인 스레드에서 쓰는 것이다.
+
+이 차이가 이 글의 문제와 바로 닿는다. 화면에서 받는 창구는 그 화면이 떠야 생기는데, 워치가 보낸 기록은 그보다 먼저 도착할 수 있다.
+
 `HomeView`의 `runViewModel.modelContext = modelContext` 줄은 지울 필요가 없다. 이제는 그냥 같은 값을 한 번 더 대입하는, 아무 부작용 없는 코드가 됐을 뿐이다. 이러면 `vm`과 `modelContext` 둘 다, 화면이 뜨는지와 완전히 무관하게 앱 프로세스가 시작되는 순간 확보된다.
 
 앱이 완전히 꺼져있던 상태에서 워치가 기록을 보냈을 때, 실제로 어떤 순서로 저장까지 이어지는지 정리하면 이렇다.
@@ -257,6 +265,10 @@ struct AlertMonthGroup: Identifiable {
 
 ## 18km 실기기 테스트에서 나온 것
 
+여기까지 고치고 실제로 18km 를 뛰었다. 지금까지 뛴 것 중 가장 길어서, 짧은 구간에서는 안 드러나던 것이 둘 나왔다.
+
+---
+
 ### 정지 중에도 심박은 계속 재는 중이라서
 
 Mission Flight를 심박 기준으로 걸어두고 뛰다가 멈췄더니, 쉬면서 심박이 자연히 내려가는 것만으로 SINK RATE가 떴다.
@@ -278,6 +290,8 @@ if !isStationary {
 값을 얼리는 대신, 정지 중엔 판정 자체를 건너뛰고 직전 상태를 그대로 유지하도록 했다. 페이스든 심박이든 똑같이 적용되는 조건이라 모드별로 따로 처리할 필요가 없었다.
 
 이후 실기기로 다시 확인했을 때, 멈춰서 쉬는 동안 심박이 실제로 내려가는데도 SINK RATE가 뜨지 않는 걸 확인했다. 의도한 대로 동작하는 게 실기기에서 검증됐다.
+
+---
 
 ### 배터리는 일단 지켜보기로
 

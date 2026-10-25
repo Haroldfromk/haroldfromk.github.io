@@ -73,6 +73,12 @@ Button {
 }
 ```
 
+#### openSettingsURLString으로 설정 앱 보내기
+
+[`UIApplication.openSettingsURLString`](https://developer.apple.com/documentation/uikit/uiapplication/opensettingsurlstring){:target="_blank"}은 **이 앱의 설정 화면**으로 가는 주소다. 설정 앱의 첫 화면이 아니라 앱 전용 칸으로 바로 떨어진다. 문자열이라 `URL` 로 한 번 감싸야 한다.
+
+여는 건 `UIApplication.shared.open(_:)` 이다. 이 주소는 앱마다 자기 것만 열 수 있어서, 남의 앱 설정이나 설정 앱의 다른 구석으로는 못 간다.
+
 앱 안에서 바꾸면 화면 글자는 바로 바뀌지만 **알림 문구와 Watch 화면은 시스템 언어로 남는다.** 전부 반영하려면 앱을 다시 시작해야 하는데, 앱이 스스로 꺼지는 건 사용자 눈에 크래시로 보이고 심사 지침에도 어긋난다.
 
 iOS 설정에서 바꾸면 시스템이 알아서 앱을 다시 띄워주고 Watch 앱까지 같이 따라온다. 직접 만들었으면 더 못했을 일이라 만들 이유가 없었다.
@@ -178,14 +184,14 @@ iOS는 기본이 자동 업데이트라 대부분은 이런 알림을 볼 일이
 <text x="150" y="192" font-size="11" fill="currentColor" stroke="none" opacity="0.6">스토어</text>
 <text x="208" y="192" font-size="13" font-weight="700" fill="currentColor" stroke="none">1.4</text>
 <path d="M262,187 L298,187" stroke-width="1.4" marker-end="url(#u48a)"/>
-<text x="312" y="192" font-size="12" font-weight="600" fill="currentColor" stroke="none">스토어가 높다 · 알림이 뜬다</text>
+<text x="312" y="192" font-size="12" font-weight="600" fill="currentColor" stroke="none">스토어가 높다, 알림이 뜬다</text>
 
 <text x="20" y="232" font-size="11" fill="currentColor" stroke="none" opacity="0.6">설치</text>
 <text x="66" y="232" font-size="13" font-weight="700" fill="currentColor" stroke="none" opacity="0.55">1.4</text>
 <text x="150" y="232" font-size="11" fill="currentColor" stroke="none" opacity="0.6">스토어</text>
 <text x="208" y="232" font-size="13" font-weight="700" fill="currentColor" stroke="none" opacity="0.55">1.4</text>
 <path d="M262,227 L298,227" stroke-width="1.4" opacity="0.45" marker-end="url(#u48a)"/>
-<text x="312" y="232" font-size="12" fill="currentColor" stroke="none" opacity="0.6">같다 · 아무 일도 안 한다</text>
+<text x="312" y="232" font-size="12" fill="currentColor" stroke="none" opacity="0.6">같다, 아무 일도 안 한다</text>
 
 </g>
 </svg>
@@ -221,11 +227,27 @@ static func checkForUpdate() async -> Update? {
 }
 ```
 
+#### URLSession으로 조회 창구에 묻기
+
+[`URLSession.shared.data(from:)`](https://developer.apple.com/documentation/foundation/urlsession/data%28from%3Adelegate%3A%29){:target="_blank"}는 주소 하나를 받아 **응답 본문과 응답 정보를 한 쌍으로** 돌려준다. `await` 가 붙으므로 기다리는 동안 화면은 멈추지 않는다. 실패하면 값을 돌려주는 대신 오류를 던져서 `catch` 로 간다.
+
+[`JSONSerialization`](https://developer.apple.com/documentation/foundation/jsonserialization){:target="_blank"}은 받은 바이트를 딕셔너리나 배열로 푼다. `Codable` 로 타입을 정의해 받는 방법도 있는데, 여기서는 응답에서 꺼내 쓰는 값이 **버전 문자열과 주소 둘뿐**이라 타입을 따로 만들지 않았다. 대신 `as?` 로 한 단계씩 내려가며 확인하는 `guard` 가 길어진다.
+
+`UserDefaults` 에 확인한 날짜를 남기는 자리가 중간에 있다. **비교보다 먼저** 둔 게 중요하다. 버전이 같아서 알림을 안 띄우는 경우에도 "오늘 물어봤다"는 사실은 남아야 한다.
+
 버전 비교는 숫자로 읽는 방식을 쓴다. 문자열로 그냥 비교하면 `1.10`이 `1.9`보다 작다고 나온다.
 
 ```swift
 return storeVersion.compare(installed, options: .numeric) == .orderedDescending
 ```
+
+#### compare의 numeric 옵션
+
+`compare(_:options:)` 는 두 문자열의 순서를 돌려준다. 그냥 쓰면 **글자 하나씩 비교**하므로 `1.10` 과 `1.9` 에서 `1` 과 `9` 를 견주게 된다.
+
+[`.numeric`](https://developer.apple.com/documentation/foundation/nsstring/compareoptions/numeric){:target="_blank"}을 주면 문자열에 섞인 숫자를 **숫자로 읽는다.** 그래서 10 이 9 보다 크다고 나온다. 돌려주는 값이 `.orderedDescending` 이면 앞의 것이 더 크다는 뜻이라, 스토어 버전이 설치본보다 높은 경우다.
+
+![글자 하나씩 비교하면 1 과 9 를 견뎌 1.10 이 작다고 나오고, numeric 을 주면 10 과 9 를 견뎌 1.10 이 크다고 나온다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-03-RunningProject-48/version-compare.png)
 
 지금은 1.4라 안 걸리지만 `1.10`까지 가면 그날부터 알림이 영영 안 뜬다. 글자 순서로는 `1`이 `9`보다 앞이라서 스토어 쪽이 더 낮다고 판정한다.
 
@@ -314,7 +336,7 @@ xcodebuild -project RunWay.xcodeproj -scheme RunWay -configuration Debug \
 
 이미 깔려 있던 자리에 덮어 설치하면 **데이터가 남아서 온보딩을 다시 안 거친다.** 지우고 깔면 첫 실행 화면부터 다시 타야 하고 기록도 날아간다.
 
-![RunWay 홈 화면 위에 '업데이트가 있어요' 알림이 떠 있고, App Store에 1.3.2 버전이 올라와 있다는 안내와 나중에·업데이트 두 버튼이 보이는 화면](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-03-RunningProject-48/runway14_update_alert.png)
+![RunWay 홈 화면 위에 '업데이트가 있어요' 알림이 떠 있고, App Store에 1.3.2 버전이 올라와 있다는 안내와 나중에와 업데이트 두 버튼이 보이는 화면](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-03-RunningProject-48/runway14_update_alert.png)
 
 1.3.1로 깔았고 스토어가 1.3.2라 **"App Store에 1.3.2 버전이 올라와 있어요"**가 떴다. 비교도 알림도 의도대로 돈다.
 

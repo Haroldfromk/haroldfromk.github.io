@@ -161,7 +161,7 @@ struct SettingsView: View {
 
 지금까지 추가한 기능들이 온보딩엔 하나도 반영이 안 돼 있어서 손을 봤다. 페이지 수도 6개에서 7개로 늘었다.
 
-두 번째 페이지(TWO FLIGHT MODES)의 Mission Flight 목업을 실제 `ModeAView`의 PACE/HEART RATE 토글과 똑같이 캡슐 두 개로 바꾸고, 1km마다 음성 안내한다는 문구도 추가했다. 원래는 "목표 페이스·거리를 설정하는 Mission Flight"라고만 적혀 있었는데, 심박수 목표 모드가 생긴 지 한참인데 온보딩엔 이게 전혀 없었다.
+두 번째 페이지(TWO FLIGHT MODES)의 Mission Flight 목업을 실제 `ModeAView`의 PACE 와 HEART RATE 토글과 똑같이 캡슐 두 개로 바꾸고, 1km마다 음성 안내한다는 문구도 추가했다. 원래는 "목표 페이스와 거리를 설정하는 Mission Flight"라고만 적혀 있었는데, 심박수 목표 모드가 생긴 지 한참인데 온보딩엔 이게 전혀 없었다.
 
 ![두 가지 비행 모드](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/onboarding_modes.png)
 
@@ -288,7 +288,7 @@ runningData.splits = splits.map {
 
 CloudKit 백업 대상을 생각하다가, 좌표를 다 그대로 올릴 필요가 있나 싶어졌다. 실제로 좌표 배열을 쓰는 곳을 찾아보니 `FlightSummaryView`의 지도 폴리라인 그리기, `HomeView`의 최근 러닝 미니 경로 미리보기, 이 두 곳뿐이었다. 
 
-페이스·심박수·케이던스·고도 같은 수치는 이미 km 스플릿 단위로 따로 저장돼 있어서, 좌표 자체를 다시 계산에 쓰는 곳은 없었다.
+페이스와 심박수, 케이던스, 고도 같은 수치는 이미 km 스플릿 단위로 따로 저장돼 있어서, 좌표 자체를 다시 계산에 쓰는 곳은 없었다.
 
 그러면 지도에 그릴 정도의 정밀도만 있으면 되는 셈이라, AI에게 어떤 방법을 통해 최적화를 하면 좋을지 물어보았고 경로를 단순화하는 유명한 알고리즘인 Douglas-Peucker를 추천해주었다. 
 
@@ -474,7 +474,7 @@ PolylineSimplifier()      // 컴파일 에러
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/signandcap.png)
 
-우선 Signing & Capabilities에 CloudKit을 추가해준다. CloudKit 백업 생각해보기에서는 SwiftData의 자동 동기화(`ModelConfiguration(cloudKitDatabase:)`)를 그대로 써볼 생각이었는데, 다시 보니 애초에 방향을 "자동 트리거 없이 버튼을 눌러야 실행"으로 잡아뒀었다. SwiftData의 자동 동기화는 백그라운드에서 알아서 도는 방식이라 이 방향이랑 안 맞아서, 처음부터 버튼을 눌렀을 때만 [`CKRecord`](https://developer.apple.com/documentation/cloudkit/ckrecord)를 직접 만들어서 CloudKit에 올리고 받는 방식으로 갔다.
+우선 Signing & Capabilities에 CloudKit을 추가해준다. CloudKit 백업 생각해보기에서는 SwiftData의 자동 동기화(`ModelConfiguration(cloudKitDatabase:)`)를 그대로 써볼 생각이었는데, 다시 보니 애초에 방향을 "자동 트리거 없이 버튼을 눌러야 실행"으로 잡아뒀었다. SwiftData의 자동 동기화는 백그라운드에서 알아서 도는 방식이라 이 방향이랑 안 맞아서, 처음부터 버튼을 눌렀을 때만 [`CKRecord`](https://developer.apple.com/documentation/cloudkit/ckrecord){:target="_blank"}를 직접 만들어서 CloudKit에 올리고 받는 방식으로 갔다.
 
 ---
 
@@ -564,17 +564,17 @@ enum CloudSyncStatusService {
 
 이 상태로 엔타이틀먼트를 잠깐 지운 채로 빌드했더니, 데이터 저장/복원 화면에 들어가자마자 크래시가 났다. 
 
-[CKContainer.default() Docs](https://developer.apple.com/documentation/cloudkit/ckcontainer)는 앱에 iCloud 엔타이틀먼트가 아예 없으면 그 자리에서 죽어버리는 API였다. 맨 위에서 Signing & Capabilities에 CloudKit을 추가해둔 이유가 이거였고, 엔타이틀먼트를 되돌리니 바로 해결됐다.
+[CKContainer.default() Docs](https://developer.apple.com/documentation/cloudkit/ckcontainer){:target="_blank"}는 앱에 iCloud 엔타이틀먼트가 아예 없으면 그 자리에서 죽어버리는 API였다. 맨 위에서 Signing & Capabilities에 CloudKit을 추가해둔 이유가 이거였고, 엔타이틀먼트를 되돌리니 바로 해결됐다.
 
 버튼도 백업/복원 둘 다 이 상태가 연결됨일 때만 눌리게 했다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/icloud_status.png)
 
----
-
 #### 버그 1. 두 번째 백업부터 조용히 0개 처리됨
 
-백업 버튼을 눌러보니 CloudKit Dashboard에 `Flight` 레코드 타입까지는 잘 생겼는데, 두 번째로 누르니 "0개 백업했습니다"라고 떴다. [`modifyRecords(saving:deleting:savePolicy:)`](https://developer.apple.com/documentation/cloudkit/ckmodifyrecordsoperation/recordsavepolicy)의 기본 저장 정책은 `.ifServerRecordUnchanged`인데, 이미 같은 `id`로 레코드가 한 번 올라가 있는 상태에서 "서버에 있는 버전이랑 내가 지금 보내는 버전이 같은 건지"를 비교하다가, 새로 만든 레코드엔 그 비교에 필요한 정보(변경 태그, `recordChangeTag`)가 없으니 충돌로 보고 저장을 실패시킨 거였다. 게다가 이 실패가 에러를 던지는 게 아니라 레코드별 결과(`Result<CKRecord, Error>`) 안에 실패로만 담겨서, 겉으로는 아무 문제 없어 보였다.
+![첫 백업은 새 레코드라 올라가지만 두 번째부터는 이미 있는 레코드를 만나 savePolicy 가 거부하고 0개로 끝난다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/backup-second-run.png)
+
+백업 버튼을 눌러보니 CloudKit Dashboard에 `Flight` 레코드 타입까지는 잘 생겼는데, 두 번째로 누르니 "0개 백업했습니다"라고 떴다. [`modifyRecords(saving:deleting:savePolicy:)`](https://developer.apple.com/documentation/cloudkit/ckmodifyrecordsoperation/recordsavepolicy){:target="_blank"}의 기본 저장 정책은 `.ifServerRecordUnchanged`인데, 이미 같은 `id`로 레코드가 한 번 올라가 있는 상태에서 "서버에 있는 버전이랑 내가 지금 보내는 버전이 같은 건지"를 비교하다가, 새로 만든 레코드엔 그 비교에 필요한 정보(변경 태그, `recordChangeTag`)가 없으니 충돌로 보고 저장을 실패시킨 거였다. 게다가 이 실패가 에러를 던지는 게 아니라 레코드별 결과(`Result<CKRecord, Error>`) 안에 실패로만 담겨서, 겉으로는 아무 문제 없어 보였다.
 
 ```swift
 // before
@@ -586,15 +586,11 @@ let (saveResults, _) = try await database.modifyRecords(
 )
 ```
 
----
-
----
-
 #### 버그 2. 백업은 되는데 대시보드에서 조회가 안 됨
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/dashboarderror.png)
 
-백업은 됐는데 이번엔 CloudKit Dashboard에서 직접 `Flight` 레코드를 조회해보니 "Field 'recordName' is not marked queryable"이라는 에러가 났다. CloudKit은 [`CKQuery`](https://developer.apple.com/documentation/cloudkit/ckquery)로 조회할 때 조건이나 정렬에 쓰는 필드마다 Queryable 인덱스가 걸려 있어야 하는데, `mode`/`distance`/`date` 같은 우리가 만든 필드는 레코드를 저장할 때 자동으로 인덱스가 걸리는 반면, `recordName`은 기본으로는 인덱스가 안 걸려 있다. 그런데 우리 쿼리(`NSPredicate(value: true)`, 조건 없이 전체 조회)는 조건에 걸리는 필드가 하나도 없어서, CloudKit이 내부적으로 recordName을 끌어다 쓰려다 막힌 것.
+백업은 됐는데 이번엔 CloudKit Dashboard에서 직접 `Flight` 레코드를 조회해보니 "Field 'recordName' is not marked queryable"이라는 에러가 났다. CloudKit은 [`CKQuery`](https://developer.apple.com/documentation/cloudkit/ckquery){:target="_blank"}로 조회할 때 조건이나 정렬에 쓰는 필드마다 Queryable 인덱스가 걸려 있어야 하는데, `mode`/`distance`/`date` 같은 우리가 만든 필드는 레코드를 저장할 때 자동으로 인덱스가 걸리는 반면, `recordName`은 기본으로는 인덱스가 안 걸려 있다. 그런데 우리 쿼리(`NSPredicate(value: true)`, 조건 없이 전체 조회)는 조건에 걸리는 필드가 하나도 없어서, CloudKit이 내부적으로 recordName을 끌어다 쓰려다 막힌 것.
 
 ```swift
 // before
@@ -610,7 +606,7 @@ query.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
 
 코드는 고쳤는데, CloudKit Dashboard의 Query Records 화면에서 조건/정렬 없이 그냥 눌러보면 여전히 같은 에러가 난다. 앱에서는 복원이 잘 되는데 대시보드에서는 왜 안 될까 궁금했는데, 이건 우리 스키마 문제가 아니라 대시보드 자체의 동작 방식 때문이었다. 
 
-대시보드의 "Query Records" 버튼은 필터/정렬을 아무것도 안 넣으면 자기 나름의 기본 조회를 만드는데, 그때 recordName을 참조하는 것으로 보인다. 반면 우리 앱 코드는 조건(`date > ...`)과 정렬(`date` 기준) 둘 다 이미 인덱스가 있는 `date` 필드만 쓰도록 명시했기 때문에 recordName을 아예 참조할 일이 없다. 대시보드에서 그때그때 `date`로 정렬(또는 필터) 조건을 직접 추가해서 눌러봐도 되지만, [Apple Docs](https://developer.apple.com/documentation/cloudkit/inspecting-and-editing-an-icloud-container-s-schema#Enable-querying-for-your-record-type)를 보니 아예 recordName 자체에 QUERYABLE 인덱스를 걸어두는 방법도 있었다.
+대시보드의 "Query Records" 버튼은 필터/정렬을 아무것도 안 넣으면 자기 나름의 기본 조회를 만드는데, 그때 recordName을 참조하는 것으로 보인다. 반면 우리 앱 코드는 조건(`date > ...`)과 정렬(`date` 기준) 둘 다 이미 인덱스가 있는 `date` 필드만 쓰도록 명시했기 때문에 recordName을 아예 참조할 일이 없다. 대시보드에서 그때그때 `date`로 정렬(또는 필터) 조건을 직접 추가해서 눌러봐도 되지만, [Apple Docs](https://developer.apple.com/documentation/cloudkit/inspecting-and-editing-an-icloud-container-s-schema#Enable-querying-for-your-record-type){:target="_blank"}를 보니 아예 recordName 자체에 QUERYABLE 인덱스를 걸어두는 방법도 있었다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-28-RunningProject-36/addindex.png)
 
@@ -875,13 +871,15 @@ func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: 
 }
 ```
 
-여기에 더해 `.duckOthers`만으로는 팟캐스트나 오디오북처럼 상대도 말하고 있는 오디오까지는 잘 안 눌리길래, 애플 문서에서 찾은 [`interruptSpokenAudioAndMixWithOthers`](https://developer.apple.com/documentation/avfoundation/avaudiosession/categoryoptions/1616534-interruptspokenaudioandmixwithot)를 같이 켰다. 이 옵션은 음악 같은 단순 재생 오디오는 볼륨만 줄이고, 말하는 콘텐츠는 안내가 나오는 동안 아예 멈췄다가 이어서 재생해준다. 이 서비스는 `Shared/`에 있어서 iOS/watchOS 양쪽에 한 번에 적용됐다.
+여기에 더해 `.duckOthers`만으로는 팟캐스트나 오디오북처럼 상대도 말하고 있는 오디오까지는 잘 안 눌리길래, 애플 문서에서 찾은 [`interruptSpokenAudioAndMixWithOthers`](https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions-swift.struct/interruptspokenaudioandmixwithothers){:target="_blank"}를 같이 켰다. 이 옵션은 음악 같은 단순 재생 오디오는 볼륨만 줄이고, 말하는 콘텐츠는 안내가 나오는 동안 아예 멈췄다가 이어서 재생해준다. 이 서비스는 `Shared/`에 있어서 iOS/watchOS 양쪽에 한 번에 적용됐다.
 
 여기까지는 아이폰이 러닝을 주도할 때는 잘 맞았는데, 워치 단독으로 러닝하면서 아이폰으로 음악을 들을 때는 여전히 TTS가 전혀 안 들렸다. 처음엔 코드 문제인 줄 알았는데, 파고들어보니 구조적인 문제였다. 에어팟은 아이폰/워치 양쪽에 블루투스로 동시에 페어링되어 있어도, 실제 오디오 스트림은 한 번에 한 기기만 가져간다. 음악이 아이폰에서 나오고 있으면 그 순간 오디오 스트림의 주인은 아이폰이고, 워치가 아무리 자기 세션을 활성화해도 에어팟으로는 안 들린다. `AVAudioSession`은 기기별로 완전히 독립된 인스턴스라, 워치 쪽 설정이 아이폰 쪽 오디오에 영향을 줄 방법 자체가 없다.
 
 같은 문제를 나이키 런 클럽도 겪고 있는지 찾아보니, 커뮤니티에 정확히 같은 증상과 워크어라운드가 있었다. "워치에서 러닝을 시작하든 아이폰에서 시작하든, 오디오 피드백은 워치 스피커로만 나온다"는 보고와 함께, 해결법으로 제시된 건 음악도 워치 자체(Music/Podcasts 앱 등)에서 먼저 재생한 뒤 러닝 앱을 여는 것뿐이었다. 즉 애플 생태계 전체가 갖고 있는 한계고, 우리 앱만의 버그가 아니었다. 음악과 TTS가 같은 기기의 같은 오디오 세션에서 나오기만 하면 에어팟이 어떤 기기와 페어링되어 있느냐는 상관없이 정상 작동한다는 뜻이라, 코드로는 더 손댈 게 없었다.
 
 그래서 이건 공지사항(Settings > 공지사항) 화면에 TIPS 섹션을 새로 만들어 "워치 단독 러닝에서 아이폰으로 음악을 재생하면 에어팟 연결 특성상 TTS가 안 들릴 수 있고, 음악도 Apple Watch에서 재생하면 정상적으로 들린다"고 안내하는 걸로 정리했다. 실제로 워치 라이브러리에 저장된 음악을 워치에서 재생한 채로 실기기 테스트를 해보니 km 스플릿 TTS가 정상적으로 들렸다.
+
+---
 
 ## 배포 전 정리
 

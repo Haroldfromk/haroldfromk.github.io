@@ -128,6 +128,14 @@ holdTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { ti
 Main actor-isolated property 'holdProgress' can not be mutated from a Sendable closure
 ```
 
+#### Timer 콜백이 메인 바깥에서 도는 문제
+
+`holdProgress` 는 화면이 읽는 값이라 메인 액터에 묶여 있다. 그런데 `Timer` 가 부르는 클로저는 **어느 스레드에서 돌지 보장되지 않는다.** 그래서 컴파일러가 막는다.
+
+고친 쪽은 클로저 안을 [`Task { @MainActor in }`](https://developer.apple.com/documentation/swift/mainactor){:target="_blank"} 으로 감쌌다. 타이머는 그대로 두고 **값을 건드리는 부분만 메인으로 옮기는** 방식이다.
+
+같이 바뀐 게 하나 더 있다. 클로저가 받던 `timer` 인자를 `_` 로 버리고 바깥의 `holdTimer` 를 쓴다. `Task` 안은 나중에 실행되므로 그때까지 인자를 붙들고 있는 것보다, 바깥 변수를 보는 쪽이 안전하다.
+
 `Timer.scheduledTimer`의 콜백은 `@Sendable` 클로저라, 그 안에서 `holdProgress` 같은 뷰의 `@State`(메인 액터에 격리된 값)를 바로 바꾸면 안 된다. 콜백 안에서 `Task { @MainActor in ... }`로 한 번 더 감싸서 메인 액터로 넘겨줘야 한다.
 
 ```swift
@@ -315,7 +323,9 @@ Free Flight면 `nil`을 반환해서 원래대로 "Airbus A320-200"이 보이고
 
 여기까지 고치고 실기기로 테스트를 좀 오래 해봤는데, 세 가지가 더 나왔다.
 
-### 1. 아이폰 주도 미러링 종료 시 워치가 간헐적으로 안 끝남
+---
+
+### 아이폰이 끝내도 간헐적으로 안 끝나던 워치
 
 아이폰 주도 미러링 중에 아이폰에서 러닝을 끝냈는데 워치는 가끔 안 끝나는 문제가 있었다. `sendStopSignal()`을 보면 원인이 바로 보인다.
 
@@ -352,7 +362,7 @@ func sendStopSignal() {
 
 ---
 
-### 2. 지도 종료 마커 E → F
+### 지도 종료 마커의 글자
 
 지인한테 앱을 보여줬는데, 지도에 찍히는 시작/종료 마커가 "S"/"E"라서 시작/종료(Start/End)가 아니라 방위(남쪽/동쪽)처럼 보인다는 피드백을 받았다. "F"(Finish)로 바꾸면 그런 오해가 없을 것 같아서 그렇게 고쳤다.
 
@@ -380,7 +390,7 @@ case "END":
 
 ---
 
-### 3. 워치 GPWS 피크 기능 안내가 없음
+### 안내가 없던 워치 GPWS 피크
 
 워치 GPWS 경고 화면에서 배경을 길게 누르면 PFD가 잠깐 보이는 기능을 아무 안내 없이 숨겨뒀던 것도 걸렸다. 
 

@@ -2,6 +2,7 @@
 title: RunWay 1.3.1 300초까지 벌어진 편차
 writer: Harold
 date: 2026-09-02 07:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [GPS]
 
@@ -48,6 +49,16 @@ if isStationary {
 }
 ```
 
+#### CLLocation이 주는 speed와 speedAccuracy
+
+[`CLLocation`](https://developer.apple.com/documentation/corelocation/cllocation){:target="_blank"}은 위치 하나가 찍힐 때마다 좌표만 주는 게 아니라 그 순간의 속도와 정확도를 같이 담아 온다.
+
+[`speed`](https://developer.apple.com/documentation/corelocation/cllocation/speed){:target="_blank"}는 초당 몇 미터로 움직이는 중인지다. 좌표 두 개를 빼서 우리가 계산한 값이 아니라 기기가 직접 재서 주는 값이다.
+
+[`speedAccuracy`](https://developer.apple.com/documentation/corelocation/cllocation/speedaccuracy){:target="_blank"}는 그 속도를 얼마나 믿어도 되는지다. 단위는 똑같이 m/s 이고, 실제 속도가 `speed` 를 기준으로 이 값만큼 위아래로 벌어질 수 있다는 뜻이다. 작을수록 정확하다.
+
+여기서 중요한 건 **음수가 따로 뜻을 갖는다**는 점이다. 애플 문서가 음수를 "속도 값이 유효하지 않다"는 신호로 못박아 뒀다. 오차가 크다는 뜻이 아니라 **그 숫자를 아예 쓰지 말라**는 뜻이다. 그래서 `>= 0` 가드가 "정확도가 좋을 때만"이 아니라 "값이 쓸 만할 때만"으로 읽혀야 맞다.
+
 문제는 페이스 계산에 쓰는 스무딩 값(`smoothingSpeedSecond`, 속도를 부드럽게 만드는 이동평균)은 이 신뢰도 체크 없이 매 위치 업데이트마다 무조건 갱신되고 있었다는 거다. 오버스피드에 반응해서 속도를 확 줄이는 순간은 GPS 입장에서도 속도를 가늠하기 애매한 구간이라, 신뢰도가 음수로 찍히는 일이 흔했다. 그러면 "멈춰있다"는 확정은 못 되는데(위 코드에서 통째로 건너뛰니까), 스무딩 값은 계속 낮은 속도 쪽으로 끌려 내려간다.
 
 멈춰있다는 확정이 안 됐으니 `isStationary`는 계속 `false`로 남고, 그럼 페이스는 계속 "새로 계산"하는 쪽 분기를 탄다. 근데 그 계산의 재료인 스무딩 속도는 계속 0에 가까워지고 있으니, 페이스(1÷속도)는 점점 커진다. 실제로는 사람은 다시 뛰고 있는데, 화면에 찍히는 페이스는 계속 나빠지는 쪽으로 갔던 거다.
@@ -61,6 +72,8 @@ if isStationary {
 더 나쁜 건, 스무딩 속도가 계속 줄어들다 결국 컴퓨터가 표현할 수 있는 가장 작은 값보다도 작아져서 정확히 0으로 취급되는 순간이 온다는 점이다. 그러면 1÷속도가 무한대가 되는데, 이 무한대 값을 화면에 정수로 바꿔서 보여주려는 순간 정수로 바꿀 수 없는 값을 억지로 바꾸려 한 거라 그 자리에서 앱이 죽어버린다. 강제 종료의 정체가 이거였다.
 
 정리하면, "정지 판단"과 "페이스 계산"이 같은 상황을 서로 다른 기준으로 보고 있었던 게 문제였다. 못 믿을 속도값은 정지 판단에서는 확실히 걸러지는데, 페이스 계산 쪽에는 그 필터가 안 걸려 있었던 거다.
+
+---
 
 ### 숫자로 보면
 
@@ -133,6 +146,10 @@ if !isStationary {
 
 Watch의 경고 화면(`WatchGPWSView`)은 `gpwsStatus`가 normal이 아닐 때만 떠 있고, 이 화면이 떠 있는 동안엔 2초 간격으로 반복되는 햅틱 루프가 화면이 사라질 때까지(`onDisappear`) 계속 돈다. 얼어붙은 상태가 안 풀리니 화면도 안 사라지고, 진동도 정지 중 내내 안 끊겼던 거다.
 
+#### onDisappear에 묶인 햅틱 루프
+
+[`onDisappear(perform:)`](https://developer.apple.com/documentation/swiftui/view/ondisappear%28perform%3A%29){:target="_blank"}는 그 뷰가 화면에서 사라질 때 한 번 불리는 자리다. 햅틱 루프를 멈추는 코드를 여기에 두면, 화면이 안 사라지는 한 멈추라는 신호 자체가 오지 않는다. 루프를 거는 쪽이 아니라 **끊는 쪽이 화면 수명에 묶여 있었다**는 게 이 문제의 모양이다.
+
 고친 방법은 "얼리기" 대신 "정지 중엔 아예 normal로 되돌리기"다. 이러면 심박 하강으로 새 경고가 뜨는 것도 여전히 막히고, 멈추기 직전에 경고가 떠 있었어도 멈추는 순간 바로 사라진다.
 
 ```swift
@@ -145,3 +162,9 @@ if isStationary {
 ```
 
 빌드 번호를 5로 올려서 이전에 확인한 700m 테스트 빌드와 구분해뒀다. 두 수정 다 짧은 구간 확인은 끝났고, 실제로 길게 뛰면서(GPS 신호가 흔들리는 구간 포함) 재현 검증하는 절차가 남아있다. 이 부분은 확인되는 대로 이어서 적을 예정이다.
+
+---
+
+## 참고자료
+
+- [Getting the current location of a device (Apple)](https://developer.apple.com/documentation/corelocation/getting-the-current-location-of-a-device){:target="_blank"}

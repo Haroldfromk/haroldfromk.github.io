@@ -2,6 +2,7 @@
 title: RunWay 1.3.2 (1) 지도에 경고가 스무 개, 건강 앱에 러닝이 두 개
 writer: Harold
 date: 2026-09-05 09:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [GPS, AI]
 
@@ -17,7 +18,7 @@ published: true
 
 이번 글은 이 두 가지를 AI와 대화하면서 좁혀나간 과정을 그대로 옮긴 것이다. 결론부터 말하면 **처음에 세운 가설은 거의 다 틀렸고, 진짜 원인은 마지막에 나왔다.** 틀린 과정을 지우면 남는 게 별로 없어서 순서대로 적는다.
 
-그리고 이걸 실기기에서 확인하러 나갔다가 **전혀 다른 문제를 하나 주웠다.** 같은 러닝이 건강 앱에 두 번 저장되고 있었다. 글 후반부가 그 이야기다. 1.3.2를 마무리하면서 손본 나머지는 [RunWay(43)](https://haroldfromk.github.io/posts/RunningProject-(43)/){:target="_blank"}에 따로 적었다.
+그리고 이걸 실기기에서 확인하러 나갔다가 **전혀 다른 문제를 하나 주웠다.** 같은 러닝이 건강 앱에 두 번 저장되고 있었다. 글 후반부가 그 이야기다. 1.3.2를 마무리하면서 손본 나머지는 [RunWay(43)](https://haroldfromk.github.io/posts/RunningProject-(43)/)에 따로 적었다.
 
 ---
 
@@ -249,63 +250,7 @@ km별 페이스는 실제 값이지만, **초당 속도가 얼마나 흔들리�
 
 그림으로 보면 이렇다. 저장하는 쪽이 둘이라 기록도 둘이 된다.
 
-<svg viewBox="0 0 420 436" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="건강 앱 중복 저장 수정 전후 비교" style="width:100%;height:auto;color:inherit">
-  <defs>
-    <marker id="ar" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
-      <path d="M0 0 L8 4 L0 8 z" fill="currentColor" opacity=".4"/>
-    </marker>
-    <marker id="arR" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
-      <path d="M0 0 L8 4 L0 8 z" fill="#e05c4f"/>
-    </marker>
-    <marker id="arG" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
-      <path d="M0 0 L8 4 L0 8 z" fill="#2fa37c"/>
-    </marker>
-  </defs>
-
-  <text x="0" y="12" font-size="11.5" fill="currentColor" opacity=".55" font-family="monospace">수정 전</text>
-
-  <rect x="0" y="22" width="198" height="56" rx="8" fill="none" stroke="#e05c4f" stroke-width="1.2"/>
-  <text x="14" y="42" font-size="11" fill="currentColor" opacity=".55" font-family="monospace">iPhone</text>
-  <text x="14" y="62" font-size="13" fill="#e05c4f" font-weight="600">시스템이 builder 마감</text>
-
-  <rect x="222" y="22" width="198" height="56" rx="8" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3"/>
-  <text x="236" y="42" font-size="11" fill="currentColor" opacity=".55" font-family="monospace">Apple Watch</text>
-  <text x="236" y="62" font-size="13" fill="currentColor" font-weight="600">finishWorkout()</text>
-
-  <line x1="99" y1="78" x2="99" y2="104" stroke="#e05c4f" stroke-width="1.2" marker-end="url(#arR)"/>
-  <line x1="321" y1="78" x2="321" y2="104" stroke="currentColor" stroke-width="1.2" opacity=".4" marker-end="url(#ar)"/>
-
-  <rect x="0" y="110" width="420" height="84" rx="8" fill="none" stroke="currentColor" stroke-width="1" opacity=".25" stroke-dasharray="4 3"/>
-  <text x="14" y="128" font-size="10.5" fill="currentColor" opacity=".5" font-family="monospace">Apple Health · 운동 목록</text>
-  <rect x="14" y="136" width="392" height="22" rx="5" fill="none" stroke="#e05c4f" stroke-width="1"/>
-  <text x="26" y="151" font-size="11.5" fill="#e05c4f" font-family="monospace">Running · Device iPhone · 심박 없음</text>
-  <rect x="14" y="164" width="392" height="22" rx="5" fill="none" stroke="#e05c4f" stroke-width="1"/>
-  <text x="26" y="179" font-size="11.5" fill="#e05c4f" font-family="monospace">Running · Device Apple Watch · 심박 있음</text>
-
-  <line x1="0" y1="216" x2="420" y2="216" stroke="currentColor" stroke-width="1" opacity=".18"/>
-
-  <text x="0" y="242" font-size="11.5" fill="currentColor" opacity=".55" font-family="monospace">수정 후</text>
-
-  <rect x="0" y="252" width="198" height="56" rx="8" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".22" stroke-dasharray="4 3"/>
-  <text x="14" y="272" font-size="11" fill="currentColor" opacity=".4" font-family="monospace">iPhone</text>
-  <text x="14" y="292" font-size="13" fill="currentColor" opacity=".45" font-weight="600">discardWorkout()</text>
-  <line x1="168" y1="266" x2="182" y2="280" stroke="currentColor" stroke-width="1.6" opacity=".4"/>
-  <line x1="182" y1="266" x2="168" y2="280" stroke="currentColor" stroke-width="1.6" opacity=".4"/>
-
-  <rect x="222" y="252" width="198" height="56" rx="8" fill="none" stroke="#2fa37c" stroke-width="1.4"/>
-  <text x="236" y="272" font-size="11" fill="currentColor" opacity=".55" font-family="monospace">Apple Watch</text>
-  <text x="236" y="292" font-size="13" fill="#2fa37c" font-weight="600">finishWorkout()</text>
-
-  <line x1="321" y1="308" x2="321" y2="334" stroke="#2fa37c" stroke-width="1.4" marker-end="url(#arG)"/>
-
-  <rect x="0" y="340" width="420" height="62" rx="8" fill="none" stroke="currentColor" stroke-width="1" opacity=".25" stroke-dasharray="4 3"/>
-  <text x="14" y="358" font-size="10.5" fill="currentColor" opacity=".5" font-family="monospace">Apple Health · 운동 목록</text>
-  <rect x="14" y="366" width="392" height="22" rx="5" fill="none" stroke="#2fa37c" stroke-width="1"/>
-  <text x="26" y="381" font-size="11.5" fill="#2fa37c" font-family="monospace">Running · Device Apple Watch · 심박 있음</text>
-
-  <text x="0" y="424" font-size="11.5" fill="currentColor" opacity=".6">저장하는 쪽을 센서 가진 기기 하나로 고정한다</text>
-</svg>
+![수정 전에는 아이폰의 builder 를 시스템이 대신 마감하고 워치도 finishWorkout 을 불러 건강 앱에 같은 러닝이 두 건 남고, 수정 후에는 아이폰이 discardWorkout 으로 버려 센서를 가진 워치 한 건만 남는다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-09-05-RunningProject-41/health-duplicate.png)
 
 
 주간 합계에는 두 배로 반영되지 않았다. 겹치는 시간대의 운동을 건강 앱이 합산에서 걸러주는 것으로 보인다.(추정) 그래서 여태 몰랐다. **건강 앱의 운동 목록을 직접 열어보기 전까지는 드러나지 않는 종류의 문제였다.**
@@ -337,6 +282,16 @@ builder?.dataSource = HKLiveWorkoutDataSource(healthStore: store, workoutConfigu
 try await builder?.beginCollection(at: startDate)
 ```
 
+#### 세션과 빌더가 저장까지 하는 과정
+
+[`HKWorkoutSession`](https://developer.apple.com/documentation/healthkit/hkworkoutsession){:target="_blank"}은 운동 하나가 진행되는 동안을 뜻한다. 시작과 끝, 일시정지 같은 상태를 들고 있고, 워치에서는 이게 떠 있는 동안 백그라운드 실행이 보장된다.
+
+[`associatedWorkoutBuilder()`](https://developer.apple.com/documentation/healthkit/hkworkoutsession/associatedworkoutbuilder%28%29){:target="_blank"}로 그 세션에 딸린 [`HKWorkoutBuilder`](https://developer.apple.com/documentation/healthkit/hkworkoutbuilder){:target="_blank"}를 꺼낸다. **세션이 시간이라면 빌더는 그 시간 동안 모이는 내용물이다.** 심박이나 거리 같은 표본이 여기 쌓인다.
+
+[`HKLiveWorkoutDataSource`](https://developer.apple.com/documentation/healthkit/hkliveworkoutdatasource){:target="_blank"}를 붙이면 센서에서 오는 값이 **자동으로** 빌더에 들어간다. 앱이 한 건씩 넣어주는 게 아니라 데이터 원천을 꽂아두는 쪽에 가깝다.
+
+`beginCollection` 은 수집을 시작하라는 신호다. 여기까지가 평범한데, 다음이 이 글의 출발점이다.
+
 그리고 종료할 때는 세션만 끝내고 빌더는 손대지 않는다. **마무리를 안 해도 시스템이 그때까지 모인 데이터로 워크아웃을 마감해 저장한다.** 그래서 앱이 저장을 지시한 적이 없는데도 Source가 RunWay로 찍힌다.
 
 워치는 워치대로 `finishWatchWorkout()`에서 `endCollection()`과 `finishWorkout()`을 부른다. 저장하는 쪽이 둘이니 기록도 둘이다.
@@ -345,7 +300,13 @@ try await builder?.beginCollection(at: startDate)
 
 ### 미러링일 때 버리는 아이폰 쪽
 
-`HKWorkoutBuilder`에는 모은 데이터를 저장하지 않고 마감하는 `discardWorkout()`이 있다. 미러링일 때만 이걸 부르면 된다.
+#### discardWorkout으로 모은 것을 버리기
+
+[`discardWorkout()`](https://developer.apple.com/documentation/healthkit/hkworkoutbuilder/discardworkout%28%29){:target="_blank"}는 빌더가 모아둔 표본을 **저장하지 않고 통째로 버린다.** 마감하는 `finishWorkout` 과 짝을 이루는 반대편이고, 둘 중 하나는 불러야 빌더가 정리된다.
+
+둘을 가르는 기준이 "데이터가 쓸모 있느냐"가 아니라 **"이 기기가 저장 주체냐"**라는 점이 이 글의 핵심이다. 미러링 중에 아이폰이 모은 거리 데이터 자체는 멀쩡하다. 다만 같은 러닝을 워치가 심박까지 담아 저장하므로 아이폰 것은 버리는 게 맞다.
+
+미러링일 때만 이걸 부르면 된다.
 
 ```swift
 // before (HealthKitService+iOS.swift)
@@ -570,6 +531,13 @@ Task {
 
 그리고 경고를 지금처럼 하나하나 따로 기록할지, **시작과 끝을 가진 한 덩어리로 묶을지**도 생각해볼 문제다. 페이스가 허용 범위를 벗어나 있는 건 한동안 이어지는 상태인데, 지금은 경고가 켜지는 순간마다 별개로 세고 있다. 덩어리로 묶으면 7.87km에 서너 건이 될 것이다. 다만 저장 구조를 바꾸는 거라 기존 사용자의 데이터를 옮기는 작업이 필요하고, 1.1에서 겪은 문제를 다시 밟지 않도록 조심해야 한다.
 
-1.3.2를 마무리하면서 손본 게 두 개 더 있는데, 성격이 이 글과 달라서 [RunWay(43)](https://haroldfromk.github.io/posts/RunningProject-(43)/){:target="_blank"}로 뺐다. 7일 리마인더와 Pre-flight Check의 APPLE WATCH 항목이다.
+1.3.2를 마무리하면서 손본 게 두 개 더 있는데, 성격이 이 글과 달라서 [RunWay(43)](https://haroldfromk.github.io/posts/RunningProject-(43)/)로 뺐다. 7일 리마인더와 Pre-flight Check의 APPLE WATCH 항목이다.
 
 실기기 테스트를 마치는 대로 1.3.2로 올릴 예정이다.
+
+---
+
+## 참고자료
+
+- [Running workout sessions (Apple)](https://developer.apple.com/documentation/healthkit/running-workout-sessions){:target="_blank"}
+- [Build a workout app for Apple Watch (Apple)](https://developer.apple.com/documentation/healthkit/build-a-workout-app-for-apple-watch){:target="_blank"}

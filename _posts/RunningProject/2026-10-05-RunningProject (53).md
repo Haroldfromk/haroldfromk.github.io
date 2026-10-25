@@ -34,7 +34,7 @@ published: true
 전부 45~46바이트
 ```
 
-워치가 5초마다 보내는 심박·케이던스다. 종료 시각 직전 것까지 정확히 그 크기였다.
+워치가 5초마다 보내는 심박과 케이던스다. 종료 시각 직전 것까지 정확히 그 크기였다.
 
 ```
 12:27:30.514   45
@@ -91,7 +91,11 @@ if HealthKitService.shared.startOrigin != .local {
 guard WCSession.default.activationState == .activated else { return }
 ```
 
+![워치에서 END FLIGHT 를 눌러도 세션이 nil 이거나 워치가 시작한 러닝이거나 세션이 활성화 전이면 각각 조용히 돌아선다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-05-RunningProject-53/three-exits.png)
+
 셋 중 어디서 멈췄는지 알 방법이 없었다. 그래서 각 자리에 한 줄씩 남기게 했다.
+
+---
 
 ### 워치 로그를 못 읽는 문제
 
@@ -182,7 +186,11 @@ FLIGHT DATA RECORDER 로 넘어갈 때
 
 증상이 다르니 원인도 다를 거라고 보고 따로 봤다. 결과적으로 **원인이 셋**이었다.
 
+---
+
 ### 줄마다 전체를 다시 정렬하던 스플릿
+
+![스플릿 한 줄을 그릴 때마다 정렬된 목록을 여섯 번 읽고 그때마다 전체를 다시 정렬한다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-05-RunningProject-53/resort-per-row.png)
 
 ```swift
 private func isFastest(_ pace: Double) -> Bool {
@@ -210,6 +218,8 @@ private var minPace: Double { validPaces.min() ?? 0 }
 
 전부 `init` 에서 한 번만 구하게 했다. **132번이 1번이 됐다.**
 
+---
+
 ### 기준선을 매 프레임 평균 내던 자리
 
 ```swift
@@ -223,6 +233,8 @@ private var paceTarget: (center: Double, tolerance: Double)? {
 Free Flight 의 평균선을 구하는 자리다. 이것도 계산 프로퍼티인데 **그래프에 넘기는 값**이라, `body` 가 돌 때마다 표본 1158개의 페이스를 전부 꺼내서 평균을 다시 냈다.
 
 여기가 제일 비쌌다. `samples` 가 SwiftData 객체라 `.pace` 하나 읽는 것도 저장소를 거친다.
+
+---
 
 ### 매 프레임 새로 만들던 배열
 
@@ -241,6 +253,8 @@ FDRLaneView(values: samples.map(lane.value), ...)
 | 배열 생성 | 1158 × 4 | 0 |
 | 범위 정렬 | 8번 | 0 |
 
+---
+
 ### 들어가는 길을 막고 있던 읽기
 
 화면 전환이 끊기는 건 다른 문제였다.
@@ -258,9 +272,19 @@ FDRLaneView(values: samples.map(lane.value), ...)
 }
 ```
 
+#### Task.yield로 그리기에 한 번 양보하기
+
+[`Task.yield()`](https://developer.apple.com/documentation/swift/task/yield%28%29){:target="_blank"}는 **지금 하던 일을 잠깐 멈추고 차례를 넘긴다.** 기다리는 대상이 있는 `await` 와 달리 기다릴 게 없고, 밀려 있는 다른 일을 먼저 돌게 해줄 뿐이다.
+
+`onAppear` 는 화면이 그려지는 흐름 안에서 바로 불린다. 거기서 저장소를 읽으면 **읽는 동안 화면이 못 그려진다.** `task` 로 옮기고 맨 앞에 양보를 한 번 두면 첫 프레임이 먼저 나가고 그다음에 읽기가 시작된다.
+
+읽는 시간 자체는 그대로다. 줄어든 건 **아무것도 안 보이는 시간**이다.
+
 첫 프레임이 그려진 뒤에 읽게 바꿨다. 전환은 매끄럽게 끝나고 내용이 조금 늦게 들어온다.
 
 읽는 중인지 아닌지를 구분하는 상태도 같이 넣었다. 그게 없으면 **"되감을 수 없어요"가 한 번 번쩍이고 사라진다.** 표본이 비어 있는 상태와 아직 안 읽은 상태를 둘 다 `samples.isEmpty` 로 보고 있었기 때문이다.
+
+---
 
 ### 남겨둔 것
 
@@ -296,11 +320,15 @@ FDRLaneView(values: samples.map(lane.value), ...)
 
 실패가 중간중간 박혀 있다. **"N분을 넘기면 난다"는 선은 없다.**
 
+---
+
 ### 아직 지워지지 않은 길이
 
 선이 없다고 길이가 무관한 건 아니다. 짧은 러닝은 다섯 번 다 성공했고, 긴 쪽은 다섯 번 중 두 번 실패했다.
 
 임계값이 아니라 **확률**로 보면 그대로 들어맞는다. 길수록 뭔가 어긋날 기회가 많아지는 것이고, 한 번 성공했다고 지워지는 종류의 가설이 아니다.
+
+---
 
 ### 세션이 아직 안 깨어 있던 자리
 
@@ -321,6 +349,8 @@ guard WCSession.default.activationState == .activated else {
 
 이 줄을 안 넣었으면 **아무 일도 없었던 것처럼 보였을 자리**다. 세션 활성화는 앱이 켜진 뒤 비동기로 끝나는데, 그 전에 종료를 누르면 신호가 조용히 버려진다.
 
+---
+
 ### 20km 실패가 설명되지 않는 이유
 
 솔깃했지만 맞춰보니 안 맞았다.
@@ -335,6 +365,8 @@ guard WCSession.default.activationState == .activated else {
 13:31 의 그 로그는 **아이폰 앱이 막 켜진 직후**의 다른 상황이었다. 같은 함수의 같은 가드이긴 해도, 20km 실패의 원인이라고 말할 근거가 없다.
 
 실제로 겪었을 때 앱을 백그라운드로 내린 적도 없다고 한다. 다만 워치 앱은 사용자가 아무것도 안 해도 watchOS 가 내렸다 올릴 수 있어서, 그쪽까지 지워지는 건 아니다.
+
+---
 
 ### 지금 말할 수 있는 것
 

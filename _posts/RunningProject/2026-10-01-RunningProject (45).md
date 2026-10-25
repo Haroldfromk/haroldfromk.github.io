@@ -2,7 +2,7 @@
 title: RunWay 1.4 (2) 분석은 모르지만 AI랑 만들어본 Debrief
 writer: Harold
 date: 2026-10-01 18:00:00 +0900
-last_modified_at: 2026-10-06 02:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [SwiftData, Charts]
 
@@ -43,6 +43,12 @@ class SwiftDataSplit {
 }
 ```
 
+#### Model로 저장되는 타입 만들기
+
+[`@Model`](https://developer.apple.com/documentation/swiftdata/model%28%29){:target="_blank"}을 붙인 클래스는 SwiftData 가 저장소에 넣고 꺼낼 수 있는 타입이 된다. 평범한 클래스처럼 쓰면 되고, 속성을 읽고 쓰는 것만으로 저장이 따라온다.
+
+여기서 눈여겨볼 건 **이 타입이 분석을 염두에 두고 만든 게 아니라는 점**이다. 스플릿을 화면에 보여주려고 넣어둔 속성들인데, 구간별 페이스와 심박이 순서대로 남아 있다는 사실 하나로 전후반 비교가 가능해졌다. 새 필드를 추가하지 않고 시작할 수 있었던 이유다.
+
 이 정도만 있어도 한 러닝 안에서 페이스/심박이 어떻게 흘렀는지는 충분히 볼 수 있었다.
 
 ---
@@ -50,6 +56,8 @@ class SwiftDataSplit {
 ## 스플릿 페이스 패턴: 일정함, 네거티브, 포지티브, 불규칙
 
 가장 먼저 만든 건 "이번 러닝의 페이스가 어떤 모양이었는지"를 분류하는 거였다. 마라톤 코칭에서 실제로 쓰는 개념인 [네거티브 스플릿(negative split)](https://en.wikipedia.org/wiki/Negative_split){:target="_blank"}을 기준으로 잡았다. 후반부가 전반부보다 빠르면 네거티브(페이싱을 잘한 것), 느려지면 포지티브(후반에 무너진 것), 이도 저도 아니면 일정함이나 불규칙으로 나눴다.
+
+![스플릿 페이스를 꺾은선으로 그린 네 가지 패턴. 일정함은 평평하고 네거티브는 후반이 올라가며 포지티브는 후반이 내려가고 불규칙은 오르내림이 크다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-01-RunningProject-45/split-patterns.png)
 
 ```swift
 // RunAnalysis.swift
@@ -152,6 +160,16 @@ Chart(bars) { bar in
 ])
 ```
 
+#### Chart와 BarMark로 두 종류를 겹쳐 그리기
+
+[`Chart`](https://developer.apple.com/documentation/charts/chart){:target="_blank"}는 데이터 모음을 받아 그 안에 그릴 것을 적는 컨테이너다. 축과 눈금, 범례는 넣은 데이터를 보고 알아서 잡아준다.
+
+[`BarMark`](https://developer.apple.com/documentation/charts/barmark){:target="_blank"}는 막대 하나를 뜻한다. `x` 와 `y` 에 [`.value`](https://developer.apple.com/documentation/charts/plottablevalue){:target="_blank"}로 넘기는데, 첫 인자는 **축에 붙을 이름**이고 둘째가 실제 값이다. 이 이름이 범례와 설명에 그대로 쓰인다.
+
+[`foregroundStyle(by:)`](https://developer.apple.com/documentation/charts/chartcontent/foregroundstyle%28by%3A%29){:target="_blank"}에 값을 하나 더 주면, **그 값이 같은 것끼리 묶여 같은 색을 받는다.** 여기서는 SINK RATE 와 OVERSPEED 로 묶여서 두 계열이 된다. 색을 직접 지정하는 게 아니라 "이 기준으로 나눠 달라"고 맡기는 것이라, 계열이 몇 개인지 미리 몰라도 된다.
+
+[`chartForegroundStyleScale(_:)`](https://developer.apple.com/documentation/swiftui/view/chartforegroundstylescale%28%5F%3A%29){:target="_blank"}는 그렇게 나뉜 계열에 쓸 색을 직접 정해준다. 안 주면 기본 팔레트가 쓰이는데, 경고 색은 앱 전체에서 의미가 정해져 있어서 맞춰줬다.
+
 실제로 확인해보니 SINK RATE가 러닝 후반부(70~90% 지점)에 몰려있는 게 한눈에 보였다. 처음부터 오버페이스했다가 후반에 못 버티는 패턴이라는 걸 숫자로만 볼 때보다 훨씬 빨리 알아챌 수 있었다.
 
 ---
@@ -170,6 +188,12 @@ private func numberedMock<Content: View>(_ number: Int, @ViewBuilder content: ()
         }
 }
 ```
+
+#### overlay로 카드 위에 번호 얹기
+
+[`overlay(alignment:content:)`](https://developer.apple.com/documentation/swiftui/view/overlay%28alignment%3Acontent%3A%29){:target="_blank"}는 원래 뷰 **위에** 다른 뷰를 겹쳐 올린다. 중요한 건 올라간 쪽이 **아래 뷰의 크기에 영향을 주지 않는다**는 점이다. 번호 배지가 아무리 커져도 예시 카드의 레이아웃은 그대로다.
+
+`alignment:` 로 어느 모서리에 붙일지 정하고, [`offset(x:y:)`](https://developer.apple.com/documentation/swiftui/view/offset%28x%3Ay%3A%29){:target="_blank"}로 거기서 조금 밀어낸다. `offset` 도 자리를 차지하지 않고 그리는 위치만 옮기는 것이라, 음수를 줘서 카드 밖으로 살짝 걸치게 할 수 있다.
 
 만들면서 실수도 하나 발견했다. 예시 카드에 박아넣은 문장 몇 개가 그냥 한글 리터럴이었다. 실제 카드는 `String(localized:)`로 미리 번역된 값을 만들어서 쓰는데, 예시 카드는 그 단계를 빼먹고 완성된 한국어 문장을 그대로 박아넣은 거라, 영어/일본어 기기에서 봐도 그 부분만 한글로 나오는 상태였다. 통계 타일 라벨도 같은 이유로 걸려있었다. `String(localized:)`로 한 번씩 감싸서 실제 카드와 같은 방식으로 맞췄다.
 
@@ -229,3 +253,9 @@ Debrief를 소개하는 온보딩 페이지도 다시 봤다. 거기엔 **무엇
 | GPWS 경고 타이밍 | 발생 시점을 거리 대비 %로 정규화, 10% 단위 집계 | 없음 (0이면 빈 그래프) |
 
 전부 CoreML 없이 통계만으로 만들었고, 실기기로 확인하면서 목표별 기준 전환, 심박 데이터 없음 안내, 예시 카드 로컬라이즈 버그까지 하나씩 잡아나갔다. CoreML은 예상 완주 페이스 예측처럼 통계로는 안 되는 진짜 예측 기능이 필요해지고, 기록도 충분히 쌓였을 때 다시 검토하기로 했다.
+
+---
+
+## 참고자료
+
+- [Creating a chart using Swift Charts (Apple)](https://developer.apple.com/documentation/charts/creating-a-chart-using-swift-charts){:target="_blank"}

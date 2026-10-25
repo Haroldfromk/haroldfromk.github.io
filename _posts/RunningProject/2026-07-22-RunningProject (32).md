@@ -2,6 +2,7 @@
 title: RunWay 1.2 (1) 심박 미러링 실기기 테스트
 writer: Harold
 date: 2026-07-22 11:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [WatchConnectivity, ActivityKit]
 
@@ -156,9 +157,13 @@ if isModeA, let modeAData {
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/heartrate.png)
 
+목표 심박을 150bpm 으로 설정한 화면이다. 아래 DIFF 에 뜬 -150 이 이 값에서 나왔다.
+
 실제로 뛰어보니 DIFF 칸에 이렇게 떴다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/diff_before_crop.png)
+
+고치기 전이다. 아직 심박을 못 받은 시작 직후라 DIFF 가 -150 으로 뜬다.
 
 ```swift
 // Before (else 분기, 심박 기준일 때)
@@ -176,6 +181,8 @@ if isModeA, let modeAData {
 페이스 쪽엔 `pace > 0` 가드가 있는데 심박 쪽엔 이 가드가 없었다. 아직 심박수를 못 받은 시점(`heartRate == 0`)에 `deviation = 0 - targetHeartRate`가 그대로 계산돼서 큰 음수가 나온 거였다. 페이스 쪽이랑 똑같은 방식으로 가드를 추가해서 해결했다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/diff_after_crop.png)
+
+가드를 넣은 뒤다. 심박이 들어오기 전에는 숫자 대신 두 줄만 보여준다.
 
 ---
 
@@ -223,6 +230,16 @@ init(..., target: String = ModeATarget.pace.rawValue, ..., heartRate: Double = 0
 ```
 
 ![SwiftData가 기존 기록의 빈 필드를 채울 때 프로퍼티 선언부 기본값만 보고 init 파라미터 기본값은 안 보는 구조](/assets/img/runway/swiftdata-default-lookup.svg){: width="720" height="320"}
+
+#### 라이트웨이트 마이그레이션이 보는 기본값
+
+라이트웨이트 마이그레이션은 **마이그레이션 코드를 따로 안 써도 SwiftData 가 알아서 스키마를 맞춰주는 것**이다. 필드를 더하거나 이름을 바꾸는 정도는 이걸로 넘어간다.
+
+문제는 **기존 레코드의 새 필드를 무엇으로 채우느냐**다. SwiftData 는 프로퍼티 선언부의 기본값을 보고, `init` 파라미터의 기본값은 안 본다. 사람 눈에는 둘 다 "기본값"이라 똑같아 보이지만 쓰이는 때가 다르다. `init` 쪽은 **새 객체를 만들 때** 쓰이고, 선언부 쪽은 **이미 있는 레코드를 채울 때** 쓰인다.
+
+그래서 안 되는 쪽으로 쓰면 새로 설치해서 테스트할 때는 멀쩡하다. 새 객체만 만드니 `init` 기본값만 타기 때문이다. 업데이트로 깔아야 비로소 드러난다.
+
+이걸로도 모자랄 때 쓰는 게 [`VersionedSchema`](https://developer.apple.com/documentation/swiftdata/versionedschema){:target="_blank"}와 [`SchemaMigrationPlan`](https://developer.apple.com/documentation/swiftdata/schemamigrationplan){:target="_blank"}이다. 스키마에 버전을 매기고 단계마다 할 일을 직접 적는 방식이라, 옵셔널로 넣었다가 채운 뒤 필수로 바꾸는 식의 다단계가 가능하다.
 
 SwiftData의 자동 라이트웨이트 마이그레이션은 기존 레코드에 새 필드 값을 채울 때 프로퍼티 선언부의 기본값을 보는데, init 파라미터에 있는 기본값은 여기서 안 보인다. 이 필드가 없던 버전(v1.1)을 쓰던 유저가 이 빌드로 업데이트하면 마이그레이션이 실패하거나 크래시할 수 있는 구조였다. 계속 삭제 후 재설치로만 테스트해서 이 문제가 한 번도 드러나지 않았던 거다. 선언부에 기본값을 직접 넣어서 고쳤다.
 
@@ -306,7 +323,11 @@ Xcode로 잡아보니 크래시 지점이 딱 그 클로저 안이었다.
 
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/CleanShot_22-21.50.png)
 
+Xcode 가 잡은 크래시 지점이다. 멈춘 자리가 errorHandler 클로저 안이다.
+
 ![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-22-RunningProject-32/CleanShot_22-21.51.png)
+
+같은 크래시의 스택이다. 실행된 스레드가 메인이 아니라는 게 보인다.
 
 ```swift
 // Before
@@ -319,6 +340,14 @@ session.sendMessage(message, replyHandler: nil, errorHandler: nil)
 ```
 
 이 에러 핸들러는 전송이 실패했을 때만 실행되는데, 지금까지는 테스트할 때마다 워치가 켜져 있어서 전송이 항상 성공했다. 그래서 이 클로저가 실행된 적이 한 번도 없었다. 워치 없이 앱만 켜니 워치를 못 찾아서 전송이 처음으로 실패했고, 그 순간 이 클로저가 처음 실행되면서 크래시가 났다.
+
+#### errorHandler가 도는 자리
+
+[`sendMessage(_:replyHandler:errorHandler:)`](https://developer.apple.com/documentation/watchconnectivity/wcsession/sendmessage%28%5F%3Areplyhandler%3Aerrorhandler%3A%29){:target="_blank"}의 두 클로저는 **내가 부른 자리가 아니라 시스템이 나중에 부르는 자리**다. 전송 결과가 나와야 불리므로 호출한 함수는 이미 끝나 있다.
+
+그래서 어느 스레드에서 불릴지를 내가 정하지 못한다. 문서가 백그라운드 스레드라고 못박아 두었다. 여기에 메인에서만 만져야 하는 것을 넣으면 어긋난다.
+
+[`@Sendable`](https://developer.apple.com/documentation/swift/sendable){:target="_blank"}은 **이 클로저가 어느 스레드로 넘어가도 안전하다**고 컴파일러에 알리는 표시다. 붙이면 컴파일러가 그 안에서 위험한 접근을 하는지 같이 검사해준다.
 
 왜 하필 실행되는 순간 크래시가 나는지 찾아보니, WCSession 문서에 `replyHandler`/`errorHandler`는 원래 백그라운드 스레드에서 실행된다고 나와 있었다. 근데 우리 코드 쪽은 Swift 동시성 체크가 걸려 있어서, 클로저가 실제로 실행되는 스레드가 코드가 기대하는 것과 다르면 그 자리에서 바로 크래시로 처리해버린다. 애플 개발자 포럼에도 똑같은 원인으로 크래시가 난 사례가 있었다. 거기서 나온 해결책은 클로저에 `@Sendable`을 붙여서 "이 클로저는 어느 스레드에서 실행돼도 안전하다"고 컴파일러에 알려주는 방식이었다.
 
@@ -336,3 +365,9 @@ session.sendMessage(message, replyHandler: nil, errorHandler: nil)
   scrolling="no"
   loading="lazy"
 ></iframe>
+
+---
+
+## 참고자료
+
+- [Preserving your app's model data across launches (Apple)](https://developer.apple.com/documentation/swiftdata/preserving-your-apps-model-data-across-launches){:target="_blank"}

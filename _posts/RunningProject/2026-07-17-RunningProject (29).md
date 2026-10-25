@@ -2,6 +2,7 @@
 title: RunWay 1.1 (1) - 네비게이션 헤더 커스텀 통일
 writer: Harold
 date: 2026-07-17 11:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [SwiftUI, Navigation]
 
@@ -66,7 +67,7 @@ struct NavigationHeader: View {
 
 그중 [`\.dismiss`](https://developer.apple.com/documentation/swiftui/environmentvalues/dismiss){:target="_blank"}는 **이 화면을 닫는 동작**이다. 돌려주는 값은 [`DismissAction`](https://developer.apple.com/documentation/swiftui/dismissaction){:target="_blank"} 타입이고, `dismiss()`처럼 함수를 부르듯 쓴다. 지금이 네비게이션으로 밀고 들어온 화면이면 뒤로 가고, 모달로 올라온 화면이면 내려간다. 어느 쪽인지 내가 따로 따질 필요가 없다는 게 이걸 쓰는 이유다.
 
-나머지는 SwiftUI 기본 요소다. `HStack`은 가로로 늘어놓고, `Spacer`는 남은 공간을 차지해 옆 요소를 밀어내고, `Image(systemName:)`은 애플이 기본으로 주는 SF Symbols 아이콘을 그린다. [`kerning(_:)`](https://developer.apple.com/documentation/swiftui/view/kerning%28_%3A%29){:target="_blank"}는 글자 사이를 벌리는 값이라 `1`을 주면 1pt씩 떨어진다.
+나머지는 SwiftUI 기본 요소다. `HStack`은 가로로 늘어놓고, `Spacer`는 남은 공간을 차지해 옆 요소를 밀어내고, `Image(systemName:)`은 애플이 기본으로 주는 SF Symbols 아이콘을 그린다. [`kerning(_:)`](https://developer.apple.com/documentation/swiftui/view/kerning%28%5F%3A%29){:target="_blank"}는 글자 사이를 벌리는 값이라 `1`을 주면 1pt씩 떨어진다.
 
 이걸 화면마다 매번 손으로 끼워 넣어야 하나 싶었는데, [이전글](https://haroldfromk.github.io/posts/MapKit-(1)/)에서 반복되는 모디파이어를 CustomModifier로 뽑아냈던 게 떠올랐다. 
 
@@ -164,7 +165,7 @@ private struct CustomNavHeaderModifier<T: View>: ViewModifier {
 
 여기서는 받아온 `content` 위에 헤더를 올린 `VStack` 을 돌려준다. 원래 화면을 고치는 게 아니라 **감싸는 것**이라, 화면 쪽 코드는 한 줄도 바뀌지 않는다.
 
-[`navigationBarHidden(_:)`](https://developer.apple.com/documentation/swiftui/view/navigationbarhidden%28_%3A%29){:target="_blank"}는 시스템이 그려주는 네비게이션 바를 숨긴다. 이걸 안 숨기면 커스텀 헤더 위에 시스템 바가 하나 더 남아서 두 줄짜리 헤더가 된다.
+[`navigationBarHidden(_:)`](https://developer.apple.com/documentation/swiftui/view/navigationbarhidden%28%5F%3A%29){:target="_blank"}는 시스템이 그려주는 네비게이션 바를 숨긴다. 이걸 안 숨기면 커스텀 헤더 위에 시스템 바가 하나 더 남아서 두 줄짜리 헤더가 된다.
 
 마지막으로 이 모디파이어를 `.customNavHeader(...)`처럼 쓸 수 있게 `View` extension으로 감쌌다.
 
@@ -182,7 +183,7 @@ extension View {
 
 #### modifier로 점 하나짜리 문법 만들기
 
-[`modifier(_:)`](https://developer.apple.com/documentation/swiftui/view/modifier%28_%3A%29){:target="_blank"}는 앞에서 만든 `ViewModifier`를 뷰에 실제로 적용하는 메서드다. 이걸 `View` extension 안에 넣어두면 `.padding()`이나 `.background()`처럼 점을 찍어 부르는 모양이 된다.
+[`modifier(_:)`](https://developer.apple.com/documentation/swiftui/view/modifier%28%5F%3A%29){:target="_blank"}는 앞에서 만든 `ViewModifier`를 뷰에 실제로 적용하는 메서드다. 이걸 `View` extension 안에 넣어두면 `.padding()`이나 `.background()`처럼 점을 찍어 부르는 모양이 된다.
 
 [`EmptyView`](https://developer.apple.com/documentation/swiftui/emptyview){:target="_blank"}는 **아무것도 그리지 않는 뷰**다. 자리도 차지하지 않는다. `trailing`의 기본값으로 줘서, 우측 버튼이 필요 없는 화면은 `.customNavHeader("타이틀")`만 붙이면 되고, 필요한 화면만 트레일링 클로저를 채워주면 된다.
 
@@ -230,10 +231,10 @@ Xcode 전체 검색 결과다. `navigationTitle`이 네 화면에서만 쓰이�
 
 | API | 하는 일 |
 |---|---|
-| [`navigationTitle(_:)`](https://developer.apple.com/documentation/swiftui/view/navigationtitle%28_%3A%29){:target="_blank"} | 네비게이션 바에 띄울 제목 문자열 |
-| [`navigationBarTitleDisplayMode(_:)`](https://developer.apple.com/documentation/swiftui/view/navigationbartitledisplaymode%28_%3A%29){:target="_blank"} | 제목을 크게 깔지(`.large`) 한 줄로 작게 둘지(`.inline`) |
-| [`toolbarBackground(_:for:)`](https://developer.apple.com/documentation/swiftui/view/toolbarbackground%28_%3Afor%3A%29){:target="_blank"} | 네비게이션 바 배경색과 보임 여부. `for:`로 어느 바인지 고른다 |
-| [`toolbarColorScheme(_:for:)`](https://developer.apple.com/documentation/swiftui/view/toolbarcolorscheme%28_%3Afor%3A%29){:target="_blank"} | 그 바 안의 글자와 아이콘을 밝게 쓸지 어둡게 쓸지 |
+| [`navigationTitle(_:)`](https://developer.apple.com/documentation/swiftui/view/navigationtitle%28%5F%3A%29){:target="_blank"} | 네비게이션 바에 띄울 제목 문자열 |
+| [`navigationBarTitleDisplayMode(_:)`](https://developer.apple.com/documentation/swiftui/view/navigationbartitledisplaymode%28%5F%3A%29){:target="_blank"} | 제목을 크게 깔지(`.large`) 한 줄로 작게 둘지(`.inline`) |
+| [`toolbarBackground(_:for:)`](https://developer.apple.com/documentation/swiftui/view/toolbarbackground%28%5F%3Afor%3A%29){:target="_blank"} | 네비게이션 바 배경색과 보임 여부. `for:`로 어느 바인지 고른다 |
+| [`toolbarColorScheme(_:for:)`](https://developer.apple.com/documentation/swiftui/view/toolbarcolorscheme%28%5F%3Afor%3A%29){:target="_blank"} | 그 바 안의 글자와 아이콘을 밝게 쓸지 어둡게 쓸지 |
 
 배경을 칠하는 일을 `toolbarBackground`가 맡고 있었다는 점은 기억해둘 만하다. 조금 뒤에 이것 때문에 문제가 하나 생긴다.
 
@@ -276,7 +277,7 @@ func body(content: Content) -> some View {
 
 세이프에어리어는 상태바나 홈 인디케이터처럼 **시스템이 이미 쓰고 있는 가장자리를 피해 남겨둔 영역**이다. 평소에는 이 안쪽에만 그려지므로 글자가 시계에 가려지는 일이 없다.
 
-[`ignoresSafeArea(_:edges:)`](https://developer.apple.com/documentation/swiftui/view/ignoressafearea%28_%3Aedges%3A%29){:target="_blank"}는 그 경계를 무시하고 화면 끝까지 뻗으라는 뜻이다. 인자를 비우면 네 방향 모두, `edges:`를 주면 특정 방향만 넘어간다.
+[`ignoresSafeArea(_:edges:)`](https://developer.apple.com/documentation/swiftui/view/ignoressafearea%28%5F%3Aedges%3A%29){:target="_blank"}는 그 경계를 무시하고 화면 끝까지 뻗으라는 뜻이다. 인자를 비우면 네 방향 모두, `edges:`를 주면 특정 방향만 넘어간다.
 
 주의할 점은 **이걸 어디에 붙이느냐**다. 여기서는 `Color`에 붙였다. 색만 화면 끝까지 퍼지고 헤더와 콘텐츠는 원래 자리에 남는다. 바깥 `VStack`에 붙였다면 타이틀까지 상태바 밑으로 올라가 시계와 겹쳤을 것이다.
 

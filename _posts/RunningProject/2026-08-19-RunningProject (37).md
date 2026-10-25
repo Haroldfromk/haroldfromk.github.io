@@ -2,6 +2,7 @@
 title: RunWay 1.3 (1) 워치 UX 다듬기 & 7일 리마인더 알림
 writer: Harold
 date: 2026-08-19 06:46:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [watchOS, SwiftUI, UserNotifications]
 
@@ -36,6 +37,21 @@ Watch에서 CUSTOM 거리를 Digital Crown으로 조절하다가 이상한 걸 �
     distance = newVal
 }
 ```
+
+#### digitalCrownRotation으로 크라운 값 받기
+
+[`digitalCrownRotation`](https://developer.apple.com/documentation/swiftui/view/digitalcrownrotation%28%5F%3Afrom%3Athrough%3Aby%3Asensitivity%3Aiscontinuous%3Aishapticfeedbackenabled%3A%29){:target="_blank"}은 워치의 용두를 돌릴 때 값이 따라 움직이게 묶어준다. 인자가 많은데 하나씩 보면 단순하다.
+
+| 인자 | 하는 일 |
+|---|---|
+| 첫 인자 | 값을 담을 자리. `$` 를 붙인 바인딩이다 |
+| `from`, `through` | 값이 오갈 수 있는 처음과 끝 |
+| `by` | 한 칸에 얼마씩 움직일지 |
+| `sensitivity` | 같은 거리를 돌렸을 때 몇 칸이 움직일지 |
+| `isContinuous` | 끝에서 처음으로 이어 돌지 여부 |
+| `isHapticFeedbackEnabled` | 한 칸 넘어갈 때마다 손목을 톡 칠지 |
+
+여기서 중요한 건 **`from` 이 눈금의 기준점이 된다**는 점이다. `by` 는 거기서부터 더해지므로, 시작값이 격자에 안 맞으면 그 뒤가 전부 어긋난다.
 
 0.1에서 0.5씩 더하면 0.1, 0.6, 1.1, 1.6... 순서가 된다. 100m라는 시작점 자체가 0.5의 배수가 아니다 보니, 그 뒤로 나오는 값도 전부 시작점만큼 밀려서 어중간해진 것. 코드에 `// 수정해야함`이라는 TODO까지 이미 남겨져 있었다.
 
@@ -83,6 +99,14 @@ Crown은 이 배열의 인덱스만 오가고, 실제 거리는 인덱스로 배
     distance = distanceSteps[idx]
 }
 ```
+
+#### onChange로 값이 바뀔 때만 따라가기
+
+[`onChange(of:_:)`](https://developer.apple.com/documentation/swiftui/view/onchange%28of%3Ainitial%3A%5F%3A%29){:target="_blank"}는 지켜보던 값이 **바뀐 순간에만** 블록을 실행한다. 화면이 다시 그려질 때마다 도는 게 아니라, 이전 값과 달라졌을 때만 한 번 돈다.
+
+클로저가 인자를 두 개 받는데 앞이 바뀌기 전 값, 뒤가 바뀐 뒤 값이다. 여기서는 뒤의 것만 쓰므로 앞은 `_` 로 버렸다.
+
+여기에 함정이 하나 있다. **크라운이 움직여야 이 블록이 돈다.** 프리셋 버튼이 거리만 바꿔놓고 크라운 값을 그대로 두면, 다음에 크라운을 한 칸 돌리는 순간 이 블록이 옛날 크라운 값을 기준으로 거리를 덮어쓴다. 아래에서 프리셋 버튼도 같이 고치는 이유가 이것이다.
 
 프리셋 버튼(3K/5K/10K/HALF/FULL)도 거리 대신 인덱스를 찾아서 설정하도록 같이 고쳤다.
 
@@ -156,6 +180,14 @@ var hapticPattern: (type: WKHapticType, repeatCount: Int, interval: TimeInterval
 }
 ```
 
+#### WKHapticType으로 손목에 다르게 울리기
+
+[`WKInterfaceDevice`](https://developer.apple.com/documentation/watchkit/wkinterfacedevice){:target="_blank"}는 워치 기기 자체를 가리킨다. `current()` 로 가져와서 `play(_:)` 를 부르면 손목이 울린다.
+
+[`WKHapticType`](https://developer.apple.com/documentation/watchkit/wkhaptictype){:target="_blank"}은 **진동 패턴의 종류**다. 세기를 숫자로 정하는 게 아니라 `.success`, `.failure`, `.directionUp` 처럼 뜻이 붙은 이름 중에 고른다. 시스템이 기기마다 알맞은 느낌으로 재생해주므로, 같은 이름이면 어느 워치에서도 같은 뜻으로 전달된다.
+
+고르면서 보니 `.directionUp` 과 `.directionDown` 이 원래 방향을 알리려고 만들어진 것이라 이 경우에 딱 맞았다. 느리면 올리라고 위로, 빠르면 줄이라고 아래로 울린다.
+
 이 패턴을 재생하는 쪽은 `Task`로 감싸서, 화면이 사라지면(`onDisappear`) 바로 취소되게 했다.
 
 ```swift
@@ -175,6 +207,16 @@ private func playHapticPattern() {
     }
 }
 ```
+
+#### Task 취소로 울리던 햅틱을 끊기
+
+[`Task`](https://developer.apple.com/documentation/swift/task){:target="_blank"}는 따로 돌아가는 일거리 하나다. 만들면 바로 시작하고, 손잡이를 들고 있으면 나중에 `cancel()` 로 그만두라고 말할 수 있다.
+
+다만 **취소는 부탁이지 강제 중단이 아니다.** `cancel()` 을 불러도 돌던 코드가 그 자리에서 멈추지 않는다. 그래서 반복문 안에서 [`Task.isCancelled`](https://developer.apple.com/documentation/swift/task/iscancelled-swift.type.property){:target="_blank"}를 직접 확인하고 빠져나와야 한다. 이 확인을 안 넣으면 화면이 사라진 뒤에도 남은 횟수만큼 계속 울린다.
+
+[`Task.sleep(for:)`](https://developer.apple.com/documentation/swift/task/sleep%28for%3Atolerance%3Aclock%3A%29){:target="_blank"}는 정해진 시간만큼 기다린다. 스레드를 붙잡고 멈춰 있는 게 아니라 그 시간 동안 자리를 내주므로, 기다리는 사이 다른 일이 돈다. 취소되면 기다리다 말고 오류를 던지는데, 여기서는 어차피 다음 바퀴에서 걸러지므로 `try?` 로 흘렸다.
+
+`hapticTask?.cancel()` 을 맨 앞에 둔 건 **경고가 연달아 뜰 때 앞 패턴이 겹쳐 울리는 걸 막기 위해서**다.
 
 페이스가 목표보다 느리면(ADD THRUST) 위로 두 번, 빠르면(REDUCE THRUST) 아래로 세 번 빠르게, MINIMUMS는 부드럽게 한 번만 울린다. 손목을 안 보고도 세 가지를 구분할 수 있게 됐다.
 
@@ -202,7 +244,7 @@ private func playHapticPattern() {
 
 ## 7일 무활동 리마인더 알림
 
-일주일 정도 러닝을 안 하면 다시 뛰라고 알려주는 로컬 알림을 추가했다. 원격 푸시가 아니라 [`UserNotifications`](https://developer.apple.com/documentation/usernotifications) 프레임워크의 `UNUserNotificationCenter`만 쓰는 순수 로컬 알림이라, APNs나 Info.plist 등록 없이 기기 안에서만 동작한다.
+일주일 정도 러닝을 안 하면 다시 뛰라고 알려주는 로컬 알림을 추가했다. 원격 푸시가 아니라 [`UserNotifications`](https://developer.apple.com/documentation/usernotifications){:target="_blank"} 프레임워크의 `UNUserNotificationCenter`만 쓰는 순수 로컬 알림이라, APNs나 Info.plist 등록 없이 기기 안에서만 동작한다.
 
 마지막 러닝 날짜를 SwiftData에서 조회해서, 그 날짜 + 7일 시점으로 알림을 예약한다. 러닝을 저장할 때마다 기존 예약을 지우고 새로 잡아서 카운트다운이 매번 리셋된다.
 
@@ -240,6 +282,14 @@ enum RunReminderService {
 }
 ```
 
+#### FetchDescriptor로 마지막 러닝 하나만 꺼내기
+
+[`FetchDescriptor`](https://developer.apple.com/documentation/swiftdata/fetchdescriptor){:target="_blank"}는 SwiftData 에 "이런 조건으로 꺼내 달라"고 적어 넘기는 주문서다. 정렬과 조건, 개수 제한을 담는다.
+
+[`SortDescriptor`](https://developer.apple.com/documentation/foundation/sortdescriptor){:target="_blank"}로 정렬 기준을 준다. `\.date` 는 어느 속성으로 줄 세울지 가리키는 것이고, `order: .reverse` 라 최근 것이 앞에 온다.
+
+`fetchLimit = 1` 이 중요하다. **저장소에서 한 건만 읽어 온다.** 전부 꺼낸 뒤 첫 개를 고르는 것과 결과는 같지만, 기록이 수백 건 쌓였을 때 읽는 양이 다르다.
+
 `reminderIdentifier`는 고정된 문자열 하나만 쓴다. 재예약할 때마다 같은 identifier로 `removePendingNotificationRequests`를 먼저 호출해서 기존 예약을 지우고 나서 새로 등록하는 방식이라, 러닝을 여러 번 저장해도 리마인더가 중복으로 쌓이지 않는다.
 
 ![러닝을 저장할 때마다 기존 예약을 지우고 마지막 러닝 기준으로 다시 잡는 흐름](/assets/img/runway/reminder-reschedule.svg){: width="720" height="250"}
@@ -250,7 +300,7 @@ enum RunReminderService {
 
 ### 트리거와 가드를 고른 기준
 
-트리거는 [`UNCalendarNotificationTrigger`](https://developer.apple.com/documentation/usernotifications/uncalendarnotificationtrigger) 대신 [`UNTimeIntervalNotificationTrigger`](https://developer.apple.com/documentation/usernotifications/untimeintervalnotificationtrigger)를 썼다. 매주 같은 요일/시각에 반복되는 알림이 아니라 "마지막 러닝으로부터 정확히 7일 뒤"라는 상대적인 시점만 필요해서, 절대 시각(`lastRunDate + 7일`)을 `timeIntervalSinceNow`로 변환해 넘기는 쪽이 더 맞는 방식이었다.
+트리거는 [`UNCalendarNotificationTrigger`](https://developer.apple.com/documentation/usernotifications/uncalendarnotificationtrigger){:target="_blank"} 대신 [`UNTimeIntervalNotificationTrigger`](https://developer.apple.com/documentation/usernotifications/untimeintervalnotificationtrigger){:target="_blank"}를 썼다. 매주 같은 요일/시각에 반복되는 알림이 아니라 "마지막 러닝으로부터 정확히 7일 뒤"라는 상대적인 시점만 필요해서, 절대 시각(`lastRunDate + 7일`)을 `timeIntervalSinceNow`로 변환해 넘기는 쪽이 더 맞는 방식이었다.
 
 `fireDate > .now` 가드도 그냥 넣은 방어 코드가 아니다. 앱을 오래 안 켜서 예약 시점이 이미 지나버린 경우, 앱을 켜자마자 알림이 즉시 뜨는 걸 막는 역할을 한다. 이 경우엔 그냥 아무 알림도 새로 잡지 않고 넘어가는데, 다음 러닝을 저장하는 시점에 `reschedule`이 다시 호출되면서 정상적인 7일 뒤 시점으로 재계산된다.
 
@@ -272,7 +322,7 @@ enum RunReminderService {
 
 ### 권한을 언제 물어볼 것인가
 
-권한 요청은 언제 할지도 고민했다. 온보딩이 이미 HealthKit, 모션 권한까지 요청하는 게 많은 편이라, 페이지마다 따로 묻는 대신 기존에 있던 마지막 페이지(개인정보 동의) 완료 시점의 배치 요청에 [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:)) 호출을 그대로 얹었다. 이미 허용/거부가 결정된 상태에서 다시 호출해도 시스템이 조용히 무시하기 때문에, 온보딩 도중 놓쳤더라도 다음에 `HomeView.onAppear`에서 자연스럽게 다시 시도된다.
+권한 요청은 언제 할지도 고민했다. 온보딩이 이미 HealthKit, 모션 권한까지 요청하는 게 많은 편이라, 페이지마다 따로 묻는 대신 기존에 있던 마지막 페이지(개인정보 동의) 완료 시점의 배치 요청에 [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization%28options%3Acompletionhandler%3A%29){:target="_blank"} 호출을 그대로 얹었다. 이미 허용/거부가 결정된 상태에서 다시 호출해도 시스템이 조용히 무시하기 때문에, 온보딩 도중 놓쳤더라도 다음에 `HomeView.onAppear`에서 자연스럽게 다시 시도된다.
 
 ```swift
 // OnboardingView.complete()
@@ -292,3 +342,9 @@ private func complete() {
 ```
 
 온보딩 페이지도 하나 늘었다(7 -> 8페이지). CLOUD BACKUP 페이지와 같은 구조로, 관제탑 벨 아이콘과 함께 이 기능을 소개하는 TOWER REMINDERS 페이지를 CLOUD BACKUP과 개인정보 동의 페이지 사이에 끼워 넣었다.
+
+---
+
+## 참고자료
+
+- [Scheduling a notification locally from your app (Apple)](https://developer.apple.com/documentation/usernotifications/scheduling-a-notification-locally-from-your-app){:target="_blank"}

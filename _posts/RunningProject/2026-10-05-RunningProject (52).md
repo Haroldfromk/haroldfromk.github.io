@@ -192,9 +192,17 @@ if apart <= loopThreshold {
 }
 ```
 
+#### distance로 두 좌표 사이 거리 재기
+
+[`distance(from:)`](https://developer.apple.com/documentation/corelocation/cllocation/distance%28from%3A%29){:target="_blank"}는 두 위치 사이의 거리를 **미터로** 돌려준다. 지구가 둥근 것을 감안해 계산하므로, 위도와 경도 차이를 평면처럼 빼는 것보다 정확하다.
+
+여기서 `CLLocation` 을 새로 두 개 만들어 쓴 건 저장된 좌표가 `CLLocationCoordinate2D` 라서다. 그쪽은 위도와 경도만 들고 있는 값이라 거리를 재는 기능이 없다.
+
 기준을 30m 로 잡았다. 핀 하나가 지도에서 덮는 넓이가 그 정도라고 봤다.
 
 **그리고 다음 날 걷어냈다.** 기준이 틀렸다는 걸 다른 거리의 기록을 열어보고 알았다.
+
+![같은 48m 가 200m 러닝 지도에서는 멀찍이 떨어져 보이고 10km 러닝 지도에서는 붙어 보인다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-05-RunningProject-52/marker-scale.png)
 
 **겹치는지는 거리가 아니라 지도 축척이 정한다.** 10km 러닝은 지도가 넓게 잡혀서 48m 가 화면에서 몇 pt 로 붙어 보이고, 200m 러닝은 같은 48m 가 멀찍이 떨어져 보인다. 미터로 선을 그으면 **둘 중 하나는 반드시 틀린다.** 짧은 러닝에서는 멀쩡히 떨어진 두 핀을 합쳐버리고, 긴 러닝에서는 붙어 있는 두 핀을 그대로 둔다.
 
@@ -209,6 +217,14 @@ case "END":
     view.glyphText = "F"
 ```
 
+#### 마커 핀의 색과 글리프 바꾸기
+
+[`MKMarkerAnnotationView`](https://developer.apple.com/documentation/mapkit/mkmarkerannotationview){:target="_blank"}는 지도에 꽂히는 물방울 모양 핀이다. 직접 그리지 않고 속성 몇 개만 정해주면 된다.
+
+[`markerTintColor`](https://developer.apple.com/documentation/mapkit/mkmarkerannotationview/markertintcolor){:target="_blank"}가 핀 몸통 색이고, [`glyphText`](https://developer.apple.com/documentation/mapkit/mkmarkerannotationview/glyphtext){:target="_blank"}는 그 안에 들어가는 글자다. 한두 글자만 들어가고 길면 잘린다. 아이콘을 쓰고 싶으면 `glyphImage` 쪽이다.
+
+`UIColor(Color.rwGreen)` 처럼 감싸는 건 MapKit 이 UIKit 쪽 타입을 받기 때문이다. SwiftUI 의 `Color` 를 그대로는 못 넘긴다.
+
 겹쳐도 색이 다르면 핀이 두 개라는 게 보인다. **축척과 무관하게 항상 맞는다.** 화면에서 겹치는지를 묻는데 모델 좌표계의 거리로 답하려 한 것이 애초에 어긋난 질문이었다.
 
 ---
@@ -222,6 +238,8 @@ case "END":
 10.05km, 44분 49초. 워치에서 종료했고 아이폰도 따라서 홈으로 돌아갔다. 저장도 됐다.
 
 표본이 500개를 넘고 스플릿이 10개다. **이 크기를 한 번 통과시킨 건 처음이다.**
+
+---
 
 ### 따로 떨어져 있던 화면 전환
 
@@ -239,6 +257,8 @@ case "END":
 가운데 두 값은 실기기와 거의 같다. 배달은 실기기에서 0.10~1.24초였고 저장은 15~101ms였다. 시뮬레이터라고 특별히 빠르거나 느리지 않다.
 
 그런데도 **5초는 안 나왔다.** 받은 뒤부터 화면이 빠지기까지 0.63초다.
+
+---
 
 ### 여전히 못 잰 워치 구간
 

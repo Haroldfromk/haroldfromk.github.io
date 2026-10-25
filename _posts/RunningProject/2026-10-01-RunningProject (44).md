@@ -56,7 +56,7 @@ class SwiftDataCoordinate {
 <desc id="c44d">위는 3초마다 수집한 좌표가 놓인 실제 경로다. 곡선 구간의 점은 남고 직선 구간 가운데 열두 개는 버려져서, 남은 점 사이가 3초와 39초로 벌어진다. 아래는 저장된 배열인데 남은 여섯 개가 균등하게 늘어서 있어 순서만으로는 그 차이를 알 수 없다.</desc>
 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
 
-<text x="0" y="22" font-size="12" font-weight="600" fill="currentColor" stroke="none">실제 경로 · 3초마다 한 점</text>
+<text x="0" y="22" font-size="12" font-weight="600" fill="currentColor" stroke="none">실제 경로, 3초마다 한 점</text>
 
 <path d="M110,112 L132,86 L162,68 L200,60 L540,60 L566,36" stroke-width="1.6" opacity="0.5"/>
 
@@ -94,7 +94,7 @@ class SwiftDataCoordinate {
 
 <path d="M0,198 L680,198" stroke-width="1" opacity="0.18"/>
 
-<text x="0" y="224" font-size="12" font-weight="600" fill="currentColor" stroke="none">저장된 배열 · order 만 있을 때</text>
+<text x="0" y="224" font-size="12" font-weight="600" fill="currentColor" stroke="none">저장된 배열, order 만 있을 때</text>
 
 <path d="M110,250 L540,250" stroke-width="1.4" opacity="0.4"/>
 <g fill="currentColor" stroke="none">
@@ -114,7 +114,7 @@ class SwiftDataCoordinate {
 
 ### 시각 하나로 되는 이유
 
-페이스를 따로 저장할까 했는데 그럴 필요가 없었다. 좌표 두 개 사이의 거리는 위도·경도로 계산되고, 시간 차이만 알면 나눠서 속도가 나온다.
+페이스를 따로 저장할까 했는데 그럴 필요가 없었다. 좌표 두 개 사이의 거리는 위도와 경도로 계산되고, 시간 차이만 알면 나눠서 속도가 나온다.
 
 ```swift
 /// 러닝 시작부터 이 좌표를 수집한 시점까지의 경과 시간 (초).
@@ -135,6 +135,12 @@ coordinateArray.append((
 ))
 ```
 
+#### timestamp로 러닝 시작부터의 초 재기
+
+[`timestamp`](https://developer.apple.com/documentation/corelocation/cllocation/timestamp){:target="_blank"}는 그 위치가 **측정된 시각**이다. 우리가 받아 처리하는 시각이 아니라 기기가 좌표를 확정한 시각이라, 처리가 밀려도 값이 안 흔들린다.
+
+[`timeIntervalSince(_:)`](https://developer.apple.com/documentation/foundation/date/timeintervalsince%28%5F%3A%29){:target="_blank"}는 두 시각의 차이를 초 단위 실수로 돌려준다. 기준이 뒤면 음수가 나오는데, 여기서 `max(0, elapsed)` 를 씌운 이유다. 러닝 시작 직전에 잡힌 위치가 섞여 들어오면 음수가 될 수 있다.
+
 위치가 들어올 때마다 `location.timestamp`가 같이 오고, 러닝 시작 시각도 같은 객체 안에 이미 있었다. **새로 계산할 게 없었다.**
 
 ---
@@ -146,6 +152,8 @@ coordinateArray.append((
 ```swift
 static func simplify(_ coordinates: [(latitude: Double, longitude: Double)]) -> [(latitude: Double, longitude: Double)]
 ```
+
+![원래 좌표와 시각이 같은 번호로 짝을 이루는데, 솎아낸 뒤 좌표만 돌려받으면 남은 것이 몇 번째였는지를 알 수 없다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-01-RunningProject-44/simplify-index.png)
 
 **좌표만 넣고 좌표만 받는다.** 남은 좌표가 원래 몇 번째였는지 알 수가 없으니, 시각 배열과 짝을 맞출 방법이 없다.
 
@@ -274,6 +282,18 @@ Text(flight.date.formatted(date: .abbreviated, time: .omitted))
 // 후
 Text(flight.date.formatted(date: .abbreviated, time: .shortened))
 ```
+
+#### formatted로 날짜와 시각 중 무엇을 보일지 고르기
+
+[`formatted(date:time:)`](https://developer.apple.com/documentation/foundation/date/formatted%28date%3Atime%3A%29){:target="_blank"}는 `Date` 를 사람이 읽을 문자열로 바꾼다. **형식 문자열을 직접 쓰지 않고 "얼마나 자세히 보일지"만 고르는 방식**이라, 지역과 언어에 맞는 배열은 시스템이 정한다. 한국어 기기면 연월일 순으로, 영어 기기면 그 지역 관례대로 나온다.
+
+[`DateStyle`](https://developer.apple.com/documentation/foundation/date/formatstyle/datestyle){:target="_blank"}과 [`TimeStyle`](https://developer.apple.com/documentation/foundation/date/formatstyle/timestyle){:target="_blank"}이 그 선택지다. 둘 다 `.omitted` 를 주면 그 부분이 통째로 빠진다. 여기서 바꾼 건 시각 쪽 하나뿐이다.
+
+| 값 | 나오는 모양 |
+|---|---|
+| `.abbreviated` | 2026. 10. 5. 처럼 줄여 쓴 날짜 |
+| `.omitted` | 그 부분을 아예 안 보여준다 |
+| `.shortened` | 오후 9:41 처럼 짧은 시각 |
 
 한 단어 바꾸는 것으로 끝났다. `date`가 기록을 저장하는 시점, 즉 **러닝을 끝낸 시각**이라 값은 이미 있었다.
 

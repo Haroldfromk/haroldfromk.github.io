@@ -2,6 +2,7 @@
 title: RunWay 1.2 (3) 스플릿 음성 안내 구상해보기
 writer: Harold
 date: 2026-07-27 21:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [AVFoundation]
 
@@ -13,7 +14,7 @@ published: true
 > RunWay 1.1 부터는 Claude Code 와 함께 만든다. 코드와 글의 문장은 거기서 나오고, 방향을 정하고 실기기에서 확인해 틀린 걸 찾아오는 건 직접 한다.
 {: .prompt-info }
 
-[이전글](https://haroldfromk.github.io/posts/RunningProject-(33)/){:target="_blank"}에서 km 스플릿 기능을 다 붙였다. 로드맵상 다음 순서는 이 스플릿이 끊길 때마다 화면을 안 봐도 페이스/심박/케이던스를 음성으로 읽어주는 기능이다.
+[이전글](https://haroldfromk.github.io/posts/RunningProject-(33)/)에서 km 스플릿 기능을 다 붙였다. 로드맵상 다음 순서는 이 스플릿이 끊길 때마다 화면을 안 봐도 페이스/심박/케이던스를 음성으로 읽어주는 기능이다.
 
 이제 이 과정을 기록해본다
 
@@ -21,7 +22,7 @@ published: true
 
 ## 스플릿 재활용
 
-[이전글](https://haroldfromk.github.io/posts/RunningProject-(33)/){:target="_blank"}에 적었던 `recordSplitSample(at:)`을 다시 보면, `while` 루프 안에서 1km 경계를 넘을 때마다 그 구간의 평균 페이스/심박/케이던스를 이미 다 계산해두고 있다.
+[이전글](https://haroldfromk.github.io/posts/RunningProject-(33)/)에 적었던 `recordSplitSample(at:)`을 다시 보면, `while` 루프 안에서 1km 경계를 넘을 때마다 그 구간의 평균 페이스/심박/케이던스를 이미 다 계산해두고 있다.
 
 ```swift
 // RunningCenter
@@ -95,12 +96,18 @@ let synthesizer = AVSpeechSynthesizer()
 synthesizer.speak(utterance)
 ```
 
-`AVSpeechUtterance` 쪽에 조절할 수 있는 값이 몇 개 있다.
+#### AVSpeechUtterance로 읽을 문장 만들기
 
-- `voice`: 어떤 언어/목소리로 읽을지. 한국어는 `"ko-KR"`
-- `rate`: 읽는 속도. 0.0~2.0 범위고 기본값이 0.5
-- `pitchMultiplier`: 음높이. 0.5~2.0, 기본 1.0
-- `volume`: 음량. 0.0~1.0, 기본 1.0
+[`AVSpeechUtterance`](https://developer.apple.com/documentation/avfaudio/avspeechutterance){:target="_blank"}는 **읽을 문장 한 덩어리**다. 문장 하나에 목소리와 속도가 따로 붙으므로, 같은 합성기로 문장마다 다르게 읽힐 수 있다.
+
+[`AVSpeechSynthesisVoice`](https://developer.apple.com/documentation/avfaudio/avspeechsynthesisvoice){:target="_blank"}는 언어 코드로 목소리를 고른다. 기기에 그 언어 목소리가 없으면 `nil` 이 돌아오므로 옵셔널이다.
+
+| 속성 | 하는 일 | 범위와 기본값 |
+|---|---|---|
+| `voice` | 어떤 언어와 목소리로 읽을지 | 한국어는 `"ko-KR"` |
+| `rate` | 읽는 속도 | 0.0 부터 2.0, 기본 0.5 |
+| `pitchMultiplier` | 음높이 | 0.5 부터 2.0, 기본 1.0 |
+| `volume` | 음량 | 0.0 부터 1.0, 기본 1.0 |
 
 `AVSpeechSynthesizer` 쪽은 `speak(_:)`로 말을 시키고, `stopSpeaking(at:)`/`pauseSpeaking(at:)`로 멈추거나 잠깐 끊을 수 있다. 지금 말하고 있는지는 `isSpeaking` 값으로 확인 가능하고, 델리게이트를 붙이면 언제 시작했는지/끝났는지도 콜백으로 받을 수 있다.
 
@@ -148,6 +155,16 @@ func streamSplitAnnouncements() -> AsyncStream<Split> {
 }
 ```
 
+#### AsyncStream으로 완료 신호만 흘려보내기
+
+[`AsyncStream`](https://developer.apple.com/documentation/swift/asyncstream){:target="_blank"}은 값이 생길 때마다 하나씩 건네주는 통로다. 받는 쪽은 `for await` 로 돌면서 값이 올 때까지 기다린다. 배열처럼 쌓아두는 게 아니라 **지나가는 값을 그때그때 넘겨주는 것**이라, 구독을 시작한 뒤에 생긴 값만 받는다.
+
+[`Continuation`](https://developer.apple.com/documentation/swift/asyncstream/continuation){:target="_blank"}은 그 통로에 값을 밀어 넣는 손잡이다. 스트림을 만들 때 받아서 들고 있다가, 값이 생긴 자리에서 `yield(_:)` 로 보낸다. 여기서는 `Split` 이 완성되는 바로 그 줄이다.
+
+`onTermination` 은 받는 쪽이 사라졌을 때 불린다. 구독이 끝났는데 손잡이를 계속 들고 있으면 아무도 안 받는 곳으로 값을 밀어 넣게 되므로, 여기서 비워준다.
+
+![1km 경계를 넘으면 completedSplits 에 쌓는 저장용 경로와 continuation 으로 흘려보내는 알림용 경로가 갈라지고, allSplits 는 부를 때마다 자투리를 확정하지만 스트림 구독은 저장된 기록을 건드리지 않는다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-07-27-RunningProject-34/split-channel.png)
+
 `completedSplits.append(split)`은 저장용이라 계속 쌓이기만 하고, `splitAnnouncementContinuation?.yield(split)`은 그 순간 딱 한 번 흘려보내고 끝이다. 그래서 이 스트림은 몇 번을 구독해도 `finalizePendingSplit()`처럼 자투리 구간을 건드리는 부작용이 없다.
 
 음성 합성은 새 서비스 하나로 분리했다.
@@ -190,6 +207,14 @@ final class SpeechAnnouncerService {
 }
 ```
 
+#### AVAudioSession으로 음악을 잠깐 줄이기
+
+[`AVAudioSession`](https://developer.apple.com/documentation/avfaudio/avaudiosession){:target="_blank"}은 이 앱의 소리가 기기 전체에서 어떻게 다뤄질지를 정하는 자리다. 앱마다 하나씩 있고 `sharedInstance()` 로 가져온다.
+
+[`setCategory(_:options:)`](https://developer.apple.com/documentation/avfaudio/avaudiosession/setcategory%28%5F%3Aoptions%3A%29){:target="_blank"}로 성격을 정한다. [`.playback`](https://developer.apple.com/documentation/avfaudio/avaudiosession/category-swift.struct/playback){:target="_blank"}은 소리를 들려주는 게 앱의 목적이라는 뜻이라, 무음 스위치를 켜두거나 화면을 꺼도 계속 난다.
+
+[`.duckOthers`](https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions-swift.struct/duckothers){:target="_blank"}는 **내 소리가 나는 동안만 다른 앱 소리를 낮춘다.** 끄는 게 아니라 줄이는 것이고, 끝나면 알아서 원래 음량으로 돌아온다. 이게 없으면 음악이 아예 끊기거나 안내가 음악에 묻힌다.
+
 `RunViewModel`/`WatchViewModel` 양쪽 다 `streamPhaseData()`를 구독하는 자리 옆에 똑같은 패턴으로 하나 더 추가했다.
 
 ```swift
@@ -230,3 +255,10 @@ Task {
 4. iPhone `Info.plist`에 `audio` 백그라운드 모드를 추가해서 화면을 꺼도 안내가 계속 나오게 했다.
 
 다음 실기기 테스트에서는 이어폰 연결 상태별로 볼륨 밸런스가 괜찮은지, 그리고 짧은 구간(예: 오르막에서 페이스가 갑자기 느려진 구간)에서 문장이 너무 길게 느껴지지 않는지 확인해볼 예정이다.
+
+---
+
+## 참고자료
+
+- [Speech synthesis (AVFAudio, Apple)](https://developer.apple.com/documentation/avfaudio/speech-synthesis){:target="_blank"}
+- [UIBackgroundModes (Apple)](https://developer.apple.com/documentation/bundleresources/information-property-list/uibackgroundmodes){:target="_blank"}

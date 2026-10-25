@@ -271,6 +271,12 @@ func sendStopSignal() {
 
 받는 쪽이 이걸 거를 방법이 없었다. 들어있는 게 "끝내라" 한 마디뿐이라 어느 러닝 것인지 물어볼 수가 없다.
 
+#### didReceiveUserInfo로 큐에 쌓인 것 받기
+
+[`session(_:didReceiveUserInfo:)`](https://developer.apple.com/documentation/watchconnectivity/wcsessiondelegate/session%28%5F%3Adidreceiveuserinfo%3A%29){:target="_blank"}는 상대가 `transferUserInfo` 로 보낸 것을 받는 자리다. `sendMessage` 쪽 콜백과 달리 **앱이 꺼져 있다가 켜져도 불린다.** 시스템이 큐에 들고 있다가 전달하기 때문이다.
+
+그래서 받는 시점이 보낸 시점과 한참 떨어질 수 있다. 이 글에서 "어느 러닝인지 말하지 않는 종료 신호"가 문제가 되는 이유가 여기 있다. 신호가 늦게 도착하면 그사이 다른 러닝이 시작돼 있을 수 있다.
+
 ```swift
 func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
     if let type = userInfo["type"] as? String, type == "remoteStopped" {
@@ -282,6 +288,8 @@ func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = 
 ---
 
 ### 세션 id 대신 시각
+
+![워치에서 종료한 신호가 큐에 쌓였다가 늦게 도착해서 그때는 이미 다음 러닝이 뛰고 있다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-02-RunningProject-47/late-stop-signal.png)
 
 러닝 중 계기 값은 이미 세션 id를 같이 실어 보내고 받는 쪽이 그걸로 거른다. **"신호에 어느 러닝인지 적어 보낸다"는 규칙이 이미 있었는데 종료 신호만 안 지키고 있었다.**
 

@@ -2,6 +2,7 @@
 title: RunWay (28) 워치 단독 러닝 문제
 writer: Harold
 date: 2026-07-17 11:00:00 +0900
+last_modified_at: 2026-10-25 23:00:00 +0900
 categories: [RunWay]
 tags: [WatchConnectivity, watchOS]
 
@@ -47,7 +48,7 @@ func sendRunningData() {
 
 [`isReachable`](https://developer.apple.com/documentation/watchconnectivity/wcsession/isreachable){:target="_blank"}은 성격이 다르다. 이건 준비 상태가 아니라 **지금 이 순간 상대 기기에 닿는지**를 말한다. 아이폰이 멀리 있거나 꺼져 있으면 false 가 된다.
 
-[`transferUserInfo(_:)`](https://developer.apple.com/documentation/watchconnectivity/wcsession/transferuserinfo%28_%3A%29){:target="_blank"}는 딕셔너리 하나를 상대 기기로 보낸다. 핵심은 **상대가 지금 안 닿아도 된다**는 점이다. 시스템이 큐에 쌓아뒀다가 연결이 되는 순간 보낸 순서대로 전달한다. 돌려주는 값은 그 전송 하나를 가리키는 객체이고, 아직 안 나간 전송을 취소할 때 쓴다.
+[`transferUserInfo(_:)`](https://developer.apple.com/documentation/watchconnectivity/wcsession/transferuserinfo%28%5F%3A%29){:target="_blank"}는 딕셔너리 하나를 상대 기기로 보낸다. 핵심은 **상대가 지금 안 닿아도 된다**는 점이다. 시스템이 큐에 쌓아뒀다가 연결이 되는 순간 보낸 순서대로 전달한다. 돌려주는 값은 그 전송 하나를 가리키는 객체이고, 아직 안 나간 전송을 취소할 때 쓴다.
 
 여기서 어긋난 게 보인다. 안 닿아도 보내주는 API 앞에 **지금 닿는지 묻는 가드**가 서 있었다. 함수 위에 달린 주석은 큐에 쌓인다고 적혀 있는데, 정작 코드는 아이폰이 당장 연결 안 돼 있으면 `transferUserInfo` 를 호출조차 안 하고 그냥 리턴하는 구조였던 거다. 마트에 가느라 아이폰과 거리가 멀어진 시점이 정확히 이 조건에 걸렸다.
 

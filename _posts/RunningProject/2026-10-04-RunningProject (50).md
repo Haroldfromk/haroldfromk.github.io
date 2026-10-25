@@ -118,6 +118,16 @@ let seconds = Int((flight.missionTargetPace - Double(minutes)) * 60)
 
 전체 초를 먼저 반올림하고 나서 쪼개게 바꿨다. 초가 60으로 반올림되는 경우도 전체 초로 다루면 자연히 다음 분으로 넘어간다.
 
+#### Int 변환이 버리는 자리
+
+Swift 의 `Int(_:)` 는 소수를 **버린다.** 반올림이 아니다. `Int(39.9999)` 가 39 가 되는 이유다.
+
+크라운이 5초 단위로만 움직여도 그 값은 분 단위 실수를 거쳐 오므로 `39.9999` 같은 수가 나온다. 사람 눈에는 40 인데 코드에서는 39 가 된다.
+
+![39.9999 가 Int 만 쓰면 왼쪽 눈금인 39 로 떨어지고, rounded 를 먼저 태우면 40.0 으로 옮겨진 뒤 40 이 된다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-04-RunningProject-50/int-truncation.png)
+
+고친 쪽은 `rounded()` 를 먼저 태운다. **버리기 전에 가장 가까운 정수로 옮겨놓는 것**이라, 떨어지는 자리가 바뀐다.
+
 ```swift
 static func minuteSecond(_ pace: Double) -> (minutes: Int, seconds: Int) {
     let total = Int((pace * 60).rounded())

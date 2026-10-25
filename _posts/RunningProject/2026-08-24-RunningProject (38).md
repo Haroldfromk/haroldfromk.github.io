@@ -35,6 +35,18 @@ mapView.isScrollEnabled = true
 mapView.isZoomEnabled = true
 ```
 
+#### UIViewRepresentable이 updateUIView를 부르는 때
+
+[`MKMapView`](https://developer.apple.com/documentation/mapkit/mkmapview){:target="_blank"}는 UIKit 쪽 지도라 SwiftUI 에서 쓰려면 [`UIViewRepresentable`](https://developer.apple.com/documentation/swiftui/uiviewrepresentable){:target="_blank"}로 감싸야 한다. 만들 때 한 번 부르는 `makeUIView` 와, 바뀔 때마다 부르는 [`updateUIView(_:context:)`](https://developer.apple.com/documentation/swiftui/uiviewrepresentable/updateuiview%28%5F%3Acontext%3A%29){:target="_blank"}가 짝이다.
+
+문제는 **"바뀔 때마다"의 범위**다. 이 뷰가 쓰는 값이 아니어도 같은 화면의 상태가 흔들리면 불린다. 스플릿 토글을 누른 것도 여기까지 온다.
+
+[`setRegion(_:animated:)`](https://developer.apple.com/documentation/mapkit/mkmapview/setregion%28%5F%3Aanimated%3A%29){:target="_blank"}는 지도가 보여줄 범위를 정한다. 사용자가 손으로 확대해둔 것도 이걸 부르면 그대로 덮인다. **그래서 "언제 부를지"를 내가 정해야 한다.**
+
+`context.coordinator` 는 그 판단에 쓸 값을 담아두는 자리다. 뷰 구조체는 자주 새로 만들어지지만 coordinator 는 살아남아서, 직전에 무엇을 했는지 기억할 수 있다.
+
+[`isZoomEnabled`](https://developer.apple.com/documentation/mapkit/mkmapview/iszoomenabled){:target="_blank"}와 [`isScrollEnabled`](https://developer.apple.com/documentation/mapkit/mkmapview/isscrollenabled){:target="_blank"}는 손으로 확대하고 밀 수 있는지다. 둘 다 켜도 위의 리셋이 남아 있으면 **켠 의미가 없다.**
+
 region 리셋은 좌표 개수가 실제로 바뀔 때(러닝 데이터가 처음 로드될 때) 딱 한 번만 하도록 `Coordinator`에 마지막 좌표 개수를 저장해뒀다.
 
 ```swift
@@ -72,6 +84,10 @@ func updateUIView(_ uiView: MKMapView, context: Context) {
 |---|---|---|
 | 신호등에서 멈춰 섬 | 데이터 없음 | 8초 뒤 일시정지 |
 | 터널을 지나 신호가 끊김 | 데이터 없음 | 8초 뒤 일시정지 |
+
+[`distanceFilter`](https://developer.apple.com/documentation/corelocation/cllocationmanager/distancefilter){:target="_blank"}는 **이만큼 움직여야 새 위치를 준다**는 기준이다. 5m 로 두면 배터리를 아끼는 대신, 제자리에 서 있는 동안은 업데이트가 아예 안 온다. 신호가 끊긴 것과 모양이 같아지는 이유가 이것이다.
+
+![신호등에서 멈춰 선 것과 터널로 신호가 끊긴 것이 둘 다 위치 업데이트 없음으로 같아 보인다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-08-24-RunningProject-38/distance-filter.png)
 
 구분할 재료가 없으니 숫자를 어떻게 조절해도 한쪽은 틀린다. 짧게 잡으면 터널에서 오탐이 나고, 길게 잡으면 진짜 멈췄을 때 느리다. 5초일 때 시작 직후 오탐이 났던 것도, 첫 GPS 신호를 아직 못 받은 상태에서 이미 타이머가 돌고 있었기 때문이었다.
 
@@ -221,7 +237,7 @@ if isRunning && Date().timeIntervalSince(lastReceivedTime) >= 15 {
 
 ---
 
-### 1. GPWS 경고 햅틱이 약하게 느껴짐
+### 약하게 느껴지던 GPWS 햅틱
 
 `WatchGPWSView.swift`를 보니 햅틱이 경고 화면이 뜨는 순간 딱 한 번만 재생되고 끝나는 구조였다. 러닝 중에는 손목에 집중하기 어려우니 한 번으로는 놓치기 쉽다.
 
@@ -269,7 +285,7 @@ private func playHapticPattern() {
 
 ---
 
-### 2. 러닝 시작하자마자 일시정지가 뜸
+### 시작하자마자 뜨던 일시정지
 
 정지 판단 로직 자체는 잘 만들었는데, 생각 못 한 사각지대가 있었다. ROTATE 카운트다운이 끝나고 실제로 뛰기 시작하기까지는 반응 시간이 걸리고, GPS 속도값도 막 켜진 직후에는 안정화되는 데 시간이 좀 걸린다. 이 몇 초 사이엔 raw 속도가 계속 낮게 나오는 게 당연한데, 정지 판단 로직 입장에서는 이것도 "2초 이상 저속 지속"으로 보여서 러닝 시작과 동시에 일시정지가 떠버렸다.
 
@@ -298,7 +314,7 @@ if compensatedSpeed < stationarySpeedThreshold {
 
 ---
 
-### 3. 미러링 중 일시정지가 뜨자마자 바로 풀림 + 정지 근처에서 페이스가 튐
+### 미러링에서 바로 풀리던 일시정지와 튀던 페이스
 
 증상은 하나처럼 보였는데 원인은 두 개였다.
 
@@ -353,7 +369,7 @@ if isStationary {
 
 ---
 
-### 4. 걸을 때 페이스 뒷자리 초가 계속 바뀜
+### 걸을 때 계속 바뀌던 페이스 뒷자리
 
 이건 정지 근처 문제가 아니라, 정상적으로 걷는 중에도 페이스 표시가 계속 미세하게 흔들리는 문제였다. 원인을 다시 짚어보니 이번에도 `distanceFilter` 제거의 부작용이었다.
 
@@ -379,7 +395,7 @@ smoothingSpeedSecond = 0.85 * smoothingSpeedSecond + 0.15 * smoothingSpeedFirst
 
 ---
 
-### 5. 일시정지 중에도 경과 시간이 계속 흐름
+### 일시정지 중에도 흐르던 경과 시간
 
 페이스는 멈췄는데 경과 시간(elapsedTime)은 계속 올라가고 있었다. `PFDView`의 PAUSED 오버레이 문구를 다시 보니 "AWAITING SIGNAL"이라고 적혀 있었는데, 여기서 원래 의도가 드러났다. `isPaused`는 애초에 "GPS 신호를 기다리는 중"이라는 뜻으로 설계된 값이었다. 신호가 잠깐 끊긴 것뿐이니 실제로는 계속 뛰고 있는 셈이라, 경과 시간은 일부러 안 멈추게 만들어둔 거였다.
 
@@ -413,7 +429,7 @@ iPhone/Watch 양쪽 타이머(러닝 시작 시점 하나, 첫 위치 수신 시
 
 ---
 
-### 6. SINK RATE랑 OVERSPEED 진동이 구분이 안 감
+### 구분이 안 가던 두 경고의 진동
 
 경고 유형별로 다른 햅틱 패턴을 넣긴 했는데, 실제로 차고 뛰어보니 SINK RATE(위로 2회)랑 OVERSPEED(아래로 3회)가 손목에서 비슷하게 느껴진다는 피드백이 들어왔다. `.directionUp`/`.directionDown`은 이름만 다르지 실제 느낌 차이가 크지 않았던 것 같다.
 
