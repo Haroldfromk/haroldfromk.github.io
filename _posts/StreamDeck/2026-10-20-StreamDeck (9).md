@@ -2,7 +2,7 @@
 title: StreamDeck (9) 밖에서 맥에 붙기, Tailscale과 잠자기 막기
 writer: Harold
 date: 2026-10-20 21:00:00 +0900
-last_modified_at: 2026-10-26 04:30:00 +0900
+last_modified_at: 2026-10-27 06:15:00 +0900
 categories: [StreamDeck]
 tags: [Tailscale, Network, IOKit, Observation, SwiftUI]
 
@@ -173,6 +173,10 @@ private func tryRemote() {
 `channel == nil`이 먼저다. 이미 Bonjour로 붙었거나 붙는 중이면 아무것도 하지 않는다.
 
 10초 제한은 맥이 잠들어 있을 때를 위한 것이다. Tailscale 통로는 열려 있는데 맥이 답을 하지 않으면, 연결은 "연결하는 중"에 꽤 오래 머문다. 그동안 아무 안내가 없으면 왜 안 붙는지 알 수 없다. 그래서 10초 안에 허락까지 못 가면 "밖에서 맥에 붙지 못했어요. 아이패드와 맥에서 Tailscale이 켜져 있는지 확인해 주세요"를 띄우고 처음부터 다시 찾는다.
+
+![](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-10-20-StreamDeck-9/touchdeck-remote-failed.webp){: width="590" }
+
+밖에서 아이폰을 가로로 두고 붙어 보다가 10초 안에 붙지 못해 안내가 뜬 상태 줄이다. 글이 길어 뒤는 잘렸고, 오른쪽에 "밖에서 붙기" 버튼이 그대로 있다. 이때 왜 못 붙었는지는 아직 확인 못 했다.
 
 `attempt === channel`은 같은 연결인지 보는 비교다. `===`는 값이 같은지가 아니라 같은 객체인지를 본다. 10초 사이에 연결이 끊기고 새 연결이 생겼으면 그건 다른 시도라서, 지난 시도의 시간 제한이 새 연결을 끊지 않게 했다.
 
