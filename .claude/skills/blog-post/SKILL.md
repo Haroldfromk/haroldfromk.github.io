@@ -2,7 +2,7 @@
 name: blog-post
 description: haroldfromk.github.io Jekyll 블로그 포스트를 작성하거나 다듬을 때 쓴다. 문체 규칙(em dash 와 가운뎃점 금지, 기술 용어 영어 유지), 헤더 이름과 구분선, 개념 설명과 코드에 나온 API 설명, 새 창 링크, front matter 형식, 그림과 스크린샷 넣는 법을 적용하고 lint script 로 검증한다. _posts 아래 markdown 을 쓰거나 고치거나 검토할 때, 또는 블로그 글 정리를 요청받을 때 사용한다.
 argument-hint: [post-path]
-allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/lint_post.py *)
+allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/lint_post.py *), Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/check_links.py *), Bash(/opt/homebrew/bin/python3.12 -I ${CLAUDE_SKILL_DIR}/scripts/check_svg.py *)
 ---
 
 # 블로그 포스트 작성 규칙
@@ -17,7 +17,7 @@ allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/lint_post.py *)
 
 1. 뼈대 (메인 세션): 블로그 메모(`~/Documents/Workspace/blog-notes/<앱>/*.md`)가 있으면 먼저 읽고, 메모의 커밋 범위 diff 를 본다. 그걸로 글 흐름, `##`/`###` 헤더 목록, 설명할 개념, 보여줄 코드(파일 경로:줄), 그림마다 보여줄 성질 한 문장과 쓸 실측값을 정한다. 메모의 에러 원문과 실측값은 2번 에이전트에게 그대로 넘긴다
 2. 본문과 그림 (Agent, `model: "sonnet"`): 뼈대 전체와 대상 파일 경로를 넘긴다. 이 스킬을 읽고 규칙대로 쓰고, 그림은 references/diagrams.md 대로 PNG 까지 만들고, lint ERROR 가 0개가 될 때까지 고치게 한다. 그림도 sonnet 이 그린다. 한글 라벨 자리 잡기와 단순화 판단이 필요해서 haiku 는 쓰지 않는다
-3. 검토 (Agent, `model: "opus"`): 기술 설명이 실제 코드와 맞는지, 개념 설명이 비전공자에게 충분한지, 그림이 틀린 인상을 주지 않는지(PNG 를 직접 열어서)를 보고 고칠 곳 목록을 돌려받는다. 고치기는 2번 에이전트에게 SendMessage 로 다시 맡긴다
+3. 검토 (Agent, `model: "opus"`): 대상 파일 경로와 1번에서 정한 "보여줄 코드(파일 경로:줄)" 목록만 넘긴다. 커밋 범위 diff 전체는 넘기지 않고 다시 읽게 하지도 않는다. 에이전트는 목록의 줄 주변만 읽어서 글과 맞춰 보고, 글의 주장이 목록 밖 코드를 가리킬 때만 그 자리를 찾아 읽는다. 기술 설명이 실제 코드와 맞는지, 개념 설명이 비전공자에게 충분한지, 그림이 틀린 인상을 주지 않는지(PNG 를 직접 열어서)를 보고 고칠 곳 목록을 돌려받는다. 고치기는 2번 에이전트에게 SendMessage 로 다시 맡긴다
 
 ## Front matter
 
@@ -43,6 +43,7 @@ published: true
 
 - em dash (U+2014), en dash (U+2013), 가운뎃점 (U+00B7) 을 쓰지 않는다. 하이픈(-)만 쓴다
 - 기술 용어는 한글로 번역하지 않고 영어 그대로 쓴다 (route, parameter, context window)
+- 글을 예고나 숙제로 맺지 않는다. "다음 글에서", "다음 편에서", "다음 강의에서", "연습으로 남긴다" 같은 말을 쓰지 않는다. 확인하지 못한 것은 "아직 확인 못 했다"로만 쓴다
 
 ## 개념 설명
 
@@ -66,15 +67,17 @@ published: true
 
 ### Apple 문서 링크 확인
 
-Apple 문서 링크는 넣기 전에 열리는지 확인한다. 문서 주소 `https://developer.apple.com/documentation/<경로>` 의 `<경로>` 를 그대로 쓴다.
+링크는 하나씩 열어 보지 않고, 글을 다 쓴 뒤 스크립트로 한 번에 확인한다. Apple 문서와 그 밖의 외부 링크를 모두 보고, 문제 있는 링크만 출력한다.
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' "https://developer.apple.com/tutorials/data/documentation/<경로>.json"
+python3 ${CLAUDE_SKILL_DIR}/scripts/check_links.py <post-path>
 ```
 
-- 200 이 나와야 한다. 경로는 소문자로 쓴다 (`swiftui/appstorage`)
-- 같은 이름의 메서드가 여러 개면(overload) 경로 끝에 `-3n9rf` 같은 꼬리가 붙어서 이름만으로는 404 가 난다. 꼬리는 추측하지 말고, 상위 타입의 JSON 에서 `references` 의 key 를 찾아 고른다. 예: `foundation/bundle.json` 안의 `.../Bundle/init(url:)-3n9rf`
-- Apple 이 아닌 문서는 링크 주소를 그대로 열어 200 인지 확인한다
+- ERROR 가 0개가 될 때까지 고친다. 글을 쓰기 전에 주소 몇 개만 먼저 보고 싶으면 파일 경로 대신 주소를 따옴표로 감싸 넘긴다
+- 문서 주소 `https://developer.apple.com/documentation/<경로>` 의 `<경로>` 는 소문자로 쓴다 (`swiftui/appstorage`)
+- 같은 이름의 메서드가 여러 개면(overload) 경로 끝에 `-3n9rf` 같은 꼬리가 붙어서 이름만으로는 404 가 난다. 꼬리는 추측하지 않는다. 스크립트가 상위 타입 문서에서 찾은 후보 주소를 ERROR 줄에 같이 보여주니 그중에서 고른다. 상위 타입의 JSON 을 직접 내려받아 읽지 않는다
+- 후보가 안 나오면(`View` 처럼 멤버가 하위 묶음 문서에 흩어진 타입) 그때만 문서 페이지에서 주소를 찾는다
+- WARN 은 자동 접속을 막는 사이트거나 시간 초과다. 고치지 말고 사용자에게 직접 열어 보라고 알린다
 
 ## 링크
 
@@ -107,6 +110,7 @@ curl -s -o /dev/null -w '%{http_code}\n' "https://developer.apple.com/tutorials/
   - `####` 는 `<API 이름>로 <하는 일>하기`: `#### CGEvent로 키 누르고 떼기`
 - API 와 기술 이름은 백틱 없이 그대로 쓰고, 바로 뒤에 한국어 조사를 붙인다 (`GeometryReader로`, `AppStorage로`)
 - 헤더에 백틱과 이모지를 쓰지 않는다
+- 헤더 끝에 `(Fluent 버전)` 같은 `(... 버전)` 라벨을 붙이지 않는다
 - `12-4.` 같은 번호는 붙이지 않는다. 따라 하는 순서가 중요한 단계(`### 1. 폴더 만들기`)에만 쓴다
 
 ## 이미지
@@ -116,7 +120,7 @@ curl -s -o /dev/null -w '%{http_code}\n' "https://developer.apple.com/tutorials/
 - 직접 그린 그림은 alt text 에 그림이 말하는 내용을 한 문장으로 쓴다. 이미지가 안 보여도 alt 만 읽고 뜻이 통해야 한다
 - 실행 화면을 찍은 스크린샷은 alt 를 비워도 된다. 대신 바로 아래 문단에서 무엇을 찍은 화면이고 어디를 보면 되는지 쓴다
 - 스크린샷은 글로 설명한 결과를 처음 보여주는 자리에 넣는다. 사용자가 준 스크린샷의 파일명과 위치는 사용자에게 확인한다
-- SVG 그림을 새로 만들거나 고칠 때만 [references/diagrams.md](references/diagrams.md) 를 읽는다
+- SVG 그림을 새로 만들거나 고칠 때만 [references/diagrams.md](references/diagrams.md) 를 읽는다. 그림 검사와 PNG 변환은 `/opt/homebrew/bin/python3.12 -I ${CLAUDE_SKILL_DIR}/scripts/check_svg.py <name>.svg` 로 한다 (diagrams.md 의 `${CLAUDE_SKILL_DIR}` 는 이 경로다)
 
 ## 검증
 
@@ -124,6 +128,7 @@ curl -s -o /dev/null -w '%{http_code}\n' "https://developer.apple.com/tutorials/
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/lint_post.py <post-path>
+python3 ${CLAUDE_SKILL_DIR}/scripts/check_links.py <post-path>
 ```
 
 WARN 은 사람이 판단할 항목이라 고치지 말고 사용자에게 보고한다.

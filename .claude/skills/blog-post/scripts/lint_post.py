@@ -33,6 +33,8 @@ SOURCE_SUFFIX = re.compile(r" \([^()]+\)$")  # [AppStorage (Apple)] 처럼 끝�
 NEW_TAB = '{:target="_blank"}'
 OWN_SITE = "haroldfromk.github.io"
 FILENAME_DATE = re.compile(r"^(\d{4}-\d{2}-\d{2})-")
+META_PHRASES = ["다음 강의에서", "연습으로 남", "다음 글에서", "다음 편에서"]  # 예고나 숙제로 글을 맺는 말
+VERSION_LABEL = re.compile(r"\([^()]*버전\)")  # (Fluent 버전)
 
 
 class Report:
@@ -106,6 +108,8 @@ def check_header_name(report, number, title):
         report.error(number, "header", f"헤더에 백틱을 쓰지 않는다. API 이름은 그대로 쓰고 조사를 붙인다: {title}")
     if EMOJI.search(title):
         report.error(number, "header", f"헤더에 이모지를 쓰지 않는다: {title}")
+    if VERSION_LABEL.search(title):
+        report.error(number, "header", f"헤더에 '(... 버전)' 라벨을 붙이지 않는다: {title}")
     if NUMBERED_HEADER.match(title):
         report.warn(number, "header", f"순서가 중요한 단계가 아니면 헤더 앞 번호를 지운다: {title}")
     if title.rstrip("?.!").endswith("다"):
@@ -179,6 +183,10 @@ def check_body(report, lines, start):
         ref = REF_LINK_DEF.match(line)
         if ref and OWN_SITE not in ref.group(2):
             report.error(number, "new-tab", f"reference 링크는 쓰지 않는다. 본문에서 [{ref.group(1)}]({ref.group(2)}){NEW_TAB} 로 바꾸고 이 줄은 지운다")
+
+        for phrase in META_PHRASES:
+            if phrase in line:
+                report.error(number, "meta", f"예고나 숙제로 글을 맺지 않는다('{phrase}'). 확인 못 한 것은 '아직 확인 못 했다'로만 쓴다")
 
         if "/assets/images/upload/" in line:
             report.warn(number, "image", "로컬 이미지 경로가 남아있다. uploadimg 를 아직 안 돌렸다면 실행한다")

@@ -23,17 +23,18 @@
 ## 변환
 
 ```bash
-/opt/homebrew/bin/python3.12 -I -c "
-import cairosvg
-cairosvg.svg2png(url='<name>.svg', write_to='<name>.png', output_width=<viewBox 너비 × 2>, output_height=<viewBox 높이 × 2>)
-"
+/opt/homebrew/bin/python3.12 -I ${CLAUDE_SKILL_DIR}/scripts/check_svg.py <name>.svg
 ```
 
+- 위 규칙(폰트, 이모지, 배경, CSS 변수, 색, 라벨 겹침, 글자 크기)을 검사하고, ERROR 가 0개일 때만 viewBox 의 2배 크기로 같은 이름의 PNG 를 만든다. 만든 PNG 경로가 마지막 줄에 나온다
+- ERROR 는 0개가 될 때까지 SVG 를 고친다. WARN 은 고칠지 판단해서 정하고, 남기면 이유를 보고한다. overlap 은 글자 수로 어림한 값이라 PNG 에서 실제로 겹치는지 본다
 - cairosvg 는 python3.12 에만 깔려 있다(기본 python3 에는 없다)
 - viewBox 는 너비 760 정도로 그리고 두 배로 뽑는다. 글자는 11.5~17 사이
 
 ## 확인
 
-변환 후 반드시 PNG 를 Read 로 열어서 눈으로 확인한다. SVG 소스 재검토나 font-family grep 만으로는 부족하다.
+변환 후 반드시 PNG 를 Read 로 열어서 눈으로 확인한다. SVG 소스 재검토나 font-family grep, check_svg.py 통과만으로는 부족하다.
 
 확인이 끝난 PNG 는 `assets/images/upload/` 에 넣고 `uploadimg` 로 올린다.
+
+확인이 끝난 SVG 원본은 버리지 말고 `~/Documents/Workspace/blog-notes/<앱>/diagrams/` 에 PNG 와 같은 이름으로 남긴다(블로그 저장소 안에는 두지 않는다).
