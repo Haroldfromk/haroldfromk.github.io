@@ -35,6 +35,10 @@ OWN_SITE = "haroldfromk.github.io"
 FILENAME_DATE = re.compile(r"^(\d{4}-\d{2}-\d{2})-")
 META_PHRASES = ["다음 강의에서", "연습으로 남", "다음 글에서", "다음 편에서"]  # 예고나 숙제로 글을 맺는 말
 VERSION_LABEL = re.compile(r"\([^()]*버전\)")  # (Fluent 버전)
+UPLOAD_SUBDIR = re.compile(r"/assets/images/upload/[^)\s\"']+/")  # upload/ 아래 하위 폴더
+URL = re.compile(r"https?://\S+")
+IMAGE = re.compile(r"!\[[^\]]*\]\([^)]*\)")  # alt 텍스트의 파일명은 커밋 해시 검사에서 뺀다
+COMMIT_HASH = re.compile(r"(?<![#\w])[0-9a-f]{7,40}(?!\w)")
 
 
 class Report:
@@ -190,6 +194,13 @@ def check_body(report, lines, start):
 
         if "/assets/images/upload/" in line:
             report.warn(number, "image", "로컬 이미지 경로가 남아있다. uploadimg 를 아직 안 돌렸다면 실행한다")
+        if UPLOAD_SUBDIR.search(line):
+            report.error(number, "image", "upload/ 아래에 하위 폴더를 만들지 않는다. 파일을 upload/ 바로 아래로 옮기고 경로를 고친다")
+
+        for candidate in COMMIT_HASH.findall(URL.sub("", IMAGE.sub("", line))):
+            if any(c.isdigit() for c in candidate) and any(c.isalpha() for c in candidate):
+                report.warn(number, "commit", f"커밋 해시처럼 보인다({candidate}). 글에는 커밋 해시나 커밋 순서를 쓰지 않는다")
+                break
 
         prev_text = line
 
