@@ -23,7 +23,7 @@ autorun은 계획 문서(체크리스트)에서 체크 안 된 task를 하나씩
 
 만든 이유는 병목 때문이었다. 나는 계획을 세우고, task마다 implementer와 reviewer 루프를 돌리고, 커밋하고, 인계 메모를 남기고, 새 세션을 여는 순서로 일한다. 그런데 세션이 바뀔 때마다 사람이 손으로 다시 시작해야 했다.
 
-![모델(claude -p)은 일하는 칸 네 개뿐이고, 게이트, 지적 판정, 라운드 수, 커밋, 다음 task 고르기는 스크립트가 한다](/assets/images/upload/orchestration-runner-flow.png)
+![모델(claude -p)은 일하는 칸 네 개뿐이고, 게이트, 지적 판정, 라운드 수, 커밋, 다음 task 고르기는 스크립트가 한다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-11-27-orchestration-patterns/orchestration-runner-flow.png)
 
 청록색 칸 네 개(implement, review, fix, handoff)가 모델을 부르는 자리이고, 회색 칸(게이트, 지적 판정, 라운드 수, 커밋, 다음 task 고르기)은 전부 스크립트가 한다. fix는 최대 3라운드까지만 돌고, 게이트가 실패하거나 3라운드를 넘기면 멈춘다. 모델은 일하고, 스크립트가 판정해서 다음 칸을 고른다. 게이트 실패나 라운드 초과로 멈춰도 마무리에서 handoff를 부른다. 사용량 한도로 멈출 때만 handoff를 부르지 않고, 인계 메모 맨 위에 멈춤 문단만 덧붙인다.
 
@@ -109,7 +109,7 @@ gate_run() {
 
 Agent SDK는 Claude Code를 코드(Python이나 TypeScript)에서 부르는 라이브러리다.
 
-![A는 판정이 모델 세션 안에 있고, B는 내 코드가, C는 zsh 스크립트가 판정하며 구현과 리뷰와 수정은 각각 독립된 claude -p 호출이다](/assets/images/upload/orchestration-who-judges.png)
+![A는 판정이 모델 세션 안에 있고, B는 내 코드가, C는 zsh 스크립트가 판정하며 구현과 리뷰와 수정은 각각 독립된 claude -p 호출이다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-11-27-orchestration-patterns/orchestration-who-judges.png)
 
 세 방식의 차이는 한 가지다. 판정하는 쪽이 모델 안에 있느냐 밖에 있느냐. A는 부모 세션이 자기 subagent의 보고를 받아 스스로 판단한다. B와 C는 판정을 모델 밖으로 뺀다. C는 그 밖을 셸 스크립트로 만들어서 B보다 작게 끝냈다.
 
@@ -381,7 +381,7 @@ dn=$(jq -cs 'map(select(.type == "result") | .permission_denials // []) | add //
 
 ---
 
-![옛 세션은 알림을 받고 인계 메모를 쓰며, 새 세션은 메모 파일만 읽고 시작하고, 옛 세션과의 묶음은 해제한다](/assets/images/upload/orchestration-session-handoff.png)
+![옛 세션은 알림을 받고 인계 메모를 쓰며, 새 세션은 메모 파일만 읽고 시작하고, 옛 세션과의 묶음은 해제한다](https://pub-1fd8ca6711bd4f3f8b74d88a697b50f9.r2.dev/2026-11-27-orchestration-patterns/orchestration-session-handoff.png)
 
 세션 사이의 인계는 대화가 아니라 메모 파일로 하고, 옛 세션은 떼어 낸다. 새 세션은 옛 대화를 하나도 모르고 메모만 읽는다. 파일로 넘기는 구조는 위의 `claude -p` 단계들과 같은 원리다.
 

@@ -32,3 +32,5 @@ _asset_bundler_cache
 _site
 assets/images/
 _plugins/*.disabled
+
+.venv/
